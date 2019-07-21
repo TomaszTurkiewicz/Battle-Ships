@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Ships</string>
+    <string name="randomGame">RANDOM GAME</string>
+    <string name="random_game">RANDOM GAME</string>
+    <string name="a">A</string>
+    <string name="b">B</string>
+    <string name="c">C</string>
+    <string name="d">D</string>
+    <string name="e">E</string>
+    <string name="f">F</string>
+    <string name="g">G</string>
+    <string name="h">H</string>
+    <string name="i">I</string>
+    <string name="j">J</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="ten">10</string>
+    <string name="startGame">START GAME</string>
+    <string name="back">BACK</string>
+    <string name="reDo">RE DO</string>
+    <string name="TableSize">250dp</string>
+    <string name="FieldSize">25dp</string>
+</resources>

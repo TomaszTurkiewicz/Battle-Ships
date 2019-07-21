@@ -1,0 +1,922 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RandomGame">
+
+
+    <TableLayout
+        android:id="@+id/tableLayoutPlayerBattleField"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.693"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.501">
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/playerCell_1x1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_1x2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_1x3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_1x4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_1x5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_1x6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_1x7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_1x8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_1x9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_1x10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/playerCell_2x1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_2x2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_2x3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_2x4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_2x5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_2x6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_2x7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_2x8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_2x9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_2x10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/playerCell_3x1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_3x2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_3x3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_3x4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_3x5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_3x6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_3x7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_3x8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_3x9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_3x10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/playerCell_4x1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_4x2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_4x3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_4x4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_4x5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_4x6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_4x7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_4x8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_4x9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_4x10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/playerCell_5x1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_5x2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_5x3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_5x4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_5x5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_5x6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_5x7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_5x8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_5x9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_5x10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/playerCell_6x1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_6x2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_6x3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_6x4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_6x5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_6x6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_6x7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_6x8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_6x9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_6x10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/playerCell_7x1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_7x2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_7x3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_7x4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_7x5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_7x6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_7x7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_7x8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_7x9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_7x10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/playerCell_8x1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_8x2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_8x3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_8x4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_8x5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_8x6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_8x7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_8x8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_8x9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_8x10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/playerCell_9x1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_9x2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_9x3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_9x4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_9x5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_9x6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_9x7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_9x8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_9x9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_9x10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="30dp">
+
+            <TextView
+                android:id="@+id/playerCell_10x1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_10x2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_10x3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_10x4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_10x5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_10x6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_10x7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_10x8"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_10x9"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+
+            <TextView
+                android:id="@+id/playerCell_10x10"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/battle_cell" />
+        </LinearLayout>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/tableLayoutPlayerBattleField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.675"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/a"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/b"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/c"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/d"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/e"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/f"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/g"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/h"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/i"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/j"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="30dp"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tableLayoutPlayerBattleField"
+        app:layout_constraintHorizontal_bias="0.961"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498"
+        android:orientation="vertical">
+
+    <TextView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:text="@string/one"
+        android:textAlignment="center"
+        android:textColor="@color/border_color"
+        android:textSize="20dp"/>
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/two"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp"/>
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/three"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp"/>
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/four"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp"/>
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/five"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp"/>
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/six"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp"/>
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/seven"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp"/>
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/eight"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp"/>
+        <TextView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:text="@string/nine"
+        android:textAlignment="center"
+        android:textColor="@color/border_color"
+        android:textSize="20dp"/>
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/ten"
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="20dp"/>
+        </LinearLayout>
+
+
+
+    <TableRow
+        android:id="@+id/tableRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayoutPlayerBattleField">
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:onClick="back"
+            android:text="@string/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/reDo"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:onClick="reDo"
+            android:text="@string/reDo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/startGame"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:onClick="startGame"
+            android:text="@string/startGame"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+    </TableRow>
+
+
+</android.support.constraint.ConstraintLayout>
