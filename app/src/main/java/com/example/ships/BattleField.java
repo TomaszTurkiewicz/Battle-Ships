@@ -4,27 +4,7 @@ import java.util.Random;
 
 public class BattleField {
     Ship[][]battleField = new Ship[10][10];
-    Ship shipZero = new Ship(0,false,false);
-    Ship shipFour1 = new Ship(4,true,false);
-    Ship shipFour2 = new Ship(4,true,false);
-    Ship shipFour3 = new Ship(4,true,false);
-    Ship shipFour4 = new Ship(4,true,false);
-    Ship shipThree1_1 = new Ship(3,true,false);
-    Ship shipThree1_2 = new Ship(3,true,false);
-    Ship shipThree1_3 = new Ship(3,true,false);
-    Ship shipThree2_1 = new Ship(3,true,false);
-    Ship shipThree2_2 = new Ship(3,true,false);
-    Ship shipThree2_3 = new Ship(3,true,false);
-    Ship shipTwo1_1 = new Ship(2,true,false);
-    Ship shipTwo1_2 = new Ship(2,true,false);
-    Ship shipTwo2_1 = new Ship(2,true,false);
-    Ship shipTwo2_2 = new Ship(2,true,false);
-    Ship shipTwo3_1 = new Ship(2,true,false);
-    Ship shipTwo3_2 = new Ship(2,true,false);
-    Ship shipOne1 = new Ship(1,true,false);
-    Ship shipOne2 = new Ship(1,true,false);
-    Ship shipOne3 = new Ship(1,true,false);
-    Ship shipOne4 = new Ship(1,true,false);
+
     boolean position;
 
     public Ship getBattleField(int i, int j) {
@@ -38,7 +18,7 @@ public class BattleField {
     public BattleField() {
         for (int i=0;i<10;i++){
             for(int j=0;j<10;j++){
-                battleField[i][j]=shipZero;
+
             }
         }
     }
@@ -203,7 +183,7 @@ public class BattleField {
     }
 
     private void putShipWithOneCellsNow(int i, int j) {
-        battleField[i][j]=shipOne;
+
     }
 
 
@@ -359,8 +339,7 @@ public class BattleField {
     }
 
     private void putShipWithTwoCellsVerticallyNow(int i, int j) {
-        battleField[i][j]=shipTwo;
-        battleField[i+1][j]=shipTwo;
+
     }
 
 
@@ -522,8 +501,7 @@ public class BattleField {
     }
 
     private void putShipWithTwoCellsHorizontallyNow(int i, int j) {
-        battleField[i][j]=shipTwo;
-        battleField[i][j+1]=shipTwo;
+
     }
 
     private void putShipWithThreeCells() {
@@ -699,9 +677,7 @@ public class BattleField {
     }
 
     private void putShipWithThreeCellsVerticallyNow(int i, int j) {
-        battleField[i][j]=shipThree;
-        battleField[i+1][j]=shipThree;
-        battleField[i+2][j]=shipThree;
+
     }
 
     private void putShipWithThreeCellHorizontally() {
@@ -897,10 +873,7 @@ public class BattleField {
         int i = position/100;
         int j = position%10;
         if (i<7){
-            battleField[i][j]=shipFour;
-            battleField[i+1][j]=shipFour;
-            battleField[i+2][j]=shipFour;
-            battleField[i+3][j]=shipFour;
+
         }
         else{
             putShipWithFourCellsVertically();
@@ -918,10 +891,7 @@ public class BattleField {
         int i = position/100;
         int j = position%10;
         if (j<7){
-            battleField[i][j]=shipFour;
-            battleField[i][j+1]=shipFour;
-            battleField[i][j+2]=shipFour;
-            battleField[i][j+3]=shipFour;
+
         }
         else{
             putShipWithFourCellsHorizontally();
@@ -929,15 +899,13 @@ public class BattleField {
     }
 
     private void putShipWithThreeCellsHorizontallyNow(int i, int j){
-        battleField[i][j]=shipThree;
-        battleField[i][j+1]=shipThree;
-        battleField[i][j+2]=shipThree;
+
     }
 
     void eraseBattleField(){
         for (int i = 0; i<10; i++){
             for (int j = 0; i<10; i++){
-                battleField[i][j]=shipZero;
+
             }
         }
     }
