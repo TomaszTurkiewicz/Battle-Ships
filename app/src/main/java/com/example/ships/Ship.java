@@ -1,10 +1,10 @@
 package com.example.ships;
 
 public class Ship {
-    int numberOfMasts;
-    int shipNumber;
-    boolean isShip;
-    boolean isHit;
+   private   int numberOfMasts;
+   private int shipNumber;
+   private boolean isShip;
+   private boolean isHit;
 
 
     public Ship(int numberOfMasts, int shipNumber, boolean isShip, boolean isHit) {
@@ -34,12 +34,26 @@ public class Ship {
         return isShip;
     }
 
+    public int isShipIntiger(){
+        if (isShip()){
+            return 1;
+        }
+        return 0;
+    }
+
     public void setShip(boolean ship) {
         isShip = ship;
     }
 
     public boolean isHit() {
         return isHit;
+    }
+
+    public int isHitInteger(){
+        if(isHit()){
+            return 1;
+        }
+        return 0;
     }
 
     public void setHit(boolean hit) {

@@ -14,13 +14,14 @@ public class RandomGameBattle extends AppCompatActivity {
         BattleField battleFieldPlayerOneActivityRandomGame = new BattleField();
         TextView[][] TextViewArrayActivityRandomGame = new TextView[10][10];
         initializeBattleFieldActivityRandomGame(TextViewArrayActivityRandomGame);
+        
         displayBattleFieldPlayerOneActivityRandomGame(TextViewArrayActivityRandomGame,battleFieldPlayerOneActivityRandomGame);
     }
 
     private void displayBattleFieldPlayerOneActivityRandomGame(TextView[][] TextViewArrayActivityRandomGame, BattleField battleFieldPlayerOneActivityRandomGame) {
         for(int i=0;i<10;i++){
             for(int j=0;j<10;j++){
-                if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip==true){
+                if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()){
                     TextViewArrayActivityRandomGame[i][j].setBackgroundColor(getResources().getColor(R.color.ship));
                 }}}
     }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RandomGame extends AppCompatActivity {
 
@@ -14,6 +15,9 @@ public class RandomGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random_game);
 
+
+
+
         BattleField battleFieldPlayerOneActivityRandom = new BattleField();
 
         TextView[][] TextViewArray = new TextView[10][10];
@@ -22,6 +26,7 @@ public class RandomGame extends AppCompatActivity {
 
 
         displayBattleFieldPlayerOne(TextViewArray,battleFieldPlayerOneActivityRandom);
+        storeBattleField(battleFieldPlayerOneActivityRandom);
 
     }
 
@@ -32,7 +37,7 @@ public class RandomGame extends AppCompatActivity {
     private void displayBattleFieldPlayerOne(TextView[][] TextViewArray, BattleField battleFieldPlayerOneActivityRandom) {
         for(int i=0;i<10;i++){
          for(int j=0;j<10;j++){
-        if(battleFieldPlayerOneActivityRandom.getBattleField(i,j).isShip==true){
+        if(battleFieldPlayerOneActivityRandom.getBattleField(i,j).isShip()){
             TextViewArray[i][j].setBackgroundColor(getResources().getColor(R.color.ship));
         }}}
     }
@@ -151,9 +156,33 @@ public class RandomGame extends AppCompatActivity {
 
 
     public void startGame(View view) {
+
+
         Intent intent = new Intent(getApplicationContext(),RandomGameBattle.class);
         startActivity(intent);
         finish();
+    }
+
+    private void storeBattleField(BattleField battleField) {
+        DatabaseOpenHelper mydb;
+        mydb = new DatabaseOpenHelper(this);
+
+        //insert
+        if(mydb.updateDatabase(1,battleField.battleField[0][0].getNumberOfMasts(),
+                battleField.battleField[0][0].getShipNumber(),
+                battleField.battleField[0][0].isShipIntiger(),
+                battleField.battleField[0][0].isHitInteger())){
+            Toast.makeText(getApplicationContext(), "done",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else
+            {
+            Toast.makeText(getApplicationContext(), "not done",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        //Read
+        //Cursor getBarcode= mydb.getData(id_to_search);
     }
 
     public void back(View view) {
