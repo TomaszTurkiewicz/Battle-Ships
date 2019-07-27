@@ -15,16 +15,14 @@ public class RandomGame extends AppCompatActivity {
         setContentView(R.layout.activity_random_game);
 
         BattleField battleFieldPlayerOneActivityRandom = new BattleField();
-        battleFieldPlayerOneActivityRandom.eraseBattleField();
-        battleFieldPlayerOneActivityRandom.storeBattleField();
-        battleFieldPlayerOneActivityRandom.readFromSingleton();
+
         TextView[][] TextViewArray = new TextView[10][10];
         initializeBattleField(TextViewArray);
         battleFieldPlayerOneActivityRandom.createFleet();
 
 
         displayBattleFieldPlayerOne(TextViewArray,battleFieldPlayerOneActivityRandom);
-        battleFieldPlayerOneActivityRandom.storeBattleField();
+
     }
 
 

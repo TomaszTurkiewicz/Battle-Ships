@@ -12,7 +12,6 @@ public class RandomGameBattle extends AppCompatActivity {
         setContentView(R.layout.activity_random_game_battle);
 
         BattleField battleFieldPlayerOneActivityRandomGame = new BattleField();
-        battleFieldPlayerOneActivityRandomGame.readFromSingleton();
         TextView[][] TextViewArrayActivityRandomGame = new TextView[10][10];
         initializeBattleFieldActivityRandomGame(TextViewArrayActivityRandomGame);
         displayBattleFieldPlayerOneActivityRandomGame(TextViewArrayActivityRandomGame,battleFieldPlayerOneActivityRandomGame);

@@ -22,7 +22,7 @@ public class DatabaseAccess {
         return instance;
     }
 
-    public void open(){
+    public void openWritable(){
         this.db=openHelper.getWritableDatabase();
     }
 
