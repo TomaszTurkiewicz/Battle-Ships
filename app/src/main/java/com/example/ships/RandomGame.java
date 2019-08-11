@@ -9,26 +9,19 @@ import android.widget.TextView;
 public class RandomGame extends AppCompatActivity {
 
 
+    BattleField battleFieldPlayerOneActivityRandom = new BattleField();
+    BattleField battleFieldPlayerTwoActivityRandom = new BattleField();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random_game);
 
-        BattleField battleFieldPlayerOneActivityRandom = new BattleField();
- //       battleFieldPlayerOneActivityRandom.eraseBattleField();
- //       battleFieldPlayerOneActivityRandom.storeBattleField();
- //       battleFieldPlayerOneActivityRandom.readFromSingleton();
         TextView[][] TextViewArray = new TextView[10][10];
         initializeBattleField(TextViewArray);
         battleFieldPlayerOneActivityRandom.createFleet();
-        displayBattleFieldPlayerOne(TextViewArray,battleFieldPlayerOneActivityRandom);
- //       battleFieldPlayerOneActivityRandom.storeBattleField();
-
+        displayBattleFieldPlayerOne(TextViewArray, battleFieldPlayerOneActivityRandom);
     }
-
-
-
-
 
     private void displayBattleFieldPlayerOne(TextView[][] TextViewArray, BattleField battleFieldPlayerOneActivityRandom) {
         for(int i=0;i<10;i++){
@@ -153,7 +146,9 @@ public class RandomGame extends AppCompatActivity {
 
     public void startGame(View view) {
 
-
+        BattleFieldPlayerOneSingleton.getInstance().storeBattleField(battleFieldPlayerOneActivityRandom);
+        battleFieldPlayerTwoActivityRandom.createFleet();
+        BattleFieldPlayerTwoSingleton.getInstance().storeBattleField(battleFieldPlayerTwoActivityRandom);
         Intent intent = new Intent(getApplicationContext(),RandomGameBattle.class);
         startActivity(intent);
         finish();

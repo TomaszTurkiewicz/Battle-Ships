@@ -6,5 +6,7 @@
     <color name="background_color">#F5FAC3</color>
     <color name="border_color">#000</color>
     <color name="ship">#410F0D</color>
+    <color name="widmoShip">#626164</color>
+    <color name="water">#2D99EE</color>
 
 </resources>

@@ -141,61 +141,81 @@
                 android:id="@+id/player2CellGame_1x1"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
+                android:background="@drawable/battle_cell"
+                android:onClick="clickPlayer2CellGame_1x1"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/player2CellGame_1x2"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
+                android:background="@drawable/battle_cell"
+                android:onClick="clickPlayer2CellGame_1x2"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/player2CellGame_1x3"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
+                android:background="@drawable/battle_cell"
+                android:onClick="clickPlayer2CellGame_1x3"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/player2CellGame_1x4"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
+                android:background="@drawable/battle_cell"
+                android:onClick="clickPlayer2CellGame_1x4"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/player2CellGame_1x5"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
+                android:background="@drawable/battle_cell"
+                android:onClick="clickPlayer2CellGame_1x5"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/player2CellGame_1x6"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
+                android:background="@drawable/battle_cell"
+                android:onClick="clickPlayer2CellGame_1x6"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/player2CellGame_1x7"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
+                android:background="@drawable/battle_cell"
+                android:onClick="clickPlayer2CellGame_1x7"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/player2CellGame_1x8"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
+                android:background="@drawable/battle_cell"
+                android:onClick="clickPlayer2CellGame_1x8"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/player2CellGame_1x9"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
+                android:background="@drawable/battle_cell"
+                android:onClick="clickPlayer2CellGame_1x9"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/player2CellGame_1x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
+                android:background="@drawable/battle_cell"
+                android:onClick="clickPlayer2CellGame_1x10"
+                android:clickable="true"/>
 
         </LinearLayout>
 

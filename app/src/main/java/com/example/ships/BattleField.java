@@ -897,24 +897,7 @@ public class BattleField {
         battleField[i][j].setShip(isShip);
     }
 
-    public void storeBattleField(){
-        BattleFieldPlayerOneSingleton.getInstance().storeBattleField(battleField);
-    }
-    void readFromSingleton(){
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                battleField[i][j]=BattleFieldPlayerOneSingleton.getInstance().battleField[i][j];
-            }
-        }
-    }
 
-    void eraseBattleField(){
-        for (int i = 0; i<10; i++){
-            for (int j = 0; i<10; i++){
-
-            }
-        }
-    }
 }
 
 
