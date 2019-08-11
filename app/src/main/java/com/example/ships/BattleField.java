@@ -130,7 +130,6 @@ public class BattleField {
     }
 
     void createFleet() {
-        putShipOnBattleFieldSpace(5,1,true,0,0);
         putShipWithFourCells(4, 1, true);
         putShipWithThreeCells(3,1,true);
         putShipWithThreeCells(3,2,true);
@@ -892,12 +891,30 @@ public class BattleField {
 
     }
 
-    private void putShipOnBattleFieldSpace(int numberOfMasts, int shipNumber, boolean isShip, int i,int j){
+    public void putShipOnBattleFieldSpace(int numberOfMasts, int shipNumber, boolean isShip, int i,int j){
         battleField[i][j].setNumberOfMasts(numberOfMasts);
         battleField[i][j].setShipNumber(shipNumber);
         battleField[i][j].setShip(isShip);
     }
 
+    public void storeBattleField(){
+        BattleFieldPlayerOneSingleton.getInstance().storeBattleField(battleField);
+    }
+    void readFromSingleton(){
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                battleField[i][j]=BattleFieldPlayerOneSingleton.getInstance().battleField[i][j];
+            }
+        }
+    }
+
+    void eraseBattleField(){
+        for (int i = 0; i<10; i++){
+            for (int j = 0; i<10; i++){
+
+            }
+        }
+    }
 }
 
 

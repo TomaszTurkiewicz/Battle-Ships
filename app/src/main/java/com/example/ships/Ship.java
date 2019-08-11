@@ -59,4 +59,18 @@ public class Ship {
     public void setHit(boolean hit) {
         isHit = hit;
     }
+
+    public void setShipInt(int i){
+        if (i!=0){
+            isShip = true;
+        }
+        else isShip=false;
+    }
+
+    public void setHitInt(int i){
+        if (i!=0){
+            isHit = true;
+        }
+        else isHit=false;
+    }
 }

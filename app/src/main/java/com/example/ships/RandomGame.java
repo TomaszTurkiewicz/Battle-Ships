@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class RandomGame extends AppCompatActivity {
 
@@ -15,18 +14,15 @@ public class RandomGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random_game);
 
-
-
-
         BattleField battleFieldPlayerOneActivityRandom = new BattleField();
-
+ //       battleFieldPlayerOneActivityRandom.eraseBattleField();
+ //       battleFieldPlayerOneActivityRandom.storeBattleField();
+ //       battleFieldPlayerOneActivityRandom.readFromSingleton();
         TextView[][] TextViewArray = new TextView[10][10];
         initializeBattleField(TextViewArray);
         battleFieldPlayerOneActivityRandom.createFleet();
-
-
         displayBattleFieldPlayerOne(TextViewArray,battleFieldPlayerOneActivityRandom);
-        storeBattleField(battleFieldPlayerOneActivityRandom);
+ //       battleFieldPlayerOneActivityRandom.storeBattleField();
 
     }
 
@@ -161,28 +157,6 @@ public class RandomGame extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(),RandomGameBattle.class);
         startActivity(intent);
         finish();
-    }
-
-    private void storeBattleField(BattleField battleField) {
-        DatabaseOpenHelper mydb;
-        mydb = new DatabaseOpenHelper(this);
-
-        //insert
-        if(mydb.updateDatabase(1,battleField.battleField[0][0].getNumberOfMasts(),
-                battleField.battleField[0][0].getShipNumber(),
-                battleField.battleField[0][0].isShipIntiger(),
-                battleField.battleField[0][0].isHitInteger())){
-            Toast.makeText(getApplicationContext(), "done",
-                    Toast.LENGTH_SHORT).show();
-        }
-        else
-            {
-            Toast.makeText(getApplicationContext(), "not done",
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        //Read
-        //Cursor getBarcode= mydb.getData(id_to_search);
     }
 
     public void back(View view) {

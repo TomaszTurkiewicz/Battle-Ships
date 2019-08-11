@@ -1,7 +1,7 @@
 package com.example.ships;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 public class RandomGameBattle extends AppCompatActivity {
@@ -11,10 +11,13 @@ public class RandomGameBattle extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random_game_battle);
 
+
         BattleField battleFieldPlayerOneActivityRandomGame = new BattleField();
         TextView[][] TextViewArrayActivityRandomGame = new TextView[10][10];
         initializeBattleFieldActivityRandomGame(TextViewArrayActivityRandomGame);
-        
+   //     battleFieldPlayerOneActivityRandomGame.readFromSingleton();
+
+
         displayBattleFieldPlayerOneActivityRandomGame(TextViewArrayActivityRandomGame,battleFieldPlayerOneActivityRandomGame);
     }
 
@@ -137,5 +140,6 @@ public class RandomGameBattle extends AppCompatActivity {
         textViewArrayActivityRandomGame[9][8]=findViewById(R.id.playerCellGame_10x9);
         textViewArrayActivityRandomGame[9][9]=findViewById(R.id.playerCellGame_10x10);
     }
+
 
 }
