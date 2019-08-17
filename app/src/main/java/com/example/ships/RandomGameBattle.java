@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -19,6 +21,22 @@ public class RandomGameBattle extends AppCompatActivity {
     TextView[][] TextViewArrayActivityRandomGamePlayerOne = new TextView[10][10];
     TextView[][] TextViewArrayActivityRandomGamePlayerTwo = new TextView[10][10];
 
+    TextView[] ShipFourMasts = new TextView[4];
+    int ShipFourMastsCounter = 0;
+    TextView[] ShipThreeMastsFirst = new TextView[3];
+    int ShipThreeMastsCounterFirst = 0;
+    TextView[] ShipThreeMastsSecond = new TextView[3];
+    int ShipThreeMastsCounterSecond = 0;
+    TextView[] ShipTwoMastsFirst = new TextView[2];
+    int ShipTwoMastsCounterFirst = 0;
+    TextView[] ShipTwoMastsSecond = new TextView[2];
+    int ShipTwoMastsCounterSecond = 0;
+    TextView[] ShipTwoMastsThird = new TextView[2];
+    int ShipTwoMastsCounterThird = 0;
+    TextView[] ShipOneMastsFirst = new TextView[1];
+    TextView[] ShipOneMastsSecond = new TextView[1];
+    TextView[] ShipOneMastsThird = new TextView[1];
+    TextView[] ShipOneMastsFourth = new TextView[1];
     boolean playerOneCounter;
     boolean playerTwoCounter;
 
@@ -26,19 +44,50 @@ public class RandomGameBattle extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_random_game_battle);
 
+        initializeShips();
         initializeBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGamePlayerOne);
         initializeBattleFieldActivityRandomGamePlayerTwo(TextViewArrayActivityRandomGamePlayerTwo);
         battleFieldPlayerOneActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
         battleFieldPlayerTwoActivityRandomGame = BattleFieldPlayerTwoSingleton.getInstance().readBattleField();
         displayBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGamePlayerOne, battleFieldPlayerOneActivityRandomGame);
-  //      displayBattleFieldActivityRandomGamePlayerTwo(TextViewArrayActivityRandomGamePlayerTwo, battleFieldPlayerTwoActivityRandomGame);
+ //       displayBattleFieldActivityRandomGamePlayerTwo(TextViewArrayActivityRandomGamePlayerTwo, battleFieldPlayerTwoActivityRandomGame);
 
         game.run();
 
     }
 
+    private void initializeShips() {
+        ShipFourMasts[0]=findViewById(R.id.FourCellShip1);
+        ShipFourMasts[1]=findViewById(R.id.FourCellShip2);
+        ShipFourMasts[2]=findViewById(R.id.FourCellShip3);
+        ShipFourMasts[3]=findViewById(R.id.FourCellShip4);
+
+        ShipThreeMastsFirst[0]=findViewById(R.id.ThreeCellShip11);
+        ShipThreeMastsFirst[1]=findViewById(R.id.ThreeCellShip12);
+        ShipThreeMastsFirst[2]=findViewById(R.id.ThreeCellShip13);
+        ShipThreeMastsSecond[0]=findViewById(R.id.ThreeCellShip21);
+        ShipThreeMastsSecond[1]=findViewById(R.id.ThreeCellShip22);
+        ShipThreeMastsSecond[2]=findViewById(R.id.ThreeCellShip23);
+
+        ShipTwoMastsFirst[0]=findViewById(R.id.TwoCellShip11);
+        ShipTwoMastsFirst[1]=findViewById(R.id.TwoCellShip12);
+        ShipTwoMastsSecond[0]=findViewById(R.id.TwoCellShip21);
+        ShipTwoMastsSecond[1]=findViewById(R.id.TwoCellShip22);
+        ShipTwoMastsThird[0]=findViewById(R.id.TwoCellShip31);
+        ShipTwoMastsThird[1]=findViewById(R.id.TwoCellShip32);
+
+        ShipOneMastsFirst[0]=findViewById(R.id.OneCellShip1);
+        ShipOneMastsSecond[0]=findViewById(R.id.OneCellShip2);
+        ShipOneMastsThird[0]=findViewById(R.id.OneCellShip3);
+        ShipOneMastsFourth[0]=findViewById(R.id.OneCellShip4);
+    }
+    //TODO opisać planszę
+        //TODO komunikaty podczas rozgrywki czyj ruch
+        //TODO zmienić kolor wody i statku aby było widać kratki
 
     private Runnable game = new Runnable() {
         @Override
@@ -62,7 +111,6 @@ public class RandomGameBattle extends AppCompatActivity {
                     finish();
             }
             else;
-
         }
     };
 
@@ -354,6 +402,7 @@ public class RandomGameBattle extends AppCompatActivity {
             TextViewArrayActivityRandomGamePlayerTwo[i][j].setClickable(false);
             if (battleFieldPlayerTwoActivityRandomGame.getBattleField(i, j).isShip()) {
                 TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundColor(getResources().getColor(R.color.ship));
+                showShipHit(i,j);
             } else {
                 TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundColor(getResources().getColor(R.color.water));
                 playerOneCounter=false;
@@ -364,6 +413,58 @@ public class RandomGameBattle extends AppCompatActivity {
 
             disableClickable();
 
+    }
+
+    private void showShipHit(int i, int j) {
+        int numberOfMasts = battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).getNumberOfMasts();
+        int Shipnumber = battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).getShipNumber();
+        if(numberOfMasts==4){
+            ShipFourMasts[ShipFourMastsCounter].setBackgroundColor(getResources().getColor(R.color.ship));
+            ShipFourMastsCounter++;
+        }
+        else if(numberOfMasts==3){
+            if(Shipnumber==1){
+            ShipThreeMastsFirst[ShipThreeMastsCounterFirst].setBackgroundColor(getResources().getColor(R.color.ship));
+                ShipThreeMastsCounterFirst++;
+            }
+            else if(Shipnumber==2){
+                ShipThreeMastsSecond[ShipThreeMastsCounterSecond].setBackgroundColor(getResources().getColor(R.color.ship));
+                ShipThreeMastsCounterSecond++;
+            }
+            else;
+        }
+        else if(numberOfMasts==2){
+                if(Shipnumber==1){
+                    ShipTwoMastsFirst[ShipTwoMastsCounterFirst].setBackgroundColor(getResources().getColor(R.color.ship));
+                    ShipTwoMastsCounterFirst++;
+                }
+                else if(Shipnumber==2){
+                    ShipTwoMastsSecond[ShipTwoMastsCounterSecond].setBackgroundColor(getResources().getColor(R.color.ship));
+                    ShipTwoMastsCounterSecond++;
+                }
+                else if(Shipnumber==3){
+                    ShipTwoMastsThird[ShipTwoMastsCounterThird].setBackgroundColor(getResources().getColor(R.color.ship));
+                    ShipTwoMastsCounterThird++;
+                }
+                else;
+        }
+        else if(numberOfMasts==1){
+            if(Shipnumber==1){
+                ShipOneMastsFirst[0].setBackgroundColor(getResources().getColor(R.color.ship));
+            }
+            else if(Shipnumber==2){
+                ShipOneMastsSecond[0].setBackgroundColor(getResources().getColor(R.color.ship));
+            }
+            else if(Shipnumber==3){
+                ShipOneMastsThird[0].setBackgroundColor(getResources().getColor(R.color.ship));
+            }
+            else if(Shipnumber==4){
+                ShipOneMastsFourth[0].setBackgroundColor(getResources().getColor(R.color.ship));
+            }
+            else;
+
+        }
+        else;
     }
 
     private void disableClickable() {

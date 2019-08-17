@@ -16,7 +16,7 @@
         app:layout_constraintStart_toEndOf="@+id/tableLayoutPlayerBattleField"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.501"
-        android:layout_marginTop="@dimen/FieldSize">
+        >
 
 
         <LinearLayout
@@ -1114,9 +1114,7 @@
         app:layout_constraintHorizontal_bias="0.693"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.501"
-        android:layout_marginLeft="@dimen/FieldSize"
-        android:layout_marginTop="@dimen/FieldSize">
+        app:layout_constraintVertical_bias="0.501">
 
         <LinearLayout
             android:id="@+id/LinearLayoutMainActivityLetters"
@@ -2000,6 +1998,186 @@
         </LinearLayout>
 
     </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/LinearLayoutMainActivityShips"
+        android:layout_width="580dp"
+        android:layout_height="20dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tableLayoutPlayerBattleField"
+        app:layout_constraintVertical_bias="0.4"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/FourCellShip1"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:id="@+id/FourCellShip2"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:id="@+id/FourCellShip3"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:id="@+id/FourCellShip4"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
+        <TextView
+            android:id="@+id/ThreeCellShip11"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:id="@+id/ThreeCellShip12"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:id="@+id/ThreeCellShip13"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
+        <TextView
+            android:id="@+id/ThreeCellShip21"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:id="@+id/ThreeCellShip22"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:id="@+id/ThreeCellShip23"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
+        <TextView
+            android:id="@+id/TwoCellShip11"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:id="@+id/TwoCellShip12"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
+        <TextView
+            android:id="@+id/TwoCellShip21"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:id="@+id/TwoCellShip22"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
+        <TextView
+            android:id="@+id/TwoCellShip31"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:id="@+id/TwoCellShip32"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
+        <TextView
+            android:id="@+id/OneCellShip1"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
+        <TextView
+            android:id="@+id/OneCellShip2"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
+        <TextView
+            android:id="@+id/OneCellShip3"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
+        <TextView
+            android:id="@+id/OneCellShip4"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/battle_cell" />
+
+    </LinearLayout>
+
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
