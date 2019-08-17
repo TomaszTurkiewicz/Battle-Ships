@@ -1,11 +1,16 @@
 package com.example.ships;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Random;
+
 public class RandomGameBattle extends AppCompatActivity {
+
+    private Handler mHandler = new Handler();
 
     BattleField battleFieldPlayerOneActivityRandomGame = new BattleField();
     BattleField battleFieldPlayerTwoActivityRandomGame = new BattleField();
@@ -13,8 +18,8 @@ public class RandomGameBattle extends AppCompatActivity {
     TextView[][] TextViewArrayActivityRandomGamePlayerOne = new TextView[10][10];
     TextView[][] TextViewArrayActivityRandomGamePlayerTwo = new TextView[10][10];
 
-    int playerOneCounter = 0;
-    int playerTwoCounter = 3;
+    int playerOneCounter = 3;
+    int playerTwoCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +33,40 @@ public class RandomGameBattle extends AppCompatActivity {
         displayBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGamePlayerOne, battleFieldPlayerOneActivityRandomGame);
         displayBattleFieldActivityRandomGamePlayerTwo(TextViewArrayActivityRandomGamePlayerTwo, battleFieldPlayerTwoActivityRandomGame);
 
+        game.run();
+      // TODO mHandler.removeCallbacks(game);
+    }
 
+
+    private Runnable game = new Runnable() {
+        @Override
+        public void run() {
+
+            shoot();
+            mHandler.postDelayed(this,1000);
+        }
+    };
+
+
+    private void shoot(){
+        Random random = new Random();
+        int shoot = random.nextInt(999);
+        int i = shoot / 100;
+        int j = shoot % 10;
+            if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isHit()){
+                shoot();
+            }
+            else{
+                if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()){
+                    TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundColor(getResources().getColor(R.color.ship));
+                    battleFieldPlayerOneActivityRandomGame.battleField[i][j].setHit(true);
+                    playerTwoCounter=playerTwoCounter-1;
+                }else{
+                    TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundColor(getResources().getColor(R.color.water));
+                    battleFieldPlayerOneActivityRandomGame.battleField[i][j].setHit(true);
+                    playerTwoCounter=playerTwoCounter-1;
+                }
+            }
     }
 
     private void initializeBattleFieldActivityRandomGamePlayerTwo(TextView[][] textViewArrayActivityRandomGame) {
@@ -147,7 +185,7 @@ public class RandomGameBattle extends AppCompatActivity {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).isShip()) {
-                    TextViewArrayActivityRandomGame[i][j].setBackgroundColor(getResources().getColor(R.color.ship));
+                    TextViewArrayActivityRandomGame[i][j].setBackgroundColor(getResources().getColor(R.color.widmoShip));
                 }
             }
         }
@@ -276,21 +314,24 @@ public class RandomGameBattle extends AppCompatActivity {
     }
 
 
-    public void clickPlayer2CellGame_1x1(View view) {
-        showAndSaveOneCellPlayerTwo(0,0);
-    }
 
     void showAndSaveOneCellPlayerTwo(int i, int j){
-        TextViewArrayActivityRandomGamePlayerTwo[i][j].setClickable(false);
-        if (battleFieldPlayerTwoActivityRandomGame.getBattleField(i, j).isShip()) {
-            TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundColor(getResources().getColor(R.color.ship));
-        } else {
-            TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundColor(getResources().getColor(R.color.water));
-        }
-        battleFieldPlayerTwoActivityRandomGame.battleField[i][j].setHit(true);
-        playerTwoCounter = playerTwoCounter - 1;
-        BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame,i,j);
 
+            TextViewArrayActivityRandomGamePlayerTwo[i][j].setClickable(false);
+            if (battleFieldPlayerTwoActivityRandomGame.getBattleField(i, j).isShip()) {
+                TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundColor(getResources().getColor(R.color.ship));
+            } else {
+                TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundColor(getResources().getColor(R.color.water));
+            }
+            battleFieldPlayerTwoActivityRandomGame.battleField[i][j].setHit(true);
+            playerOneCounter = playerOneCounter - 1;
+            BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame, i, j);
+
+    }
+
+
+    public void clickPlayer2CellGame_1x1(View view) {
+        showAndSaveOneCellPlayerTwo(0,0);
     }
 
     public void clickPlayer2CellGame_1x2(View view) {
