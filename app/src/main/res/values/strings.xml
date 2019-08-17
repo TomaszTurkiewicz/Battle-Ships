@@ -27,4 +27,6 @@
     <string name="reDo">RE DO</string>
     <string name="TableSize">250dp</string>
     <string name="FieldSize">25dp</string>
+    <string name="you_win">YOU WON</string>
+    <string name="you_lost">YOU LOST</string>
 </resources>

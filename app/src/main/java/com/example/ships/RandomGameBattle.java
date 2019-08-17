@@ -1,5 +1,6 @@
 package com.example.ships;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +19,9 @@ public class RandomGameBattle extends AppCompatActivity {
     TextView[][] TextViewArrayActivityRandomGamePlayerOne = new TextView[10][10];
     TextView[][] TextViewArrayActivityRandomGamePlayerTwo = new TextView[10][10];
 
-    int playerOneCounter = 3;
-    int playerTwoCounter = 0;
+    boolean playerOneCounter;
+    boolean playerTwoCounter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,22 +33,53 @@ public class RandomGameBattle extends AppCompatActivity {
         battleFieldPlayerOneActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
         battleFieldPlayerTwoActivityRandomGame = BattleFieldPlayerTwoSingleton.getInstance().readBattleField();
         displayBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGamePlayerOne, battleFieldPlayerOneActivityRandomGame);
-        displayBattleFieldActivityRandomGamePlayerTwo(TextViewArrayActivityRandomGamePlayerTwo, battleFieldPlayerTwoActivityRandomGame);
+  //      displayBattleFieldActivityRandomGamePlayerTwo(TextViewArrayActivityRandomGamePlayerTwo, battleFieldPlayerTwoActivityRandomGame);
 
         game.run();
-      // TODO mHandler.removeCallbacks(game);
+
     }
 
 
     private Runnable game = new Runnable() {
         @Override
         public void run() {
+            if(!battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&!battleFieldPlayerOneActivityRandomGame.allShipsHit()) //game
+            {
+            battle();
+            }
+            else if (battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&!battleFieldPlayerOneActivityRandomGame.allShipsHit())      // allShipsHit player
+            {
+                     mHandler.removeCallbacks(game);
+                Intent intent = new Intent(getApplicationContext(),WinPlayerOne.class);
+                startActivity(intent);
+                finish();
+            }
+            else if (!battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&battleFieldPlayerOneActivityRandomGame.allShipsHit())     // allShipsHit computer
+                {
+                    mHandler.removeCallbacks(game);
+                    Intent intent = new Intent(getApplicationContext(),WinPlayerTwo.class);
+                    startActivity(intent);
+                    finish();
+            }
+            else;
 
-            shoot();
-            mHandler.postDelayed(this,1000);
         }
     };
 
+    public void battle(){
+
+        if(playerOneCounter&&!playerTwoCounter){
+            readClicable();
+        }
+        else if(playerTwoCounter&&!playerOneCounter){
+            shoot();
+        }
+        else{
+            playerOneCounter=true;
+            playerTwoCounter=false;
+        }
+        mHandler.postDelayed(game,1000);
+    };
 
     private void shoot(){
         Random random = new Random();
@@ -60,13 +93,14 @@ public class RandomGameBattle extends AppCompatActivity {
                 if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()){
                     TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundColor(getResources().getColor(R.color.ship));
                     battleFieldPlayerOneActivityRandomGame.battleField[i][j].setHit(true);
-                    playerTwoCounter=playerTwoCounter-1;
                 }else{
                     TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundColor(getResources().getColor(R.color.water));
                     battleFieldPlayerOneActivityRandomGame.battleField[i][j].setHit(true);
-                    playerTwoCounter=playerTwoCounter-1;
+                    playerTwoCounter=false;
+                    playerOneCounter=true;
                 }
             }
+
     }
 
     private void initializeBattleFieldActivityRandomGamePlayerTwo(TextView[][] textViewArrayActivityRandomGame) {
@@ -322,11 +356,30 @@ public class RandomGameBattle extends AppCompatActivity {
                 TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundColor(getResources().getColor(R.color.ship));
             } else {
                 TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundColor(getResources().getColor(R.color.water));
+                playerOneCounter=false;
+                playerTwoCounter=true;
             }
             battleFieldPlayerTwoActivityRandomGame.battleField[i][j].setHit(true);
-            playerOneCounter = playerOneCounter - 1;
             BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame, i, j);
 
+            disableClickable();
+
+    }
+
+    private void disableClickable() {
+        for(int i = 0;i<10;i++){
+            for(int j=0;j<10;j++){
+                TextViewArrayActivityRandomGamePlayerTwo[i][j].setClickable(false);
+            }
+        }
+    }
+
+    private void readClicable() {
+        for(int i = 0;i<10;i++){
+            for(int j=0;j<10;j++){
+                TextViewArrayActivityRandomGamePlayerTwo[i][j].setClickable(!BattleFieldPlayerTwoSingleton.getInstance().battleField.battleField[i][j].isHit());
+            }
+        }
     }
 
 

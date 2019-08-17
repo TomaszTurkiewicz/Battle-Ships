@@ -5,5 +5,6 @@
     <dimen name="FieldSize">25dp</dimen>
     <dimen name="TextSize">20sp</dimen>
     <dimen name="Button">20</dimen>
+    <dimen name="TextBigSize">75</dimen>
 
 </resources>
