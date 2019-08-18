@@ -86,8 +86,6 @@ public class RandomGameBattle extends AppCompatActivity {
         ShipOneMastsFourth[0]=findViewById(R.id.OneCellShip4);
     }
     //TODO opisać planszę
-        //TODO komunikaty podczas rozgrywki czyj ruch
-        //TODO zmienić kolor wody i statku aby było widać kratki
 
     private Runnable game = new Runnable() {
         @Override
@@ -315,7 +313,6 @@ public class RandomGameBattle extends AppCompatActivity {
         }
     }
 
-    ;
 
     private void shoot(){
         Random random = new Random();
@@ -635,35 +632,55 @@ public class RandomGameBattle extends AppCompatActivity {
 
     }
 
+    void setShipHit(TextView[]textViews, int noOfMasts){
+        for(int i = 0;i<noOfMasts;i++){
+            textViews[i].setBackgroundColor(getResources().getColor(R.color.ship));
+        }
+    }
+
     private void showShipHit(int i, int j) {
         int numberOfMasts = battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).getNumberOfMasts();
         int Shipnumber = battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).getShipNumber();
         if(numberOfMasts==4){
-            ShipFourMasts[ShipFourMastsCounter].setBackgroundColor(getResources().getColor(R.color.ship));
+            if(ShipFourMastsCounter==3){
+                setShipHit(ShipFourMasts,4);
+            }else;
             ShipFourMastsCounter++;
         }
         else if(numberOfMasts==3){
             if(Shipnumber==1){
-            ShipThreeMastsFirst[ShipThreeMastsCounterFirst].setBackgroundColor(getResources().getColor(R.color.ship));
+                if(ShipThreeMastsCounterFirst==2) {
+                    setShipHit(ShipThreeMastsFirst,3);
+                }else;
                 ShipThreeMastsCounterFirst++;
             }
             else if(Shipnumber==2){
-                ShipThreeMastsSecond[ShipThreeMastsCounterSecond].setBackgroundColor(getResources().getColor(R.color.ship));
+                if(ShipThreeMastsCounterSecond==2) {
+                    setShipHit(ShipThreeMastsSecond,3);
+                }else;
                 ShipThreeMastsCounterSecond++;
             }
             else;
         }
         else if(numberOfMasts==2){
                 if(Shipnumber==1){
-                    ShipTwoMastsFirst[ShipTwoMastsCounterFirst].setBackgroundColor(getResources().getColor(R.color.ship));
+                    if(ShipTwoMastsCounterFirst==1) {
+                        setShipHit(ShipTwoMastsFirst,2);
+                    }
+                    else;
                     ShipTwoMastsCounterFirst++;
                 }
                 else if(Shipnumber==2){
-                    ShipTwoMastsSecond[ShipTwoMastsCounterSecond].setBackgroundColor(getResources().getColor(R.color.ship));
+                    if(ShipTwoMastsCounterSecond==1) {
+                        setShipHit(ShipTwoMastsSecond,2);
+                    }else;
                     ShipTwoMastsCounterSecond++;
                 }
                 else if(Shipnumber==3){
-                    ShipTwoMastsThird[ShipTwoMastsCounterThird].setBackgroundColor(getResources().getColor(R.color.ship));
+                    if(ShipTwoMastsCounterThird==1) {
+                        setShipHit(ShipTwoMastsThird,2);
+                    }
+                    else;
                     ShipTwoMastsCounterThird++;
                 }
                 else;
