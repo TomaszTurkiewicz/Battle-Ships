@@ -11,14 +11,16 @@ public class RandomGame extends AppCompatActivity {
 
     BattleField battleFieldPlayerOneActivityRandom = new BattleField();
     BattleField battleFieldPlayerTwoActivityRandom = new BattleField();
-
+    TextView[][] TextViewArray = new TextView[10][10];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_random_game);
 
-        TextView[][] TextViewArray = new TextView[10][10];
+
         initializeBattleField(TextViewArray);
+
+
         battleFieldPlayerOneActivityRandom.createFleet();
         displayBattleFieldPlayerOne(TextViewArray, battleFieldPlayerOneActivityRandom);
     }
@@ -34,7 +36,15 @@ public class RandomGame extends AppCompatActivity {
             } else {
                 TextViewArray[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell));
             }
-        }}}
+        }else{
+            final int sdk = android.os.Build.VERSION.SDK_INT;
+            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                TextViewArray[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell));
+            } else {
+                TextViewArray[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell));
+            }
+        }
+         }}
     }
 
     private void initializeBattleField(TextView[][] textViewArray) {
@@ -167,8 +177,10 @@ public class RandomGame extends AppCompatActivity {
     }
 
     public void reDo(View view) {
-        Intent intent = new Intent(getApplicationContext(),RandomGame.class);
-        startActivity(intent);
-        finish();
+
+        battleFieldPlayerOneActivityRandom.initializeBattleShipField();
+        battleFieldPlayerOneActivityRandom.createFleet();
+        displayBattleFieldPlayerOne(TextViewArray, battleFieldPlayerOneActivityRandom);
+
     }
 }

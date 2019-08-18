@@ -26,7 +26,7 @@ public class BattleField{
         initializeBattleShipField();
     }
 
-    private void initializeBattleShipField() {
+    public void initializeBattleShipField() {
         battleField[0][0] = new Ship(0, 0, false, false);
         battleField[0][1] = new Ship(0, 0, false, false);
         battleField[0][2] = new Ship(0, 0, false, false);
