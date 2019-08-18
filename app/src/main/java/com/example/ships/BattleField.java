@@ -2,7 +2,7 @@ package com.example.ships;
 
 import java.util.Random;
 
-public class BattleField {
+public class BattleField{
     Ship[][] battleField = new Ship[10][10];
 
     boolean position;
