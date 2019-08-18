@@ -27,7 +27,13 @@ public class RandomGame extends AppCompatActivity {
         for(int i=0;i<10;i++){
          for(int j=0;j<10;j++){
         if(battleFieldPlayerOneActivityRandom.getBattleField(i,j).isShip()){
-            TextViewArray[i][j].setBackgroundColor(getResources().getColor(R.color.ship));
+
+            final int sdk = android.os.Build.VERSION.SDK_INT;
+            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                TextViewArray[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell));
+            } else {
+                TextViewArray[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell));
+            }
         }}}
     }
 

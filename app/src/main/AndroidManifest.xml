@@ -18,7 +18,7 @@
             android:screenOrientation="landscape"/>
         <activity
             android:name=".WinPlayerOne"
-            tools:ignore="DuplicateActivity" />
+            android:screenOrientation="landscape" />
         <activity
             android:name=".RandomGame"
             android:screenOrientation="portrait" />

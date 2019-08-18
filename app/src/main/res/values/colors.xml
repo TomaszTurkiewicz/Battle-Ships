@@ -4,10 +4,15 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="background_color">#F5FAC3</color>
+    <color name="background_color_hidden">#D2D5C8</color>
     <color name="border_color">#000</color>
     <color name="ship">#410F0D</color>
+    <color name="ship_hidden">#4E3130</color>
     <color name="widmoShip">#626164</color>
+    <color name="widmoShip_hidden">#9C9B9E</color>
     <color name="water">#2D99EE</color>
+    <color name="water_hidden">#80BCEC</color>
     <color name="GREEN">#14FC03</color>
+    <color name="RED">#D60606</color>
 
 </resources>

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/you_win"
-        android:textSize="@dimen/FieldSize"
+        android:textSize="75dp"
         android:textColor="@color/GREEN"
         android:gravity="center"/>
 
