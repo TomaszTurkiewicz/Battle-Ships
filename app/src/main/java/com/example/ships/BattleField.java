@@ -27,115 +27,115 @@ public class BattleField{
     }
 
     public void initializeBattleShipField() {
-        battleField[0][0] = new Ship(0, 0, false, false);
-        battleField[0][1] = new Ship(0, 0, false, false);
-        battleField[0][2] = new Ship(0, 0, false, false);
-        battleField[0][3] = new Ship(0, 0, false, false);
-        battleField[0][4] = new Ship(0, 0, false, false);
-        battleField[0][5] = new Ship(0, 0, false, false);
-        battleField[0][6] = new Ship(0, 0, false, false);
-        battleField[0][7] = new Ship(0, 0, false, false);
-        battleField[0][8] = new Ship(0, 0, false, false);
-        battleField[0][9] = new Ship(0, 0, false, false);
+        battleField[0][0] = new Ship(0, 0, false, false,false);
+        battleField[0][1] = new Ship(0, 0, false, false,false);
+        battleField[0][2] = new Ship(0, 0, false, false,false);
+        battleField[0][3] = new Ship(0, 0, false, false,false);
+        battleField[0][4] = new Ship(0, 0, false, false,false);
+        battleField[0][5] = new Ship(0, 0, false, false,false);
+        battleField[0][6] = new Ship(0, 0, false, false,false);
+        battleField[0][7] = new Ship(0, 0, false, false,false);
+        battleField[0][8] = new Ship(0, 0, false, false,false);
+        battleField[0][9] = new Ship(0, 0, false, false,false);
 
-        battleField[1][0] = new Ship(0, 0, false, false);
-        battleField[1][1] = new Ship(0, 0, false, false);
-        battleField[1][2] = new Ship(0, 0, false, false);
-        battleField[1][3] = new Ship(0, 0, false, false);
-        battleField[1][4] = new Ship(0, 0, false, false);
-        battleField[1][5] = new Ship(0, 0, false, false);
-        battleField[1][6] = new Ship(0, 0, false, false);
-        battleField[1][7] = new Ship(0, 0, false, false);
-        battleField[1][8] = new Ship(0, 0, false, false);
-        battleField[1][9] = new Ship(0, 0, false, false);
+        battleField[1][0] = new Ship(0, 0, false, false,false);
+        battleField[1][1] = new Ship(0, 0, false, false,false);
+        battleField[1][2] = new Ship(0, 0, false, false,false);
+        battleField[1][3] = new Ship(0, 0, false, false,false);
+        battleField[1][4] = new Ship(0, 0, false, false,false);
+        battleField[1][5] = new Ship(0, 0, false, false,false);
+        battleField[1][6] = new Ship(0, 0, false, false,false);
+        battleField[1][7] = new Ship(0, 0, false, false,false);
+        battleField[1][8] = new Ship(0, 0, false, false,false);
+        battleField[1][9] = new Ship(0, 0, false, false,false);
 
-        battleField[2][0] = new Ship(0, 0, false, false);
-        battleField[2][1] = new Ship(0, 0, false, false);
-        battleField[2][2] = new Ship(0, 0, false, false);
-        battleField[2][3] = new Ship(0, 0, false, false);
-        battleField[2][4] = new Ship(0, 0, false, false);
-        battleField[2][5] = new Ship(0, 0, false, false);
-        battleField[2][6] = new Ship(0, 0, false, false);
-        battleField[2][7] = new Ship(0, 0, false, false);
-        battleField[2][8] = new Ship(0, 0, false, false);
-        battleField[2][9] = new Ship(0, 0, false, false);
+        battleField[2][0] = new Ship(0, 0, false, false,false);
+        battleField[2][1] = new Ship(0, 0, false, false,false);
+        battleField[2][2] = new Ship(0, 0, false, false,false);
+        battleField[2][3] = new Ship(0, 0, false, false,false);
+        battleField[2][4] = new Ship(0, 0, false, false,false);
+        battleField[2][5] = new Ship(0, 0, false, false,false);
+        battleField[2][6] = new Ship(0, 0, false, false,false);
+        battleField[2][7] = new Ship(0, 0, false, false,false);
+        battleField[2][8] = new Ship(0, 0, false, false,false);
+        battleField[2][9] = new Ship(0, 0, false, false,false);
 
-        battleField[3][0] = new Ship(0, 0, false, false);
-        battleField[3][1] = new Ship(0, 0, false, false);
-        battleField[3][2] = new Ship(0, 0, false, false);
-        battleField[3][3] = new Ship(0, 0, false, false);
-        battleField[3][4] = new Ship(0, 0, false, false);
-        battleField[3][5] = new Ship(0, 0, false, false);
-        battleField[3][6] = new Ship(0, 0, false, false);
-        battleField[3][7] = new Ship(0, 0, false, false);
-        battleField[3][8] = new Ship(0, 0, false, false);
-        battleField[3][9] = new Ship(0, 0, false, false);
+        battleField[3][0] = new Ship(0, 0, false, false,false);
+        battleField[3][1] = new Ship(0, 0, false, false,false);
+        battleField[3][2] = new Ship(0, 0, false, false,false);
+        battleField[3][3] = new Ship(0, 0, false, false,false);
+        battleField[3][4] = new Ship(0, 0, false, false,false);
+        battleField[3][5] = new Ship(0, 0, false, false,false);
+        battleField[3][6] = new Ship(0, 0, false, false,false);
+        battleField[3][7] = new Ship(0, 0, false, false,false);
+        battleField[3][8] = new Ship(0, 0, false, false,false);
+        battleField[3][9] = new Ship(0, 0, false, false,false);
 
-        battleField[4][0] = new Ship(0, 0, false, false);
-        battleField[4][1] = new Ship(0, 0, false, false);
-        battleField[4][2] = new Ship(0, 0, false, false);
-        battleField[4][3] = new Ship(0, 0, false, false);
-        battleField[4][4] = new Ship(0, 0, false, false);
-        battleField[4][5] = new Ship(0, 0, false, false);
-        battleField[4][6] = new Ship(0, 0, false, false);
-        battleField[4][7] = new Ship(0, 0, false, false);
-        battleField[4][8] = new Ship(0, 0, false, false);
-        battleField[4][9] = new Ship(0, 0, false, false);
+        battleField[4][0] = new Ship(0, 0, false, false,false);
+        battleField[4][1] = new Ship(0, 0, false, false,false);
+        battleField[4][2] = new Ship(0, 0, false, false,false);
+        battleField[4][3] = new Ship(0, 0, false, false,false);
+        battleField[4][4] = new Ship(0, 0, false, false,false);
+        battleField[4][5] = new Ship(0, 0, false, false,false);
+        battleField[4][6] = new Ship(0, 0, false, false,false);
+        battleField[4][7] = new Ship(0, 0, false, false,false);
+        battleField[4][8] = new Ship(0, 0, false, false,false);
+        battleField[4][9] = new Ship(0, 0, false, false,false);
 
-        battleField[5][0] = new Ship(0, 0, false, false);
-        battleField[5][1] = new Ship(0, 0, false, false);
-        battleField[5][2] = new Ship(0, 0, false, false);
-        battleField[5][3] = new Ship(0, 0, false, false);
-        battleField[5][4] = new Ship(0, 0, false, false);
-        battleField[5][5] = new Ship(0, 0, false, false);
-        battleField[5][6] = new Ship(0, 0, false, false);
-        battleField[5][7] = new Ship(0, 0, false, false);
-        battleField[5][8] = new Ship(0, 0, false, false);
-        battleField[5][9] = new Ship(0, 0, false, false);
+        battleField[5][0] = new Ship(0, 0, false, false,false);
+        battleField[5][1] = new Ship(0, 0, false, false,false);
+        battleField[5][2] = new Ship(0, 0, false, false,false);
+        battleField[5][3] = new Ship(0, 0, false, false,false);
+        battleField[5][4] = new Ship(0, 0, false, false,false);
+        battleField[5][5] = new Ship(0, 0, false, false,false);
+        battleField[5][6] = new Ship(0, 0, false, false,false);
+        battleField[5][7] = new Ship(0, 0, false, false,false);
+        battleField[5][8] = new Ship(0, 0, false, false,false);
+        battleField[5][9] = new Ship(0, 0, false, false,false);
 
-        battleField[6][0] = new Ship(0, 0, false, false);
-        battleField[6][1] = new Ship(0, 0, false, false);
-        battleField[6][2] = new Ship(0, 0, false, false);
-        battleField[6][3] = new Ship(0, 0, false, false);
-        battleField[6][4] = new Ship(0, 0, false, false);
-        battleField[6][5] = new Ship(0, 0, false, false);
-        battleField[6][6] = new Ship(0, 0, false, false);
-        battleField[6][7] = new Ship(0, 0, false, false);
-        battleField[6][8] = new Ship(0, 0, false, false);
-        battleField[6][9] = new Ship(0, 0, false, false);
+        battleField[6][0] = new Ship(0, 0, false, false,false);
+        battleField[6][1] = new Ship(0, 0, false, false,false);
+        battleField[6][2] = new Ship(0, 0, false, false,false);
+        battleField[6][3] = new Ship(0, 0, false, false,false);
+        battleField[6][4] = new Ship(0, 0, false, false,false);
+        battleField[6][5] = new Ship(0, 0, false, false,false);
+        battleField[6][6] = new Ship(0, 0, false, false,false);
+        battleField[6][7] = new Ship(0, 0, false, false,false);
+        battleField[6][8] = new Ship(0, 0, false, false,false);
+        battleField[6][9] = new Ship(0, 0, false, false,false);
 
-        battleField[7][0] = new Ship(0, 0, false, false);
-        battleField[7][1] = new Ship(0, 0, false, false);
-        battleField[7][2] = new Ship(0, 0, false, false);
-        battleField[7][3] = new Ship(0, 0, false, false);
-        battleField[7][4] = new Ship(0, 0, false, false);
-        battleField[7][5] = new Ship(0, 0, false, false);
-        battleField[7][6] = new Ship(0, 0, false, false);
-        battleField[7][7] = new Ship(0, 0, false, false);
-        battleField[7][8] = new Ship(0, 0, false, false);
-        battleField[7][9] = new Ship(0, 0, false, false);
+        battleField[7][0] = new Ship(0, 0, false, false,false);
+        battleField[7][1] = new Ship(0, 0, false, false,false);
+        battleField[7][2] = new Ship(0, 0, false, false,false);
+        battleField[7][3] = new Ship(0, 0, false, false,false);
+        battleField[7][4] = new Ship(0, 0, false, false,false);
+        battleField[7][5] = new Ship(0, 0, false, false,false);
+        battleField[7][6] = new Ship(0, 0, false, false,false);
+        battleField[7][7] = new Ship(0, 0, false, false,false);
+        battleField[7][8] = new Ship(0, 0, false, false,false);
+        battleField[7][9] = new Ship(0, 0, false, false,false);
 
-        battleField[8][0] = new Ship(0, 0, false, false);
-        battleField[8][1] = new Ship(0, 0, false, false);
-        battleField[8][2] = new Ship(0, 0, false, false);
-        battleField[8][3] = new Ship(0, 0, false, false);
-        battleField[8][4] = new Ship(0, 0, false, false);
-        battleField[8][5] = new Ship(0, 0, false, false);
-        battleField[8][6] = new Ship(0, 0, false, false);
-        battleField[8][7] = new Ship(0, 0, false, false);
-        battleField[8][8] = new Ship(0, 0, false, false);
-        battleField[8][9] = new Ship(0, 0, false, false);
+        battleField[8][0] = new Ship(0, 0, false, false,false);
+        battleField[8][1] = new Ship(0, 0, false, false,false);
+        battleField[8][2] = new Ship(0, 0, false, false,false);
+        battleField[8][3] = new Ship(0, 0, false, false,false);
+        battleField[8][4] = new Ship(0, 0, false, false,false);
+        battleField[8][5] = new Ship(0, 0, false, false,false);
+        battleField[8][6] = new Ship(0, 0, false, false,false);
+        battleField[8][7] = new Ship(0, 0, false, false,false);
+        battleField[8][8] = new Ship(0, 0, false, false,false);
+        battleField[8][9] = new Ship(0, 0, false, false,false);
 
-        battleField[9][0] = new Ship(0, 0, false, false);
-        battleField[9][1] = new Ship(0, 0, false, false);
-        battleField[9][2] = new Ship(0, 0, false, false);
-        battleField[9][3] = new Ship(0, 0, false, false);
-        battleField[9][4] = new Ship(0, 0, false, false);
-        battleField[9][5] = new Ship(0, 0, false, false);
-        battleField[9][6] = new Ship(0, 0, false, false);
-        battleField[9][7] = new Ship(0, 0, false, false);
-        battleField[9][8] = new Ship(0, 0, false, false);
-        battleField[9][9] = new Ship(0, 0, false, false);
+        battleField[9][0] = new Ship(0, 0, false, false,false);
+        battleField[9][1] = new Ship(0, 0, false, false,false);
+        battleField[9][2] = new Ship(0, 0, false, false,false);
+        battleField[9][3] = new Ship(0, 0, false, false,false);
+        battleField[9][4] = new Ship(0, 0, false, false,false);
+        battleField[9][5] = new Ship(0, 0, false, false,false);
+        battleField[9][6] = new Ship(0, 0, false, false,false);
+        battleField[9][7] = new Ship(0, 0, false, false,false);
+        battleField[9][8] = new Ship(0, 0, false, false,false);
+        battleField[9][9] = new Ship(0, 0, false, false,false);
 
     }
 
@@ -910,7 +910,6 @@ public class BattleField{
         battleField[i][j].setShipNumber(shipNumber);
         battleField[i][j].setShip(isShip);
     }
-
 
 }
 

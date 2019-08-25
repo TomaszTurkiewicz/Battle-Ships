@@ -33,4 +33,11 @@ public class ChooseGameLevel extends AppCompatActivity {
      startActivity(intent);
      finish();
 }
+
+    public void expertGame(View view) {
+        GameDifficulty.getInstance().setLevel(3);
+        Intent intent = new Intent(getApplicationContext(),RandomGameBattle.class);
+        startActivity(intent);
+        finish();
+    }
 }

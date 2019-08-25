@@ -5,13 +5,15 @@ public class Ship {
     private int shipNumber;
     private boolean isShip;
     private boolean isHit;
+    private boolean isShipHit;
 
 
-    public Ship(int numberOfMasts, int shipNumber, boolean isShip, boolean isHit) {
+    public Ship(int numberOfMasts, int shipNumber, boolean isShip, boolean isHit, boolean isShipHit) {
         this.numberOfMasts = numberOfMasts;
         this.shipNumber = shipNumber;
         this.isShip = isShip;
         this.isHit = isHit;
+        this.isShipHit = isShipHit;
     }
 
     public int getNumberOfMasts() {
@@ -46,4 +48,10 @@ public class Ship {
         isHit = hit;
     }
 
+    public boolean getisShipHit(){
+        return isShipHit;
+    }
+    public void setShipHit(boolean shipHit){
+        isShipHit=shipHit;
+    }
 }

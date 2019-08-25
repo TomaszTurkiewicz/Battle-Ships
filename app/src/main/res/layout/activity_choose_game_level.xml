@@ -25,7 +25,7 @@
 
     <Button
         android:id="@+id/tooEasy"
-        android:layout_width="150dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
@@ -44,7 +44,7 @@
 
     <Button
         android:id="@+id/stillEasy"
-        android:layout_width="150dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
@@ -62,7 +62,25 @@
 
         <Button
             android:id="@+id/normal"
-            android:layout_width="150dp"
+            android:layout_width="110dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/expert"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/normal"
+            android:onClick="normalGame"
+            android:layout_gravity="center"
+            />
+
+        <Button
+            android:id="@+id/expert"
+            android:layout_width="110dp"
             android:layout_height="60dp"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
@@ -73,8 +91,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/normal"
-            android:onClick="normalGame"
+            android:text="@string/expert"
+            android:onClick="expertGame"
             android:layout_gravity="center"
             />
 

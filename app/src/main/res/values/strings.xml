@@ -27,10 +27,11 @@
     <string name="reDo">RE DO</string>
     <string name="TableSize">250dp</string>
     <string name="FieldSize">25dp</string>
-    <string name="you_win">YOU WON</string>
-    <string name="you_lost">YOU LOST</string>
+    <string name="you_win">YOU WIN</string>
     <string name="not_random_game">NOT RANDOM GAME</string>
     <string name="tooEasy">TOO EASY</string>
     <string name="stillEasy">STILL EASY</string>
     <string name="normal">NORMAL</string>
+    <string name="you_lose">YOU LOSE</string>
+    <string name="expert">EXPERT</string>
 </resources>
