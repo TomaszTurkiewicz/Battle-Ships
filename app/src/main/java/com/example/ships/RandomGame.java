@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 public class RandomGame extends AppCompatActivity {
 
-
+//TODO usunąć to activity
     BattleField battleFieldPlayerOneActivityRandom = new BattleField();
     BattleField battleFieldPlayerTwoActivityRandom = new BattleField();
     TextView[][] TextViewArray = new TextView[10][10];
@@ -162,9 +162,9 @@ public class RandomGame extends AppCompatActivity {
 
     public void startGame(View view) {
 
-        BattleFieldPlayerOneSingleton.getInstance().storeBattleField(battleFieldPlayerOneActivityRandom);
-        battleFieldPlayerTwoActivityRandom.createFleet();
-        BattleFieldPlayerTwoSingleton.getInstance().storeBattleField(battleFieldPlayerTwoActivityRandom);
+  //      BattleFieldPlayerOneSingleton.getInstance().storeBattleField(battleFieldPlayerOneActivityRandom);
+  //      battleFieldPlayerTwoActivityRandom.createFleet();
+  //      BattleFieldPlayerTwoSingleton.getInstance().storeBattleField(battleFieldPlayerTwoActivityRandom);
         Intent intent = new Intent(getApplicationContext(),RandomGameBattle.class);
         startActivity(intent);
         finish();
@@ -178,9 +178,9 @@ public class RandomGame extends AppCompatActivity {
 
     public void reDo(View view) {
 
-        battleFieldPlayerOneActivityRandom.initializeBattleShipField();
-        battleFieldPlayerOneActivityRandom.createFleet();
-        displayBattleFieldPlayerOne(TextViewArray, battleFieldPlayerOneActivityRandom);
+  //      battleFieldPlayerOneActivityRandom.initializeBattleShipField();
+  //      battleFieldPlayerOneActivityRandom.createFleet();
+ //       displayBattleFieldPlayerOne(TextViewArray, battleFieldPlayerOneActivityRandom);
 
     }
 }

@@ -15,8 +15,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void randomGame(View view) {
 
-        Intent intent = new Intent(getApplicationContext(),RandomGame.class);
+        Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
         startActivity(intent);
     }
 
+    public void notRandomGame(View view) {
+    }
 }

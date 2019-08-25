@@ -39,8 +39,10 @@ public class RandomGameBattle extends AppCompatActivity {
     TextView[] ShipOneMastsFourth = new TextView[1];
     boolean playerOneCounter;
     boolean playerTwoCounter;
-
-
+    int level = GameDifficulty.getInstance().getLevel();
+    boolean newShoot=true;
+    int positionI;
+    int positionJ;
 
 
     @Override
@@ -50,11 +52,17 @@ public class RandomGameBattle extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_random_game_battle);
 
+
+
         initializeShips();
         initializeBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGamePlayerOne);
         initializeBattleFieldActivityRandomGamePlayerTwo(TextViewArrayActivityRandomGamePlayerTwo);
-        battleFieldPlayerOneActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
-        battleFieldPlayerTwoActivityRandomGame = BattleFieldPlayerTwoSingleton.getInstance().readBattleField();
+        battleFieldPlayerOneActivityRandomGame.createFleet();
+        battleFieldPlayerTwoActivityRandomGame.createFleet();
+
+
+ //       battleFieldPlayerOneActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
+ //       battleFieldPlayerTwoActivityRandomGame = BattleFieldPlayerTwoSingleton.getInstance().readBattleField();
         displayBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGamePlayerOne, battleFieldPlayerOneActivityRandomGame);
  //       displayBattleFieldActivityRandomGamePlayerTwo(TextViewArrayActivityRandomGamePlayerTwo, battleFieldPlayerTwoActivityRandomGame);
 
@@ -102,6 +110,7 @@ public class RandomGameBattle extends AppCompatActivity {
         ShipOneMastsFourth[0]=findViewById(R.id.OneCellShip4);
     }
     //TODO opisać planszę
+    // TODO dodać trzy wersje gry, "super easy", "not so Easy", "Normal"
 
     private Runnable game = new Runnable() {
         @Override
@@ -153,50 +162,103 @@ public class RandomGameBattle extends AppCompatActivity {
                 //jest statek i został trafiony
                 if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()
                         &&battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell));
-                    }
+                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne,i,j);
                 }
 
                 // woda i została trafiony
                 else if(!battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()
                         &&battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell));
-                    }
+                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,i,j);
                 }
 
                 // jest statek i nie został trafiony
                 else if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()
                 &&!battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.widmo_ship_cell));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackground(getResources().getDrawable(R.drawable.widmo_ship_cell));
-                    }
+                    displayWidmoShip(TextViewArrayActivityRandomGamePlayerOne,i,j);
                 }
                 // nie ma statku i nie został trafiony
                 else if(!battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()
                         &&!battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell));
-                    }
+                    displayBattleCell(TextViewArrayActivityRandomGamePlayerOne,i,j);
                 }
-
                 else;
             }
         }
     }
+
+    private void displayBattleCell(TextView[][] TextView, int i, int j) {
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell));
+        }
+    }
+
+    private void displayWidmoShip(TextView[][] TextView, int i, int j){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.widmo_ship_cell));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.widmo_ship_cell));
+        }
+    }
+
+    private void displayWaterCell(TextView[][] TextView, int i, int j) {
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell));
+        }
+    }
+
+    private void displayShipCell(TextView[][] TextView, int i, int j) {
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell));
+        }
+    }
+
+    private void displayShipCellHidden(TextView[][] TextView, int i, int j){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell_hidden));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell_hidden));
+        }
+    }
+
+    private void displayWaterCellHidden(TextView[][] TextView,int i, int j){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_hiden));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell_hiden));
+        }
+
+    }
+
+    private void displayWidmoShipHidden(TextView[][] TextView,int i, int j){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.widmo_ship_hidden));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.widmo_ship_hidden));
+        }
+    }
+
+    private void displayBattleCellHidden(TextView[][] TextView,int i, int j){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_hidden));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_hidden));
+        }
+    }
+
 
     private void hideBattleFiledAvailablePlayerOne() {
         for(int i =0;i<10;i++){
@@ -204,44 +266,24 @@ public class RandomGameBattle extends AppCompatActivity {
                 //jest statek i został trafiony
                 if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()
                         &&battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell_hidden));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell_hidden));
-                    }
+                    displayShipCellHidden(TextViewArrayActivityRandomGamePlayerOne,i,j);
                 }
 
                 // woda i została trafiony
                 else if(!battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()
                         &&battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_hiden));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell_hiden));
-                    }
+                    displayWaterCellHidden(TextViewArrayActivityRandomGamePlayerOne,i,j);
                 }
 
                 // jest statek i nie został trafiony
                 else if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()
                         &&!battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.widmo_ship_hidden));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackground(getResources().getDrawable(R.drawable.widmo_ship_hidden));
-                    }
+                        displayWidmoShipHidden(TextViewArrayActivityRandomGamePlayerOne,i,j);
                 }
                 // nie ma statku i nie został trafiony
                 else if(!battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()
                         &&!battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_hidden));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerOne[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_hidden));
-                    }
+                        displayBattleCellHidden(TextViewArrayActivityRandomGamePlayerOne,i,j);
                 }
 
                 else;
@@ -256,40 +298,25 @@ public class RandomGameBattle extends AppCompatActivity {
                 //jest statek i został trafiony
                 if(battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).isShip()
                         &&battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell_hidden));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell_hidden));
-                    }
+                    displayShipCellHidden(TextViewArrayActivityRandomGamePlayerTwo,i,j);
                 }
 
                 // woda i został trafiony
                 else if(!battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).isShip()
                         &&battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_hiden));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell_hiden));
-                    }
+                    displayWaterCellHidden(TextViewArrayActivityRandomGamePlayerTwo,i,j);
                 }
 
-                // został trafiony
+                // nie został trafiony
                 else if(!battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).isHit()){
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_hidden));
-                    } else {
-                        TextViewArrayActivityRandomGamePlayerTwo[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_hidden));
-                    }
+                        displayBattleCellHidden(TextViewArrayActivityRandomGamePlayerTwo,i,j);
                 }
                 else;
             }
         }
 
     }
-
+//TODO wyczyścić metody od wyświetlania kolorów
     private void showBattleFieldAvailablePlayerTwo() {
         for(int i =0;i<10;i++){
             for(int j = 0; j<10;j++){
@@ -342,37 +369,59 @@ public class RandomGameBattle extends AppCompatActivity {
     }
 
 
-    private void shoot(){
-        Random random = new Random();
-        int shoot = random.nextInt(999);
-        int i = shoot / 100;
-        int j = shoot % 10;
-            if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isHit()){
+    private void shoot() {
+        if (newShoot) {
+            Random random = new Random();
+            int shoot = random.nextInt(999);
+            int i = shoot / 100;
+            int j = shoot % 10;
+            if (battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).isHit()) {
                 shoot();
-            }
-            else{
-                if(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).isShip()){
+            } else {
+                if (battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).isShip()) {
                     final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell));
                     } else {
                         TextViewArrayActivityRandomGamePlayerOne[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell));
                     }
                     battleFieldPlayerOneActivityRandomGame.battleField[i][j].setHit(true);
-                }else{
+                    if(level==2&&!zatopiony(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber()))
+                    {
+                    positionI=i;
+                    positionJ=j;
+                    newShoot=false;
+                    dobijShip(positionI,positionJ);
+                    }else;
+
+                } else {
                     final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         TextViewArrayActivityRandomGamePlayerOne[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell));
                     } else {
                         TextViewArrayActivityRandomGamePlayerOne[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell));
                     }
                     battleFieldPlayerOneActivityRandomGame.battleField[i][j].setHit(true);
-                    playerTwoCounter=false;
-                    playerOneCounter=true;
+                    playerTwoCounter = false;
+                    playerOneCounter = true;
                 }
             }
-
+        } else
+            {
+                dobijShip(positionI,positionJ);
+        }
     }
+
+    private void dobijShip(int i, int j) {
+        if (battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts()==4){
+            findFourMasts(i,j);
+        }
+    }
+
+    private void findFourMasts(int i, int j) {
+        //TODO how to find ship?
+    }
+
 
     private void initializeBattleFieldActivityRandomGamePlayerTwo(TextView[][] textViewArrayActivityRandomGame) {
         textViewArrayActivityRandomGame[0][0] = findViewById(R.id.player2CellGame_1x1);
@@ -664,7 +713,7 @@ public class RandomGameBattle extends AppCompatActivity {
                 playerTwoCounter=true;
             }
             battleFieldPlayerTwoActivityRandomGame.battleField[i][j].setHit(true);
-            BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame, i, j);
+        //    BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame, i, j);
 
             disableClickable();
 
@@ -680,45 +729,75 @@ public class RandomGameBattle extends AppCompatActivity {
         int numberOfMasts = battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).getNumberOfMasts();
         int Shipnumber = battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).getShipNumber();
         if(numberOfMasts==4){
-            if(ShipFourMastsCounter==3){
-                setShipHit(ShipFourMasts,4);
-            }else;
+            if(level==0){
+                ShipFourMasts[ShipFourMastsCounter].setBackgroundColor(getResources().getColor(R.color.ship));
+            }
+            else {
+                if (ShipFourMastsCounter == 3) {
+                    setShipHit(ShipFourMasts, 4);
+                } else ;
+
+            }
+
             ShipFourMastsCounter++;
         }
         else if(numberOfMasts==3){
             if(Shipnumber==1){
-                if(ShipThreeMastsCounterFirst==2) {
-                    setShipHit(ShipThreeMastsFirst,3);
-                }else;
+                if(level==0){
+                    ShipThreeMastsFirst[ShipThreeMastsCounterFirst].setBackgroundColor(getResources().getColor(R.color.ship));
+                }
+                else {
+                    if (ShipThreeMastsCounterFirst == 2) {
+                        setShipHit(ShipThreeMastsFirst, 3);
+                    } else ;
+                }
                 ShipThreeMastsCounterFirst++;
             }
             else if(Shipnumber==2){
+                if(level==0){
+                    ShipThreeMastsSecond[ShipThreeMastsCounterSecond].setBackgroundColor(getResources().getColor(R.color.ship));
+                }
+                else{
                 if(ShipThreeMastsCounterSecond==2) {
                     setShipHit(ShipThreeMastsSecond,3);
                 }else;
+                }
                 ShipThreeMastsCounterSecond++;
             }
             else;
         }
         else if(numberOfMasts==2){
                 if(Shipnumber==1){
-                    if(ShipTwoMastsCounterFirst==1) {
-                        setShipHit(ShipTwoMastsFirst,2);
+                    if(level==0){
+                        ShipTwoMastsFirst[ShipTwoMastsCounterFirst].setBackgroundColor(getResources().getColor(R.color.ship));
                     }
-                    else;
+                    else {
+                        if (ShipTwoMastsCounterFirst == 1) {
+                            setShipHit(ShipTwoMastsFirst, 2);
+                        } else ;
+                    }
                     ShipTwoMastsCounterFirst++;
                 }
                 else if(Shipnumber==2){
-                    if(ShipTwoMastsCounterSecond==1) {
-                        setShipHit(ShipTwoMastsSecond,2);
-                    }else;
+                    if(level==0){
+                        ShipTwoMastsSecond[ShipTwoMastsCounterSecond].setBackgroundColor(getResources().getColor(R.color.ship));
+                    }
+                    else {
+                        if (ShipTwoMastsCounterSecond == 1) {
+                            setShipHit(ShipTwoMastsSecond, 2);
+                        } else ;
+                    }
                     ShipTwoMastsCounterSecond++;
                 }
                 else if(Shipnumber==3){
-                    if(ShipTwoMastsCounterThird==1) {
-                        setShipHit(ShipTwoMastsThird,2);
+                    if(level==0){
+                        ShipTwoMastsThird[ShipTwoMastsCounterThird].setBackgroundColor(getResources().getColor(R.color.ship));
                     }
-                    else;
+                    else {
+                        if (ShipTwoMastsCounterThird == 1) {
+                            setShipHit(ShipTwoMastsThird, 2);
+                        } else ;
+                    }
                     ShipTwoMastsCounterThird++;
                 }
                 else;

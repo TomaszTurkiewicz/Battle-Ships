@@ -29,4 +29,8 @@
     <string name="FieldSize">25dp</string>
     <string name="you_win">YOU WON</string>
     <string name="you_lost">YOU LOST</string>
+    <string name="not_random_game">NOT RANDOM GAME</string>
+    <string name="tooEasy">TOO EASY</string>
+    <string name="stillEasy">STILL EASY</string>
+    <string name="normal">NORMAL</string>
 </resources>
