@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class RandomGameBattle extends AppCompatActivity {
@@ -46,7 +47,7 @@ public class RandomGameBattle extends AppCompatActivity {
     int direction;
     int x;
     int y;
-
+    ArrayList<Integer>ShootTable = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,8 @@ public class RandomGameBattle extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_random_game_battle);
 
+
+        initializeTable(ShootTable);
 
 
         initializeShips();
@@ -71,6 +74,12 @@ public class RandomGameBattle extends AppCompatActivity {
 
         game.run();
 
+    }
+
+    private void initializeTable(ArrayList<Integer> shootTable) {
+        for(int i=0;i<100;i++){
+            shootTable.add(i);
+        }
     }
 
 
@@ -375,18 +384,23 @@ public class RandomGameBattle extends AppCompatActivity {
     private void shoot() {
         if (newShoot) {
             Random random = new Random();
-            int shoot = random.nextInt(999);
-            int i = shoot / 100;
-            int j = shoot % 10;
+            int shoot = random.nextInt(ShootTable.size()-1);
+       //     int i = shoot / 100;
+       //     int j = shoot % 10;
+            int i=ShootTable.get(shoot)/10;
+            int j=ShootTable.get(shoot)%10;
             if (battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).isHit()) {
+                ShootTable.remove(Integer.valueOf(i*10+j));
                 shoot();
             } else {
                 if(level==3&&checkCell(i,j)){
+                    ShootTable.remove(Integer.valueOf(i*10+j));
                    shoot();
                 }
                 else{
                 if (battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).isShip()) {
                     displayShipCell(TextViewArrayActivityRandomGamePlayerOne,i,j);
+                    ShootTable.remove(Integer.valueOf(i*10+j));
                     battleFieldPlayerOneActivityRandomGame.battleField[i][j].setHit(true);
                     if((level==2||level==3)&&!zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber()))
                     {
@@ -399,6 +413,7 @@ public class RandomGameBattle extends AppCompatActivity {
 
                 } else {
                     displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,i,j);
+                    ShootTable.remove(Integer.valueOf(i*10+j));
                     battleFieldPlayerOneActivityRandomGame.battleField[i][j].setHit(true);
                     playerTwoCounter = false;
                     playerOneCounter = true;
@@ -524,6 +539,7 @@ public class RandomGameBattle extends AppCompatActivity {
                 if(!battleFieldPlayerOneActivityRandomGame.battleField[x][j].isHit()){
                     if(battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()){
                     displayShipCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
+                        ShootTable.remove(Integer.valueOf(x*10+j));
                     battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
                     if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
                         newShoot=true;
@@ -533,6 +549,7 @@ public class RandomGameBattle extends AppCompatActivity {
                     }
                 }else{
                     displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
+                        ShootTable.remove(Integer.valueOf(x*10+j));
                     battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
                     playerTwoCounter = false;
                     playerOneCounter = true;
@@ -555,6 +572,7 @@ public class RandomGameBattle extends AppCompatActivity {
                 if(!battleFieldPlayerOneActivityRandomGame.battleField[x][j].isHit()){
                     if(battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()){
                         displayShipCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
+                        ShootTable.remove(Integer.valueOf(x*10+j));
                         battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
                         if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
                             newShoot=true;
@@ -564,6 +582,7 @@ public class RandomGameBattle extends AppCompatActivity {
                         }
                     }else{
                         displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
+                        ShootTable.remove(Integer.valueOf(x*10+j));
                         battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
                         playerTwoCounter = false;
                         playerOneCounter = true;
@@ -585,6 +604,7 @@ public class RandomGameBattle extends AppCompatActivity {
                 if(!battleFieldPlayerOneActivityRandomGame.battleField[i][y].isHit()){
                     if(battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()){
                         displayShipCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                        ShootTable.remove(Integer.valueOf(i*10+y));
                         battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
                         if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
                             newShoot=true;
@@ -594,6 +614,7 @@ public class RandomGameBattle extends AppCompatActivity {
                         }
                     }else{
                         displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                        ShootTable.remove(Integer.valueOf(i*10+y));
                         battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
                         playerTwoCounter = false;
                         playerOneCounter = true;
@@ -615,6 +636,7 @@ public class RandomGameBattle extends AppCompatActivity {
                 if(!battleFieldPlayerOneActivityRandomGame.battleField[i][y].isHit()){
                     if(battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()){
                         displayShipCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                        ShootTable.remove(Integer.valueOf(i*10+y));
                         battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
                         if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
                             newShoot=true;
@@ -624,6 +646,7 @@ public class RandomGameBattle extends AppCompatActivity {
                         }
                     }else{
                         displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                        ShootTable.remove(Integer.valueOf(i*10+y));
                         battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
                         playerTwoCounter = false;
                         playerOneCounter = true;
