@@ -33,30 +33,12 @@
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/stillEasy"
+        app:layout_constraintEnd_toStartOf="@+id/normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="@string/tooEasy"
         android:onClick="tooEasyGame"
-        android:layout_gravity="center"
-        />
-
-    <Button
-        android:id="@+id/stillEasy"
-        android:layout_width="110dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/normal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@string/stillEasy"
-        android:onClick="stillEasyGame"
         android:layout_gravity="center"
         />
 

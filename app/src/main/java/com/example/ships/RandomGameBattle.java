@@ -142,7 +142,7 @@ public class RandomGameBattle extends AppCompatActivity {
         ShipOneMastsFourth[0]=findViewById(R.id.OneCellShip4);
     }
     //TODO opisać planszę
-    // TODO upgrade expert
+    //TODO wyczyścić kod
 
     private Runnable game = new Runnable() {
         @Override
@@ -356,7 +356,7 @@ public class RandomGameBattle extends AppCompatActivity {
         }
 
     }
-//TODO wyczyścić metody od wyświetlania kolorów
+
     private void showBattleFieldAvailablePlayerTwo() {
         for(int i =0;i<10;i++){
             for(int j = 0; j<10;j++){
@@ -542,60 +542,240 @@ public class RandomGameBattle extends AppCompatActivity {
 
     private void dobijShip(int i, int j) {
         if(direction==1){
-                if(x>=0){
+            if(x>=0){
                 if(!battleFieldPlayerOneActivityRandomGame.battleField[x][j].isHit()){
-                    if(battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()){
-                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
-                        ShootTable.remove(Integer.valueOf(x*10+j));
-                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
-                    if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
-                        newShoot=true;
+                    if(x==0) {
+                        if (battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()) {
+                            displayShipCell(TextViewArrayActivityRandomGamePlayerOne, x, j);
+                            ShootTable.remove(Integer.valueOf(x * 10 + j));
+                            battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                            if (zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getShipNumber())) {
+                                newShoot = true;
+                            } else {
+                                x = x - 1;
+                            }
+                        } else {
+                            displayWaterCell(TextViewArrayActivityRandomGamePlayerOne, x, j);
+                            ShootTable.remove(Integer.valueOf(x * 10 + j));
+                            battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                            playerTwoCounter = false;
+                            playerOneCounter = true;
+                            direction = 2;
+                            x = i + 1;
+                        }
                     }
                     else{
-                        x=x-1;
+                        if(j==0){
+                            if((battleFieldPlayerOneActivityRandomGame.battleField[x-1][j].isHit()&&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x-1][j].isShip())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[x-1][j+1].isHit()&&
+                                            battleFieldPlayerOneActivityRandomGame.battleField[x-1][j+1].isShip())){
+                                direction = 2;
+                                x = i + 1;
+                            }else{
+                                if (battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()) {
+                                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne, x, j);
+                                    ShootTable.remove(Integer.valueOf(x * 10 + j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    if (zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getShipNumber())) {
+                                        newShoot = true;
+                                    } else {
+                                        x = x - 1;
+                                    }
+                                } else {
+                                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne, x, j);
+                                    ShootTable.remove(Integer.valueOf(x * 10 + j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    playerTwoCounter = false;
+                                    playerOneCounter = true;
+                                    direction = 2;
+                                    x = i + 1;
+                                }
+                            }
+
+                        }
+                        else if(j==9){
+                            if((battleFieldPlayerOneActivityRandomGame.battleField[x-1][j-1].isHit()&&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x-1][j-1].isShip())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[x-1][j].isHit()&&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x-1][j].isShip())){
+                                direction = 2;
+                                x = i + 1;
+                            }else{
+                                if (battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()) {
+                                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne, x, j);
+                                    ShootTable.remove(Integer.valueOf(x * 10 + j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    if (zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getShipNumber())) {
+                                        newShoot = true;
+                                    } else {
+                                        x = x - 1;
+                                    }
+                                } else {
+                                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne, x, j);
+                                    ShootTable.remove(Integer.valueOf(x * 10 + j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    playerTwoCounter = false;
+                                    playerOneCounter = true;
+                                    direction = 2;
+                                    x = i + 1;
+                                }
+                            }
+                        }
+                        else{
+                            if((battleFieldPlayerOneActivityRandomGame.battleField[x-1][j-1].isHit()&&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x-1][j-1].isShip())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[x-1][j].isHit()&&
+                                            battleFieldPlayerOneActivityRandomGame.battleField[x-1][j].isShip())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[x-1][j+1].isHit()&&
+                                            battleFieldPlayerOneActivityRandomGame.battleField[x-1][j+1].isShip())){
+                                direction = 2;
+                                x = i + 1;
+                            }else{
+                                if (battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()) {
+                                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne, x, j);
+                                    ShootTable.remove(Integer.valueOf(x * 10 + j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    if (zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getShipNumber())) {
+                                        newShoot = true;
+                                    } else {
+                                        x = x - 1;
+                                    }
+                                } else {
+                                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne, x, j);
+                                    ShootTable.remove(Integer.valueOf(x * 10 + j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    playerTwoCounter = false;
+                                    playerOneCounter = true;
+                                    direction = 2;
+                                    x = i + 1;
+                                }
+                            }
+
+                        }
                     }
-                }else{
-                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
-                        ShootTable.remove(Integer.valueOf(x*10+j));
-                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
-                    playerTwoCounter = false;
-                    playerOneCounter = true;
-                    direction=2;
-                    x=i+1;
-                }
                 }
                 else{
                     direction=2;
                     x=i+1;
                 }
             }
-                else{
+            else{
                 direction=2;
                 x=i+1;
             }
-            }
+        }
 
         else if(direction==2){
             if(x<=9){
                 if(!battleFieldPlayerOneActivityRandomGame.battleField[x][j].isHit()){
-                    if(battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()){
-                        displayShipCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
-                        ShootTable.remove(Integer.valueOf(x*10+j));
-                        battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
-                        if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
-                            newShoot=true;
+                    if(x==9){
+                        if(battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()){
+                            displayShipCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
+                            ShootTable.remove(Integer.valueOf(x*10+j));
+                            battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                            if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
+                                newShoot=true;
+                            }
+                            else{
+                                x=x+1;
+                            }
+                        }else{
+                            displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
+                            ShootTable.remove(Integer.valueOf(x*10+j));
+                            battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                            playerTwoCounter = false;
+                            playerOneCounter = true;
+                            direction=3;
+                            y=j-1;
                         }
-                        else{
-                            x=x+1;
+                    }else {
+                        if(j==0){
+                            if((battleFieldPlayerOneActivityRandomGame.battleField[x+1][j].isHit()&&
+                                            battleFieldPlayerOneActivityRandomGame.battleField[x+1][j].isShip())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[x+1][j+1].isHit()&&
+                                            battleFieldPlayerOneActivityRandomGame.battleField[x+1][j+1].isShip())){
+                                direction=3;
+                                y=j-1;
+                            }else{
+                                if(battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()){
+                                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
+                                    ShootTable.remove(Integer.valueOf(x*10+j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
+                                        newShoot=true;
+                                    }
+                                    else{
+                                        x=x+1;
+                                    }
+                                }else{
+                                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
+                                    ShootTable.remove(Integer.valueOf(x*10+j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    playerTwoCounter = false;
+                                    playerOneCounter = true;
+                                    direction=3;
+                                    y=j-1;
+                            }
+                            }
+                        }else if(j==9) {
+                            if ((battleFieldPlayerOneActivityRandomGame.battleField[x + 1][j].isHit() &&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x + 1][j].isShip()) ||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[x + 1][j - 1].isHit() &&
+                                            battleFieldPlayerOneActivityRandomGame.battleField[x + 1][j - 1].isShip())) {
+                                direction = 3;
+                                y = j - 1;
+                            } else {
+                                if (battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()) {
+                                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne, x, j);
+                                    ShootTable.remove(Integer.valueOf(x * 10 + j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    if (zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getShipNumber())) {
+                                        newShoot = true;
+                                    } else {
+                                        x = x + 1;
+                                    }
+                                } else {
+                                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne, x, j);
+                                    ShootTable.remove(Integer.valueOf(x * 10 + j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    playerTwoCounter = false;
+                                    playerOneCounter = true;
+                                    direction = 3;
+                                    y = j - 1;
+                                }
+                            }
+                        }else{
+                            if((battleFieldPlayerOneActivityRandomGame.battleField[x+1][j-1].isHit()&&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x+1][j-1].isShip())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[x+1][j].isHit()&&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x+1][j].isShip())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[x+1][j+1].isHit()&&
+                                            battleFieldPlayerOneActivityRandomGame.battleField[x+1][j+1].isShip())){
+                                direction=3;
+                                y=j-1;
+                            }else{
+                                if(battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()){
+                                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
+                                    ShootTable.remove(Integer.valueOf(x*10+j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
+                                        newShoot=true;
+                                    }
+                                    else{
+                                        x=x+1;
+                                    }
+                                }else{
+                                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
+                                    ShootTable.remove(Integer.valueOf(x*10+j));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
+                                    playerTwoCounter = false;
+                                    playerOneCounter = true;
+                                    direction=3;
+                                    y=j-1;
+                                }
+                            }
                         }
-                    }else{
-                        displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
-                        ShootTable.remove(Integer.valueOf(x*10+j));
-                        battleFieldPlayerOneActivityRandomGame.battleField[x][j].setHit(true);
-                        playerTwoCounter = false;
-                        playerOneCounter = true;
-                        direction=3;
-                        y=j-1;
                     }
                 }else{
                     direction=3;
@@ -610,31 +790,120 @@ public class RandomGameBattle extends AppCompatActivity {
         else if(direction==3){
             if(y>=0){
                 if(!battleFieldPlayerOneActivityRandomGame.battleField[i][y].isHit()){
-                    if(battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()){
-                        displayShipCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
-                        ShootTable.remove(Integer.valueOf(i*10+y));
-                        battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
-                        if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
-                            newShoot=true;
+                    if (y == 0) {
+                        if (battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()) {
+                            displayShipCell(TextViewArrayActivityRandomGamePlayerOne, i, y);
+                            ShootTable.remove(Integer.valueOf(i * 10 + y));
+                            battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                            if (zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getShipNumber())) {
+                                newShoot = true;
+                            } else {
+                                y = y - 1;
+                            }
+                        } else {
+                            displayWaterCell(TextViewArrayActivityRandomGamePlayerOne, i, y);
+                            ShootTable.remove(Integer.valueOf(i * 10 + y));
+                            battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                            playerTwoCounter = false;
+                            playerOneCounter = true;
+                            direction = 4;
+                            y = j + 1;
+                        }
+                    }
+                    else{
+                        if(i==0){
+                            if((battleFieldPlayerOneActivityRandomGame.battleField[i][y-1].isShip()&&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[i][y-1].isHit())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[i+1][y-1].isShip()&&
+                                            battleFieldPlayerOneActivityRandomGame.battleField[i+1][y-1].isHit())){
+                                direction = 4;
+                                y = j + 1;
+                            }else{
+                                if (battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()) {
+                                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne, i, y);
+                                    ShootTable.remove(Integer.valueOf(i * 10 + y));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                    if (zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getShipNumber())) {
+                                        newShoot = true;
+                                    } else {
+                                        y = y - 1;
+                                    }
+                                } else {
+                                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne, i, y);
+                                    ShootTable.remove(Integer.valueOf(i * 10 + y));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                    playerTwoCounter = false;
+                                    playerOneCounter = true;
+                                    direction = 4;
+                                    y = j + 1;
+                                }
+                            }
+                        }
+                        else if(i==9){
+                            if((battleFieldPlayerOneActivityRandomGame.battleField[i][y-1].isShip()&&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[i][y-1].isHit())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[i-1][y-1].isShip()&&
+                                            battleFieldPlayerOneActivityRandomGame.battleField[i-1][y-1].isHit())){
+                                direction = 4;
+                                y = j + 1;
+                            }else{
+                                if (battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()) {
+                                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne, i, y);
+                                    ShootTable.remove(Integer.valueOf(i * 10 + y));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                    if (zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getShipNumber())) {
+                                        newShoot = true;
+                                    } else {
+                                        y = y - 1;
+                                    }
+                                } else {
+                                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne, i, y);
+                                    ShootTable.remove(Integer.valueOf(i * 10 + y));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                    playerTwoCounter = false;
+                                    playerOneCounter = true;
+                                    direction = 4;
+                                    y = j + 1;
+                                }
+                            }
                         }
                         else{
-                            y=y-1;
+                            if((battleFieldPlayerOneActivityRandomGame.battleField[i-1][y-1].isShip()&&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[i-1][y-1].isHit())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[i][y-1].isShip()&&
+                                    battleFieldPlayerOneActivityRandomGame.battleField[i][y-1].isHit())||
+                                    (battleFieldPlayerOneActivityRandomGame.battleField[i+1][y-1].isShip()&&
+                                            battleFieldPlayerOneActivityRandomGame.battleField[i+1][y-1].isHit())){
+                                direction = 4;
+                                y = j + 1;
+                            }else{
+                                if (battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()) {
+                                    displayShipCell(TextViewArrayActivityRandomGamePlayerOne, i, y);
+                                    ShootTable.remove(Integer.valueOf(i * 10 + y));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                    if (zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).getShipNumber())) {
+                                        newShoot = true;
+                                    } else {
+                                        y = y - 1;
+                                    }
+                                } else {
+                                    displayWaterCell(TextViewArrayActivityRandomGamePlayerOne, i, y);
+                                    ShootTable.remove(Integer.valueOf(i * 10 + y));
+                                    battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                    playerTwoCounter = false;
+                                    playerOneCounter = true;
+                                    direction = 4;
+                                    y = j + 1;
+                                }
+                            }
                         }
-                    }else{
-                        displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
-                        ShootTable.remove(Integer.valueOf(i*10+y));
-                        battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
-                        playerTwoCounter = false;
-                        playerOneCounter = true;
+
+                    }
+                }else{
                         direction=4;
                         y=j+1;
                     }
-                }else{
-                    direction=4;
-                    y=j+1;
-                }
-            }
-            else{
+            } else{
                 direction=4;
                 y=j+1;
             }
@@ -642,23 +911,116 @@ public class RandomGameBattle extends AppCompatActivity {
         else if(direction==4){
             if(y<=9){
                 if(!battleFieldPlayerOneActivityRandomGame.battleField[i][y].isHit()){
-                    if(battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()){
-                        displayShipCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
-                        ShootTable.remove(Integer.valueOf(i*10+y));
-                        battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
-                        if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
-                            newShoot=true;
-                        }
-                        else{
-                            y=y+1;
+                    if(y==9){
+                        if(battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()){
+                            displayShipCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                            ShootTable.remove(Integer.valueOf(i*10+y));
+                            battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                            if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
+                                newShoot=true;
+                            }
+                            else{
+                                y=y+1;
+                            }
+                        }else{
+                            displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                            ShootTable.remove(Integer.valueOf(i*10+y));
+                            battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                            playerTwoCounter = false;
+                            playerOneCounter = true;
+                            direction=5;
                         }
                     }else{
-                        displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
-                        ShootTable.remove(Integer.valueOf(i*10+y));
-                        battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
-                        playerTwoCounter = false;
-                        playerOneCounter = true;
-                        direction=5;
+                         if(i==0){
+                             if((battleFieldPlayerOneActivityRandomGame.battleField[i][y+1].isShip()&&
+                                     battleFieldPlayerOneActivityRandomGame.battleField[i][y+1].isHit())||
+                                     (battleFieldPlayerOneActivityRandomGame.battleField[i+1][y+1].isShip()&&
+                                             battleFieldPlayerOneActivityRandomGame.battleField[i+1][y+1].isHit())) {
+                                 direction=5;
+                             }else{
+                                 if(battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()){
+                                     displayShipCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                                     ShootTable.remove(Integer.valueOf(i*10+y));
+                                     battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                     if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
+                                         newShoot=true;
+                                     }
+                                     else{
+                                         y=y+1;
+                                     }
+                                 }else{
+                                     displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                                     ShootTable.remove(Integer.valueOf(i*10+y));
+                                     battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                     playerTwoCounter = false;
+                                     playerOneCounter = true;
+                                     direction=5;
+                                 }
+
+                             }
+
+                             }
+                         else if (i==9){
+                             if((battleFieldPlayerOneActivityRandomGame.battleField[i][y+1].isShip()&&
+                                     battleFieldPlayerOneActivityRandomGame.battleField[i][y+1].isHit())||
+                                     (battleFieldPlayerOneActivityRandomGame.battleField[i-1][y+1].isShip()&&
+                                             battleFieldPlayerOneActivityRandomGame.battleField[i-1][y+1].isHit())) {
+                                 direction=5;
+                             }else{
+                                 if(battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()){
+                                     displayShipCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                                     ShootTable.remove(Integer.valueOf(i*10+y));
+                                     battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                     if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
+                                         newShoot=true;
+                                     }
+                                     else{
+                                         y=y+1;
+                                     }
+                                 }else{
+                                     displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                                     ShootTable.remove(Integer.valueOf(i*10+y));
+                                     battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                     playerTwoCounter = false;
+                                     playerOneCounter = true;
+                                     direction=5;
+                                 }
+
+                             }
+
+                         }
+                         else{
+                             if((battleFieldPlayerOneActivityRandomGame.battleField[i+1][y+1].isShip()&&
+                                     battleFieldPlayerOneActivityRandomGame.battleField[i+1][y+1].isHit())||
+                                     (battleFieldPlayerOneActivityRandomGame.battleField[i][y+1].isShip()&&
+                                     battleFieldPlayerOneActivityRandomGame.battleField[i][y+1].isHit())||
+                                     (battleFieldPlayerOneActivityRandomGame.battleField[i-1][y+1].isShip()&&
+                                             battleFieldPlayerOneActivityRandomGame.battleField[i-1][y+1].isHit())) {
+                                 direction=5;
+                             }else{
+                                 if(battleFieldPlayerOneActivityRandomGame.battleField[i][y].isShip()){
+                                     displayShipCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                                     ShootTable.remove(Integer.valueOf(i*10+y));
+                                     battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                     if(zatopiony2(battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getNumberOfMasts(),battleFieldPlayerOneActivityRandomGame.getBattleField(i,j).getShipNumber())){
+                                         newShoot=true;
+                                     }
+                                     else{
+                                         y=y+1;
+                                     }
+                                 }else{
+                                     displayWaterCell(TextViewArrayActivityRandomGamePlayerOne,i,y);
+                                     ShootTable.remove(Integer.valueOf(i*10+y));
+                                     battleFieldPlayerOneActivityRandomGame.battleField[i][y].setHit(true);
+                                     playerTwoCounter = false;
+                                     playerOneCounter = true;
+                                     direction=5;
+                                 }
+
+                             }
+
+
+                         }
                     }
                 }else{
                     direction=5;

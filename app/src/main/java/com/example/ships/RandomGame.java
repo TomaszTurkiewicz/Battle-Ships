@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 public class RandomGame extends AppCompatActivity {
 
-//TODO usunąć to activity
+
     BattleField battleFieldPlayerOneActivityRandom = new BattleField();
     BattleField battleFieldPlayerTwoActivityRandom = new BattleField();
     TextView[][] TextViewArray = new TextView[10][10];
