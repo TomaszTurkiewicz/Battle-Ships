@@ -66,6 +66,13 @@ public class RandomGameBattle extends AppCompatActivity {
         battleFieldPlayerOneActivityRandomGame.createFleet();
         battleFieldPlayerTwoActivityRandomGame.createFleet();
 
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame, i, j);
+            }
+        }
+
+
 
  //       battleFieldPlayerOneActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
  //       battleFieldPlayerTwoActivityRandomGame = BattleFieldPlayerTwoSingleton.getInstance().readBattleField();
@@ -135,7 +142,7 @@ public class RandomGameBattle extends AppCompatActivity {
         ShipOneMastsFourth[0]=findViewById(R.id.OneCellShip4);
     }
     //TODO opisać planszę
-    // TODO dodać trzy wersje gry, "super easy", "not so Easy", "Normal"
+    // TODO upgrade expert
 
     private Runnable game = new Runnable() {
         @Override
@@ -535,7 +542,7 @@ public class RandomGameBattle extends AppCompatActivity {
 
     private void dobijShip(int i, int j) {
         if(direction==1){
-            if(x>=0){
+                if(x>=0){
                 if(!battleFieldPlayerOneActivityRandomGame.battleField[x][j].isHit()){
                     if(battleFieldPlayerOneActivityRandomGame.battleField[x][j].isShip()){
                     displayShipCell(TextViewArrayActivityRandomGamePlayerOne,x,j);
@@ -562,11 +569,12 @@ public class RandomGameBattle extends AppCompatActivity {
                     x=i+1;
                 }
             }
-            else{
+                else{
                 direction=2;
                 x=i+1;
             }
-        }
+            }
+
         else if(direction==2){
             if(x<=9){
                 if(!battleFieldPlayerOneActivityRandomGame.battleField[x][j].isHit()){
@@ -941,7 +949,7 @@ else
                 playerTwoCounter=true;
             }
             battleFieldPlayerTwoActivityRandomGame.battleField[i][j].setHit(true);
-        //    BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame, i, j);
+            BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame,i,j);
 
             disableClickable();
 

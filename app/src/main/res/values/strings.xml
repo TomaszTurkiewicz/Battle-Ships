@@ -34,4 +34,6 @@
     <string name="normal">NORMAL</string>
     <string name="you_lose">YOU LOSE</string>
     <string name="expert">EXPERT</string>
+    <string name="bluetooth">BLUETOOTH</string>
+    <string name="networkGame">NETWORK</string>
 </resources>

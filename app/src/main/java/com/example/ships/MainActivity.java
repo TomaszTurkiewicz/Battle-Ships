@@ -21,4 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void notRandomGame(View view) {
     }
+
+    public void networkGame(View view) {
+    }
+
+    public void bluetooth(View view) {
+    }
 }

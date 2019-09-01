@@ -17,15 +17,6 @@ public class BattleFieldPlayerTwoSingleton {
             }}
     }
 
-    public void storeBattleField(BattleField battleField){
-        this.battleField=battleField;
-    }
-
-    public BattleField readBattleField(){
-
-        return BattleFieldPlayerTwoSingleton.getInstance().battleField;
-
-    }
 
     public void storeOneCell(BattleField battleField, int i, int j){
         this.battleField.battleField[i][j]=battleField.battleField[i][j];
