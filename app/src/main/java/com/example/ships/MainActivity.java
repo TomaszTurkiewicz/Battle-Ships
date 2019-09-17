@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void notRandomGame(View view) {
+        Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
+        startActivity(intent);
     }
 
     public void networkGame(View view) {

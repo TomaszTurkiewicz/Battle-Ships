@@ -20,12 +20,6 @@ public class ChooseGameLevel extends AppCompatActivity {
         finish();
     }
 
-    public void stillEasyGame(View view) {
-        GameDifficulty.getInstance().setLevel(1);
-        Intent intent = new Intent(getApplicationContext(),RandomGameBattle.class);
-        startActivity(intent);
-        finish();
-    }
 
     public void normalGame(View view){
         GameDifficulty.getInstance().setLevel(2);
