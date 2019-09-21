@@ -8,7 +8,7 @@
 
 
     <TableLayout
-        android:id="@+id/tableLayoutPlayerBattleField"
+        android:id="@+id/tableLayoutPlayerBattleFieldCreateBattleField"
         android:layout_width="@dimen/TableSizePlusJeden"
         android:layout_height="@dimen/TableSizePlusJeden"
         app:layout_constraintHorizontal_bias="0.10"
@@ -900,6 +900,7 @@
         </LinearLayout>
 
     </TableLayout>
+
 
 
 </android.support.constraint.ConstraintLayout>
