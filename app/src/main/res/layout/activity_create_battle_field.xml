@@ -7,899 +7,896 @@
     tools:context=".CreateBattleField">
 
 
-    <TableLayout
-        android:id="@+id/tableLayoutPlayerBattleFieldCreateBattleField"
-        android:layout_width="@dimen/TableSizePlusJeden"
-        android:layout_height="@dimen/TableSizePlusJeden"
-        app:layout_constraintHorizontal_bias="0.10"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.5">
 
-        <LinearLayout
-            android:id="@+id/LinearLayoutCreateBattleFieldActivityLetters"
+
+        <TableLayout
+            android:id="@+id/tableLayoutPlayerBattleFieldCreateBattleField"
             android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.675"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_1x"
-            app:layout_constraintVertical_bias="1.0">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text=""
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/a"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/b"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/c"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/d"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/e"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/f"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/g"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/h"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/i"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/j"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayoutCreateBattleField_1x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_2x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/one"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_1x1"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_1x2"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_1x3"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_1x4"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_1x5"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_1x6"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_1x7"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_1x8"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_1x9"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_1x10"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayoutCreateBattleField_2x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_3x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/two"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_2x1"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_2x2"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_2x3"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_2x4"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_2x5"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_2x6"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_2x7"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_2x8"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_2x9"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_2x10"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayoutCreateBattleField_3x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_4x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/three"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_3x1"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_3x2"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_3x3"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_3x4"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_3x5"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_3x6"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_3x7"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_3x8"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_3x9"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_3x10"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayoutCreateBattleField_4x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_5x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/four"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_4x1"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_4x2"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_4x3"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_4x4"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_4x5"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_4x6"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_4x7"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_4x8"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_4x9"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_4x10"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayoutCreateBattleField_5x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_6x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/five"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_5x1"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_5x2"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_5x3"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_5x4"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_5x5"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_5x6"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_5x7"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_5x8"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_5x9"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_5x10"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayoutCreateBattleField_6x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_7x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/six"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_6x1"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_6x2"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_6x3"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_6x4"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_6x5"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_6x6"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_6x7"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_6x8"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_6x9"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_6x10"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayoutCreateBattleField_7x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_8x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/seven"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_7x1"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_7x2"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_7x3"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_7x4"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_7x5"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_7x6"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_7x7"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_7x8"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_7x9"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_7x10"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayoutCreateBattleField_8x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_9x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/eight"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_8x1"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_8x2"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_8x3"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_8x4"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_8x5"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_8x6"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_8x7"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_8x8"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_8x9"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_8x10"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayoutCreateBattleField_9x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_10x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/nine"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_9x1"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_9x2"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_9x3"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_9x4"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_9x5"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_9x6"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_9x7"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_9x8"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_9x9"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_9x10"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayoutCreateBattleField_10x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/ten"
-                android:textAlignment="center"
-                android:textColor="@color/border_color"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_10x1"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_10x2"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_10x3"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_10x4"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_10x5"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_10x6"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_10x7"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_10x8"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_10x9"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-
-            <TextView
-                android:id="@+id/playerCellGameCreateBattleField_10x10"
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:background="@drawable/battle_cell" />
-        </LinearLayout>
-
-    </TableLayout>
+            android:layout_height="@dimen/TableSizePlusJeden"
+            android:layout_columnWeight="1">
+
+            <LinearLayout
+                android:id="@+id/LinearLayoutCreateBattleFieldActivityLetters"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_1x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.675"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/a"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/b"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/c"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/d"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/e"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/f"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/g"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/h"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/i"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/j"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playerLinearLayoutCreateBattleField_1x"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_2x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/one"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_1x1"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_1x2"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_1x3"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_1x4"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_1x5"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_1x6"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_1x7"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_1x8"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_1x9"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_1x10"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playerLinearLayoutCreateBattleField_2x"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_3x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/two"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_2x1"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_2x2"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_2x3"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_2x4"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_2x5"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_2x6"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_2x7"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_2x8"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_2x9"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_2x10"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playerLinearLayoutCreateBattleField_3x"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_4x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/three"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_3x1"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_3x2"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_3x3"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_3x4"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_3x5"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_3x6"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_3x7"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_3x8"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_3x9"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_3x10"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playerLinearLayoutCreateBattleField_4x"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_5x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/four"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_4x1"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_4x2"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_4x3"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_4x4"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_4x5"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_4x6"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_4x7"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_4x8"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_4x9"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_4x10"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playerLinearLayoutCreateBattleField_5x"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_6x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/five"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_5x1"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_5x2"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_5x3"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_5x4"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_5x5"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_5x6"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_5x7"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_5x8"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_5x9"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_5x10"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playerLinearLayoutCreateBattleField_6x"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_7x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/six"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_6x1"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_6x2"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_6x3"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_6x4"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_6x5"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_6x6"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_6x7"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_6x8"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_6x9"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_6x10"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playerLinearLayoutCreateBattleField_7x"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_8x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/seven"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_7x1"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_7x2"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_7x3"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_7x4"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_7x5"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_7x6"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_7x7"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_7x8"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_7x9"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_7x10"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playerLinearLayoutCreateBattleField_8x"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_9x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/eight"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_8x1"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_8x2"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_8x3"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_8x4"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_8x5"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_8x6"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_8x7"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_8x8"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_8x9"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_8x10"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playerLinearLayoutCreateBattleField_9x"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_10x"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/nine"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_9x1"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_9x2"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_9x3"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_9x4"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_9x5"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_9x6"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_9x7"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_9x8"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_9x9"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_9x10"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playerLinearLayoutCreateBattleField_10x"
+                android:layout_width="@dimen/TableSizePlusJeden"
+                android:layout_height="@dimen/FieldSize"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/ten"
+                    android:textAlignment="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_10x1"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_10x2"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_10x3"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_10x4"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_10x5"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_10x6"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_10x7"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_10x8"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_10x9"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+
+                <TextView
+                    android:id="@+id/playerCellGameCreateBattleField_10x10"
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:background="@drawable/battle_cell" />
+            </LinearLayout>
+
+        </TableLayout>
 
 
 
