@@ -2,6 +2,7 @@
 <resources>
     <dimen name="TableSize">250dp</dimen>
     <dimen name="TableSizePlusJeden">275dp</dimen>
+    <dimen name="TableSizeSmall">100dp</dimen>
     <dimen name="FieldSize">25dp</dimen>
     <dimen name="TextSize">20sp</dimen>
     <dimen name="Button">20</dimen>
