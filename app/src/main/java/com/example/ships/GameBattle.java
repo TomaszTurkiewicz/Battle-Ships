@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class RandomGameBattle extends AppCompatActivity {
+public class GameBattle extends AppCompatActivity {
 
     private Handler mHandler = new Handler();
 
@@ -64,7 +64,14 @@ public class RandomGameBattle extends AppCompatActivity {
         initializeShips();
         initializeBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGamePlayerOne);
         initializeBattleFieldActivityRandomGamePlayerTwo(TextViewArrayActivityRandomGamePlayerTwo);
-        battleFieldPlayerOneActivityRandomGame.createFleet();
+
+       if(GameDifficulty.getInstance().getRandom()) {
+           battleFieldPlayerOneActivityRandomGame.createFleet();
+       }else{
+           battleFieldPlayerOneActivityRandomGame=BattleFieldPlayerOneSingleton.getInstance().readBattleField();
+       }
+
+
         battleFieldPlayerTwoActivityRandomGame.createFleet();
 
         for(int i=0;i<10;i++){

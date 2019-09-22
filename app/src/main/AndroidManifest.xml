@@ -20,7 +20,7 @@
             android:name=".WinPlayerTwo"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".RandomGameBattle"
+            android:name=".GameBattle"
             android:screenOrientation="landscape" />
         <activity
             android:name=".WinPlayerOne"

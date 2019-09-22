@@ -14,12 +14,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void randomGame(View view) {
-
+        GameDifficulty.getInstance().setRandom(true);
         Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
         startActivity(intent);
     }
 
     public void notRandomGame(View view) {
+        GameDifficulty.getInstance().setRandom(false);
         Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
         startActivity(intent);
     }

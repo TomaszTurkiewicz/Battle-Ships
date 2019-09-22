@@ -15,7 +15,7 @@ public class ChooseGameLevel extends AppCompatActivity {
 
     public void tooEasyGame(View view) {
         GameDifficulty.getInstance().setLevel(0);
-        Intent intent = new Intent(getApplicationContext(),RandomGameBattle.class);
+        Intent intent = new Intent(getApplicationContext(), GameBattle.class);
         startActivity(intent);
         finish();
     }
@@ -23,14 +23,14 @@ public class ChooseGameLevel extends AppCompatActivity {
 
     public void normalGame(View view){
         GameDifficulty.getInstance().setLevel(2);
-     Intent intent = new Intent(getApplicationContext(),RandomGameBattle.class);
+     Intent intent = new Intent(getApplicationContext(), GameBattle.class);
      startActivity(intent);
      finish();
 }
 
     public void expertGame(View view) {
         GameDifficulty.getInstance().setLevel(3);
-        Intent intent = new Intent(getApplicationContext(),RandomGameBattle.class);
+        Intent intent = new Intent(getApplicationContext(), GameBattle.class);
         startActivity(intent);
         finish();
     }
