@@ -36,4 +36,5 @@
     <string name="expert">EXPERT</string>
     <string name="bluetooth">BLUETOOTH</string>
     <string name="networkGame">NETWORK</string>
+    <string name="play">PLAY</string>
 </resources>
