@@ -1025,7 +1025,6 @@
                 android:layout_column="0"/>
 
             <TextView
-                android:text="@string/one"
                 android:id="@+id/fourMastsCounterTextView"
                 android:textColor="@color/border_color"
                 android:layout_height="@dimen/FieldSize"
@@ -1078,7 +1077,6 @@
 
             <TextView
                 android:id="@+id/threeMastsCounterTextView"
-                android:text="@string/two"
                 android:textColor="@color/border_color"
                 android:layout_height="@dimen/FieldSize"
                 android:layout_width="@dimen/FieldSize"
@@ -1126,7 +1124,6 @@
             </LinearLayout>
 
             <TextView
-                android:text="@string/three"
                 android:id="@+id/twoMastsCounterTextView"
                 android:textColor="@color/border_color"
                 android:layout_height="@dimen/FieldSize"
@@ -1173,7 +1170,6 @@
 
             <TextView
                 android:id="@+id/oneMastsCounterTextView"
-                android:text="@string/four"
                 android:textColor="@color/border_color"
                 android:layout_height="@dimen/FieldSize"
                 android:layout_width="@dimen/FieldSize"
