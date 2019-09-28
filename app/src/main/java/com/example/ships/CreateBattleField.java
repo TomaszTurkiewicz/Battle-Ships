@@ -50,23 +50,88 @@ public class CreateBattleField extends AppCompatActivity {
         initializeTwoMastsShipTextView(TwoMastsShip);
         initializeOneMastsShipTextView(OneMastsShip);
 
-//
+
 //        battleFieldPlayerCreateBattleFieldActivity.battleField[0][0].setShip(true);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][0].setNumberOfMasts(1);
+//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][0].setNumberOfMasts(4);
 //        battleFieldPlayerCreateBattleFieldActivity.battleField[0][0].setShipNumber(1);
 //
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][3].setShip(true);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][3].setNumberOfMasts(1);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][3].setShipNumber(3);
+//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][1].setShip(true);
+//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][1].setNumberOfMasts(4);
+//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][1].setShipNumber(3);
 //
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[1][3].setShip(true);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[1][3].setNumberOfMasts(1);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[1][3].setShipNumber(2);
+//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][2].setShip(true);
+//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][2].setNumberOfMasts(4);
+//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][2].setShipNumber(2);
+//
+//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][3].setShip(true);
+//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][3].setNumberOfMasts(4);
+//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][3].setShipNumber(4);
 
         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
         checkLeftShips();
         updateTextViewCounters();
+        updateTextViewCountersShips();
+        updateBattleField();
 
+    }
+
+    private void updateBattleField() {
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
+                    setShipColor(TextViewArrayActivityCreateBattleField,i,j);//Todo cały lub częściowy
+                }else{
+                    setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                }
+            }
+        }
+    }
+
+    private void setNoShipColor(TextView[][] TextView, int i, int j) {
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell));
+        }
+    }
+
+    private void setShipColor(TextView[][] TextView, int i, int j) {
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell));
+        }
+    }
+
+    private void updateTextViewCountersShips() {
+        updateTextViewFourMastsShipCounter();
+ // TODO      updateTextViewThreeMastsShipCounter();
+ //       updateTextViewTwoMastsShipCounter();
+ //       updateTextViewOneMastsShipCounter();
+    }
+
+    private void updateTextViewFourMastsShipCounter() {
+        if(leftFourMasts==0){
+            setGrey(FourMastsShip,0);
+            setGrey(FourMastsShip,1);
+            setGrey(FourMastsShip,2);
+            setGrey(FourMastsShip,3);
+            FourMastsShip[0].setClickable(false);
+            FourMastsShip[1].setClickable(false);
+            FourMastsShip[2].setClickable(false);
+            FourMastsShip[3].setClickable(false);
+        }
+    }
+
+    private void setGrey (TextView[] TextView, int i){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.widmo_ship_cell));
+        } else {
+            TextView[i].setBackground(getResources().getDrawable(R.drawable.widmo_ship_cell));
+        }
     }
 
     private void checkLeftShips() {
