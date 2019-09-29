@@ -32,6 +32,12 @@ public class CreateBattleField extends AppCompatActivity {
     int leftThreeMasts;
     int leftTwoMasts;
     int leftOneMasts;
+    int choosenShip;
+    PointIJ firstPointMastsShip = new PointIJ();
+    PointIJ secondPointMastsShip = new PointIJ();
+    int shipNumber;
+
+
 
 
 
@@ -50,29 +56,51 @@ public class CreateBattleField extends AppCompatActivity {
         initializeTwoMastsShipTextView(TwoMastsShip);
         initializeOneMastsShipTextView(OneMastsShip);
 
+            updateScreen();
 
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][0].setShip(true);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][0].setNumberOfMasts(4);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][0].setShipNumber(1);
-//
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][1].setShip(true);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][1].setNumberOfMasts(4);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][1].setShipNumber(3);
-//
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][2].setShip(true);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][2].setNumberOfMasts(4);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][2].setShipNumber(2);
-//
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][3].setShip(true);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][3].setNumberOfMasts(4);
-//        battleFieldPlayerCreateBattleFieldActivity.battleField[0][3].setShipNumber(4);
+    }
+    private void disableOneMastsTextView(){
+        setGrey(OneMastsShip,0);
+        OneMastsShip[0].setClickable(false);
+        choosenShip=0;
+    }
 
+    private void disableTwoMastsTextView(){
+        setGrey(TwoMastsShip,0);
+        setGrey(TwoMastsShip,1);
+        TwoMastsShip[0].setClickable(false);
+        TwoMastsShip[1].setClickable(false);
+        choosenShip=0;
+    }
+
+    private void disableThreeMastsTextView(){
+        setGrey(ThreeMastsShip,0);
+        setGrey(ThreeMastsShip,1);
+        setGrey(ThreeMastsShip,2);
+        ThreeMastsShip[0].setClickable(false);
+        ThreeMastsShip[1].setClickable(false);
+        ThreeMastsShip[2].setClickable(false);
+        choosenShip=0;
+    }
+
+    private void disableFourMastsTextView(){
+        setGrey(FourMastsShip,0);
+        setGrey(FourMastsShip,1);
+        setGrey(FourMastsShip,2);
+        setGrey(FourMastsShip,3);
+        FourMastsShip[0].setClickable(false);
+        FourMastsShip[1].setClickable(false);
+        FourMastsShip[2].setClickable(false);
+        FourMastsShip[3].setClickable(false);
+        choosenShip=0;
+    }
+
+    private void updateScreen(){
         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
         checkLeftShips();
         updateTextViewCounters();
         updateTextViewCountersShips();
         updateBattleField();
-
     }
 
     private void updateBattleField() {
@@ -107,21 +135,113 @@ public class CreateBattleField extends AppCompatActivity {
 
     private void updateTextViewCountersShips() {
         updateTextViewFourMastsShipCounter();
- // TODO      updateTextViewThreeMastsShipCounter();
- //       updateTextViewTwoMastsShipCounter();
- //       updateTextViewOneMastsShipCounter();
+        updateTextViewThreeMastsShipCounter();
+        updateTextViewTwoMastsShipCounter();
+        updateTextViewOneMastsShipCounter();
+    }
+
+    private void updateTextViewOneMastsShipCounter() {
+        if(leftOneMasts==0){
+            disableOneMastsTextView();
+        }else{
+            enableOneMastsTextView();
+        }
+
+    }
+
+    private void enableOneMastsTextView() {
+        setBlank(OneMastsShip,0);
+        OneMastsShip[0].setClickable(true);
+    }
+
+    private void updateTextViewTwoMastsShipCounter() {
+        if(leftTwoMasts==0){
+            disableTwoMastsTextView();
+        }else{
+            enableTwoMastsTextView();
+        }
+    }
+
+    private void enableTwoMastsTextView() {
+        setBlank(TwoMastsShip,0);
+        setBlank(TwoMastsShip,1);
+        TwoMastsShip[0].setClickable(true);
+        TwoMastsShip[1].setClickable(true);
+    }
+
+    private void updateTextViewThreeMastsShipCounter() {
+        if(leftThreeMasts==0){
+            disableThreeMastsTextView();
+        }else{
+            enableThreeMastsTextView();
+        }
+    }
+
+    private void enableThreeMastsTextView() {
+
+        if(choosenShip==3){
+        setRed(ThreeMastsShip,0);
+        setRed(ThreeMastsShip,1);
+        setRed(ThreeMastsShip,2);
+        ThreeMastsShip[0].setClickable(true);
+        ThreeMastsShip[1].setClickable(true);
+        ThreeMastsShip[2].setClickable(true);
+    }else{
+            setBlank(ThreeMastsShip,0);
+            setBlank(ThreeMastsShip,1);
+            setBlank(ThreeMastsShip,2);
+            ThreeMastsShip[0].setClickable(true);
+            ThreeMastsShip[1].setClickable(true);
+            ThreeMastsShip[2].setClickable(true);
+        }
     }
 
     private void updateTextViewFourMastsShipCounter() {
         if(leftFourMasts==0){
-            setGrey(FourMastsShip,0);
-            setGrey(FourMastsShip,1);
-            setGrey(FourMastsShip,2);
-            setGrey(FourMastsShip,3);
-            FourMastsShip[0].setClickable(false);
-            FourMastsShip[1].setClickable(false);
-            FourMastsShip[2].setClickable(false);
-            FourMastsShip[3].setClickable(false);
+            disableFourMastsTextView();
+        }else{
+            enableFourMastsTextView();
+        }
+    }
+
+    private void enableFourMastsTextView() {
+        if(choosenShip==4){
+            setRed(FourMastsShip,0);
+            setRed(FourMastsShip,1);
+            setRed(FourMastsShip,2);
+            setRed(FourMastsShip,3);
+            FourMastsShip[0].setClickable(true);
+            FourMastsShip[1].setClickable(true);
+            FourMastsShip[2].setClickable(true);
+            FourMastsShip[3].setClickable(true);
+        }
+        else{
+        setBlank(FourMastsShip,0);
+        setBlank(FourMastsShip,1);
+        setBlank(FourMastsShip,2);
+        setBlank(FourMastsShip,3);
+        FourMastsShip[0].setClickable(true);
+        FourMastsShip[1].setClickable(true);
+        FourMastsShip[2].setClickable(true);
+        FourMastsShip[3].setClickable(true);
+        }
+    }
+
+    private void setBlank (TextView[] TextView, int i){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell));
+        } else {
+            TextView[i].setBackground(getResources().getDrawable(R.drawable.battle_cell));
+        }
+    }
+
+    private void setRed (TextView[] TextView, int i){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.red_ship));
+        } else {
+            TextView[i].setBackground(getResources().getDrawable(R.drawable.red_ship));
         }
     }
 
@@ -148,7 +268,6 @@ public class CreateBattleField extends AppCompatActivity {
         OneMastsCounter.setText(String.valueOf(leftOneMasts));
 
     }
-
 
     private void checkShipsOnBattleField(BattleField battleFieldPlayerCreateBattleFieldActivity) {
         fourMastsCounter=0;
@@ -358,339 +477,632 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     public void onClickputThreeMastsShip(View view) {
+        choosenShip=3;
+        enableThreeMastsTextView();
     }
 
     public void onClickputFourMastsShip(View view) {
+        choosenShip=4;
+        enableFourMastsTextView();
+    }
 
+    public void putShip(int i, int j, int numberOfMasts){
+        if(numberOfMasts==1||numberOfMasts==2||numberOfMasts==3||numberOfMasts==4){
+            if(numberOfMasts==4){
+                checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
+                if(fourMastsCounter==0){
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(numberOfMasts);
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(1);
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
+                    firstPointMastsShip.setI(i);
+                    firstPointMastsShip.setJ(j);
+                    updateScreen();
+                }else if(fourMastsCounter==1){
+                    if(conditionIJ(i,j,numberOfMasts)) {
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(numberOfMasts);
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(1);
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
+                        secondPointMastsShip.setI(i);
+                        secondPointMastsShip.setJ(j);
+                        updateScreen();
+                    }
+                }else{
+                    if(firstPointMastsShip.getI()== secondPointMastsShip.getI()){
+                        if(conditionI(i,j,numberOfMasts)) {
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(numberOfMasts);
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(1);
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
+                            updateScreen();
+                        }
+                    }else if(firstPointMastsShip.getJ()== secondPointMastsShip.getJ()){
+                        if(conditionJ(i,j,numberOfMasts)) {
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(numberOfMasts);
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(1);
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
+                            updateScreen();
+                        }
+                    }
+                }
+            }
+            else if(numberOfMasts==3){
+                checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
+                if(!threeMastsShip1Boolean()){
+                    shipNumber=1;
+
+                }else{
+                    if(!threeMastsShip2Boolean()){
+                    shipNumber=2;
+                    }
+                    else;
+                }
+
+
+                if(threeMastsCounter1==0){
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(numberOfMasts);
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(1);
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
+                    firstPointMastsShip.setI(i);
+                    firstPointMastsShip.setJ(j);
+                    updateScreen();
+                }
+                else if(threeMastsCounter1==1){
+                    if(conditionIJ(i,j,numberOfMasts)) {
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(numberOfMasts);
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(shipNumber);
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
+                        secondPointMastsShip.setI(i);
+                        secondPointMastsShip.setJ(j);
+                        updateScreen();
+                    }
+                }else{
+                    if(firstPointMastsShip.getI()== secondPointMastsShip.getI()){
+                        if(conditionI(i,j,numberOfMasts)) {
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(numberOfMasts);
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(shipNumber);
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
+                            updateScreen();
+                        }
+                    }else if(firstPointMastsShip.getJ()== secondPointMastsShip.getJ()){
+                        if(conditionJ(i,j,numberOfMasts)) {
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(numberOfMasts);
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(shipNumber);
+                            battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
+                            updateScreen();
+                        }
+                    }
+                }
+
+            }
+            else if(numberOfMasts==2){}
+            else if(numberOfMasts==1){}
+            else;
+        }
+    }
+
+    public boolean conditionIJ (int i, int j, int numberOfMasts) {
+        if(i==0&&j==0){
+            return battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].getNumberOfMasts()==numberOfMasts;
+        }
+        else if((i > 0) && (i < 9) && j == 0){
+           return battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].getNumberOfMasts()==numberOfMasts;
+        }
+        else if(i==9&&j==0){
+          return  battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].getNumberOfMasts()==numberOfMasts;
+        } else if (i == 0 && ((j > 0) && (j < 9))){
+            return battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].getNumberOfMasts()==numberOfMasts;
+        }
+         else if (((i > 0) && (i < 9)) && ((j > 0) && (j < 9))){
+             return battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j].getNumberOfMasts()==numberOfMasts||
+                     battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j].getNumberOfMasts()==numberOfMasts||
+                     battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].getNumberOfMasts()==numberOfMasts||
+                     battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].getNumberOfMasts()==numberOfMasts;
+        }
+         else if (i == 9 && ((j > 0) && (j < 9))) {
+            return battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].getNumberOfMasts()==numberOfMasts;
+        }
+         else if (i == 0 && j == 9) {
+            return battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].getNumberOfMasts()==numberOfMasts;
+        }
+         else if (((i > 0) && (i < 9)) && (j == 9)) {
+            return battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].getNumberOfMasts()==numberOfMasts;
+        }
+         else if ((i == 9) && (j == 9)){
+             return battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j].getNumberOfMasts()==numberOfMasts||
+                     battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].getNumberOfMasts()==numberOfMasts;
+        }
+
+        return false;
+    }
+
+    public boolean conditionI (int i, int j, int numberOfMasts) {
+        if(j==0){
+            return battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].getNumberOfMasts()==numberOfMasts;
+        }
+        else if ((j > 0) && (j < 9)){
+            return battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].getNumberOfMasts()==numberOfMasts;
+        }
+        else if (j == 9) {
+            return battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].getNumberOfMasts()==numberOfMasts;
+        }
+        return false;
+    }
+
+    public boolean conditionJ (int i, int j, int numberOfMasts) {
+        if(i==0){
+            return battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j].getNumberOfMasts()==numberOfMasts;
+        }
+        else if(i > 0 && i < 9){
+            return battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j].getNumberOfMasts()==numberOfMasts||
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j].getNumberOfMasts()==numberOfMasts;
+        }
+        else if(i==9){
+            return  battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j].getNumberOfMasts()==numberOfMasts;
+        }
+        return false;
     }
 
     public void clickCreateBattleField_1x1(View view) {
+        putShip(0,0,choosenShip);
     }
 
     public void clickCreateBattleField_1x2(View view) {
+        putShip(0,1,choosenShip);
     }
 
     public void clickCreateBattleField_1x3(View view) {
+        putShip(0,2,choosenShip);
     }
 
     public void clickCreateBattleField_1x4(View view) {
+        putShip(0,3,choosenShip);
     }
 
     public void clickCreateBattleField_1x5(View view) {
+        putShip(0,4,choosenShip);
     }
 
     public void clickCreateBattleField_1x6(View view) {
+        putShip(0,5,choosenShip);
     }
 
     public void clickCreateBattleField_1x7(View view) {
+        putShip(0,6,choosenShip);
     }
 
     public void clickCreateBattleField_1x8(View view) {
+        putShip(0,7,choosenShip);
     }
 
     public void clickCreateBattleField_1x9(View view) {
+        putShip(0,8,choosenShip);
     }
 
     public void clickCreateBattleField_1x10(View view) {
+        putShip(0,9,choosenShip);
     }
 
     public void clickCreateBattleField_2x1(View view) {
+        putShip(1,0,choosenShip);
     }
 
     public void clickCreateBattleField_2x2(View view) {
+        putShip(1,1,choosenShip);
     }
 
     public void clickCreateBattleField_2x3(View view) {
+        putShip(1,2,choosenShip);
     }
 
     public void clickCreateBattleField_2x4(View view) {
+        putShip(1,3,choosenShip);
     }
 
     public void clickCreateBattleField_2x5(View view) {
+        putShip(1,4,choosenShip);
     }
 
     public void clickCreateBattleField_2x6(View view) {
+        putShip(1,5,choosenShip);
     }
 
     public void clickCreateBattleField_2x7(View view) {
+        putShip(1,6,choosenShip);
     }
 
     public void clickCreateBattleField_2x8(View view) {
+        putShip(1,7,choosenShip);
     }
 
     public void clickCreateBattleField_2x9(View view) {
+        putShip(1,8,choosenShip);
     }
 
     public void clickCreateBattleField_2x10(View view) {
+        putShip(1,9,choosenShip);
     }
 
     public void clickCreateBattleField_3x1(View view) {
+        putShip(2,0,choosenShip);
     }
 
     public void clickCreateBattleField_3x2(View view) {
+        putShip(2,1,choosenShip);
     }
 
     public void clickCreateBattleField_3x3(View view) {
+        putShip(2,2,choosenShip);
     }
 
     public void clickCreateBattleField_3x4(View view) {
+        putShip(2,3,choosenShip);
     }
 
     public void clickCreateBattleField_3x5(View view) {
+        putShip(2,4,choosenShip);
     }
 
     public void clickCreateBattleField_3x6(View view) {
+        putShip(2,5,choosenShip);
     }
 
     public void clickCreateBattleField_3x7(View view) {
+        putShip(2,6,choosenShip);
     }
 
     public void clickCreateBattleField_3x8(View view) {
+        putShip(2,7,choosenShip);
     }
 
     public void clickCreateBattleField_3x9(View view) {
+        putShip(2,8,choosenShip);
     }
 
     public void clickCreateBattleField_3x10(View view) {
+        putShip(2,9,choosenShip);
     }
 
     public void clickCreateBattleField_4x1(View view) {
+        putShip(3,0,choosenShip);
     }
 
     public void clickCreateBattleField_4x2(View view) {
+        putShip(3,1,choosenShip);
     }
 
     public void clickCreateBattleField_4x3(View view) {
+        putShip(3,2,choosenShip);
     }
 
     public void clickCreateBattleField_4x4(View view) {
+        putShip(3,3,choosenShip);
     }
 
     public void clickCreateBattleField_4x5(View view) {
+        putShip(3,4,choosenShip);
     }
 
     public void clickCreateBattleField_4x6(View view) {
+        putShip(3,5,choosenShip);
     }
 
     public void clickCreateBattleField_4x7(View view) {
+        putShip(3,6,choosenShip);
     }
 
     public void clickCreateBattleField_4x8(View view) {
+        putShip(3,7,choosenShip);
     }
 
     public void clickCreateBattleField_4x9(View view) {
+        putShip(3,8,choosenShip);
     }
 
     public void clickCreateBattleField_4x10(View view) {
+        putShip(3,9,choosenShip);
     }
 
     public void clickCreateBattleField_5x1(View view) {
+        putShip(4,0,choosenShip);
     }
 
     public void clickCreateBattleField_5x2(View view) {
+        putShip(4,1,choosenShip);
     }
 
     public void clickCreateBattleField_5x3(View view) {
+        putShip(4,2,choosenShip);
     }
 
     public void clickCreateBattleField_5x4(View view) {
+        putShip(4,3,choosenShip);
     }
 
     public void clickCreateBattleField_5x5(View view) {
+        putShip(4,4,choosenShip);
     }
 
     public void clickCreateBattleField_5x6(View view) {
+        putShip(4,5,choosenShip);
     }
 
     public void clickCreateBattleField_5x7(View view) {
+        putShip(4,6,choosenShip);
     }
 
     public void clickCreateBattleField_5x8(View view) {
+        putShip(4,7,choosenShip);
     }
 
     public void clickCreateBattleField_5x9(View view) {
+        putShip(4,8,choosenShip);
     }
 
     public void clickCreateBattleField_5x10(View view) {
+        putShip(4,9,choosenShip);
     }
 
     public void clickCreateBattleField_6x1(View view) {
+        putShip(5,0,choosenShip);
     }
 
     public void clickCreateBattleField_6x2(View view) {
+        putShip(5,1,choosenShip);
     }
 
     public void clickCreateBattleField_6x3(View view) {
+        putShip(5,2,choosenShip);
     }
 
     public void clickCreateBattleField_6x4(View view) {
+        putShip(5,3,choosenShip);
     }
 
     public void clickCreateBattleField_6x5(View view) {
+        putShip(5,4,choosenShip);
     }
 
     public void clickCreateBattleField_6x6(View view) {
+        putShip(5,5,choosenShip);
     }
 
     public void clickCreateBattleField_6x7(View view) {
+        putShip(5,6,choosenShip);
     }
 
     public void clickCreateBattleField_6x8(View view) {
+        putShip(5,7,choosenShip);
     }
 
     public void clickCreateBattleField_6x9(View view) {
+        putShip(5,8,choosenShip);
     }
 
     public void clickCreateBattleField_6x10(View view) {
+        putShip(5,9,choosenShip);
     }
 
     public void clickCreateBattleField_7x1(View view) {
+        putShip(6,0,choosenShip);
     }
 
     public void clickCreateBattleField_7x2(View view) {
+        putShip(6,1,choosenShip);
     }
 
     public void clickCreateBattleField_7x3(View view) {
+        putShip(6,2,choosenShip);
     }
 
     public void clickCreateBattleField_7x4(View view) {
+        putShip(6,3,choosenShip);
     }
 
     public void clickCreateBattleField_7x5(View view) {
+        putShip(6,4,choosenShip);
     }
 
     public void clickCreateBattleField_7x6(View view) {
+        putShip(6,5,choosenShip);
     }
 
     public void clickCreateBattleField_7x7(View view) {
+        putShip(6,6,choosenShip);
     }
 
     public void clickCreateBattleField_7x8(View view) {
+        putShip(6,7,choosenShip);
     }
 
     public void clickCreateBattleField_7x9(View view) {
+        putShip(6,8,choosenShip);
     }
 
     public void clickCreateBattleField_7x10(View view) {
+        putShip(6,9,choosenShip);
     }
 
     public void clickCreateBattleField_8x1(View view) {
+        putShip(7,0,choosenShip);
     }
 
     public void clickCreateBattleField_8x2(View view) {
+        putShip(7,1,choosenShip);
     }
 
     public void clickCreateBattleField_8x3(View view) {
+        putShip(7,2,choosenShip);
     }
 
     public void clickCreateBattleField_8x4(View view) {
+        putShip(7,3,choosenShip);
     }
 
     public void clickCreateBattleField_8x5(View view) {
+        putShip(7,4,choosenShip);
     }
 
     public void clickCreateBattleField_8x6(View view) {
+        putShip(7,5,choosenShip);
     }
 
     public void clickCreateBattleField_8x7(View view) {
+        putShip(7,6,choosenShip);
     }
 
     public void clickCreateBattleField_8x8(View view) {
+        putShip(7,7,choosenShip);
     }
 
     public void clickCreateBattleField_8x9(View view) {
+        putShip(7,8,choosenShip);
     }
 
     public void clickCreateBattleField_8x10(View view) {
+        putShip(7,9,choosenShip);
     }
 
     public void clickCreateBattleField_9x1(View view) {
+        putShip(8,0,choosenShip);
     }
 
     public void clickCreateBattleField_9x2(View view) {
+        putShip(8,1,choosenShip);
     }
 
     public void clickCreateBattleField_9x3(View view) {
+        putShip(8,2,choosenShip);
     }
 
     public void clickCreateBattleField_9x4(View view) {
+        putShip(8,3,choosenShip);
     }
 
     public void clickCreateBattleField_9x5(View view) {
+        putShip(8,4,choosenShip);
     }
 
     public void clickCreateBattleField_9x6(View view) {
+        putShip(8,5,choosenShip);
     }
 
     public void clickCreateBattleField_9x7(View view) {
+        putShip(8,6,choosenShip);
     }
 
     public void clickCreateBattleField_9x8(View view) {
+        putShip(8,7,choosenShip);
     }
 
     public void clickCreateBattleField_9x9(View view) {
+        putShip(8,8,choosenShip);
     }
 
     public void clickCreateBattleField_9x10(View view) {
+        putShip(8,9,choosenShip);
     }
 
     public void clickCreateBattleField_10x1(View view) {
+        putShip(9,0,choosenShip);
     }
 
     public void clickCreateBattleField_10x2(View view) {
+        putShip(9,1,choosenShip);
     }
 
     public void clickCreateBattleField_10x3(View view) {
+        putShip(9,2,choosenShip);
     }
 
     public void clickCreateBattleField_10x4(View view) {
+        putShip(9,3,choosenShip);
     }
 
     public void clickCreateBattleField_10x5(View view) {
+        putShip(9,4,choosenShip);
     }
 
     public void clickCreateBattleField_10x6(View view) {
+        putShip(9,5,choosenShip);
     }
 
     public void clickCreateBattleField_10x7(View view) {
+        putShip(9,6,choosenShip);
     }
 
     public void clickCreateBattleField_10x8(View view) {
+        putShip(9,7,choosenShip);
     }
 
     public void clickCreateBattleField_10x9(View view) {
+        putShip(9,8,choosenShip);
     }
 
     public void clickCreateBattleField_10x10(View view) {
+        putShip(9,9,choosenShip);
     }
+
     private boolean fourMastsShipBoolean(){
         return fourMastsCounter==4;
     }
+
     private boolean threeMastsShip1Boolean(){
         return threeMastsCounter1==3;
     }
+
     private boolean threeMastsShip2Boolean(){
         return threeMastsCounter2==3;
     }
+
     private boolean twoMastsShip1Boolean(){
         return twoMastsCounter1==2;
     }
+
     private boolean twoMastsShip2Boolean(){
         return twoMastsCounter2==2;
     }
+
     private boolean twoMastsShip3Boolean(){
         return twoMastsCounter3==2;
     }
+
     private boolean oneMastsShip1Boolean(){
         return oneMastsCounter1==1;
     }
+
     private boolean oneMastsShip2Boolean(){
         return oneMastsCounter2==1;
     }
+
     private boolean oneMastsShip3Boolean(){
         return oneMastsCounter3==1;
     }
+
     private boolean oneMastsShip4Boolean(){
         return oneMastsCounter4==1;
+    }
+
+    public void onClickReset(View view) {
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(0);
+                battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(0);
+                battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(false);
+
+            }
+        }
+        choosenShip=0;
+        updateScreen();
     }
 }

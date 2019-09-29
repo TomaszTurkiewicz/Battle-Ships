@@ -5,6 +5,7 @@ import java.util.Random;
 public class BattleField{
     Ship[][] battleField = new Ship[10][10];
 
+
     boolean position;
 
     public boolean allShipsHit(){

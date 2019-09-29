@@ -1017,7 +1017,8 @@
                 android:id="@+id/resetButton"
                 android:layout_row="0"
                 android:layout_column="3"
-                android:src="@drawable/reset" />
+                android:src="@drawable/reset"
+                android:onClick="onClickReset"/>
 
             <TextView
                 android:layout_height="@dimen/FieldSize"
