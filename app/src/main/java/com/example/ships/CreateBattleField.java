@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class CreateBattleField extends AppCompatActivity {
@@ -37,6 +38,7 @@ public class CreateBattleField extends AppCompatActivity {
     PointIJ firstPointMastsShip = new PointIJ();
     PointIJ secondPointMastsShip = new PointIJ();
     int shipNumber;
+    Button startButton;
 
 
 
@@ -56,10 +58,11 @@ public class CreateBattleField extends AppCompatActivity {
         initializeThreeMastsShipTextView(ThreeMastsShip);
         initializeTwoMastsShipTextView(TwoMastsShip);
         initializeOneMastsShipTextView(OneMastsShip);
-
+        startButton=findViewById(R.id.playButton);
             updateScreen();
 
     }
+
     private void disableOneMastsTextView(){
         setGrey(OneMastsShip,0);
         OneMastsShip[0].setClickable(false);
@@ -102,7 +105,19 @@ public class CreateBattleField extends AppCompatActivity {
         updateTextViewCounters();
         updateTextViewCountersShips();
         updateClicableBattleField();
+        updateStartButton();
+    }
 
+    private void updateStartButton() {
+        if(leftFourMasts==0&&leftThreeMasts==0&&leftTwoMasts==0&&leftOneMasts==0){
+            startButton.setClickable(true);
+            startButton.setVisibility(View.VISIBLE);
+        }
+        else{
+            startButton.setClickable(false);
+            startButton.setVisibility(View.GONE);
+
+        }
     }
 
     private void updateBattleField() {
@@ -134,6 +149,7 @@ public class CreateBattleField extends AppCompatActivity {
             TextView[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell));
         }
     }
+
     private void setGreyColor(TextView[][] TextView, int i, int j) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -460,9 +476,13 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     public void onClickBack(View view) {
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void onClickStartGame(View view) {
+        BattleFieldPlayerOneSingleton.getInstance().storeBattleField(battleFieldPlayerCreateBattleFieldActivity);
         Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
         startActivity(intent);
         finish();
@@ -659,7 +679,6 @@ public class CreateBattleField extends AppCompatActivity {
         setRed(FourMastsShip,3);
     }
 
-
     public void putShip(int i, int j, int numberOfMasts){
         if(numberOfMasts==1||numberOfMasts==2||numberOfMasts==3||numberOfMasts==4){
             if(numberOfMasts==4){
@@ -714,6 +733,8 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(1);
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                             updateScreen();
+                            updateActiveTextViewFourMastsShipCounter(5);
+                            choosenShip=0;
   //                          updateClicableBattleField();
 
                         }
@@ -723,6 +744,8 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(1);
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                             updateScreen();
+                            updateActiveTextViewFourMastsShipCounter(5);
+                            choosenShip=0;
  //                           updateClicableBattleField();
                         }
                     }
@@ -761,6 +784,7 @@ public class CreateBattleField extends AppCompatActivity {
                                 battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                                 updateScreen();
                                 updateActiveTextViewFourMastsShipCounter(5);
+                                choosenShip=0;
    //                             updateClicableBattleField();
                             }
                         }else if(firstPointMastsShip.getJ()== secondPointMastsShip.getJ()){
@@ -770,6 +794,7 @@ public class CreateBattleField extends AppCompatActivity {
                                 battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                                 updateScreen();
                                 updateActiveTextViewFourMastsShipCounter(5);
+                                choosenShip=0;
    //                             updateClicableBattleField();
                             }
                         }
@@ -804,6 +829,7 @@ public class CreateBattleField extends AppCompatActivity {
                                 battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                                 updateScreen();
                                 updateActiveTextViewFourMastsShipCounter(5);
+                                choosenShip=0;
     //                            updateClicableBattleField();
                             }
                         } else if (firstPointMastsShip.getJ() == secondPointMastsShip.getJ()) {
@@ -813,6 +839,7 @@ public class CreateBattleField extends AppCompatActivity {
                                 battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                                 updateScreen();
                                 updateActiveTextViewFourMastsShipCounter(5);
+                                choosenShip=0;
       //                          updateClicableBattleField();
                             }
                         }
@@ -837,6 +864,7 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                             updateScreen();
                             updateActiveTextViewFourMastsShipCounter(5);
+                            choosenShip=0;
 //                            updateClicableBattleField();
                         }
                     }
@@ -858,6 +886,7 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                             updateScreen();
                             updateActiveTextViewFourMastsShipCounter(5);
+                            choosenShip=0;
  //                           updateClicableBattleField();
                         }
                     }
@@ -879,6 +908,7 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                             updateScreen();
                             updateActiveTextViewFourMastsShipCounter(5);
+                            choosenShip=0;
  //                           updateClicableBattleField();
                         }
                     }
@@ -886,11 +916,13 @@ public class CreateBattleField extends AppCompatActivity {
                 }else;
             }
             else if(numberOfMasts==1){
+
                 battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(numberOfMasts);
                 battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(shipNumberFlag);
                 battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                 updateScreen();
                 updateActiveTextViewFourMastsShipCounter(5);
+                choosenShip=0;
  //               updateClicableBattleField();
             }
             else;

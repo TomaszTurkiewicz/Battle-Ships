@@ -17,12 +17,14 @@ public class MainActivity extends AppCompatActivity {
         GameDifficulty.getInstance().setRandom(true);
         Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
         startActivity(intent);
+        finish();
     }
 
     public void notRandomGame(View view) {
         GameDifficulty.getInstance().setRandom(false);
         Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
         startActivity(intent);
+        finish();
     }
 
     public void networkGame(View view) {
