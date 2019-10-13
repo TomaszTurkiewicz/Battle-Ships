@@ -26,9 +26,6 @@
             android:name=".WinPlayerOne"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".RandomGame"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".MainActivity"
             android:screenOrientation="landscape">
             <intent-filter>
