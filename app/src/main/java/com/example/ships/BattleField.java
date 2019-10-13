@@ -163,104 +163,104 @@ public class BattleField{
         int i = position / 100;
         int j = position % 10;
         if (i == 0 && j == 0) {
-            if ((!battleField[i][j].isShip()) &&
-                    (!battleField[i][j + 1].isShip()) &&
-                    (!battleField[i + 1][j].isShip()) &&
-                    (!battleField[i + 1][j + 1].isShip())) {
-                putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
-            } else {
-                putShipWithOneCell( numberOfMasts, shipNumber, isShip);
-            }
-        } else if ((i > 0) && (i < 9) && j == 0) {
-            if ((!battleField[i][j].isShip()) &&
-                    (!battleField[i][j + 1].isShip()) &&
-                    (!battleField[i + 1][j].isShip()) &&
-                    (!battleField[i + 1][j + 1].isShip()) &&
-                    (!battleField[i - 1][j].isShip()) &&
-                    (!battleField[i - 1][j + 1].isShip())) {
-                putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
-            } else {
-                putShipWithOneCell(numberOfMasts, shipNumber, isShip);
-            }
-        } else if (i == 9 && j == 0) {
-            if ((!battleField[i][j].isShip()) &&
-                    (!battleField[i][j + 1].isShip()) &&
-                    (!battleField[i - 1][j].isShip()) &&
-                    (!battleField[i - 1][j + 1].isShip())) {
-                putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
-            } else {
-                putShipWithOneCell(numberOfMasts, shipNumber, isShip);
-            }
+                    if ((!battleField[i][j].isShip()) &&
+                            (!battleField[i][j + 1].isShip()) &&
+                            (!battleField[i + 1][j].isShip()) &&
+                            (!battleField[i + 1][j + 1].isShip())) {
+                        putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
+                    } else {
+                        putShipWithOneCell( numberOfMasts, shipNumber, isShip);
+                    }
+                } else if ((i > 0) && (i < 9) && j == 0) {
+                    if ((!battleField[i][j].isShip()) &&
+                            (!battleField[i][j + 1].isShip()) &&
+                            (!battleField[i + 1][j].isShip()) &&
+                            (!battleField[i + 1][j + 1].isShip()) &&
+                            (!battleField[i - 1][j].isShip()) &&
+                            (!battleField[i - 1][j + 1].isShip())) {
+                        putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
+                    } else {
+                        putShipWithOneCell(numberOfMasts, shipNumber, isShip);
+                    }
+                } else if (i == 9 && j == 0) {
+                    if ((!battleField[i][j].isShip()) &&
+                            (!battleField[i][j + 1].isShip()) &&
+                            (!battleField[i - 1][j].isShip()) &&
+                            (!battleField[i - 1][j + 1].isShip())) {
+                        putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
+                    } else {
+                        putShipWithOneCell(numberOfMasts, shipNumber, isShip);
+                    }
 
-        } else if (i == 0 && ((j > 0) && (j < 9))) {
-            if ((!battleField[i][j - 1].isShip()) &&
-                    (!battleField[i][j].isShip()) &&
-                    (!battleField[i][j + 1].isShip()) &&
-                    (!battleField[i + 1][j - 1].isShip()) &&
-                    (!battleField[i + 1][j].isShip()) &&
-                    (!battleField[i + 1][j + 1].isShip())) {
-                putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
-            } else {
-                putShipWithOneCell(numberOfMasts, shipNumber, isShip);
-            }
+                } else if (i == 0 && ((j > 0) && (j < 9))) {
+                    if ((!battleField[i][j - 1].isShip()) &&
+                            (!battleField[i][j].isShip()) &&
+                            (!battleField[i][j + 1].isShip()) &&
+                            (!battleField[i + 1][j - 1].isShip()) &&
+                            (!battleField[i + 1][j].isShip()) &&
+                            (!battleField[i + 1][j + 1].isShip())) {
+                        putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
+                    } else {
+                        putShipWithOneCell(numberOfMasts, shipNumber, isShip);
+                    }
 
-        } else if (((i > 0) && (i < 9)) && ((j > 0) && (j < 9))) {
-            if ((!battleField[i][j - 1].isShip()) &&
-                    (!battleField[i][j].isShip()) &&
-                    (!battleField[i][j + 1].isShip()) &&
-                    (!battleField[i + 1][j - 1].isShip()) &&
-                    (!battleField[i + 1][j].isShip()) &&
-                    (!battleField[i + 1][j + 1].isShip()) &&
-                    (!battleField[i - 1][j - 1].isShip()) &&
-                    (!battleField[i - 1][j].isShip()) &&
-                    (!battleField[i - 1][j + 1].isShip())) {
-                putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
-            } else {
-                putShipWithOneCell(numberOfMasts, shipNumber, isShip);
-            }
+                } else if (((i > 0) && (i < 9)) && ((j > 0) && (j < 9))) {
+                    if ((!battleField[i][j - 1].isShip()) &&
+                            (!battleField[i][j].isShip()) &&
+                            (!battleField[i][j + 1].isShip()) &&
+                            (!battleField[i + 1][j - 1].isShip()) &&
+                            (!battleField[i + 1][j].isShip()) &&
+                            (!battleField[i + 1][j + 1].isShip()) &&
+                            (!battleField[i - 1][j - 1].isShip()) &&
+                            (!battleField[i - 1][j].isShip()) &&
+                            (!battleField[i - 1][j + 1].isShip())) {
+                        putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
+                    } else {
+                        putShipWithOneCell(numberOfMasts, shipNumber, isShip);
+                    }
 
-        } else if (i == 9 && ((j > 0) && (j < 9))) {
-            if ((!battleField[i][j - 1].isShip()) &&
-                    (!battleField[i][j].isShip()) &&
-                    (!battleField[i][j + 1].isShip()) &&
-                    (!battleField[i - 1][j - 1].isShip()) &&
-                    (!battleField[i - 1][j].isShip()) &&
-                    (!battleField[i - 1][j + 1].isShip())) {
-                putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
-            } else {
-                putShipWithOneCell(numberOfMasts, shipNumber, isShip);
-            }
+                } else if (i == 9 && ((j > 0) && (j < 9))) {
+                    if ((!battleField[i][j - 1].isShip()) &&
+                            (!battleField[i][j].isShip()) &&
+                            (!battleField[i][j + 1].isShip()) &&
+                            (!battleField[i - 1][j - 1].isShip()) &&
+                            (!battleField[i - 1][j].isShip()) &&
+                            (!battleField[i - 1][j + 1].isShip())) {
+                        putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
+                    } else {
+                        putShipWithOneCell(numberOfMasts, shipNumber, isShip);
+                    }
 
-        } else if (i == 0 && j == 9) {
-            if ((!battleField[i][j - 1].isShip()) &&
-                    (!battleField[i][j].isShip()) &&
-                    (!battleField[i + 1][j - 1].isShip()) &&
-                    (!battleField[i + 1][j].isShip())) {
-                putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
-            } else {
-                putShipWithOneCell(numberOfMasts, shipNumber, isShip);
-            }
+                } else if (i == 0 && j == 9) {
+                    if ((!battleField[i][j - 1].isShip()) &&
+                            (!battleField[i][j].isShip()) &&
+                            (!battleField[i + 1][j - 1].isShip()) &&
+                            (!battleField[i + 1][j].isShip())) {
+                        putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
+                    } else {
+                        putShipWithOneCell(numberOfMasts, shipNumber, isShip);
+                    }
 
-        } else if (((i > 0) && (i < 9)) && (j == 9)) {
-            if ((!battleField[i][j - 1].isShip()) &&
-                    (!battleField[i][j].isShip()) &&
-                    (!battleField[i + 1][j - 1].isShip()) &&
-                    (!battleField[i + 1][j].isShip()) &&
-                    (!battleField[i - 1][j - 1].isShip()) &&
-                    (!battleField[i - 1][j].isShip())) {
-                putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
-            } else {
-                putShipWithOneCell(numberOfMasts, shipNumber, isShip);
-            }
+                } else if (((i > 0) && (i < 9)) && (j == 9)) {
+                    if ((!battleField[i][j - 1].isShip()) &&
+                            (!battleField[i][j].isShip()) &&
+                            (!battleField[i + 1][j - 1].isShip()) &&
+                            (!battleField[i + 1][j].isShip()) &&
+                            (!battleField[i - 1][j - 1].isShip()) &&
+                            (!battleField[i - 1][j].isShip())) {
+                        putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
+                    } else {
+                        putShipWithOneCell(numberOfMasts, shipNumber, isShip);
+                    }
 
-        } else if ((i == 9) && (j == 9)) {
-            if ((!battleField[i][j - 1].isShip()) &&
-                    (!battleField[i][j].isShip()) &&
-                    (!battleField[i][j + 1].isShip()) &&
-                    (!battleField[i - 1][j - 1].isShip()) &&
-                    (!battleField[i - 1][j].isShip()) &&
-                    (!battleField[i - 1][j + 1].isShip())) {
-                putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
+                } else if ((i == 9) && (j == 9)) {
+                    if ((!battleField[i][j - 1].isShip()) &&
+                            (!battleField[i][j].isShip()) &&
+                            (!battleField[i][j + 1].isShip()) &&
+                            (!battleField[i - 1][j - 1].isShip()) &&
+                            (!battleField[i - 1][j].isShip()) &&
+                            (!battleField[i - 1][j + 1].isShip())) {
+                        putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
             } else {
                 putShipWithOneCell(numberOfMasts, shipNumber, isShip);
             }
