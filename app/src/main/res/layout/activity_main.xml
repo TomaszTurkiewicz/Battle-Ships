@@ -57,7 +57,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imageViewSinglePlayer"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="@string/not_random_game"
@@ -66,10 +66,24 @@
             />
 
         <ImageView
+            android:id="@+id/imageViewSinglePlayer"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:src="@drawable/pobrane"
+            app:layout_constraintEnd_toStartOf="@id/accountButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
+
+        <ImageButton
+            android:id="@+id/accountButton"
+            android:layout_height="60dp"
+            android:layout_width="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/account"
+            android:onClick="onClickSignIn"/>
     </LinearLayout>
         <LinearLayout
             android:id="@+id/linearLayoutMainActivit2"

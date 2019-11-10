@@ -11,8 +11,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".EmailAndPasswordLogIn"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EmailAndPasswordSignIn"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SignInActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".CreateBattleField"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ChooseGameLevel"
             android:screenOrientation="landscape" />

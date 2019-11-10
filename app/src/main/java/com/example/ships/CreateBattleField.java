@@ -2,10 +2,11 @@ package com.example.ships;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class CreateBattleField extends AppCompatActivity {
@@ -692,6 +693,7 @@ public class CreateBattleField extends AppCompatActivity {
                     firstPointMastsShip.setJ(j);
                     checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                     setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                    TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
                     //                    updateBattleField();
                 }else if(fourMastsCounter==1){
                     if(conditionIJ(i,j,numberOfMasts)) {
@@ -702,6 +704,7 @@ public class CreateBattleField extends AppCompatActivity {
                         secondPointMastsShip.setJ(j);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                         setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
 //                        updateBattleField();
                     }
                 }
@@ -713,6 +716,7 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                             checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                             setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
                             //                            updateBattleField();
                         }
                     }else if(firstPointMastsShip.getJ()== secondPointMastsShip.getJ()){
@@ -722,6 +726,7 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                             checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                             setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
 //                            updateBattleField();
 
                         }
@@ -764,6 +769,7 @@ public class CreateBattleField extends AppCompatActivity {
                         firstPointMastsShip.setJ(j);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                         setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
 //                        updateBattleField();
                     }
                     else if(threeMastsCounter1==1){
@@ -775,6 +781,7 @@ public class CreateBattleField extends AppCompatActivity {
                             secondPointMastsShip.setJ(j);
                             checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                             setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
 //                            updateBattleField();
                         }
                     }else{
@@ -810,6 +817,7 @@ public class CreateBattleField extends AppCompatActivity {
                         firstPointMastsShip.setJ(j);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                         setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
                         //                        updateBattleField();
                     } else if (threeMastsCounter2 == 1) {
                         if (conditionIJ(i, j, numberOfMasts)) {
@@ -820,6 +828,7 @@ public class CreateBattleField extends AppCompatActivity {
                             secondPointMastsShip.setJ(j);
                             checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                             setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
  //                           updateBattleField();
                         }
                     } else {
@@ -856,6 +865,7 @@ public class CreateBattleField extends AppCompatActivity {
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                         setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
  //                       updateBattleField();
                     }
                     else {
@@ -878,6 +888,7 @@ public class CreateBattleField extends AppCompatActivity {
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                         setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
  //                       updateBattleField();
                     }
                     else {
@@ -900,6 +911,7 @@ public class CreateBattleField extends AppCompatActivity {
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
                         setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
  //                       updateBattleField();
                     }
                     else {
