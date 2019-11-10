@@ -81,6 +81,7 @@ public class EmailAndPasswordSignIn extends AppCompatActivity {
                                     }else{
                                         Toast.makeText(EmailAndPasswordSignIn.this,task.getException().getMessage(),
                                                 Toast.LENGTH_LONG).show();
+                                        progressDialog.dismiss();
                                     }
 
                                 }
@@ -106,5 +107,6 @@ public class EmailAndPasswordSignIn extends AppCompatActivity {
     public void goToLogIn(View view) {
         Intent intent = new Intent(getApplicationContext(),EmailAndPasswordLogIn.class);
         startActivity(intent);
+        finish();
     }
 }

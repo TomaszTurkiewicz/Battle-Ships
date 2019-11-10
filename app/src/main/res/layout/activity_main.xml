@@ -74,7 +74,10 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
         <ImageButton
             android:id="@+id/accountButton"
             android:layout_height="60dp"
@@ -84,6 +87,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/account"
             android:onClick="onClickSignIn"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/userName"/>
+
+</LinearLayout>
     </LinearLayout>
         <LinearLayout
             android:id="@+id/linearLayoutMainActivit2"

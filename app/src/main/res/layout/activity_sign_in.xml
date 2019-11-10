@@ -13,4 +13,10 @@
         android:layout_marginTop="20dp"
         android:text="@string/email_and_password"
         android:onClick="onClickEmailAndPasswordLogin"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/logout"
+        android:text="@string/logout"/>
 </LinearLayout>
