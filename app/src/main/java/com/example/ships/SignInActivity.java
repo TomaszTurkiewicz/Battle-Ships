@@ -36,3 +36,9 @@ public class SignInActivity extends AppCompatActivity {
         finish();
     }
 }
+//TODO odzielić rejestrację do osobnego aktivity
+//TODO forgot password
+//TODO Zmienić rejestrację aby trzeba było podać nazwę(username)
+//TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
+//TODO rejestracje przez Gmaila
+//TODO Rejestracja przez Facebook
