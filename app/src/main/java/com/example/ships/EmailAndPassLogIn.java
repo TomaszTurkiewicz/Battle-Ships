@@ -17,7 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class EmailAndPasswordLogIn extends AppCompatActivity {
+public class EmailAndPassLogIn extends AppCompatActivity {
 
     private EditText email;
     private EditText password;
@@ -28,11 +28,12 @@ public class EmailAndPasswordLogIn extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_email_and_password_log_in);
+        setContentView(R.layout.activity_email_and_pass_log_in);
 
-        email = findViewById(R.id.EmailLogIn);
-        password = findViewById(R.id.passwordLogIn);
-        loginBtn = findViewById(R.id.logInBtnLogIn);
+
+        email = findViewById(R.id.emailEditTextLogIn);
+        password = findViewById(R.id.passwordEditTextLogIn);
+        loginBtn = findViewById(R.id.LogInBtnLogIn);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -62,26 +63,32 @@ public class EmailAndPasswordLogIn extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 if(firebaseAuth.getCurrentUser().isEmailVerified()){
-                                    startActivity(new Intent(EmailAndPasswordLogIn.this, MainActivity.class));
+                                    startActivity(new Intent(EmailAndPassLogIn.this, MainActivity.class));
                                     progressDialog.dismiss();
                                     finish();
                                 }else{
-                                    Toast.makeText(EmailAndPasswordLogIn.this,"Please verify your email address",
+                                    Toast.makeText(EmailAndPassLogIn.this,"Please verify your email address",
                                             Toast.LENGTH_LONG).show();
                                     progressDialog.dismiss();
                                 }
                             } else {
-                                Toast.makeText(EmailAndPasswordLogIn.this, task.getException().getMessage(),
+                                Toast.makeText(EmailAndPassLogIn.this, task.getException().getMessage(),
                                         Toast.LENGTH_LONG).show();
                                 progressDialog.dismiss();
                             }
                         }
                     });
-       }
+        }
         else{
-            Toast.makeText(EmailAndPasswordLogIn.this,"Registered unsuccessful: Fields empty",
+            Toast.makeText(EmailAndPassLogIn.this,"Registered unsuccessful: Fields empty",
                     Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
         }
     }
+
+    public void goToSignIn(View view) {
+        startActivity(new Intent(EmailAndPassLogIn.this, EmailAndPassSignIn.class));
+        finish();
+    }
 }
+

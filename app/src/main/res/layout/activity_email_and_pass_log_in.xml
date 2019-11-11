@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EmailAndPasswordLogIn"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/linearLayoutEmailAndPassLogIn"
+    tools:context=".EmailAndPassLogIn" >
 
     <EditText
-        android:id="@+id/EmailLogIn"
+        android:id="@+id/emailEditTextLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
@@ -16,7 +17,7 @@
         android:inputType="textEmailAddress" />
 
     <EditText
-        android:id="@+id/passwordLogIn"
+        android:id="@+id/passwordEditTextLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
@@ -25,9 +26,29 @@
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/logInBtnLogIn"
+        android:id="@+id/LogInBtnLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="@string/log_in" />
+
+
+
+    <Button
+        android:id="@+id/forgotPasswordBtnLogIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/forgot_password" />
+
+    <Button
+        android:id="@+id/signInBtnLogIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginTop="@dimen/Distance50dp"
+        android:text="@string/sign_up"
+        android:onClick="goToSignIn"/>
+
+
 </LinearLayout>

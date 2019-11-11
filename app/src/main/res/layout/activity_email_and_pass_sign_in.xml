@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/linearLayoutEmailAndPasswordSingIn"
-    tools:context=".EmailAndPasswordSignIn" >
+    tools:context=".EmailAndPassSignIn"
+    android:orientation="vertical">
 
     <EditText
-        android:id="@+id/emailEditTextSignIn"
+        android:id="@+id/EmailSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
@@ -18,7 +16,7 @@
         android:inputType="textEmailAddress" />
 
     <EditText
-        android:id="@+id/passwordEditTextSignIn"
+        android:id="@+id/passwordSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
@@ -32,19 +30,4 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="@string/sign_up" />
-
-    <Button
-        android:id="@+id/logInBtnSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="@string/log_in"
-        android:onClick="goToLogIn"/>
-
-    <Button
-        android:id="@+id/forgotPasswordBtnSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="@string/forgot_password" />
 </LinearLayout>

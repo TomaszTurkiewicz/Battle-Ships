@@ -31,14 +31,15 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void onClickEmailAndPasswordLogin(View view) {
-        Intent intent = new Intent(getApplicationContext(),EmailAndPasswordSignIn.class);
+        Intent intent = new Intent(getApplicationContext(),EmailAndPassLogIn.class);
         startActivity(intent);
         finish();
     }
 }
-//TODO odzielić rejestrację do osobnego aktivity
+//TODO rejestracja z podwójnym mailem i password plus username
 //TODO forgot password
-//TODO Zmienić rejestrację aby trzeba było podać nazwę(username)
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO rejestracje przez Gmaila
 //TODO Rejestracja przez Facebook
+//TODO tworzenie database dla rejestracji urzytkownika
+//TODO zapis i odczyt z bazy danych (przy logowaniu i grze)
