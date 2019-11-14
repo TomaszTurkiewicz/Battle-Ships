@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class EmailAndPassSignIn extends AppCompatActivity {
 
@@ -24,6 +29,10 @@ public class EmailAndPassSignIn extends AppCompatActivity {
     private Button signup;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +41,11 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         email = findViewById(R.id.EmailSignIn);
         password = findViewById(R.id.passwordSignIn);
         signup = findViewById(R.id.SignInBtnSignIn);
-
-
         firebaseAuth = FirebaseAuth.getInstance();
-
         progressDialog = new ProgressDialog(this);
-
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference("User");
+        user = new User();
 
         signup.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -69,8 +77,12 @@ public class EmailAndPassSignIn extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
+                                            createUserInDatabase();//TODO sprawdzić dlaczego nie działa!!!
                                             Toast.makeText(EmailAndPassSignIn.this,"Registered successfully. Please check your email for verification",
                                                     Toast.LENGTH_LONG).show();
+
+
+
                                             email.setText("");
                                             password.setText("");
                                             progressDialog.dismiss();
@@ -102,6 +114,30 @@ public class EmailAndPassSignIn extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
         }
+    }
+
+    private void createUserInDatabase() {
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setValue();
+                databaseReference.child("Pierwszy").setValue(user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void setValue(){
+        user.setName("Pierwszy");
+        user.setEmail(email.getText().toString().trim());
+        user.setNoOfGames(0);
+        user.setScore(0);
     }
 
 }
