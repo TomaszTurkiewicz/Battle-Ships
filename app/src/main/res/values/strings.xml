@@ -44,4 +44,6 @@
     <string name="log_in">LOG IN</string>
     <string name="forgot_password">FORGOT PASSWORD</string>
     <string name="logout">LOGOUT</string>
+    <string name="create_user">Create USER</string>
+    <string name="username">Username</string>
 </resources>

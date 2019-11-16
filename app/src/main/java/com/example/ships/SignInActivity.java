@@ -41,5 +41,7 @@ public class SignInActivity extends AppCompatActivity {
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO rejestracje przez Gmaila
 //TODO Rejestracja przez Facebook
-//TODO tworzenie database dla rejestracji urzytkownika
 //TODO zapis i odczyt z bazy danych (przy logowaniu i grze)
+//TODO usuwanie konta
+//TODO animacja
+//TODO inaczej zrobić pętlę gry (opóźnienie)

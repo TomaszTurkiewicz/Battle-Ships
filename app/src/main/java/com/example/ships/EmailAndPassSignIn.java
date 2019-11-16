@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class EmailAndPassSignIn extends AppCompatActivity {
 
+    private EditText username;
     private EditText email;
     private EditText password;
     private Button signup;
@@ -33,11 +34,14 @@ public class EmailAndPassSignIn extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private User user;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_and_pass_sign_in);
 
+        username = findViewById(R.id.Username);
         email = findViewById(R.id.EmailSignIn);
         password = findViewById(R.id.passwordSignIn);
         signup = findViewById(R.id.SignInBtnSignIn);
@@ -46,8 +50,16 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("User");
         user = new User();
+        if (firebaseAuth.getCurrentUser() != null) {
+            if(firebaseAuth.getCurrentUser().isEmailVerified()){
+                startActivity(new Intent(EmailAndPassSignIn.this, MainActivity.class));
+                finish();
+            }
 
-        signup.setOnClickListener(new View.OnClickListener(){
+        }
+
+
+            signup.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 startRegistering();
@@ -55,29 +67,35 @@ public class EmailAndPassSignIn extends AppCompatActivity {
             }
         });
 
+
+
     }
+
 
     private void startRegistering() {
 
         progressDialog.setMessage("Registering ...");
         progressDialog.show();
 
-        String email_val = email.getText().toString().trim();
+        final String email_val = email.getText().toString().trim();
         String password_val = password.getText().toString().trim();
+        final String username_val = username.getText().toString().trim();
 
-        if(!TextUtils.isEmpty(email_val)&&!TextUtils.isEmpty(password_val)){
+        if(!TextUtils.isEmpty(email_val)&&!TextUtils.isEmpty(password_val)&&!TextUtils.isEmpty(username_val)){
 
             firebaseAuth.createUserWithEmailAndPassword(email_val, password_val)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+
+                            final String userID = firebaseAuth.getCurrentUser().getUid();
                             if(task.isSuccessful()){
 
                                 firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
-                                            createUserInDatabase();//TODO sprawdzić dlaczego nie działa!!!
+                                            createUserInDatabase(username_val ,email_val, userID);
                                             Toast.makeText(EmailAndPassSignIn.this,"Registered successfully. Please check your email for verification",
                                                     Toast.LENGTH_LONG).show();
 
@@ -116,13 +134,13 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         }
     }
 
-    private void createUserInDatabase() {
+    private void createUserInDatabase(final String username_val, final String email_address, final String userId) {
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setValue();
-                databaseReference.child("Pierwszy").setValue(user);
+                setValue(username_val, email_address);
+                databaseReference.child(userId).setValue(user);
             }
 
             @Override
@@ -133,9 +151,9 @@ public class EmailAndPassSignIn extends AppCompatActivity {
 
     }
 
-    private void setValue(){
-        user.setName("Pierwszy");
-        user.setEmail(email.getText().toString().trim());
+    private void setValue(String username_val, String email){
+        user.setName(username_val);
+        user.setEmail(email);
         user.setNoOfGames(0);
         user.setScore(0);
     }

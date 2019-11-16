@@ -2,6 +2,7 @@ package com.example.ships;
 
 public class User {
 
+    private String id;
     private String name;
     private String email;
     private int score;
@@ -10,11 +11,20 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, int score, int noOfGames) {
+    public User(String id, String name, String email, int score, int noOfGames) {
+        this.id=id;
         this.name = name;
         this.email = email;
         this.score = score;
         this.noOfGames = noOfGames;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
