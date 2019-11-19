@@ -4,11 +4,21 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -48,7 +58,17 @@ public class GameBattle extends AppCompatActivity {
     int direction;
     int x;
     int y;
+    boolean loggedIn;
+    long noOfGames;
+    long score;
+
     ArrayList<Integer>ShootTable = new ArrayList<>();
+
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private String userID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +79,6 @@ public class GameBattle extends AppCompatActivity {
 
 
         initializeTable(ShootTable);
-
 
         initializeShips();
         initializeBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGamePlayerOne);
@@ -80,15 +99,59 @@ public class GameBattle extends AppCompatActivity {
             }
         }
 
-
-
- //       battleFieldPlayerOneActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
- //       battleFieldPlayerTwoActivityRandomGame = BattleFieldPlayerTwoSingleton.getInstance().readBattleField();
         displayBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGamePlayerOne, battleFieldPlayerOneActivityRandomGame);
- //       displayBattleFieldActivityRandomGamePlayerTwo(TextViewArrayActivityRandomGamePlayerTwo, battleFieldPlayerTwoActivityRandomGame);
+
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference("User");
+
+        if (firebaseAuth.getCurrentUser() != null) {
+            if(firebaseAuth.getCurrentUser().isEmailVerified()){
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                userID = firebaseUser.getUid();
+                loggedIn = true;
+
+            }else{
+                loggedIn = false;
+            }
+
+        }
+
+
+    if (loggedIn) {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                showData(dataSnapshot);
+                addNewGameCounter();
+                databaseReference.child(userID).child("noOfGames").setValue(noOfGames);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 
         game.run();
 
+    }
+
+    private void addNewGameCounter() {
+        noOfGames = noOfGames+1;
+    }
+
+    private void showData(DataSnapshot dataSnapshot) {
+            for(DataSnapshot ds : dataSnapshot.getChildren()){
+
+                noOfGames= (Long) dataSnapshot.child(userID).child("noOfGames").getValue();
+
+            }
     }
 
     private void initializeTable(ArrayList<Integer> shootTable) {
@@ -162,6 +225,7 @@ public class GameBattle extends AppCompatActivity {
             else if (battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&!battleFieldPlayerOneActivityRandomGame.allShipsHit())      // allShipsHit player
             {
                      mHandler.removeCallbacks(game);
+                     updatePoints();
                 Intent intent = new Intent(getApplicationContext(),WinPlayerOne.class);
                 startActivity(intent);
                 finish();
@@ -177,10 +241,50 @@ public class GameBattle extends AppCompatActivity {
         }
     };
 
+    private void updatePoints() {
+
+        if (loggedIn) {
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    showDataPoints(dataSnapshot);
+                    addPoints();
+                    databaseReference.child(userID).child("score").setValue(score);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+    }
+
+    private void addPoints() {
+
+        if(level==0){
+            score = score+1;
+        }else if(level==2){
+            score = score+10;
+        }else if(level==3){
+            score = score+100;
+        }else;
+
+    }
+
+    private void showDataPoints(DataSnapshot dataSnapshot) {
+        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+            score = (Long) dataSnapshot.child(userID).child("score").getValue();
+        }
+    }
+
     public void battle(){
 
         if(playerOneCounter&&!playerTwoCounter){
             readClicable();
+ //TODO testowanie           pokazStatki();
             showBattleFieldAvailablePlayerTwo();
             hideBattleFiledAvailablePlayerOne();
         }
@@ -194,6 +298,37 @@ public class GameBattle extends AppCompatActivity {
             playerTwoCounter=false;
         }
         mHandler.postDelayed(game,1000);
+    }
+
+    private void pokazStatki() {
+
+        for(int i =0;i<10;i++){
+            for(int j = 0; j<10;j++){
+                //jest statek i został trafiony
+                if(battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).isShip()){
+
+                    if(zatopiony(battleFieldPlayerTwoActivityRandomGame.battleField[i][j].getNumberOfMasts(),battleFieldPlayerTwoActivityRandomGame.battleField[i][j].getShipNumber())){
+                        displayShipCell(TextViewArrayActivityRandomGamePlayerTwo,i,j);
+                    }
+                    else{
+                        displayRedCell(TextViewArrayActivityRandomGamePlayerTwo,i,j);
+                    }
+                }
+
+                // woda i została trafiony
+                else if(!battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).isShip()
+                        &&battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).isHit()){
+                    displayWaterCell(TextViewArrayActivityRandomGamePlayerTwo,i,j);
+                }
+
+                // nie ma statku
+                else if(!battleFieldPlayerTwoActivityRandomGame.getBattleField(i,j).isHit()){
+                    displayBattleCell(TextViewArrayActivityRandomGamePlayerTwo,i,j);
+                }
+                else;
+            }
+        }
+
     }
 
     private void showBattleFieldAvailablePlayerOne() {

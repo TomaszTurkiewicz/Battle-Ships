@@ -136,7 +136,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
 
     private void createUserInDatabase(final String username_val, final String email_address, final String userId) {
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 setValue(username_val, email_address);
