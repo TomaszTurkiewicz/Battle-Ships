@@ -31,8 +31,12 @@ public class EmailAndPassSignIn extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReferenceUser;
+    private DatabaseReference databaseReferenceRanking;
     private DatabaseReference databaseReference;
     private User user;
+    private int numberOfUsers;
+    private Long position;
 
 
 
@@ -48,7 +52,10 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference("User");
+        databaseReferenceUser =firebaseDatabase.getReference("User");
+        databaseReferenceRanking=firebaseDatabase.getReference("Ranking");
+        databaseReference=firebaseDatabase.getReference();
+
         user = new User();
         if (firebaseAuth.getCurrentUser() != null) {
             if(firebaseAuth.getCurrentUser().isEmailVerified()){
@@ -136,11 +143,14 @@ public class EmailAndPassSignIn extends AppCompatActivity {
 
     private void createUserInDatabase(final String username_val, final String email_address, final String userId) {
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+        databaseReferenceUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setValue(username_val, email_address);
-                databaseReference.child(userId).setValue(user);
+                numberOfUsers= (int) dataSnapshot.getChildrenCount();
+                setValue(username_val, email_address, numberOfUsers+1);
+                databaseReferenceUser.child(userId).setValue(user);
             }
 
             @Override
@@ -149,13 +159,37 @@ public class EmailAndPassSignIn extends AppCompatActivity {
             }
         });
 
+
+
+
+//        databaseReferenceRanking.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
     }
 
-    private void setValue(String username_val, String email){
+    private void checkNoOfUsers(DataSnapshot dataSnapshot) {
+        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+             numberOfUsers = (int) dataSnapshot.child("Counter").getValue();
+
+        }
+    }
+
+    private void setValue(String username_val, String email, int position){
         user.setName(username_val);
         user.setEmail(email);
         user.setNoOfGames(0);
         user.setScore(0);
+        user.setPosition(position);
     }
 
 }
