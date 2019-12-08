@@ -27,16 +27,13 @@ public class EmailAndPassSignIn extends AppCompatActivity {
     private EditText username;
     private EditText email;
     private EditText password;
-    private Button signup;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceUser;
-    private DatabaseReference databaseReferenceRanking;
-    private DatabaseReference databaseReference;
     private User user;
     private int numberOfUsers;
-    private Long position;
+
 
 
 
@@ -48,13 +45,12 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         username = findViewById(R.id.Username);
         email = findViewById(R.id.EmailSignIn);
         password = findViewById(R.id.passwordSignIn);
-        signup = findViewById(R.id.SignInBtnSignIn);
+        Button signup = findViewById(R.id.SignInBtnSignIn);
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReferenceUser =firebaseDatabase.getReference("User");
-        databaseReferenceRanking=firebaseDatabase.getReference("Ranking");
-        databaseReference=firebaseDatabase.getReference();
+
 
         user = new User();
         if (firebaseAuth.getCurrentUser() != null) {
@@ -149,7 +145,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 numberOfUsers= (int) dataSnapshot.getChildrenCount();
-                setValue(username_val, email_address, numberOfUsers+1);
+                setValue(username_val, email_address, numberOfUsers+1,userId);
                 databaseReferenceUser.child(userId).setValue(user);
             }
 
@@ -160,31 +156,10 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         });
 
 
-
-
-//        databaseReferenceRanking.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
     }
 
-    private void checkNoOfUsers(DataSnapshot dataSnapshot) {
-        for(DataSnapshot ds : dataSnapshot.getChildren()) {
-             numberOfUsers = (int) dataSnapshot.child("Counter").getValue();
-
-        }
-    }
-
-    private void setValue(String username_val, String email, int position){
+    private void setValue(String username_val, String email, int position, String userID){
+        user.setId(userID);
         user.setName(username_val);
         user.setEmail(email);
         user.setNoOfGames(0);

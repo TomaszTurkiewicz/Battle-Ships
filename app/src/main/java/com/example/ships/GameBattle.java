@@ -70,6 +70,7 @@ public class GameBattle extends AppCompatActivity {
     private String userID;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -284,8 +285,8 @@ public class GameBattle extends AppCompatActivity {
 
         if(playerOneCounter&&!playerTwoCounter){
             readClicable();
- //TODO testowanie           pokazStatki();
-            showBattleFieldAvailablePlayerTwo();
+           pokazStatki();
+  //          showBattleFieldAvailablePlayerTwo();
             hideBattleFiledAvailablePlayerOne();
         }
         else if(playerTwoCounter&&!playerOneCounter){
