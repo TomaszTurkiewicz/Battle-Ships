@@ -21,12 +21,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GameBattle extends AppCompatActivity {
 
     private Handler mHandler = new Handler();
-
+    private int numberOfUsers;
+    List<User> list = new ArrayList<>();
     BattleField battleFieldPlayerOneActivityRandomGame = new BattleField();
     BattleField battleFieldPlayerTwoActivityRandomGame = new BattleField();
 
@@ -60,7 +62,9 @@ public class GameBattle extends AppCompatActivity {
     int y;
     boolean loggedIn;
     long noOfGames;
-    long score;
+    int score;
+
+
 
     ArrayList<Integer>ShootTable = new ArrayList<>();
 
@@ -226,7 +230,11 @@ public class GameBattle extends AppCompatActivity {
             else if (battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&!battleFieldPlayerOneActivityRandomGame.allShipsHit())      // allShipsHit player
             {
                      mHandler.removeCallbacks(game);
-                     updatePoints();
+// TODO why it's getting old snapshot?
+                     if(loggedIn) {
+                         updateRanking();
+
+                     }
                 Intent intent = new Intent(getApplicationContext(),WinPlayerOne.class);
                 startActivity(intent);
                 finish();
@@ -242,16 +250,42 @@ public class GameBattle extends AppCompatActivity {
         }
     };
 
-    private void updatePoints() {
+    private void updateRanking() {
 
-        if (loggedIn) {
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    showDataPoints(dataSnapshot);
-                    addPoints();
+
+                    numberOfUsers = (int) dataSnapshot.getChildrenCount();
+                    Ranking ranking = new Ranking(numberOfUsers);
+
+                    for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                        User user = postSnapshot.getValue(User.class);
+                        list.add(user);
+                    }
+
+                    for(int i=0;i<list.size();i++){
+                        ranking.addUsers(list.get(i));
+                    }
+
+                    for(int i=0; i<ranking.getRanking().length;i++){
+                        if(ranking.getRanking(i).getId().equals(userID)){
+                            score = ranking.getRanking(i).getScore();
+                            addPoints();
+                            ranking.getRanking(i).setScore(score);
+                        }
+                    }
+
+                    ranking.sortRanking();
+                    ranking.setPosition();
+
                     databaseReference.child(userID).child("score").setValue(score);
+                    for(int i=0;i<numberOfUsers;i++){
+                        databaseReference.child(ranking.getRanking(i).getId()).child("position").setValue(ranking.getRanking(i).getPosition());
+                    }
+
+
                 }
 
                 @Override
@@ -259,7 +293,7 @@ public class GameBattle extends AppCompatActivity {
 
                 }
             });
-        }
+
 
     }
 
@@ -273,12 +307,6 @@ public class GameBattle extends AppCompatActivity {
             score = score+100;
         }else;
 
-    }
-
-    private void showDataPoints(DataSnapshot dataSnapshot) {
-        for(DataSnapshot ds : dataSnapshot.getChildren()) {
-            score = (Long) dataSnapshot.child(userID).child("score").getValue();
-        }
     }
 
     public void battle(){

@@ -151,13 +151,7 @@
                 android:layout_height="120dp"
                 android:src="@drawable/pobrane2"
                 />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sort"
-                android:layout_margin="@dimen/FieldSize"
-                android:layout_gravity="center_horizontal"
-                android:onClick="sort"/>
+
 
         </LinearLayout>
 
