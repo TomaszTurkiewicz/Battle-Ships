@@ -81,9 +81,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
+    public void ranking(View view) {
+    }
 }
