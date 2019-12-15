@@ -5,9 +5,11 @@
     <dimen name="TableSizeSmall">100dp</dimen>
     <dimen name="FieldSize">25dp</dimen>
     <dimen name="TextSize">20sp</dimen>
+    <dimen name="TextSizeMini">12sp</dimen>
     <dimen name="Button">20</dimen>
     <dimen name="TextBigSize">75</dimen>
     <dimen name="Distance50dp">50dp</dimen>
     <dimen name="Distance80dp">80dp</dimen>
+
 
 </resources>

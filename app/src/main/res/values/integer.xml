@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="PositionWeight">1</integer>
+    <integer name="UserWeight">2</integer>
+    <integer name="NoOFGamesWeight">1</integer>
+    <integer name="ScoreWeight">2</integer>
+
+
+
+</resources>

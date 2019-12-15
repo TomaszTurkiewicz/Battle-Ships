@@ -32,7 +32,7 @@ public class Scores extends AppCompatActivity {
         setContentView(R.layout.activity_scores);
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("User");
-
+//TODO set progress bar during data is not ready to show on the screen
         initRanking();
 
     }

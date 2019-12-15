@@ -9,32 +9,32 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/positionScore"
-        android:textSize="@dimen/FieldSize"
+        android:textSize="@dimen/TextSize"
         android:layout_margin="8dp"
-        android:layout_weight="1"/>
+        android:layout_weight="@integer/PositionWeight"/>
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/usernameScore"
-        android:textSize="@dimen/FieldSize"
+        android:textSize="@dimen/TextSize"
         android:layout_margin="8dp"
-        android:layout_weight="3"/>
+        android:layout_weight="@integer/UserWeight"/>
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/noOfGamesScore"
-        android:textSize="@dimen/FieldSize"
+        android:textSize="@dimen/TextSize"
         android:layout_margin="8dp"
-        android:layout_weight="1"/>
+        android:layout_weight="@integer/NoOFGamesWeight"/>
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/scoreScore"
-        android:textSize="@dimen/FieldSize"
+        android:textSize="@dimen/TextSize"
         android:layout_margin="8dp"
-        android:layout_weight="3"
+        android:layout_weight="@integer/ScoreWeight"
         android:gravity="right"/>
 
 </LinearLayout>

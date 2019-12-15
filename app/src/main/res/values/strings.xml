@@ -48,4 +48,8 @@
     <string name="username">Username</string>
     <string name="sort">sort</string>
     <string name="ranking">RANKING</string>
+    <string name="position">POSITION</string>
+    <string name="user">USER</string>
+    <string name="no_of_games">NO OF GAMES</string>
+    <string name="points">POINTS</string>
 </resources>
