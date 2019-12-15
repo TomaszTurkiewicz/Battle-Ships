@@ -2,20 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:id="@+id/parent_layout">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/usernameScore"/>
+        android:id="@+id/positionScore"
+        android:textSize="@dimen/FieldSize"
+        android:layout_margin="8dp"
+        android:layout_weight="1"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/noOfGamesScore"/>
+        android:id="@+id/usernameScore"
+        android:textSize="@dimen/FieldSize"
+        android:layout_margin="8dp"
+        android:layout_weight="3"/>
+
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/scoreScore"/>
+        android:id="@+id/noOfGamesScore"
+        android:textSize="@dimen/FieldSize"
+        android:layout_margin="8dp"
+        android:layout_weight="1"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/scoreScore"
+        android:textSize="@dimen/FieldSize"
+        android:layout_margin="8dp"
+        android:layout_weight="3"
+        android:gravity="right"/>
 
 </LinearLayout>

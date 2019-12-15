@@ -36,33 +36,33 @@ public class GameBattle extends AppCompatActivity {
     TextView[][] TextViewArrayActivityRandomGamePlayerTwo = new TextView[10][10];
 
     TextView[] ShipFourMasts = new TextView[4];
-    int ShipFourMastsCounter = 0;
+    private int ShipFourMastsCounter = 0;
     TextView[] ShipThreeMastsFirst = new TextView[3];
-    int ShipThreeMastsCounterFirst = 0;
+    private int ShipThreeMastsCounterFirst = 0;
     TextView[] ShipThreeMastsSecond = new TextView[3];
-    int ShipThreeMastsCounterSecond = 0;
+    private int ShipThreeMastsCounterSecond = 0;
     TextView[] ShipTwoMastsFirst = new TextView[2];
-    int ShipTwoMastsCounterFirst = 0;
+    private int ShipTwoMastsCounterFirst = 0;
     TextView[] ShipTwoMastsSecond = new TextView[2];
-    int ShipTwoMastsCounterSecond = 0;
+    private int ShipTwoMastsCounterSecond = 0;
     TextView[] ShipTwoMastsThird = new TextView[2];
-    int ShipTwoMastsCounterThird = 0;
+    private int ShipTwoMastsCounterThird = 0;
     TextView[] ShipOneMastsFirst = new TextView[1];
     TextView[] ShipOneMastsSecond = new TextView[1];
     TextView[] ShipOneMastsThird = new TextView[1];
     TextView[] ShipOneMastsFourth = new TextView[1];
-    boolean playerOneCounter;
-    boolean playerTwoCounter;
-    int level = GameDifficulty.getInstance().getLevel();
-    boolean newShoot=true;
-    int positionI;
-    int positionJ;
-    int direction;
-    int x;
-    int y;
-    boolean loggedIn;
-    long noOfGames;
-    int score;
+    private boolean playerOneCounter;
+    private boolean playerTwoCounter;
+    private int level = GameDifficulty.getInstance().getLevel();
+    private boolean newShoot=true;
+    private int positionI;
+    private int positionJ;
+    private int direction;
+    private int x;
+    private int y;
+    private boolean loggedIn;
+    private long noOfGames;
+    private int score;
 
 
 
@@ -230,7 +230,7 @@ public class GameBattle extends AppCompatActivity {
             else if (battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&!battleFieldPlayerOneActivityRandomGame.allShipsHit())      // allShipsHit player
             {
                      mHandler.removeCallbacks(game);
-// TODO why it's getting old snapshot?
+
                      if(loggedIn) {
                          updateRanking();
 

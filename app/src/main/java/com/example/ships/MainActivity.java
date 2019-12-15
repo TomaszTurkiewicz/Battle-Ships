@@ -82,5 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void ranking(View view) {
+        Intent intent = new Intent(getApplicationContext(),Scores.class);
+        startActivity(intent);
+        finish();
     }
 }
