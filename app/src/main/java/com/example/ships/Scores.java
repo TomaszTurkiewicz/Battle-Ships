@@ -1,5 +1,6 @@
 package com.example.ships;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ public class Scores extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private int numberOfUsers;
     List<User> list = new ArrayList<>();
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -32,7 +34,9 @@ public class Scores extends AppCompatActivity {
         setContentView(R.layout.activity_scores);
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("User");
-//TODO set progress bar during data is not ready to show on the screen
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Updating ranking...");
+        progressDialog.show();
         initRanking();
 
     }
@@ -71,6 +75,7 @@ public class Scores extends AppCompatActivity {
     }
 
     private void initRecyclerView(){
+        progressDialog.dismiss();
         RecyclerView recyclerView = findViewById(R.id.recyclerViewScores);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,ranking);
         recyclerView.setAdapter(adapter);
