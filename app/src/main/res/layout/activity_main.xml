@@ -6,164 +6,71 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:id="@+id/linearLayoutMainActivity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@id/linearLayoutMainActivit2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <Button
+        android:id="@+id/randomGame"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:onClick="randomGame"
+        android:text="@string/random_game"
         app:layout_constraintTop_toTopOf="parent"
-        >
-        <ImageView
-            android:id="@+id/imageViewSinglePlayer"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/pobrane"
-            app:layout_constraintEnd_toStartOf="@id/accountButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-        <Button
-            android:id="@+id/randomGame"
-            android:layout_width="150dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/notRandomGame"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/random_game"
-            android:onClick="randomGame"
-            android:layout_gravity="center"
-            />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"/>
 
-        <Button
-            android:id="@+id/notRandomGame"
-            android:layout_width="150dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintEnd_toStartOf="@id/imageViewSinglePlayer"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/not_random_game"
-            android:onClick="notRandomGame"
-            android:layout_gravity="center"
-            />
+    <Button
+        android:id="@+id/notRandomGame"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:onClick="notRandomGame"
+        android:text="@string/not_random_game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"/>
 
 
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-        <ImageButton
-            android:id="@+id/accountButton"
-            android:layout_height="60dp"
-            android:layout_width="60dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/account"
-            android:onClick="onClickSignIn"/>
+    <ImageButton
+        android:id="@+id/accountButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:onClick="onClickSignIn"
+        android:src="@drawable/account"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="@dimen/FieldSize"/>
+
     <TextView
+        android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/userName"/>
+        app:layout_constraintLeft_toRightOf="@id/loggedIn"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/FieldSize"/>
 
-</LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/FieldSize">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/RED"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-            android:id="@+id/linearLayoutMainActivit2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            >
-
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/pobrane2"
-                />
-            <Button
-                android:id="@+id/networkGame"
-                android:layout_width="150dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:text="@string/networkGame"
-                android:onClick="networkGame"
-                android:layout_gravity="center"
-                />
-
-        <Button
-            android:id="@+id/ranking"
-            android:layout_width="120dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
-            android:onClick="ranking"
-            android:text="@string/ranking"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+    <TextView
+        android:id="@+id/loggedIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/FieldSize"
+        android:layout_marginLeft="@dimen/FieldSize"/>
 
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/ranking"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:onClick="ranking"
+        android:text="@string/ranking"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/FieldSize"/>
 
-    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
