@@ -14,5 +14,6 @@
     <color name="water_hidden">#80BCEC</color>
     <color name="GREEN">#14FC03</color>
     <color name="RED">#D60606</color>
+    <color name="WHITE">#FFFFFF</color>
 
 </resources>

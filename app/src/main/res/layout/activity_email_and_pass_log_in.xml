@@ -46,9 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_marginTop="@dimen/Distance50dp"
-        android:text="@string/sign_up"
-        android:onClick="goToSignIn"/>
+        android:onClick="goToSignIn"
+        android:text="@string/sign_up" />
 
 
 </LinearLayout>

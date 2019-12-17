@@ -10,7 +10,7 @@
         android:id="@+id/emailAndPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_margin="20dp"
         android:text="@string/email_and_password"
         android:onClick="onClickEmailAndPasswordLogin"/>
 
@@ -18,6 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/Distance50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:id="@+id/logout"
         android:text="@string/logout"/>
 </LinearLayout>

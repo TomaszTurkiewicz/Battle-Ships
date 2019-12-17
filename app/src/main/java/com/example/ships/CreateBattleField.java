@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
+//TODO change layout... constraint
 public class CreateBattleField extends AppCompatActivity {
 
     BattleField battleFieldPlayerCreateBattleFieldActivity = new BattleField();

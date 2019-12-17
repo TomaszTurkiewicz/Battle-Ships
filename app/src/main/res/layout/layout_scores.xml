@@ -3,6 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/scoretextview"
     android:id="@+id/parent_layout">
 
     <TextView
@@ -28,6 +29,7 @@
         android:textSize="@dimen/TextSize"
         android:layout_margin="8dp"
         android:layout_weight="@integer/NoOFGamesWeight"/>
+
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
