@@ -256,10 +256,8 @@ public class BattleField{
                 } else if ((i == 9) && (j == 9)) {
                     if ((!battleField[i][j - 1].isShip()) &&
                             (!battleField[i][j].isShip()) &&
-                            (!battleField[i][j + 1].isShip()) &&
                             (!battleField[i - 1][j - 1].isShip()) &&
-                            (!battleField[i - 1][j].isShip()) &&
-                            (!battleField[i - 1][j + 1].isShip())) {
+                            (!battleField[i - 1][j].isShip())) {
                         putShipWithOneCellsNow(numberOfMasts,shipNumber,isShip,i, j);
             } else {
                 putShipWithOneCell(numberOfMasts, shipNumber, isShip);
