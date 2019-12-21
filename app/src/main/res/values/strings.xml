@@ -52,4 +52,5 @@
     <string name="user">USER</string>
     <string name="no_of_games">NO OF GAMES</string>
     <string name="points">POINTS</string>
+    <string name="delete_user">DELETE USER</string>
 </resources>

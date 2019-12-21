@@ -1520,7 +1520,7 @@ else
                 mHandler.postDelayed(game,deelay);
 
             }
-            
+
             BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame,i,j);
 
 

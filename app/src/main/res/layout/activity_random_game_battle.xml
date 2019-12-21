@@ -43,7 +43,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/a"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -51,7 +51,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/b"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -59,7 +59,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/c"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -67,7 +67,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/d"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -75,7 +75,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/e"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -83,7 +83,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/f"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -91,7 +91,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/g"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -99,7 +99,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/h"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -107,7 +107,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/i"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -115,7 +115,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/j"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
         </LinearLayout>
@@ -133,7 +133,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/one"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -232,7 +232,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/two"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -330,7 +330,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/three"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -428,7 +428,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/four"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -526,7 +526,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/five"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -624,7 +624,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/six"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -722,7 +722,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/seven"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -820,7 +820,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/eight"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -919,7 +919,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/nine"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1019,7 +1019,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/ten"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1140,7 +1140,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/a"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1148,7 +1148,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/b"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1156,7 +1156,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/c"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1164,7 +1164,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/d"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1172,7 +1172,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/e"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1180,7 +1180,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/f"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1188,7 +1188,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/g"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1196,7 +1196,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/h"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1204,7 +1204,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/i"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1212,7 +1212,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/j"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
         </LinearLayout>
@@ -1230,7 +1230,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/one"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1308,7 +1308,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/two"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1386,7 +1386,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/three"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1464,7 +1464,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/four"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1542,7 +1542,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/five"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1620,7 +1620,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/six"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1698,7 +1698,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/seven"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1776,7 +1776,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/eight"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1854,7 +1854,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/nine"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 
@@ -1932,7 +1932,7 @@
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"
                 android:text="@string/ten"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/border_color"
                 android:textSize="@dimen/TextSize" />
 

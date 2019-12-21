@@ -22,4 +22,11 @@
         android:layout_marginRight="20dp"
         android:id="@+id/logout"
         android:text="@string/logout"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/delete_user"
+        android:id="@+id/deleteUser"/>
 </LinearLayout>
