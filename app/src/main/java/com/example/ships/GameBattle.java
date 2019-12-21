@@ -27,6 +27,7 @@ import java.util.Random;
 public class GameBattle extends AppCompatActivity {
 
     private Handler mHandler = new Handler();
+    private Handler mHandler2 = new Handler();
     private int numberOfUsers;
     List<User> list = new ArrayList<>();
     BattleField battleFieldPlayerOneActivityRandomGame = new BattleField();
@@ -63,6 +64,7 @@ public class GameBattle extends AppCompatActivity {
     private boolean loggedIn;
     private long noOfGames;
     private int score;
+    private int deelay=1000;
 
 
 
@@ -223,6 +225,7 @@ public class GameBattle extends AppCompatActivity {
     private Runnable game = new Runnable() {
         @Override
         public void run() {
+            mHandler2.removeCallbacks(game);
             if(!battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&!battleFieldPlayerOneActivityRandomGame.allShipsHit()) //game
             {
             battle();
@@ -313,9 +316,13 @@ public class GameBattle extends AppCompatActivity {
 
         if(playerOneCounter&&!playerTwoCounter){
             readClicable();
-           pokazStatki();
-  //          showBattleFieldAvailablePlayerTwo();
+ //          pokazStatki();
+            showBattleFieldAvailablePlayerTwo();
             hideBattleFiledAvailablePlayerOne();
+
+
+            mHandler.removeCallbacks(game);
+
         }
         else if(playerTwoCounter&&!playerOneCounter){
             hideBattleFiledAvailablePlayerTwo();
@@ -326,7 +333,7 @@ public class GameBattle extends AppCompatActivity {
             playerOneCounter=true;
             playerTwoCounter=false;
         }
-        mHandler.postDelayed(game,1000);
+        mHandler.postDelayed(game,deelay);
     }
 
     private void pokazStatki() {
@@ -1487,6 +1494,7 @@ else
     void showAndSaveOneCellPlayerTwo(int i, int j){
 
             TextViewArrayActivityRandomGamePlayerTwo[i][j].setClickable(false);
+
             if (battleFieldPlayerTwoActivityRandomGame.getBattleField(i, j).isShip()) {
                 if(zatopiony(battleFieldPlayerTwoActivityRandomGame.battleField[i][j].getNumberOfMasts(),battleFieldPlayerTwoActivityRandomGame.battleField[i][j].getShipNumber())){
                 displayShipCell(TextViewArrayActivityRandomGamePlayerTwo,i,j);
@@ -1497,13 +1505,15 @@ else
                 showShipHit(i,j);
             } else {
                 displayWaterCell(TextViewArrayActivityRandomGamePlayerTwo,i,j);
+                disableClickable();
                 playerOneCounter=false;
                 playerTwoCounter=true;
             }
             battleFieldPlayerTwoActivityRandomGame.battleField[i][j].setHit(true);
             BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame,i,j);
 
-            disableClickable();
+        mHandler2.postDelayed(game,deelay);
+
 
     }
 

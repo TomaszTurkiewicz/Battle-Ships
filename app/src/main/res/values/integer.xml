@@ -4,6 +4,7 @@
     <integer name="UserWeight">2</integer>
     <integer name="NoOFGamesWeight">1</integer>
     <integer name="ScoreWeight">2</integer>
+    <integer name="gameLoopTimer">1500</integer>
 
 
 

@@ -44,5 +44,4 @@ public class SignInActivity extends AppCompatActivity {
 //TODO usuwanie konta
 //TODO animacja
 //TODO inaczej zrobić pętlę gry (opóźnienie)
-//TODO znaleźć buga... przy randomowym wyborze planszy się kraszuje czasami
 //TODO wymyślić jak zrobić grę na dwie osoby
