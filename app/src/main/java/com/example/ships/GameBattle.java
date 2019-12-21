@@ -27,7 +27,7 @@ import java.util.Random;
 public class GameBattle extends AppCompatActivity {
 
     private Handler mHandler = new Handler();
-    private Handler mHandler2 = new Handler();
+ //   private Handler mHandler2 = new Handler();
     private int numberOfUsers;
     List<User> list = new ArrayList<>();
     BattleField battleFieldPlayerOneActivityRandomGame = new BattleField();
@@ -65,6 +65,7 @@ public class GameBattle extends AppCompatActivity {
     private long noOfGames;
     private int score;
     private int deelay=1000;
+
 
 
 
@@ -225,33 +226,40 @@ public class GameBattle extends AppCompatActivity {
     private Runnable game = new Runnable() {
         @Override
         public void run() {
-            mHandler2.removeCallbacks(game);
-            if(!battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&!battleFieldPlayerOneActivityRandomGame.allShipsHit()) //game
-            {
-            battle();
-            }
-            else if (battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&!battleFieldPlayerOneActivityRandomGame.allShipsHit())      // allShipsHit player
-            {
-                     mHandler.removeCallbacks(game);
+                play();
 
-                     if(loggedIn) {
-                         updateRanking();
-
-                     }
-                Intent intent = new Intent(getApplicationContext(),WinPlayerOne.class);
-                startActivity(intent);
-                finish();
-            }
-            else if (!battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&battleFieldPlayerOneActivityRandomGame.allShipsHit())     // allShipsHit computer
-                {
-                    mHandler.removeCallbacks(game);
-                    Intent intent = new Intent(getApplicationContext(),WinPlayerTwo.class);
-                    startActivity(intent);
-                    finish();
-            }
-            else;
         }
     };
+
+
+
+    private void play() {
+        if(!battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&!battleFieldPlayerOneActivityRandomGame.allShipsHit()) //game
+        {
+            battle();
+        }
+        else if (battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&!battleFieldPlayerOneActivityRandomGame.allShipsHit())      // allShipsHit player
+        {
+
+            if(loggedIn) {
+                updateRanking();
+
+            }
+            Intent intent = new Intent(getApplicationContext(),WinPlayerOne.class);
+            startActivity(intent);
+            finish();
+        }
+        else if (!battleFieldPlayerTwoActivityRandomGame.allShipsHit()&&battleFieldPlayerOneActivityRandomGame.allShipsHit())     // allShipsHit computer
+        {
+
+            Intent intent = new Intent(getApplicationContext(),WinPlayerTwo.class);
+            startActivity(intent);
+            finish();
+        }
+        else;
+    }
+
+
 
     private void updateRanking() {
 
@@ -320,20 +328,19 @@ public class GameBattle extends AppCompatActivity {
             showBattleFieldAvailablePlayerTwo();
             hideBattleFiledAvailablePlayerOne();
 
-
-            mHandler.removeCallbacks(game);
-
         }
         else if(playerTwoCounter&&!playerOneCounter){
             hideBattleFiledAvailablePlayerTwo();
             showBattleFieldAvailablePlayerOne();
             shoot();
+            mHandler.postDelayed(game,deelay);
         }
         else{
             playerOneCounter=true;
             playerTwoCounter=false;
+            mHandler.postDelayed(game,deelay);
         }
-        mHandler.postDelayed(game,deelay);
+
     }
 
     private void pokazStatki() {
@@ -1494,25 +1501,29 @@ else
     void showAndSaveOneCellPlayerTwo(int i, int j){
 
             TextViewArrayActivityRandomGamePlayerTwo[i][j].setClickable(false);
-
+        battleFieldPlayerTwoActivityRandomGame.battleField[i][j].setHit(true);
             if (battleFieldPlayerTwoActivityRandomGame.getBattleField(i, j).isShip()) {
+
                 if(zatopiony(battleFieldPlayerTwoActivityRandomGame.battleField[i][j].getNumberOfMasts(),battleFieldPlayerTwoActivityRandomGame.battleField[i][j].getShipNumber())){
                 displayShipCell(TextViewArrayActivityRandomGamePlayerTwo,i,j);
                 }
                 else{
                     displayRedCell(TextViewArrayActivityRandomGamePlayerTwo,i,j);
                 }
+                showBattleFieldAvailablePlayerTwo();
                 showShipHit(i,j);
             } else {
                 displayWaterCell(TextViewArrayActivityRandomGamePlayerTwo,i,j);
                 disableClickable();
                 playerOneCounter=false;
                 playerTwoCounter=true;
+                mHandler.postDelayed(game,deelay);
+
             }
-            battleFieldPlayerTwoActivityRandomGame.battleField[i][j].setHit(true);
+            
             BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldPlayerTwoActivityRandomGame,i,j);
 
-        mHandler2.postDelayed(game,deelay);
+
 
 
     }
