@@ -13,28 +13,47 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignInActivity extends AppCompatActivity {
     private Button userLogout;
     private FirebaseAuth firebaseAuth;
-    Button deleteUser;
+    private Button deleteUser;
+    private String userID;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private boolean loggedIn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         userLogout=findViewById(R.id.logout);
         firebaseAuth = FirebaseAuth.getInstance();
-        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        deleteUser = (Button)findViewById(R.id.deleteUser);
+        final FirebaseUser firebaseUser;
+        deleteUser = findViewById(R.id.deleteUser);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference("User");
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        loggedIn = firebaseAuth.getCurrentUser()!= null&&firebaseAuth.getCurrentUser().isEmailVerified();
 
 
-        if(firebaseUser==null){
+
+        if(!loggedIn){
             deleteUser.setVisibility(View.GONE);
+            userLogout.setVisibility(View.GONE);
+        }else{
+            userID = firebaseUser.getUid();
         }
 
         deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                databaseReference.child(userID).removeValue();
+
                 firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -71,6 +90,5 @@ public class SignInActivity extends AppCompatActivity {
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO rejestracje przez Gmaila
 //TODO Rejestracja przez Facebook
-//TODO usuwanie konta
 //TODO animacja
 //TODO wymyślić jak zrobić grę na dwie osoby
