@@ -1,5 +1,6 @@
 package com.example.ships;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,17 +54,47 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                databaseReference.child(userID).removeValue();
-
-                firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+                builder.setTitle("DELETE ACCOUNT");
+                builder.setMessage("Do you really want to delete your account?");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(SignInActivity.this,"Account Deleted",Toast.LENGTH_LONG).show();
-                        }
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        databaseReference.child(userID).removeValue();
+                        firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(SignInActivity.this,"Account Deleted",Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        });
+
                     }
                 });
-            }
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+
+
+
+
+
+
+
+
+                    }
         });
 
         userLogout.setOnClickListener(new View.OnClickListener() {
@@ -85,11 +117,10 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 }
-//TODO resend confiramtion email
+
 //TODO forgot password
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO rejestracje przez Gmaila
 //TODO Rejestracja przez Facebook
-//TODO deleting user with confiramtion popup window
 //TODO animacja
 //TODO wymyślić jak zrobić grę na dwie osoby
