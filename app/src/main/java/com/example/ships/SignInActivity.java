@@ -85,6 +85,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 }
+//TODO resend confiramtion email
 //TODO forgot password
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO rejestracje przez Gmaila

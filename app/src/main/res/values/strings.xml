@@ -55,4 +55,5 @@
     <string name="delete_user">DELETE USER</string>
     <string name="confirm_email">Confirm Email …</string>
     <string name="confirm_password">Confirm Password …</string>
+    <string name="resend_ver_email">RESEND VER EMAIL</string>
 </resources>

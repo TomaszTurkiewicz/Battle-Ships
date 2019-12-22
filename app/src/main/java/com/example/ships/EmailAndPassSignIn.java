@@ -89,7 +89,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         String emailConfirm_val = emailCofirm.getText().toString().trim();
         String passwordConfirm_val = passwordConfirm.getText().toString().trim();
         boolean emailsEqual;
-        boolean passworsdEqual;
+        boolean passwordEqual;
 
         if(!TextUtils.isEmpty(email_val)&&
                 !TextUtils.isEmpty(emailConfirm_val)&&
@@ -98,9 +98,9 @@ public class EmailAndPassSignIn extends AppCompatActivity {
                 !TextUtils.isEmpty(username_val)){
 
             emailsEqual=email_val.equals(emailConfirm_val);
-            passworsdEqual=password_val.equals(passwordConfirm_val);
+            passwordEqual=password_val.equals(passwordConfirm_val);
 
-            if(emailsEqual&&passworsdEqual) {
+            if(emailsEqual&&passwordEqual) {
 
                 progressDialog.setMessage("Registering ...");
                 progressDialog.show();

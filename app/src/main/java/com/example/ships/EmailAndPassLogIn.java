@@ -22,8 +22,12 @@ public class EmailAndPassLogIn extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private Button loginBtn;
+    private Button resendEmail;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private String password_val;
+    private String email_val;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +38,41 @@ public class EmailAndPassLogIn extends AppCompatActivity {
         email = findViewById(R.id.emailEditTextLogIn);
         password = findViewById(R.id.passwordEditTextLogIn);
         loginBtn = findViewById(R.id.LogInBtnLogIn);
+        resendEmail = findViewById(R.id.resendVerificationEmailBtnLogIn);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+
         progressDialog = new ProgressDialog(this);
+
+        resendEmail.setVisibility(View.GONE);
 
         loginBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 login();
+            }
+        });
+
+
+
+
+
+        resendEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(firebaseAuth.getCurrentUser()!=null){
+                    firebaseAuth.getCurrentUser().reload();
+                    if(!firebaseAuth.getCurrentUser().isEmailVerified()){
+                        firebaseAuth.getCurrentUser().sendEmailVerification();
+                        Toast.makeText(EmailAndPassLogIn.this,"Email Sent!!!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Toast.makeText(EmailAndPassLogIn.this,"Your email has been verified! You can log in now",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
     }
@@ -52,8 +82,8 @@ public class EmailAndPassLogIn extends AppCompatActivity {
         progressDialog.setMessage("Logging ...");
         progressDialog.show();
 
-        String email_val = email.getText().toString().trim();
-        String password_val = password.getText().toString().trim();
+        email_val = email.getText().toString().trim();
+        password_val = password.getText().toString().trim();
 
         if (!TextUtils.isEmpty(email_val) && !TextUtils.isEmpty(password_val)){
 
@@ -67,6 +97,7 @@ public class EmailAndPassLogIn extends AppCompatActivity {
                                     progressDialog.dismiss();
                                     finish();
                                 }else{
+                                    resendEmail.setVisibility(View.VISIBLE);
                                     Toast.makeText(EmailAndPassLogIn.this,"Please verify your email address",
                                             Toast.LENGTH_LONG).show();
                                     progressDialog.dismiss();
@@ -80,7 +111,7 @@ public class EmailAndPassLogIn extends AppCompatActivity {
                     });
         }
         else{
-            Toast.makeText(EmailAndPassLogIn.this,"Registered unsuccessful: Fields empty",
+            Toast.makeText(EmailAndPassLogIn.this,"Logging unsuccessful: Fields empty",
                     Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
         }

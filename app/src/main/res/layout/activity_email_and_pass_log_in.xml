@@ -42,6 +42,13 @@
         android:text="@string/forgot_password" />
 
     <Button
+        android:id="@+id/resendVerificationEmailBtnLogIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/resend_ver_email" />
+
+    <Button
         android:id="@+id/signInBtnLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
