@@ -26,7 +26,9 @@ public class EmailAndPassSignIn extends AppCompatActivity {
 
     private EditText username;
     private EditText email;
+    private EditText emailCofirm;
     private EditText password;
+    private EditText passwordConfirm;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -44,7 +46,9 @@ public class EmailAndPassSignIn extends AppCompatActivity {
 
         username = findViewById(R.id.Username);
         email = findViewById(R.id.EmailSignIn);
+        emailCofirm = findViewById(R.id.EmailSignInConfirm);
         password = findViewById(R.id.passwordSignIn);
+        passwordConfirm = findViewById(R.id.passwordSignInConfirm);
         Button signup = findViewById(R.id.SignInBtnSignIn);
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
@@ -77,59 +81,79 @@ public class EmailAndPassSignIn extends AppCompatActivity {
 
     private void startRegistering() {
 
-        progressDialog.setMessage("Registering ...");
-        progressDialog.show();
+
 
         final String email_val = email.getText().toString().trim();
         String password_val = password.getText().toString().trim();
         final String username_val = username.getText().toString().trim();
+        String emailConfirm_val = emailCofirm.getText().toString().trim();
+        String passwordConfirm_val = passwordConfirm.getText().toString().trim();
+        boolean emailsEqual;
+        boolean passworsdEqual;
 
-        if(!TextUtils.isEmpty(email_val)&&!TextUtils.isEmpty(password_val)&&!TextUtils.isEmpty(username_val)){
+        if(!TextUtils.isEmpty(email_val)&&
+                !TextUtils.isEmpty(emailConfirm_val)&&
+                !TextUtils.isEmpty(password_val) &&
+                !TextUtils.isEmpty(passwordConfirm_val) &&
+                !TextUtils.isEmpty(username_val)){
 
-            firebaseAuth.createUserWithEmailAndPassword(email_val, password_val)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+            emailsEqual=email_val.equals(emailConfirm_val);
+            passworsdEqual=password_val.equals(passwordConfirm_val);
 
-                            final String userID = firebaseAuth.getCurrentUser().getUid();
-                            if(task.isSuccessful()){
+            if(emailsEqual&&passworsdEqual) {
 
-                                firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful()){
-                                            createUserInDatabase(username_val ,email_val, userID);
-                                            Toast.makeText(EmailAndPassSignIn.this,"Registered successfully. Please check your email for verification",
-                                                    Toast.LENGTH_LONG).show();
+                progressDialog.setMessage("Registering ...");
+                progressDialog.show();
+
+                firebaseAuth.createUserWithEmailAndPassword(email_val, password_val)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                final String userID = firebaseAuth.getCurrentUser().getUid();
+                                if (task.isSuccessful()) {
+
+                                    firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                createUserInDatabase(username_val, email_val, userID);
+                                                Toast.makeText(EmailAndPassSignIn.this, "Registered successfully. Please check your email for verification",
+                                                        Toast.LENGTH_LONG).show();
 
 
+                                                email.setText("");
+                                                password.setText("");
+                                                progressDialog.dismiss();
+                                                Intent intent = new Intent(getApplicationContext(), EmailAndPassLogIn.class);
+                                                startActivity(intent);
+                                                finish();
 
-                                            email.setText("");
-                                            password.setText("");
-                                            progressDialog.dismiss();
-                                            Intent intent = new Intent(getApplicationContext(),EmailAndPassLogIn.class);
-                                            startActivity(intent);
-                                            finish();
-
-                                        }else{
-                                            Toast.makeText(EmailAndPassSignIn.this,task.getException().getMessage(),
-                                                    Toast.LENGTH_LONG).show();
-                                            progressDialog.dismiss();
+                                            } else {
+                                                Toast.makeText(EmailAndPassSignIn.this, task.getException().getMessage(),
+                                                        Toast.LENGTH_LONG).show();
+                                                progressDialog.dismiss();
+                                            }
                                         }
-
-                                    }
-                                });
-
-
-
-                            }else{
-                                Toast.makeText(EmailAndPassSignIn.this,task.getException().getMessage(),
-                                        Toast.LENGTH_LONG).show();
-                                progressDialog.dismiss();
+                                    });
+                                } else {
+                                    Toast.makeText(EmailAndPassSignIn.this, task.getException().getMessage(),
+                                            Toast.LENGTH_LONG).show();
+                                    progressDialog.dismiss();
+                                }
                             }
-
-                        }
-                    });
+                        });
+            }
+            else{
+                if(!emailsEqual){
+                    Toast.makeText(EmailAndPassSignIn.this, "Check Emails!!!",
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(EmailAndPassSignIn.this, "Check Passwords!!!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
         }else{
             Toast.makeText(EmailAndPassSignIn.this,"Registered unsuccessful: Fields empty",
                     Toast.LENGTH_LONG).show();

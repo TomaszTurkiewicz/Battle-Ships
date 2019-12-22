@@ -85,10 +85,10 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 }
-//TODO rejestracja z podwójnym mailem i password plus username
 //TODO forgot password
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO rejestracje przez Gmaila
 //TODO Rejestracja przez Facebook
+//TODO deleting user with confiramtion popup window
 //TODO animacja
 //TODO wymyślić jak zrobić grę na dwie osoby

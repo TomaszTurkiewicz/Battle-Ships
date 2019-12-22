@@ -25,12 +25,30 @@
         android:inputType="textEmailAddress" />
 
     <EditText
+        android:id="@+id/EmailSignInConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:ems="10"
+        android:hint="@string/confirm_email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
         android:id="@+id/passwordSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:ems="10"
         android:hint="@string/password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/passwordSignInConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:ems="10"
+        android:hint="@string/confirm_password"
         android:inputType="textPassword" />
 
     <Button
