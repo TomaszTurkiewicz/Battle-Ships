@@ -26,6 +26,9 @@ public class SignInActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private boolean loggedIn;
+    static final int GOOGLE_SIGN = 123;
+    private Button login_google;
+    //TODO dokończyć logowanie przez googla
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
