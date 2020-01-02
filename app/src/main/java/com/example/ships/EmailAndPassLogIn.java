@@ -121,5 +121,11 @@ public class EmailAndPassLogIn extends AppCompatActivity {
         startActivity(new Intent(EmailAndPassLogIn.this, EmailAndPassSignIn.class));
         finish();
     }
+
+    public void goToForgotPasswordActivity(View view) {
+        startActivity(new Intent(EmailAndPassLogIn.this, ForgotPassword.class));
+        finish();
+
+    }
 }
 

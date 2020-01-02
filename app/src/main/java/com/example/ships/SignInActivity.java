@@ -118,7 +118,6 @@ public class SignInActivity extends AppCompatActivity {
 
 }
 
-//TODO forgot password
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO rejestracje przez Gmaila
 //TODO Rejestracja przez Facebook
