@@ -34,7 +34,7 @@ public class SignInActivity extends AppCompatActivity {
     private boolean loggedIn;
     static final int GOOGLE_SIGN = 123;
     private Button login_google;
-    //TODO dokończyć logowanie przez googla
+    //TODO dokończyć logowanie przez googla zakładanie bazy danych dla nowego użytkownika
     private GoogleSignInClient mGoogleSignInClient;
 
 
@@ -61,7 +61,7 @@ public class SignInActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
-        
+        login_google.setOnClickListener(v -> SignInGoogle());
 
 
         if(!loggedIn){
@@ -89,19 +89,10 @@ public class SignInActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-
             });
             builder.setNegativeButton("NO", (dialog, which) -> dialog.dismiss());
             AlertDialog alert = builder.create();
             alert.show();
-
-
-
-
-
-
-
-
                 });
 
         userLogout.setOnClickListener(view -> {
@@ -149,8 +140,18 @@ public class SignInActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
 
                     if(task.isSuccessful()){
-                        Log.d("TAG","signin success");
-                        Toast.makeText(this, "Signin success", Toast.LENGTH_SHORT).show();
+
+
+
+
+
+
+
+
+
+                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }else{
                         Log.d("TAG","signin failure", task.getException());
                         Toast.makeText(this, "Signin Failed", Toast.LENGTH_SHORT).show();
