@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private int positionRanking;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private DatabaseReference databaseReferenceUsers;
     private String userID;
 
 
@@ -49,46 +50,60 @@ public class MainActivity extends AppCompatActivity {
         if(firebaseUser != null && firebaseUser.isEmailVerified()){
             loggedIn.setText("Zalogowany jako: ");
             accountBtn.setBackgroundColor(Color.RED);
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            databaseReference=firebaseDatabase.getReference("User");
             userID = firebaseUser.getUid();
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            databaseReference=firebaseDatabase.getReference("User").child(userID);
+            databaseReferenceUsers=firebaseDatabase.getReference("User");
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    showData(dataSnapshot);
 
+                    if (dataSnapshot.exists()) {
+                        showData(dataSnapshot);
+                    } else {
+                        userName.setText(firebaseUser.getEmail());
 
+                        databaseReferenceUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+                                numberOfUsers= (int) dataSnapshot1.getChildrenCount();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError1) {
+
+                            }
+                        });
+
+                        User user = new User();
+                        user.setId(userID);
+                        user.setName(firebaseUser.getEmail());
+                        user.setEmail(firebaseUser.getEmail());
+                        user.setNoOfGames(0);
+                        user.setScore(0);
+                        user.setPosition(numberOfUsers+1);
+
+                        databaseReference.setValue(user);
+
+                    }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
         }else{
             loggedIn.setText("niezalogowany");
-
         }
-
-
-
-
-
-
-
     }
 
     private void showData(DataSnapshot dataSnapshot) {
-            for(DataSnapshot ds : dataSnapshot.getChildren()){
-
-                name = (String) dataSnapshot.child(userID).child("name").getValue();
-
-
-            }
+        name = (String) dataSnapshot.child("name").getValue();
         userName.setText(name);
-
     }
+
+
+
 
     public void randomGame(View view) {
         GameDifficulty.getInstance().setRandom(true);
