@@ -34,7 +34,6 @@ public class SignInActivity extends AppCompatActivity {
     private boolean loggedIn;
     static final int GOOGLE_SIGN = 123;
     private Button login_google;
-    //TODO dokończyć logowanie przez googla zakładanie bazy danych dla nowego użytkownika
     private GoogleSignInClient mGoogleSignInClient;
 
 
@@ -107,6 +106,7 @@ public class SignInActivity extends AppCompatActivity {
 
 
     void SignInGoogle(){
+        //TODO kręciołko bo nic nie widać że myśli
         Intent signIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signIntent,GOOGLE_SIGN);
     }
@@ -141,14 +141,6 @@ public class SignInActivity extends AppCompatActivity {
 
                     if(task.isSuccessful()){
 
-
-
-
-
-
-
-
-
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -156,10 +148,7 @@ public class SignInActivity extends AppCompatActivity {
                         Log.d("TAG","signin failure", task.getException());
                         Toast.makeText(this, "Signin Failed", Toast.LENGTH_SHORT).show();
                     }
-
-
                 });
-
     }
 
     public void onClickEmailAndPasswordLogin(View view) {
@@ -171,7 +160,6 @@ public class SignInActivity extends AppCompatActivity {
 }
 
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
-//TODO rejestracje przez Gmaila
 //TODO Rejestracja przez Facebook
 //TODO animacja
 //TODO wymyślić jak zrobić grę na dwie osoby

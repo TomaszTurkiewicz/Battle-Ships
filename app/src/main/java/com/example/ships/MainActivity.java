@@ -3,11 +3,14 @@ package com.example.ships;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private DatabaseReference databaseReferenceUsers;
     private String userID;
+    private String newUserName;
 
 
 
@@ -92,8 +96,28 @@ public class MainActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
+            userName.setClickable(true);
+            userName.setOnClickListener(v->{
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("NEW USER NAME");
+
+                final EditText input = new EditText(this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", (dialog, which) ->
+                {
+                    newUserName=input.getText().toString();
+                    databaseReference.child("name").setValue(newUserName);
+                    userName.setText(newUserName);
+
+                });
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                builder.show();
+            });
         }else{
             loggedIn.setText("niezalogowany");
+            userName.setClickable(false);
         }
     }
 
