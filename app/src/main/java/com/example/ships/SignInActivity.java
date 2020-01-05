@@ -1,5 +1,6 @@
 package com.example.ships;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ public class SignInActivity extends AppCompatActivity {
     static final int GOOGLE_SIGN = 123;
     private Button login_google;
     private GoogleSignInClient mGoogleSignInClient;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -48,6 +50,7 @@ public class SignInActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("User");
         firebaseUser = firebaseAuth.getCurrentUser();
+        progressDialog = new ProgressDialog(this);
 
         loggedIn = firebaseAuth.getCurrentUser()!= null&&firebaseAuth.getCurrentUser().isEmailVerified();
 
@@ -106,7 +109,8 @@ public class SignInActivity extends AppCompatActivity {
 
 
     void SignInGoogle(){
-        //TODO kręciołko bo nic nie widać że myśli
+        progressDialog.setMessage("Signing in ...");
+        progressDialog.show();
         Intent signIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signIntent,GOOGLE_SIGN);
     }
@@ -140,7 +144,7 @@ public class SignInActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
 
                     if(task.isSuccessful()){
-
+                        progressDialog.dismiss();
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -158,7 +162,8 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 }
-
+// TODO OnTouch evenet
+// TODO change progressDialog na progressBar
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO Rejestracja przez Facebook
 //TODO animacja
