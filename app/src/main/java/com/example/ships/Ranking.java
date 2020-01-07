@@ -43,10 +43,4 @@ public class Ranking {
         }while(sort);
     }
 
-    public void setPosition(){
-        for(int i=0;i<ranking.length;i++){
-            ranking[i].setPosition(i+1);
-        }
-    }
-
 }

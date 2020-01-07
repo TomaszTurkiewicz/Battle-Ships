@@ -7,26 +7,18 @@ public class User {
     private String email;
     private int score;
     private int noOfGames;
-    private int position;
 
     public User() {
     }
 
-    public int getPosition() {
-        return position;
-    }
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
 
-    public User(String id, String name, String email, int score, int noOfGames, int position) {
+    public User(String id, String name, String email, int score, int noOfGames) {
         this.id=id;
         this.name = name;
         this.email = email;
         this.score = score;
         this.noOfGames = noOfGames;
-        this.position = position;
     }
 
     public String getId() {
