@@ -63,8 +63,9 @@ public class GameBattle extends AppCompatActivity {
     private int y;
     private boolean loggedIn;
     private long noOfGames;
-    private int score;
+    private long score;
     private int deelay=1000;
+    private int deelayFast=100;
 
 
 
@@ -112,13 +113,14 @@ public class GameBattle extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference("User");
+
 
         if (firebaseAuth.getCurrentUser() != null) {
             if(firebaseAuth.getCurrentUser().isEmailVerified()){
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 userID = firebaseUser.getUid();
                 loggedIn = true;
+                databaseReference=firebaseDatabase.getReference("User").child(userID);
 
             }else{
                 loggedIn = false;
@@ -132,9 +134,9 @@ public class GameBattle extends AppCompatActivity {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                showData(dataSnapshot);
-                addNewGameCounter();
-                databaseReference.child(userID).child("noOfGames").setValue(noOfGames);
+                noOfGames= (Long) dataSnapshot.child("noOfGames").getValue();
+                noOfGames = noOfGames+1;
+                databaseReference.child("noOfGames").setValue(noOfGames);
             }
 
             @Override
@@ -151,13 +153,13 @@ public class GameBattle extends AppCompatActivity {
     }
 
     private void addNewGameCounter() {
-        noOfGames = noOfGames+1;
+
     }
 
     private void showData(DataSnapshot dataSnapshot) {
             for(DataSnapshot ds : dataSnapshot.getChildren()){
 
-                noOfGames= (Long) dataSnapshot.child(userID).child("noOfGames").getValue();
+
 
             }
     }
@@ -263,49 +265,19 @@ public class GameBattle extends AppCompatActivity {
 
     private void updateRanking() {
 
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                    numberOfUsers = (int) dataSnapshot.getChildrenCount();
-                    Ranking ranking = new Ranking(numberOfUsers);
-
-                    for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-                        User user = postSnapshot.getValue(User.class);
-                        list.add(user);
-                    }
-
-                    for(int i=0;i<list.size();i++){
-                        ranking.addUsers(list.get(i));
-                    }
-
-                    for(int i=0; i<ranking.getRanking().length;i++){
-                        if(ranking.getRanking(i).getId().equals(userID)){
-                            score = ranking.getRanking(i).getScore();
-                            addPoints();
-                            ranking.getRanking(i).setScore(score);
-                        }
-                    }
-
-                    ranking.sortRanking();
-                    ranking.setPosition();
-
-                    databaseReference.child(userID).child("score").setValue(score);
-                    for(int i=0;i<numberOfUsers;i++){
-                        databaseReference.child(ranking.getRanking(i).getId()).child("position").setValue(ranking.getRanking(i).getPosition());
-                    }
-
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                score= (Long) dataSnapshot.child("score").getValue();
+                addPoints();
+                databaseReference.child("score").setValue(score);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     private void addPoints() {
@@ -324,8 +296,8 @@ public class GameBattle extends AppCompatActivity {
 
         if(playerOneCounter&&!playerTwoCounter){
             readClicable();
- //          pokazStatki();
-            showBattleFieldAvailablePlayerTwo();
+           pokazStatki();
+  //          showBattleFieldAvailablePlayerTwo();
             hideBattleFiledAvailablePlayerOne();
 
         }
@@ -1512,6 +1484,7 @@ else
                 }
                 showBattleFieldAvailablePlayerTwo();
                 showShipHit(i,j);
+                mHandler.postDelayed(game,deelayFast);
             } else {
                 displayWaterCell(TextViewArrayActivityRandomGamePlayerTwo,i,j);
                 disableClickable();
