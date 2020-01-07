@@ -30,7 +30,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceUser;
     private User user;
-    private int numberOfUsers;
+    private Button signup;
 
 
 
@@ -45,7 +45,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         emailCofirm = findViewById(R.id.EmailSignInConfirm);
         password = findViewById(R.id.passwordSignIn);
         passwordConfirm = findViewById(R.id.passwordSignInConfirm);
-        Button signup = findViewById(R.id.SignInBtnSignIn);
+        signup = findViewById(R.id.SignInBtnSignIn);
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -58,7 +58,6 @@ public class EmailAndPassSignIn extends AppCompatActivity {
                 startActivity(new Intent(EmailAndPassSignIn.this, MainActivity.class));
                 finish();
             }
-
         }
 
 
@@ -150,8 +149,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         databaseReferenceUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                numberOfUsers= (int) dataSnapshot.getChildrenCount();
-                setValue(username_val, email_address, numberOfUsers+1,userId);
+                setValue(username_val, email_address,userId);
                 databaseReferenceUser.child(userId).setValue(user);
             }
 
@@ -164,13 +162,12 @@ public class EmailAndPassSignIn extends AppCompatActivity {
 
     }
 
-    private void setValue(String username_val, String email, int position, String userID){
+    private void setValue(String username_val, String email, String userID){
         user.setId(userID);
         user.setName(username_val);
         user.setEmail(email);
         user.setNoOfGames(0);
         user.setScore(0);
-        user.setPosition(position);
     }
 
 }
