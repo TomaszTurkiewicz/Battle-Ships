@@ -56,15 +56,14 @@ public class Scores extends AppCompatActivity {
                     User user = postSnapshot.getValue(User.class);
                     list.add(user);
                 }
+
+
+
+
                 for(int i=0;i<list.size();i++){
-                    ranking.addUsers(list.get(i));
+                    ranking.addUsers(list.get(i),i);
                 }
                 ranking.sortRanking();
-                ranking.setPosition();
-
-                for(int i=0;i<numberOfUsers;i++){
-                    databaseReference.child(ranking.getRanking(i).getId()).child("position").setValue(ranking.getRanking(i).getPosition());
-                }
 
                 initRecyclerView();
             }

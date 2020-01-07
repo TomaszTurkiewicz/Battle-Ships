@@ -36,7 +36,7 @@ private Context mContext;
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.positionScore.setText(String.valueOf(mRanking.getRanking(position).getPosition()));
+        holder.positionScore.setText(String.valueOf(position+1));
         holder.usernameScore.setText(mRanking.getRanking(position).getName());
         holder.noOfGamesScore.setText(String.valueOf(mRanking.getRanking(position).getNoOfGames()));
         holder.scoreScore.setText(String.valueOf(mRanking.getRanking(position).getScore()));

@@ -22,8 +22,8 @@ public class Ranking {
         ranking = new User[lenght];
     }
 
-    public void addUsers(User user){
-        ranking[user.getPosition()-1]=user;
+    public void addUsers(User user, int i){
+        ranking[i]=user;
     }
 
     public void sortRanking(){
