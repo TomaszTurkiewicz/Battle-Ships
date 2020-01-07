@@ -27,11 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView loggedIn;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
-    private int numberOfUsers;
-    private int positionRanking;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private DatabaseReference databaseReferenceUsers;
+
     private String userID;
     private String newUserName;
 
@@ -57,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
             userID = firebaseUser.getUid();
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReference=firebaseDatabase.getReference("User").child(userID);
-            databaseReferenceUsers=firebaseDatabase.getReference("User");
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -68,26 +65,12 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         userName.setText(firebaseUser.getEmail());
 
-                        databaseReferenceUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
-                                numberOfUsers= (int) dataSnapshot1.getChildrenCount();
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError1) {
-
-                            }
-                        });
-
                         User user = new User();
                         user.setId(userID);
                         user.setName(firebaseUser.getEmail());
                         user.setEmail(firebaseUser.getEmail());
                         user.setNoOfGames(0);
                         user.setScore(0);
-                        user.setPosition(numberOfUsers+1);
-
                         databaseReference.setValue(user);
 
                     }
