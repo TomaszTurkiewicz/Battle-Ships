@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private Button multiplayerBtn;
 
     private String userID;
     private String newUserName;
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         accountBtn=findViewById(R.id.accountButton);
+
+        multiplayerBtn=findViewById(R.id.multiplayer);
 
         if(firebaseUser != null && firebaseUser.isEmailVerified()){
             loggedIn.setText("Zalogowany jako: ");
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         user.setEmail(firebaseUser.getEmail());
                         user.setNoOfGames(0);
                         user.setScore(0);
+                        user.setIndex(new FightIndex(false,null,false));
                         databaseReference.setValue(user);
 
                     }
@@ -98,9 +103,17 @@ public class MainActivity extends AppCompatActivity {
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                 builder.show();
             });
+
+            multiplayerBtn.setVisibility(View.VISIBLE);
+            multiplayerBtn.setClickable(true);
+
+
+
         }else{
             loggedIn.setText("niezalogowany");
             userName.setClickable(false);
+            multiplayerBtn.setVisibility(View.GONE);
+            multiplayerBtn.setClickable(false);
         }
     }
 
@@ -139,4 +152,5 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 }

@@ -168,6 +168,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         user.setEmail(email);
         user.setNoOfGames(0);
         user.setScore(0);
+        user.setIndex(new FightIndex(false,null,false));
     }
 
 }
