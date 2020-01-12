@@ -4,13 +4,31 @@ public class FightIndex {
     private boolean fight;
     private boolean accepted;
     private String opponent;
+    private int counter;
+    private String gameName;
 
+    public int getCounter() {
+        return counter;
+    }
 
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
 
-    public FightIndex(boolean fight, String opponent, boolean accepted) {
+    public String getGameName() {
+        return gameName;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
+
+    public FightIndex(boolean fight, String opponent, boolean accepted, int counter, String gameName) {
         this.fight = fight;
         this.opponent = opponent;
         this.accepted = accepted;
+        this.counter = counter;
+        this.gameName = gameName;
     }
 
     public boolean isAccepted() {
