@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/scoretextview"
+    android:id="@+id/parent_layout_invitation_to_fight">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/positionFightWith"
+        android:textSize="@dimen/TextSize"
+        android:layout_margin="8dp"
+        android:layout_weight="@integer/PositionWeight"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/usernameFightWith"
+        android:textSize="@dimen/TextSize"
+        android:layout_margin="8dp"
+        android:layout_weight="@integer/UserWeight"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/pointsFightWith"
+        android:textSize="@dimen/TextSize"
+        android:layout_margin="8dp"
+        android:layout_weight="@integer/PositionWeight"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/invitationFightWith"
+        android:textSize="@dimen/TextSize"
+        android:layout_margin="8dp"
+        android:layout_weight="@integer/FightWith"
+        android:gravity="right"/>
+
+</LinearLayout>

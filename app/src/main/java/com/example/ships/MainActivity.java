@@ -106,6 +106,12 @@ public class MainActivity extends AppCompatActivity {
 
             multiplayerBtn.setVisibility(View.VISIBLE);
             multiplayerBtn.setClickable(true);
+            multiplayerBtn.setOnClickListener(v->{
+
+                //TODO different activities depending on invitation to fight or not
+                Intent intent = new Intent(getApplicationContext(),ChooseOpponent.class);
+                startActivity(intent);
+                finish();});
 
 
 

@@ -59,4 +59,6 @@
     <string name="reset_password">RESET PASSWORD</string>
     <string name="login_with_google">LOGIN WITH GOOGLE</string>
     <string name="multiplayer">MULTIPLAYER</string>
+    <string name="invite">INVITE</string>
+    <string name="fightWith">FIGHT WITH</string>
 </resources>
