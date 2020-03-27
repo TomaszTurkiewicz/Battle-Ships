@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChooseOpponent">
+    tools:context=".ChooseOpponent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,21 +38,26 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/TextSizeMini"
             android:layout_margin="8dp"
-            android:layout_weight="@integer/ScoreWeight"
-            android:gravity="right"
-            android:text="@string/points"/>
+            android:layout_weight="@integer/NoOFGamesWeight"
+            android:text="@string/no_of_games"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="@dimen/TextSizeMini"
             android:layout_margin="8dp"
-            android:layout_weight="@integer/FightWith"
-            android:text="@string/fightWith"/>
-
-
-
-
+            android:layout_weight="@integer/ScoreWeight"
+            android:gravity="right"
+            android:text="@string/points"/>
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/LinearLayoutActivityChooseOpponent"
+        android:id="@+id/recyclerViewChooseOpponent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

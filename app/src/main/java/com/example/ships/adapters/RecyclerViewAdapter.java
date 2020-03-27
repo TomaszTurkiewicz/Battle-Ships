@@ -22,11 +22,6 @@ private Context mContext;
         this.mRanking = mRanking;
         this.mContext = mContext;
     }
-//    private User[] mUser;
-//
-//    public RecyclerViewAdapter(User[] mUser) {
-//        this.mUser = mUser;
-//    }
 
     @NonNull
     @Override

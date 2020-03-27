@@ -61,4 +61,5 @@
     <string name="multiplayer">MULTIPLAYER</string>
     <string name="invite">INVITE</string>
     <string name="fightWith">FIGHT WITH</string>
+    <string name="firebasepath_user">User</string>
 </resources>

@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
                         user.setEmail(firebaseUser.getEmail());
                         user.setNoOfGames(0);
                         user.setScore(0);
-                        user.setIndex(new FightIndex(false,null,false,0,null));
+                        // TODO add whatever I will add to user;
+                        user.setIndex(new FightIndex());
                         databaseReference.setValue(user);
 
                     }

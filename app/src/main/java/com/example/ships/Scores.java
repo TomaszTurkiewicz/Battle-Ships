@@ -36,7 +36,7 @@ public class Scores extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scores);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference("User");
+        databaseReference=firebaseDatabase.getReference(getString(R.string.firebasepath_user));
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating ranking...");
         progressDialog.show();
