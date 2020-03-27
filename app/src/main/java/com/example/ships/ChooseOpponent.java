@@ -1,7 +1,6 @@
 package com.example.ships;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -85,19 +84,15 @@ public class ChooseOpponent extends AppCompatActivity {
         RecyclerViewAdapterChooseOpponent adapter = new RecyclerViewAdapterChooseOpponent(this,ranking,userID);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter.setOnItemClickListener(new RecyclerViewAdapterChooseOpponent.OnItemClickListener() {
-            @Override
-            public void inviteGamer(int position) {
-                invite(position);
-            }
-        });
+        adapter.setOnItemClickListener(position -> invite(position));
     }
 
     private void invite(int position) {
         if(!list.get(position).getId().equals(userID)){
-            Intent intent = new Intent(ChooseOpponent.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            String opponentID = list.get(position).getId();
+
+            databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
+            databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
         }else;
     }
 }

@@ -48,11 +48,14 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
         holder.usernameScore.setText(mRanking.getRanking(position).getName());
         holder.noOfGamesScore.setText(String.valueOf(mRanking.getRanking(position).getNoOfGames()));
         holder.scoreScore.setText(String.valueOf(mRanking.getRanking(position).getScore()));
-        if(mRanking.getRanking(position).getId().equals(userId)){
-            holder.parentLayout.setBackgroundResource(R.color.RED);
-        }else{
-
+        if(mRanking.getRanking(position).getId().equals(userId)||
+        !mRanking.getRanking(position).getIndex().getOpponent().isEmpty()){
+            holder.positionScore.setVisibility(View.GONE);
+            holder.usernameScore.setVisibility(View.GONE);
+            holder.noOfGamesScore.setVisibility(View.GONE);
+            holder.scoreScore.setVisibility(View.GONE);
         }
+
     }
 
     @Override

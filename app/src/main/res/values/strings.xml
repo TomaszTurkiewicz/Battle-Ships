@@ -62,4 +62,6 @@
     <string name="invite">INVITE</string>
     <string name="fightWith">FIGHT WITH</string>
     <string name="firebasepath_user">User</string>
+    <string name="firebasepath_index">index</string>
+    <string name="firebasepath_opponent">opponent</string>
 </resources>
