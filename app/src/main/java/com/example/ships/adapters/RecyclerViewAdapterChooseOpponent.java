@@ -18,6 +18,14 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
     private Ranking mRanking;
     private Context mContext;
     String userId;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener{
+        void inviteGamer(int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener=listener;
+    }
 
     public RecyclerViewAdapterChooseOpponent(Context mContext, Ranking mRanking, String userID) {
         this.mRanking = mRanking;
@@ -42,6 +50,8 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
         holder.scoreScore.setText(String.valueOf(mRanking.getRanking(position).getScore()));
         if(mRanking.getRanking(position).getId().equals(userId)){
             holder.parentLayout.setBackgroundResource(R.color.RED);
+        }else{
+
         }
     }
 
@@ -65,6 +75,17 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
             noOfGamesScore = itemView.findViewById(R.id.noOfGamesScoreChooseOpponent);
             scoreScore = itemView.findViewById(R.id.scoreScoreChooseOpponent);
             parentLayout = itemView.findViewById(R.id.parent_layout_choose_opponent);
+            parentLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mListener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mListener.inviteGamer(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
