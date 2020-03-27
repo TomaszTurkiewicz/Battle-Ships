@@ -1,4 +1,4 @@
-package com.example.ships;
+package com.example.ships.classes;
 
 public class User {
 

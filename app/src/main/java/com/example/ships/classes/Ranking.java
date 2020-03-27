@@ -1,4 +1,4 @@
-package com.example.ships;
+package com.example.ships.classes;
 
 public class Ranking {
     private User[]ranking;
@@ -18,7 +18,7 @@ public class Ranking {
     Ranking(){
     }
 
-    Ranking(int lenght){
+    public Ranking(int lenght){
         ranking = new User[lenght];
     }
 

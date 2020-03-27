@@ -1,12 +1,14 @@
-package com.example.ships;
+package com.example.ships.singletons;
+
+import com.example.ships.classes.BattleField;
 
 public class BattleFieldPlayerTwoSingleton {
 
     private static final BattleFieldPlayerTwoSingleton ourInstance = new BattleFieldPlayerTwoSingleton();
 
-    BattleField battleField = new BattleField();
+    public BattleField battleField = new BattleField();
 
-    static BattleFieldPlayerTwoSingleton getInstance() {
+   public static BattleFieldPlayerTwoSingleton getInstance() {
         return ourInstance;
     }
 

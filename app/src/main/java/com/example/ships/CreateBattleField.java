@@ -8,6 +8,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ships.classes.BattleField;
+import com.example.ships.classes.PointIJ;
+import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
+
 //TODO change layout... constraint
 public class CreateBattleField extends AppCompatActivity {
 

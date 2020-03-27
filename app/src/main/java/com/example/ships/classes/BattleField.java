@@ -1,9 +1,9 @@
-package com.example.ships;
+package com.example.ships.classes;
 
 import java.util.Random;
 
 public class BattleField{
-    Ship[][] battleField = new Ship[10][10];
+    public Ship[][] battleField = new Ship[10][10];
 
 
     boolean position;
@@ -144,7 +144,7 @@ public class BattleField{
         return battleField[i][j];
     }
 
-    void createFleet() {
+    public void createFleet() {
         putShipWithFourCells(4, 1, true);
         putShipWithThreeCells(3,1,true);
         putShipWithThreeCells(3,2,true);

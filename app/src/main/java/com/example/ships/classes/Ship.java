@@ -1,4 +1,4 @@
-package com.example.ships;
+package com.example.ships.classes;
 
 public class Ship {
     private int numberOfMasts;
@@ -48,7 +48,7 @@ public class Ship {
         isHit = hit;
     }
 
-    public boolean getisShipHit(){
+    public boolean getIsShipHit(){
         return isShipHit;
     }
     public void setShipHit(boolean shipHit){

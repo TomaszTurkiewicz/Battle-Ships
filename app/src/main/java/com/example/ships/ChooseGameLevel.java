@@ -2,8 +2,11 @@ package com.example.ships;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.ships.classes.GameDifficulty;
 
 
 public class ChooseGameLevel extends AppCompatActivity {

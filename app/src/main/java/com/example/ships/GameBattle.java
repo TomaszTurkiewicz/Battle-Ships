@@ -12,6 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ships.classes.BattleField;
+import com.example.ships.classes.GameDifficulty;
+import com.example.ships.classes.User;
+import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
+import com.example.ships.singletons.BattleFieldPlayerTwoSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -96,7 +101,7 @@ public class GameBattle extends AppCompatActivity {
        if(GameDifficulty.getInstance().getRandom()) {
            battleFieldPlayerOneActivityRandomGame.createFleet();
        }else{
-           battleFieldPlayerOneActivityRandomGame=BattleFieldPlayerOneSingleton.getInstance().readBattleField();
+           battleFieldPlayerOneActivityRandomGame= BattleFieldPlayerOneSingleton.getInstance().readBattleField();
        }
 
 
@@ -620,94 +625,94 @@ public class GameBattle extends AppCompatActivity {
 
 
         if (i == 0 && j == 0) {
-            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getisShipHit() ||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j + 1].getisShipHit()) {
+            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getIsShipHit() ||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j + 1].getIsShipHit()) {
                 return true;
             } else {
                 return false;
             }
         } else if ((i > 0) && (i < 9) && j == 0) {
-            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getisShipHit() ||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getisShipHit() ||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j + 1].getisShipHit() ||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getisShipHit() ||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j + 1].getisShipHit()) {
+            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getIsShipHit() ||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getIsShipHit() ||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j + 1].getIsShipHit() ||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getIsShipHit() ||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j + 1].getIsShipHit()) {
                 return true;
             } else {
                 return false;
             }
         } else if (i == 9 && j == 0) {
-            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getisShipHit() ||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getisShipHit() ||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j + 1].getisShipHit()) {
+            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getIsShipHit() ||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getIsShipHit() ||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j + 1].getIsShipHit()) {
                 return true;
             } else {
                 return false;
             }
 
         } else if (i == 0 && ((j > 0) && (j < 9))) {
-            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j + 1].getisShipHit()) {
+            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j + 1].getIsShipHit()) {
                 return true;
             } else {
                 return false;
             }
 
         } else if (((i > 0) && (i < 9)) && ((j > 0) && (j < 9))) {
-            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j + 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j + 1].getisShipHit()) {
+            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j + 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j + 1].getIsShipHit()) {
                 return true;
             } else {
                 return false;
             }
 
         } else if (i == 9 && ((j > 0) && (j < 9))) {
-            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j + 1].getisShipHit()) {
+            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j + 1].getIsShipHit()) {
                 return true;
             } else {
                 return false;
             }
 
         } else if (i == 0 && j == 9) {
-            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getisShipHit()) {
+            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getIsShipHit()) {
                 return true;
             } else {
                 return false;
             }
 
         } else if (((i > 0) && (i < 9)) && (j == 9)) {
-            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getisShipHit()) {
+            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i + 1][j].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getIsShipHit()) {
                 return true;
             } else {
                 return false;
             }
 
         } else if ((i == 9) && (j == 9)) {
-            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j - 1].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getisShipHit()||
-                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j + 1].getisShipHit()) {
+            if (battleFieldPlayerOneActivityRandomGame.battleField[i][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i][j + 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j - 1].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j].getIsShipHit()||
+                    battleFieldPlayerOneActivityRandomGame.battleField[i - 1][j + 1].getIsShipHit()) {
                 return true;
             } else {
                 return false;
