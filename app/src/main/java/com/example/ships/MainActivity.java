@@ -37,9 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String userID;
     private String newUserName;
-
-
-
+    private User user = new User();
     private ImageButton accountBtn;
     private String name;
 
@@ -68,11 +66,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     if (dataSnapshot.exists()) {
-                        showData(dataSnapshot);
+                        user=dataSnapshot.getValue(User.class);
+                        userName.setText(user.getName());
                     } else {
-                        userName.setText(firebaseUser.getEmail());
 
-                        User user = new User();
+                        userName.setText(firebaseUser.getEmail());
                         user.setId(userID);
                         user.setName(firebaseUser.getEmail());
                         user.setEmail(firebaseUser.getEmail());
@@ -100,8 +98,9 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("OK", (dialog, which) ->
                 {
                     newUserName=input.getText().toString();
-                    databaseReference.child("name").setValue(newUserName);
-                    userName.setText(newUserName);
+                    user.setName(newUserName);
+                    databaseReference.setValue(user);
+                    userName.setText(user.getName());
 
                 });
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -112,10 +111,17 @@ public class MainActivity extends AppCompatActivity {
             multiplayerBtn.setClickable(true);
             multiplayerBtn.setOnClickListener(v->{
 
-                //TODO different activities depending on invitation to fight or not
-                Intent intent = new Intent(getApplicationContext(),ChooseOpponent.class);
-                startActivity(intent);
-                finish();});
+                if(user.getIndex().getOpponent().isEmpty()){
+                    //TODO different activities depending on invitation to fight or not
+                    Intent intent = new Intent(getApplicationContext(),ChooseOpponent.class);
+                    startActivity(intent);
+                    finish();
+                }else;
+
+
+
+
+            });
 
 
 
@@ -126,13 +132,6 @@ public class MainActivity extends AppCompatActivity {
             multiplayerBtn.setClickable(false);
         }
     }
-
-    private void showData(DataSnapshot dataSnapshot) {
-        name = (String) dataSnapshot.child("name").getValue();
-        userName.setText(name);
-    }
-
-
 
 
     public void randomGame(View view) {

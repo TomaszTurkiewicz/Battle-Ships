@@ -68,4 +68,13 @@ public class User {
     public void setNoOfGames(int noOfGames) {
         this.noOfGames = noOfGames;
     }
+
+    public void makeUser(User user){
+        this.id=user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.score = getScore();
+        this.noOfGames = user.getNoOfGames();
+        this.index = user.getIndex();
+    }
 }
