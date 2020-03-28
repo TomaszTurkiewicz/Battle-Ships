@@ -7,29 +7,24 @@
     tools:context=".GameBattle">
 
 
-    <TableLayout
+    <LinearLayout
         android:id="@+id/tableLayoutPlayer2BattleField"
         android:layout_width="@dimen/TableSizePlusJeden"
         android:layout_height="@dimen/TableSizePlusJeden"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.693"
-        app:layout_constraintStart_toEndOf="@+id/tableLayoutPlayerBattleField"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.501"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintHorizontal_bias="0.9">
 
 
         <LinearLayout
             android:id="@+id/LinearLayout2MainActivityLetters"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/player2LinearLayout_1x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.675"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -124,10 +119,7 @@
             android:id="@+id/player2LinearLayout_1x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/player2LinearLayout_2x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -223,10 +215,7 @@
             android:id="@+id/player2LinearLayout_2x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/player2LinearLayout_3x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -321,10 +310,7 @@
             android:id="@+id/player2LinearLayout_3x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/player2LinearLayout_4x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -419,10 +405,7 @@
             android:id="@+id/player2LinearLayout_4x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/player2LinearLayout_5x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -517,10 +500,7 @@
             android:id="@+id/player2LinearLayout_5x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/player2LinearLayout_6x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -615,10 +595,7 @@
             android:id="@+id/player2LinearLayout_6x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/player2LinearLayout_7x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -713,10 +690,7 @@
             android:id="@+id/player2LinearLayout_7x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/player2LinearLayout_8x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -811,10 +785,7 @@
             android:id="@+id/player2LinearLayout_8x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/player2LinearLayout_9x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -910,10 +881,7 @@
             android:id="@+id/player2LinearLayout_9x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/player2LinearLayout_10x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1009,10 +977,7 @@
             android:id="@+id/player2LinearLayout_10x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
 
             <TextView
@@ -1105,28 +1070,25 @@
         </LinearLayout>
 
 
-    </TableLayout>
+    </LinearLayout>
 
-    <TableLayout
+    <LinearLayout
         android:id="@+id/tableLayoutPlayerBattleField"
         android:layout_width="@dimen/TableSizePlusJeden"
         android:layout_height="@dimen/TableSizePlusJeden"
-        app:layout_constraintHorizontal_bias="0.693"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.501">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintHorizontal_bias="0.1">
 
         <LinearLayout
             android:id="@+id/LinearLayoutMainActivityLetters"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.675"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayout_1x"
-            app:layout_constraintVertical_bias="1.0">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1221,10 +1183,7 @@
             android:id="@+id/playerLinearLayout_1x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayout_2x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1299,10 +1258,7 @@
             android:id="@+id/playerLinearLayout_2x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayout_3x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1377,10 +1333,7 @@
             android:id="@+id/playerLinearLayout_3x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayout_4x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1455,10 +1408,7 @@
             android:id="@+id/playerLinearLayout_4x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayout_5x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1533,10 +1483,7 @@
             android:id="@+id/playerLinearLayout_5x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayout_6x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1611,10 +1558,7 @@
             android:id="@+id/playerLinearLayout_6x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayout_7x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1689,10 +1633,7 @@
             android:id="@+id/playerLinearLayout_7x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayout_8x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1767,10 +1708,7 @@
             android:id="@+id/playerLinearLayout_8x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayout_9x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1845,10 +1783,7 @@
             android:id="@+id/playerLinearLayout_9x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/playerLinearLayout_10x"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1923,10 +1858,7 @@
             android:id="@+id/playerLinearLayout_10x"
             android:layout_width="@dimen/TableSizePlusJeden"
             android:layout_height="@dimen/FieldSize"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="@dimen/FieldSize"
@@ -1997,19 +1929,19 @@
                 android:background="@drawable/battle_cell" />
         </LinearLayout>
 
-    </TableLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/LinearLayoutMainActivityShips"
-        android:layout_width="580dp"
+        android:layout_width="590dp"
         android:layout_height="20dp"
         android:gravity="center_horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tableLayoutPlayerBattleField"
-        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.9"
         android:orientation="horizontal">
 
         <TextView

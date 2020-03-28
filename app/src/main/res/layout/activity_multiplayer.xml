@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintVertical_bias="0.2">
 
 
         <LinearLayout
@@ -1082,7 +1082,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintVertical_bias="0.2">
 
         <LinearLayout
             android:id="@+id/LinearLayoutOpponentMultiplayerLetters"
@@ -1933,7 +1933,7 @@
 
     <LinearLayout
         android:id="@+id/LinearLayoutMultiplayerActivityShips"
-        android:layout_width="580dp"
+        android:layout_width="590dp"
         android:layout_height="20dp"
         android:gravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
