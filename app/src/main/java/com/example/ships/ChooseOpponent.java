@@ -1,6 +1,7 @@
 package com.example.ships;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -96,6 +97,9 @@ public class ChooseOpponent extends AppCompatActivity {
             databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
             databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
             databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
+            Intent intent = new Intent(ChooseOpponent.this,MainActivity.class);
+            startActivity(intent);
+            finish();
         }else;
     }
 }

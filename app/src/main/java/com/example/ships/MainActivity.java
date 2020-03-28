@@ -1,5 +1,6 @@
 package com.example.ships;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -122,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                             user=dataSnapshot.getValue(User.class);
 
                             if(user.getIndex().getOpponent().isEmpty()){
-                                //TODO different activities depending on invitation to fight or not
                                 Intent intent = new Intent(getApplicationContext(),ChooseOpponent.class);
                                 startActivity(intent);
                                 finish();
@@ -136,15 +136,76 @@ public class MainActivity extends AppCompatActivity {
                                             opponentUser=dataSnapshot.getValue(User.class);
                                             if(user.getIndex().isAccepted()&&opponentUser.getIndex().isAccepted()){
                                                 Toast.makeText(MainActivity.this,"You can fight",Toast.LENGTH_LONG).show();
+
+                                                    Intent intent = new Intent(MainActivity.this,MultiplayerActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+
+
                                             }else if(user.getIndex().isAccepted()&&!opponentUser.getIndex().isAccepted()){
                                                 Toast.makeText(MainActivity.this,"You invited him",Toast.LENGTH_LONG).show();
+
+
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                                builder.setCancelable(true);
+                                                builder.setTitle("Waiting");
+                                                builder.setMessage("Do you want to wait for accept from: "+"\n"+opponentUser.getName());
+                                                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // do nothing
+                                                    }
+                                                });
+                                                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        user.getIndex().setOpponent("");
+                                                        user.getIndex().setAccepted(false);
+                                                        opponentUser.getIndex().setOpponent("");
+                                                        opponentUser.getIndex().setAccepted(false);
+                                                        databaseReferenceMy.setValue(user);
+                                                        databaseReferenceOpponent.setValue(opponentUser);
+                                                    }
+                                                });
+                                                AlertDialog dialog = builder.create();
+                                                dialog.show();
+
+
                                             }else if(!user.getIndex().isAccepted()&&opponentUser.getIndex().isAccepted()){
                                                 Toast.makeText(MainActivity.this,"You have to accept",Toast.LENGTH_LONG).show();
+
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                                builder.setCancelable(true);
+                                                builder.setTitle("Accepting");
+                                                builder.setMessage("Do you want to fight with: "+"\n"+opponentUser.getName());
+                                                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        user.getIndex().setAccepted(true);
+                                                        databaseReferenceMy.setValue(user);
+                                                    }
+                                                });
+                                                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        user.getIndex().setOpponent("");
+                                                        opponentUser.getIndex().setOpponent("");
+                                                        opponentUser.getIndex().setAccepted(false);
+                                                        databaseReferenceMy.setValue(user);
+                                                        databaseReferenceOpponent.setValue(opponentUser);
+                                                    }
+                                                });
+                                                AlertDialog dialog = builder.create();
+                                                dialog.show();
+
+
                                             }else;
-                                            
+
                                         }
                                         else{
-                                            // TODO if opponent disappeared!!
+                                            user.getIndex().setAccepted(false);
+                                            user.getIndex().setOpponent("");
+                                            databaseReferenceMy.setValue(user);
                                         }
 
 

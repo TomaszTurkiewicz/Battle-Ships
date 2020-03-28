@@ -12,6 +12,10 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".MultiplayerActivity"
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:name=".ChooseOpponent"
             android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
