@@ -7,6 +7,8 @@ public class Ship {
     private boolean isHit;
     private boolean isShipHit;
 
+    public Ship() {
+    }
 
     public Ship(int numberOfMasts, int shipNumber, boolean isShip, boolean isHit, boolean isShipHit) {
         this.numberOfMasts = numberOfMasts;
