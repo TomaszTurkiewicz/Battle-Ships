@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -32,14 +33,14 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReferenceMy, databaseReferenceOpponent;
     private Button multiplayerBtn;
 
     private String userID;
     private String newUserName;
     private User user = new User();
+    private User opponentUser = new User();
     private ImageButton accountBtn;
-    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         userName=findViewById(R.id.userName);
         loggedIn=findViewById(R.id.loggedIn);
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
 
         accountBtn=findViewById(R.id.accountButton);
 
@@ -59,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
             accountBtn.setBackgroundColor(Color.RED);
             userID = firebaseUser.getUid();
             firebaseDatabase = FirebaseDatabase.getInstance();
-            databaseReference=firebaseDatabase.getReference("User").child(userID);
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
+
+            databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         user.setScore(0);
                         // TODO add whatever I will add to user;
                         user.setIndex(new FightIndex());
-                        databaseReference.setValue(user);
+                        databaseReferenceMy.setValue(user);
 
                     }
                 }
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     newUserName=input.getText().toString();
                     user.setName(newUserName);
-                    databaseReference.setValue(user);
+                    databaseReferenceMy.setValue(user);
                     userName.setText(user.getName());
 
                 });
@@ -111,12 +113,61 @@ public class MainActivity extends AppCompatActivity {
             multiplayerBtn.setClickable(true);
             multiplayerBtn.setOnClickListener(v->{
 
-                if(user.getIndex().getOpponent().isEmpty()){
-                    //TODO different activities depending on invitation to fight or not
-                    Intent intent = new Intent(getApplicationContext(),ChooseOpponent.class);
-                    startActivity(intent);
-                    finish();
-                }else;
+                databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.exists()) {
+                            user=dataSnapshot.getValue(User.class);
+
+                            if(user.getIndex().getOpponent().isEmpty()){
+                                //TODO different activities depending on invitation to fight or not
+                                Intent intent = new Intent(getApplicationContext(),ChooseOpponent.class);
+                                startActivity(intent);
+                                finish();
+                            }else{
+                                databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().opponent);
+                                databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                        if(dataSnapshot.exists()){
+                                            opponentUser=dataSnapshot.getValue(User.class);
+                                            if(user.getIndex().isAccepted()&&opponentUser.getIndex().isAccepted()){
+                                                Toast.makeText(MainActivity.this,"You can fight",Toast.LENGTH_LONG).show();
+                                            }else if(user.getIndex().isAccepted()&&!opponentUser.getIndex().isAccepted()){
+                                                Toast.makeText(MainActivity.this,"You invited him",Toast.LENGTH_LONG).show();
+                                            }else if(!user.getIndex().isAccepted()&&opponentUser.getIndex().isAccepted()){
+                                                Toast.makeText(MainActivity.this,"You have to accept",Toast.LENGTH_LONG).show();
+                                            }else;
+                                            
+                                        }
+                                        else{
+                                            // TODO if opponent disappeared!!
+                                        }
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                            }
+
+
+
+                        } else ;
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+
+
 
 
 

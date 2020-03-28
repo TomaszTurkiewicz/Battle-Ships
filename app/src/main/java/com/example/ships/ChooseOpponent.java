@@ -31,6 +31,7 @@ public class ChooseOpponent extends AppCompatActivity {
     List<User> list = new ArrayList<>();
     private ProgressDialog progressDialog;
     private String userID;
+    private boolean accepted;
 //TODO change textview invitation for layout invitation with buttons
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class ChooseOpponent extends AppCompatActivity {
         progressDialog.setMessage("Updating ranking...");
         progressDialog.show();
         initRanking();
+        accepted=false;
     }
 
     private void initRanking() {
@@ -90,8 +92,9 @@ public class ChooseOpponent extends AppCompatActivity {
     private void invite(int position) {
         if(!list.get(position).getId().equals(userID)){
             String opponentID = list.get(position).getId();
-
+            accepted=true;
             databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
+            databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
             databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
         }else;
     }
