@@ -200,10 +200,7 @@ public class MainActivity extends AppCompatActivity {
                                                 });
                                                 AlertDialog dialog = builder.create();
                                                 dialog.show();
-
-
                                             }else;
-
                                         }
                                         else{
                                             user.getIndex().setAccepted(false);
@@ -211,20 +208,12 @@ public class MainActivity extends AppCompatActivity {
                                             user.getIndex().setGameIndex("");
                                             databaseReferenceMy.setValue(user);
                                         }
-
-
                                     }
-
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
                                     }
                                 });
-
                             }
-
-
-
                         } else ;
                     }
                     @Override
