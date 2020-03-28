@@ -182,7 +182,10 @@ public class MainActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         user.getIndex().setAccepted(true);
+                                                        user.getIndex().setGameIndex(opponentUser.getId()+user.getId());
+                                                        opponentUser.getIndex().setGameIndex(opponentUser.getId()+user.getId());
                                                         databaseReferenceMy.setValue(user);
+                                                        databaseReferenceOpponent.setValue(opponentUser);
                                                     }
                                                 });
                                                 builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -205,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
                                         else{
                                             user.getIndex().setAccepted(false);
                                             user.getIndex().setOpponent("");
+                                            user.getIndex().setGameIndex("");
                                             databaseReferenceMy.setValue(user);
                                         }
 
