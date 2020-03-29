@@ -348,11 +348,14 @@ public class MultiplayerActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String turn = (String) dataSnapshot.child("turn").getValue();
                 if(user.getId().equals(turn)){
-                    turnTextView.setText("YOUR MOVE");
+                    turnTextView.setText("MY MOVE");
+                    readClicable();
+
                     // TODO napierdalaj przeciwnika i zapisuj do bazy.
                 }
                 else{
-                    turnTextView.setText("NOT YOUR MOVE");
+                    turnTextView.setText("NOT MY MOVE");
+                    disableClickable();
                     battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                     battleFieldForDataBaseMy.listToField();
                     //TODO wyświtlanie moje pola bitwy
@@ -371,6 +374,21 @@ public class MultiplayerActivity extends AppCompatActivity {
 
     }
 
+    private void disableClickable() {
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                textViewArrayActivityMultiplayerOpponent[i][j].setClickable(false);
+            }
+        }
+    }
+
+    private void readClicable() {
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                textViewArrayActivityMultiplayerOpponent[i][j].setClickable(true);
+            }
+        }
+    }
 
 
     private void showOpponentBattleFieldRed() {
@@ -403,6 +421,7 @@ public class MultiplayerActivity extends AppCompatActivity {
     }
 
     private void createFields() {
+        turnTextView.setText("WAITING FOR OPPONENT");
         databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -424,24 +443,23 @@ public class MultiplayerActivity extends AppCompatActivity {
                                 databaseReferenceFight.child("turn").setValue(user.getId());
                                 mHandler.postDelayed(game, deelay);
                             } else {
-
                                 battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
-                                battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
-                                battleFieldForDataBaseMy.listToField();
-                                battleFieldForDataBaseOpponent.listToField();
+
                                 if (!battleFieldForDataBaseMy.isCreated()) {
                                     battleFieldForDataBaseMy.create();
                                     databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
                                 }else{
                                     battleFieldForDataBaseMy.listToField();
-                                }
 
+                                }
                                 // pokaż moje statki
                                 showMyBattleField();
-
+                                battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
+                                battleFieldForDataBaseOpponent.listToField();
 
                                 if (battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated()) {
                                     battleFieldsSet=true;
+
                                     mHandler.postDelayed(game, deelay);
 
                                 } else {
@@ -527,303 +545,421 @@ public class MultiplayerActivity extends AppCompatActivity {
             textView.setBackground(getResources().getDrawable(R.drawable.ship_cell));
     }
 
+
+
+    private void shoot(int i, int j) {
+        textViewArrayActivityMultiplayerOpponent[i][j].setClickable(false);
+        battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).setHit(true);
+        if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
+            displayShipCell(textViewArrayActivityMultiplayerOpponent[i][j]);
+            databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
+        }else{
+            displayWaterCell(textViewArrayActivityMultiplayerOpponent[i][j]);
+            databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
+
+            databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
+
+            mHandler.postDelayed(game, deelay);
+        }
+    }
+
     public void clickMeCellGame_1x1(View view) {
+        shoot(0,0);
     }
 
     public void clickMeCellGame_1x2(View view) {
+        shoot(0,1);
     }
 
     public void clickMeCellGame_1x3(View view) {
+        shoot(0,2);
     }
 
     public void clickMeCellGame_1x4(View view) {
+        shoot(0,3);
     }
 
     public void clickMeCellGame_1x5(View view) {
+        shoot(0,4);
     }
 
     public void clickMeCellGame_1x6(View view) {
+        shoot(0,5);
     }
 
     public void clickMeCellGame_1x7(View view) {
+        shoot(0,6);
     }
 
     public void clickMeCellGame_1x8(View view) {
+        shoot(0,7);
     }
 
     public void clickMeCellGame_1x9(View view) {
+        shoot(0,8);
     }
 
     public void clickMeCellGame_1x10(View view) {
+        shoot(0,9);
     }
 
     public void clickMeCellGame_2x1(View view) {
+        shoot(1,0);
     }
 
     public void clickMeCellGame_2x2(View view) {
+        shoot(1,1);
     }
 
     public void clickMeCellGame_2x3(View view) {
+        shoot(1,2);
     }
 
     public void clickMeCellGame_2x4(View view) {
+        shoot(1,3);
     }
 
     public void clickMeCellGame_2x5(View view) {
+        shoot(1,4);
     }
 
     public void clickMeCellGame_2x6(View view) {
+        shoot(1,5);
     }
 
     public void clickMeCellGame_2x7(View view) {
+        shoot(1,6);
     }
 
     public void clickMeCellGame_2x8(View view) {
+        shoot(1,7);
     }
 
     public void clickMeCellGame_2x9(View view) {
+        shoot(1,8);
     }
 
     public void clickMeCellGame_2x10(View view) {
+        shoot(1,9);
     }
 
     public void clickMeCellGame_3x1(View view) {
+        shoot(2,0);
     }
 
     public void clickMeCellGame_3x2(View view) {
+        shoot(2,1);
     }
 
     public void clickMeCellGame_3x3(View view) {
+        shoot(2,2);
     }
 
     public void clickMeCellGame_3x4(View view) {
+        shoot(2,3);
     }
 
     public void clickMeCellGame_3x5(View view) {
+        shoot(2,4);
     }
 
     public void clickMeCellGame_3x6(View view) {
+        shoot(2,5);
     }
 
     public void clickMeCellGame_3x7(View view) {
+        shoot(2,6);
     }
 
     public void clickMeCellGame_3x8(View view) {
+        shoot(2,7);
     }
 
     public void clickMeCellGame_3x9(View view) {
+        shoot(2,8);
     }
 
     public void clickMeCellGame_3x10(View view) {
+        shoot(2,9);
     }
 
     public void clickMeCellGame_4x1(View view) {
+        shoot(3,0);
     }
 
     public void clickMeCellGame_4x2(View view) {
+        shoot(3,1);
     }
 
     public void clickMeCellGame_4x3(View view) {
+        shoot(3,2);
     }
 
     public void clickMeCellGame_4x4(View view) {
+        shoot(3,3);
     }
 
     public void clickMeCellGame_4x5(View view) {
+        shoot(3,4);
     }
 
     public void clickMeCellGame_4x6(View view) {
+        shoot(3,5);
     }
 
     public void clickMeCellGame_4x7(View view) {
+        shoot(3,6);
     }
 
     public void clickMeCellGame_4x8(View view) {
+        shoot(3,7);
     }
 
     public void clickMeCellGame_4x9(View view) {
+        shoot(3,8);
     }
 
     public void clickMeCellGame_4x10(View view) {
+        shoot(3,9);
     }
 
     public void clickMeCellGame_5x1(View view) {
+        shoot(4,0);
     }
 
     public void clickMeCellGame_5x2(View view) {
+        shoot(4,1);
     }
 
     public void clickMeCellGame_5x3(View view) {
+        shoot(4,2);
     }
 
     public void clickMeCellGame_5x4(View view) {
+        shoot(4,3);
     }
 
     public void clickMeCellGame_5x5(View view) {
+        shoot(4,4);
     }
 
     public void clickMeCellGame_5x6(View view) {
+        shoot(4,5);
     }
 
     public void clickMeCellGame_5x7(View view) {
+        shoot(4,6);
     }
 
     public void clickMeCellGame_5x8(View view) {
+        shoot(4,7);
     }
 
     public void clickMeCellGame_5x9(View view) {
+        shoot(4,8);
     }
 
     public void clickMeCellGame_5x10(View view) {
+        shoot(4,9);
     }
 
     public void clickMeCellGame_6x1(View view) {
+        shoot(5,0);
     }
 
     public void clickMeCellGame_6x2(View view) {
+        shoot(5,1);
     }
 
     public void clickMeCellGame_6x3(View view) {
+        shoot(5,2);
     }
 
     public void clickMeCellGame_6x4(View view) {
+        shoot(5,3);
     }
 
     public void clickMeCellGame_6x5(View view) {
+        shoot(5,4);
     }
 
     public void clickMeCellGame_6x6(View view) {
+        shoot(5,5);
     }
 
     public void clickMeCellGame_6x7(View view) {
+        shoot(5,6);
     }
 
     public void clickMeCellGame_6x8(View view) {
+        shoot(5,7);
     }
 
     public void clickMeCellGame_6x9(View view) {
+        shoot(5,8);
     }
 
     public void clickMeCellGame_6x10(View view) {
+        shoot(5,9);
     }
 
     public void clickMeCellGame_7x1(View view) {
+        shoot(6,0);
     }
 
     public void clickMeCellGame_7x2(View view) {
+        shoot(6,1);
     }
 
     public void clickMeCellGame_7x3(View view) {
+        shoot(6,2);
     }
 
     public void clickMeCellGame_7x4(View view) {
+        shoot(6,3);
     }
 
     public void clickMeCellGame_7x5(View view) {
+        shoot(6,4);
     }
 
     public void clickMeCellGame_7x6(View view) {
+        shoot(6,5);
     }
 
     public void clickMeCellGame_7x7(View view) {
+        shoot(6,6);
     }
 
     public void clickMeCellGame_7x8(View view) {
+        shoot(6,7);
     }
 
     public void clickMeCellGame_7x9(View view) {
+        shoot(6,8);
     }
 
     public void clickMeCellGame_7x10(View view) {
+        shoot(6,9);
     }
 
     public void clickMeCellGame_8x1(View view) {
+        shoot(7,0);
     }
 
     public void clickMeCellGame_8x2(View view) {
+        shoot(7,1);
     }
 
     public void clickMeCellGame_8x3(View view) {
+        shoot(7,2);
     }
 
     public void clickMeCellGame_8x4(View view) {
+        shoot(7,3);
     }
 
     public void clickMeCellGame_8x5(View view) {
+        shoot(7,4);
     }
 
     public void clickMeCellGame_8x6(View view) {
+        shoot(7,5);
     }
 
     public void clickMeCellGame_8x7(View view) {
+        shoot(7,6);
     }
 
     public void clickMeCellGame_8x8(View view) {
+        shoot(7,7);
     }
 
     public void clickMeCellGame_8x9(View view) {
+        shoot(7,8);
     }
 
     public void clickMeCellGame_8x10(View view) {
+        shoot(7,9);
     }
 
     public void clickMeCellGame_9x1(View view) {
+        shoot(8,0);
     }
 
     public void clickMeCellGame_9x2(View view) {
+        shoot(8,1);
     }
 
     public void clickMeCellGame_9x3(View view) {
+        shoot(8,2);
     }
 
     public void clickMeCellGame_9x4(View view) {
+        shoot(8,3);
     }
 
     public void clickMeCellGame_9x5(View view) {
+        shoot(8,4);
     }
 
     public void clickMeCellGame_9x6(View view) {
+        shoot(8,5);
     }
 
     public void clickMeCellGame_9x7(View view) {
+        shoot(8,6);
     }
 
     public void clickMeCellGame_9x8(View view) {
+        shoot(8,7);
     }
 
     public void clickMeCellGame_9x9(View view) {
+        shoot(8,8);
     }
 
     public void clickMeCellGame_9x10(View view) {
+        shoot(8,9);
     }
 
     public void clickMeCellGame_10x1(View view) {
+        shoot(9,0);
     }
 
     public void clickMeCellGame_10x2(View view) {
+        shoot(9,1);
     }
 
     public void clickMeCellGame_10x3(View view) {
+        shoot(9,2);
     }
 
     public void clickMeCellGame_10x4(View view) {
+        shoot(9,3);
     }
 
     public void clickMeCellGame_10x5(View view) {
+        shoot(9,4);
     }
 
     public void clickMeCellGame_10x6(View view) {
+        shoot(9,5);
     }
 
     public void clickMeCellGame_10x7(View view) {
+        shoot(9,6);
     }
 
     public void clickMeCellGame_10x8(View view) {
+        shoot(9,7);
     }
 
     public void clickMeCellGame_10x9(View view) {
+        shoot(9,8);
     }
 
     public void clickMeCellGame_10x10(View view) {
+        shoot(9,9);
     }
 }

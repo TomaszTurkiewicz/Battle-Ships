@@ -91,8 +91,8 @@ public class ChooseOpponent extends AppCompatActivity {
     }
 
     private void invite(int position) {
-        if(!list.get(position).getId().equals(userID)){
-            String opponentID = list.get(position).getId();
+        if(!ranking.getRanking(position).getId().equals(userID)){
+            String opponentID = ranking.getRanking(position).getId();
             accepted=true;
             databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
             databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
