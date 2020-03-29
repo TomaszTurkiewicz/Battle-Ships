@@ -8,8 +8,6 @@ public class BattleFieldForDataBase {
     private List<Ship> battleFieldList = Arrays.asList(new Ship[100]);
     private BattleField battleFieldField = new BattleField();
 
-
-
     public boolean isCreated() {
         return created;
     }
@@ -28,21 +26,33 @@ public class BattleFieldForDataBase {
 
     public BattleFieldForDataBase() {
         this.created=false;
-        listToField();
+        fieldToList();
 
+    }
+
+    public BattleField showBattleField(){
+        return battleFieldField;
     }
 
     public void create() {
         battleFieldField.createFleet();
-        listToField();
+        fieldToList();
         created=true;
     }
 
-    private void listToField(){
+    private void fieldToList(){
         for(int i=0;i<10;i++){
             for(int j=0;j<10;j++){
                 int index = 10*i+j;
                 battleFieldList.set(index,battleFieldField.getBattleField(i,j));
+            }
+        }
+    }
+
+    public void listToField(){
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                battleFieldField.makeShip(i,j,battleFieldList.get(10*i+j));
             }
         }
     }

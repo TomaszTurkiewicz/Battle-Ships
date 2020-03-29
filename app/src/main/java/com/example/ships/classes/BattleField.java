@@ -8,6 +8,10 @@ public class BattleField{
 
     boolean position;
 
+    public void makeShip(int i,int j, Ship ship){
+        battleField[i][j] = ship;
+    }
+
     public boolean allShipsHit(){
         int counter = 0;
         for(int i = 0;i<10;i++){

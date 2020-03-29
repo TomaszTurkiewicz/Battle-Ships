@@ -38,25 +38,25 @@ public class GameBattle extends AppCompatActivity {
     BattleField battleFieldPlayerOneActivityRandomGame = new BattleField();
     BattleField battleFieldPlayerTwoActivityRandomGame = new BattleField();
 
-    TextView[][] TextViewArrayActivityRandomGamePlayerOne = new TextView[10][10];
-    TextView[][] TextViewArrayActivityRandomGamePlayerTwo = new TextView[10][10];
+    private TextView[][] TextViewArrayActivityRandomGamePlayerOne = new TextView[10][10];
+    private TextView[][] TextViewArrayActivityRandomGamePlayerTwo = new TextView[10][10];
 
-    TextView[] ShipFourMasts = new TextView[4];
+    private TextView[] ShipFourMasts = new TextView[4];
     private int ShipFourMastsCounter = 0;
-    TextView[] ShipThreeMastsFirst = new TextView[3];
+    private TextView[] ShipThreeMastsFirst = new TextView[3];
     private int ShipThreeMastsCounterFirst = 0;
-    TextView[] ShipThreeMastsSecond = new TextView[3];
+    private TextView[] ShipThreeMastsSecond = new TextView[3];
     private int ShipThreeMastsCounterSecond = 0;
-    TextView[] ShipTwoMastsFirst = new TextView[2];
+    private TextView[] ShipTwoMastsFirst = new TextView[2];
     private int ShipTwoMastsCounterFirst = 0;
-    TextView[] ShipTwoMastsSecond = new TextView[2];
+    private TextView[] ShipTwoMastsSecond = new TextView[2];
     private int ShipTwoMastsCounterSecond = 0;
-    TextView[] ShipTwoMastsThird = new TextView[2];
+    private TextView[] ShipTwoMastsThird = new TextView[2];
     private int ShipTwoMastsCounterThird = 0;
-    TextView[] ShipOneMastsFirst = new TextView[1];
-    TextView[] ShipOneMastsSecond = new TextView[1];
-    TextView[] ShipOneMastsThird = new TextView[1];
-    TextView[] ShipOneMastsFourth = new TextView[1];
+    private TextView[] ShipOneMastsFirst = new TextView[1];
+    private TextView[] ShipOneMastsSecond = new TextView[1];
+    private TextView[] ShipOneMastsThird = new TextView[1];
+    private TextView[] ShipOneMastsFourth = new TextView[1];
     private boolean playerOneCounter;
     private boolean playerTwoCounter;
     private int level = GameDifficulty.getInstance().getLevel();
