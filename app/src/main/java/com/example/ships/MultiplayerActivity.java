@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ships.classes.BattleFieldForDataBase;
+import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,7 +25,7 @@ public class MultiplayerActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReferenceMy, databaseReferenceFight;
+    private DatabaseReference databaseReferenceMy, databaseReferenceFight, databaseReferenceOpponent;
     private String userID;
     private User user = new User();
     private BattleFieldForDataBase battleFieldForDataBaseMy = new BattleFieldForDataBase();
@@ -57,6 +58,8 @@ public class MultiplayerActivity extends AppCompatActivity {
         userID = firebaseUser.getUid();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
+
+
         battleFieldsSet=false;
         game.run();
 
@@ -349,29 +352,40 @@ public class MultiplayerActivity extends AppCompatActivity {
                 String turn = (String) dataSnapshot.child("turn").getValue();
                 if(user.getId().equals(turn)){
                     turnTextView.setText("MY MOVE");
+                    battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
+                    battleFieldForDataBaseMy.listToField();
                     readClicable();
+                    showMyBattleField();
+                    showOpponentBattleField();
 
                     // TODO napierdalaj przeciwnika i zapisuj do bazy.
                 }
                 else{
                     turnTextView.setText("NOT MY MOVE");
-                    disableClickable();
-                    battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
-                    battleFieldForDataBaseMy.listToField();
-                    //TODO wyświtlanie moje pola bitwy
-                    showMyBattleField();
-                    mHandler.postDelayed(game, deelay);
+                    String winner = (String) dataSnapshot.child("winner").getValue();
+
+                    if(user.getIndex().getOpponent().equals(winner)){
+                        databaseReferenceFight.removeValue();
+                        FightIndex fightIndex = new FightIndex();
+                        databaseReferenceMy.child("index").setValue(fightIndex);
+                        databaseReferenceOpponent.child("index").setValue(fightIndex);
+                        Intent intent = new Intent(MultiplayerActivity.this,WinPlayerTwo.class);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
+                        battleFieldForDataBaseMy.listToField();
+                        //TODO wyświtlanie moje pola bitwy
+                        showOpponentBattleField();
+                        showMyBattleField();
+                        mHandler.postDelayed(game, deelay);
+                    }
                 }
-
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-
     }
 
     private void disableClickable() {
@@ -385,7 +399,11 @@ public class MultiplayerActivity extends AppCompatActivity {
     private void readClicable() {
         for(int i=0;i<10;i++){
             for(int j=0;j<10;j++){
-                textViewArrayActivityMultiplayerOpponent[i][j].setClickable(true);
+                textViewArrayActivityMultiplayerOpponent[i][j]
+                        .setClickable(!battleFieldForDataBaseOpponent
+                                .showBattleField()
+                                .getBattleField(i,j)
+                                .isHit());
             }
         }
     }
@@ -432,21 +450,31 @@ public class MultiplayerActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }else {
+                    databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
                     databaseReferenceFight = firebaseDatabase.getReference("Battle").child(user.getIndex().getGameIndex());
                     databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (!dataSnapshot.exists()) {
                                 battleFieldForDataBaseMy.create();
+                                int noOfGames = user.getNoOfGames();
+                                noOfGames = noOfGames+1;
+                                user.setNoOfGames(noOfGames);
+                                databaseReferenceMy.setValue(user);
                                 databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
                                 databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
                                 databaseReferenceFight.child("turn").setValue(user.getId());
+                                databaseReferenceFight.child("winner").setValue("");
                                 mHandler.postDelayed(game, deelay);
                             } else {
                                 battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
 
                                 if (!battleFieldForDataBaseMy.isCreated()) {
                                     battleFieldForDataBaseMy.create();
+                                    int noOfGames = user.getNoOfGames();
+                                    noOfGames = noOfGames+1;
+                                    user.setNoOfGames(noOfGames);
+                                    databaseReferenceMy.setValue(user);
                                     databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
                                 }else{
                                     battleFieldForDataBaseMy.listToField();
@@ -489,11 +517,29 @@ public class MultiplayerActivity extends AppCompatActivity {
     private void showOpponentBattleField() {
         for(int i=0;i<10;i++){
             for(int j=0;j<10;j++){
-                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
+                //jest statek i został trafiony
+                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()
+                        &&battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
                     displayShipCell(textViewArrayActivityMultiplayerOpponent[i][j]);
-                }else{
+                }
+
+                // woda i została trafiony
+                else if(!battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()
+                        &&battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
+                    displayWaterCell(textViewArrayActivityMultiplayerOpponent[i][j]);
+                }
+
+                // jest statek i nie został trafiony
+                else if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()
+                        &&!battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
+                    displayWidmoShip(textViewArrayActivityMultiplayerOpponent[i][j]);
+                }
+                // nie ma statku i nie został trafiony
+                else if(!battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()
+                        &&!battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
                     displayBattleCell(textViewArrayActivityMultiplayerOpponent[i][j]);
                 }
+                else;
             }
         }
     }
@@ -553,8 +599,23 @@ public class MultiplayerActivity extends AppCompatActivity {
         if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
             displayShipCell(textViewArrayActivityMultiplayerOpponent[i][j]);
             databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
+            if(battleFieldForDataBaseOpponent.showBattleField().allShipsHit()){
+
+                //TODO wykasować grę i nabić punkty
+                databaseReferenceFight.child("winner").setValue(user.getId());
+
+                int score = user.getScore();
+                score = score+50;
+                user.setScore(score);
+                databaseReferenceMy.setValue(user);
+
+                Intent intent = new Intent(MultiplayerActivity.this,WinPlayerOne.class);
+                startActivity(intent);
+                finish();
+            }
         }else{
             displayWaterCell(textViewArrayActivityMultiplayerOpponent[i][j]);
+            disableClickable();
             databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
 
             databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
