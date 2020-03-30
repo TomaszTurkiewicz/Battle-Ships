@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -53,19 +54,21 @@ public class MultiplayerActivity extends AppCompatActivity {
             shipOneMastsCounterFirst, shipOneMastsCounterSecond, shipOneMastsCounterThird, shipOneMastsCounterFourth;
     private boolean battleFieldsSet;
     private TextView turnTextView;
+    private ImageButton leaveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer);
         initializeTextViews();
+        leaveButton = findViewById(R.id.leaveMultiplayer);
         turnTextView=findViewById(R.id.turn);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
-
+        leaveButton.setVisibility(View.GONE);
 
         battleFieldsSet=false;
         game.run();
@@ -444,8 +447,11 @@ public class MultiplayerActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }else {
+
                     databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
+
                     databaseReferenceFight = firebaseDatabase.getReference("Battle").child(user.getIndex().getGameIndex());
+                    leaveButton.setVisibility(View.VISIBLE);
                     databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -1242,5 +1248,32 @@ public class MultiplayerActivity extends AppCompatActivity {
 
     public void clickMeCellGame_10x10(View view) {
         shoot(9,9);
+    }
+
+    public void leaveMultiplayer(View view) {
+
+        databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User opponent=dataSnapshot.getValue(User.class);
+                int score = opponent.getScore();
+                score = score+50;
+                opponent.setScore(score);
+                opponent.setIndex(new FightIndex());
+                databaseReferenceOpponent.setValue(opponent);
+                user.setIndex(new FightIndex());
+                databaseReferenceMy.setValue(user);
+                databaseReferenceFight.removeValue();
+                Intent intent = new Intent(MultiplayerActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }
