@@ -1,9 +1,9 @@
 package com.example.ships.classes;
 
 public class FightIndex {
-    public String opponent;
-    public boolean accepted;
-    public String gameIndex;
+    private String opponent;
+    private boolean accepted;
+    private String gameIndex;
 
     public FightIndex(String opponent, boolean accepted, String gameIndex) {
         this.opponent = opponent;

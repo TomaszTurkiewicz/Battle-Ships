@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             }else{
-                                databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().opponent);
+                                databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
                                 databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

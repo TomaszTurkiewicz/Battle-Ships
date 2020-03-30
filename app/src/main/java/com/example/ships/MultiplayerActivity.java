@@ -1,5 +1,6 @@
 package com.example.ships;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ships.classes.BattleFieldForDataBase;
@@ -460,6 +462,9 @@ public class MultiplayerActivity extends AppCompatActivity {
                                 int noOfGames = user.getNoOfGames();
                                 noOfGames = noOfGames+1;
                                 user.setNoOfGames(noOfGames);
+
+                                chooseDifficulty();
+
                                 databaseReferenceMy.setValue(user);
                                 databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
                                 databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
@@ -471,11 +476,17 @@ public class MultiplayerActivity extends AppCompatActivity {
 
                                 if (!battleFieldForDataBaseMy.isCreated()) {
                                     battleFieldForDataBaseMy.create();
+
+                                    databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
                                     int noOfGames = user.getNoOfGames();
                                     noOfGames = noOfGames+1;
                                     user.setNoOfGames(noOfGames);
                                     databaseReferenceMy.setValue(user);
-                                    databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
+
+                                    chooseDifficulty();
+
+
+
                                 }else{
                                     battleFieldForDataBaseMy.listToField();
 
@@ -512,6 +523,32 @@ public class MultiplayerActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void chooseDifficulty() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
+        builder.setCancelable(true);
+        builder.setTitle("Difficulty");
+        builder.setMessage("choose game difficulty");
+        builder.setPositiveButton("NORMAL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                battleFieldForDataBaseMy.setEasy(false);
+                databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
+            }
+        });
+        builder.setNegativeButton("EASY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                    battleFieldForDataBaseMy.setEasy(true);
+                databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     private void showOpponentBattleField() {
