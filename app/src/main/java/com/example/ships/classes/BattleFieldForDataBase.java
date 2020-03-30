@@ -5,7 +5,7 @@ import java.util.List;
 
 public class BattleFieldForDataBase {
     private boolean created;
-    private boolean easy;
+    private Difficulty difficulty;
     private List<Ship> battleFieldList = Arrays.asList(new Ship[100]);
     private BattleField battleFieldField = new BattleField();
 
@@ -28,16 +28,15 @@ public class BattleFieldForDataBase {
     public BattleFieldForDataBase() {
         this.created=false;
         fieldToList();
-        this.easy = false;
-
+        this.difficulty = new Difficulty();
     }
 
-    public boolean isEasy() {
-        return easy;
+    public Difficulty getDifficulty() {
+        return difficulty;
     }
 
-    public void setEasy(boolean easy) {
-        this.easy = easy;
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 
     public BattleField showBattleField(){

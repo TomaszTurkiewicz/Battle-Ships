@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ships.classes.BattleFieldForDataBase;
+import com.example.ships.classes.Difficulty;
 import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,6 +47,10 @@ public class MultiplayerActivity extends AppCompatActivity {
     private TextView[] ShipOneMastsSecond = new TextView[1];
     private TextView[] ShipOneMastsThird = new TextView[1];
     private TextView[] ShipOneMastsFourth = new TextView[1];
+    private int shipFourMastsCounter,
+            shipThreeMastsCounterFirst, shipThreeMastsCounterSecond,
+            shipTwoMastsCounterFirst, shipTwoMastsCounterSecond, shipTwoMastsCounterThird,
+            shipOneMastsCounterFirst, shipOneMastsCounterSecond, shipOneMastsCounterThird, shipOneMastsCounterFourth;
     private boolean battleFieldsSet;
     private TextView turnTextView;
 
@@ -348,6 +353,8 @@ public class MultiplayerActivity extends AppCompatActivity {
     }
 
     private void makeMove() {
+
+        showShipsHit();
         databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -356,6 +363,9 @@ public class MultiplayerActivity extends AppCompatActivity {
                     turnTextView.setText("MY MOVE");
                     battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                     battleFieldForDataBaseMy.listToField();
+
+
+
                     readClicable();
                     showMyBattleField();
                     showOpponentBattleField();
@@ -388,6 +398,10 @@ public class MultiplayerActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+    }
+
+    private void showShipsHit() {
+
     }
 
     private void disableClickable() {
@@ -496,8 +510,11 @@ public class MultiplayerActivity extends AppCompatActivity {
                                 battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
                                 battleFieldForDataBaseOpponent.listToField();
 
-                                if (battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated()) {
+                                if (battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated()&&
+                                battleFieldForDataBaseMy.getDifficulty().isSet()&&battleFieldForDataBaseOpponent.getDifficulty().isSet()) {
                                     battleFieldsSet=true;
+                                    checkShipCounters();
+                                    updateShipsHit();
 
                                     mHandler.postDelayed(game, deelay);
 
@@ -525,6 +542,62 @@ public class MultiplayerActivity extends AppCompatActivity {
         });
     }
 
+    private void checkShipCounters() {
+        shipFourMastsCounter=0;
+        shipThreeMastsCounterFirst=0;
+        shipThreeMastsCounterSecond=0;
+        shipTwoMastsCounterFirst=0;
+        shipTwoMastsCounterSecond=0;
+        shipTwoMastsCounterThird=0;
+        shipOneMastsCounterFirst=0;
+        shipOneMastsCounterSecond=0;
+        shipOneMastsCounterThird=0;
+        shipOneMastsCounterFourth=0;
+
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()&&
+                battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
+                    int numberOfMasts = battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts();
+                    int shipNumber = battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber();
+                    if(numberOfMasts==4){
+                        shipFourMastsCounter++;
+                    }else if(numberOfMasts==3){
+                        if(shipNumber==1){
+                            shipThreeMastsCounterFirst++;
+                        }else if(shipNumber==2){
+                            shipThreeMastsCounterSecond++;
+                        }else;
+
+                    }else if(numberOfMasts==2){
+                        if(shipNumber==1){
+                            shipTwoMastsCounterFirst++;
+                        }else if(shipNumber==2){
+                            shipTwoMastsCounterSecond++;
+                        }else if(shipNumber==3){
+                            shipTwoMastsCounterThird++;
+                        }else;
+
+
+                    }else if(numberOfMasts==1){
+                        if(shipNumber==1){
+                            shipOneMastsCounterFirst++;
+                        }else if(shipNumber==2){
+                            shipOneMastsCounterSecond++;
+                        }else if(shipNumber==3){
+                            shipOneMastsCounterThird++;
+                        }else if(shipNumber==4){
+                            shipOneMastsCounterFourth++;
+                        }else;
+
+
+                    }else;
+                }
+            }
+        }
+
+    }
+
     private void chooseDifficulty() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
@@ -534,7 +607,7 @@ public class MultiplayerActivity extends AppCompatActivity {
         builder.setPositiveButton("NORMAL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                battleFieldForDataBaseMy.setEasy(false);
+                battleFieldForDataBaseMy.setDifficulty(new Difficulty(false,true));
                 databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
             }
         });
@@ -542,7 +615,7 @@ public class MultiplayerActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                    battleFieldForDataBaseMy.setEasy(true);
+                    battleFieldForDataBaseMy.setDifficulty(new Difficulty(true,true));
                 databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
             }
         });
@@ -636,13 +709,20 @@ public class MultiplayerActivity extends AppCompatActivity {
         if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
             displayShipCell(textViewArrayActivityMultiplayerOpponent[i][j]);
             databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
+            checkShipCounters();
+            updateShipsHit();
             if(battleFieldForDataBaseOpponent.showBattleField().allShipsHit()){
 
                 //TODO wykasować grę i nabić punkty
                 databaseReferenceFight.child("winner").setValue(user.getId());
 
                 int score = user.getScore();
-                score = score+50;
+                if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                    score = score+5;
+                }else{
+                    score = score+50;
+                }
+
                 user.setScore(score);
                 databaseReferenceMy.setValue(user);
 
@@ -658,6 +738,119 @@ public class MultiplayerActivity extends AppCompatActivity {
             databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
 
             mHandler.postDelayed(game, deelay);
+        }
+    }
+
+    private void updateShipsHit() {
+
+        if(shipFourMastsCounter==0){
+        }else{
+            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                for(int i=0;i<shipFourMastsCounter;i++){
+                    ShipFourMasts[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }else{
+                if(shipFourMastsCounter==4){
+                    for(int i=0;i<shipFourMastsCounter;i++){
+                        ShipFourMasts[i].setBackground(getDrawable(R.drawable.ship_cell));
+                    }
+                }
+            }
+        }
+
+        if(shipThreeMastsCounterFirst==0){
+        }else{
+            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                for(int i=0;i<shipThreeMastsCounterFirst;i++){
+                    ShipThreeMastsFirst[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }else{
+                if(shipThreeMastsCounterFirst==3){
+                    for(int i=0;i<shipThreeMastsCounterFirst;i++){
+                        ShipThreeMastsFirst[i].setBackground(getDrawable(R.drawable.ship_cell));
+                    }
+                }
+            }
+        }
+
+        if(shipThreeMastsCounterSecond==0){
+        }else{
+            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                for(int i=0;i<shipThreeMastsCounterSecond;i++){
+                    ShipThreeMastsSecond[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }else{
+                if(shipThreeMastsCounterSecond==3){
+                    for(int i=0;i<shipThreeMastsCounterSecond;i++){
+                        ShipThreeMastsSecond[i].setBackground(getDrawable(R.drawable.ship_cell));
+                    }
+                }
+            }
+        }
+
+        if(shipTwoMastsCounterFirst==0){
+        }else{
+            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                for(int i=0;i<shipTwoMastsCounterFirst;i++){
+                    ShipTwoMastsFirst[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }else{
+                if(shipTwoMastsCounterFirst==2){
+                    for(int i=0;i<shipTwoMastsCounterFirst;i++){
+                        ShipTwoMastsFirst[i].setBackground(getDrawable(R.drawable.ship_cell));
+                    }
+                }
+            }
+        }
+
+        if(shipTwoMastsCounterSecond==0){
+        }else{
+            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                for(int i=0;i<shipTwoMastsCounterSecond;i++){
+                    ShipTwoMastsSecond[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }else{
+                if(shipTwoMastsCounterSecond==2){
+                    for(int i=0;i<shipTwoMastsCounterSecond;i++){
+                        ShipTwoMastsSecond[i].setBackground(getDrawable(R.drawable.ship_cell));
+                    }
+                }
+            }
+        }
+
+        if(shipTwoMastsCounterThird==0){
+        }else{
+            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                for(int i=0;i<shipTwoMastsCounterThird;i++){
+                    ShipTwoMastsThird[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }else{
+                if(shipTwoMastsCounterThird==2){
+                    for(int i=0;i<shipTwoMastsCounterThird;i++){
+                        ShipTwoMastsThird[i].setBackground(getDrawable(R.drawable.ship_cell));
+                    }
+                }
+            }
+        }
+
+        if(shipOneMastsCounterFirst==0){
+        }else{
+            ShipOneMastsFirst[shipOneMastsCounterFirst-1].setBackground(getDrawable(R.drawable.ship_cell));
+        }
+
+        if(shipOneMastsCounterSecond==0){
+        }else{
+            ShipOneMastsSecond[shipOneMastsCounterSecond-1].setBackground(getDrawable(R.drawable.ship_cell));
+        }
+
+        if(shipOneMastsCounterThird==0){
+        }else{
+            ShipOneMastsThird[shipOneMastsCounterThird-1].setBackground(getDrawable(R.drawable.ship_cell));
+        }
+
+        if(shipOneMastsCounterFourth==0){
+        }else{
+            ShipOneMastsFourth[shipOneMastsCounterFourth-1].setBackground(getDrawable(R.drawable.ship_cell));
         }
     }
 
