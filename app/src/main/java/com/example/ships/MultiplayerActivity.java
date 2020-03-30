@@ -425,34 +425,12 @@ public class MultiplayerActivity extends AppCompatActivity {
     }
 
 
-    private void showOpponentBattleFieldRed() {
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
-                    displayShipCellRed(textViewArrayActivityMultiplayerOpponent[i][j]);
-                }else{
-                    displayBattleCell(textViewArrayActivityMultiplayerOpponent[i][j]);
-                }
-            }
-        }
-    }
 
     private void displayShipCellRed(TextView textView) {
         textView.setBackground(getResources().getDrawable(R.drawable.red_ship));
     }
 
 
-    private void showMyBattleFieldRed() {
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()){
-                    displayShipCellRed(textViewArrayActivityMultiplayerMe[i][j]);
-                }else{
-                    displayBattleCell(textViewArrayActivityMultiplayerMe[i][j]);
-                }
-            }
-        }
-    }
 
     private void createFields() {
         turnTextView.setText("WAITING FOR OPPONENT");
@@ -509,6 +487,7 @@ public class MultiplayerActivity extends AppCompatActivity {
                                 showMyBattleField();
                                 battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
                                 battleFieldForDataBaseOpponent.listToField();
+                                disableClickable();
 
                                 if (battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated()&&
                                 battleFieldForDataBaseMy.getDifficulty().isSet()&&battleFieldForDataBaseOpponent.getDifficulty().isSet()) {
@@ -630,7 +609,13 @@ public class MultiplayerActivity extends AppCompatActivity {
                 //jest statek i został trafiony
                 if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()
                         &&battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
-                    displayShipCell(textViewArrayActivityMultiplayerOpponent[i][j]);
+
+                    if(zatopiony(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts(),
+                    battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber())){
+                        displayShipCell(textViewArrayActivityMultiplayerOpponent[i][j]);
+                    }else{
+                    displayShipCellRed(textViewArrayActivityMultiplayerOpponent[i][j]);
+                    }
                 }
 
                 // woda i została trafiony
@@ -639,19 +624,24 @@ public class MultiplayerActivity extends AppCompatActivity {
                     displayWaterCell(textViewArrayActivityMultiplayerOpponent[i][j]);
                 }
 
-                // jest statek i nie został trafiony
-                else if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()
-                        &&!battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
-                    displayWidmoShip(textViewArrayActivityMultiplayerOpponent[i][j]);
-                }
-                // nie ma statku i nie został trafiony
-                else if(!battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()
-                        &&!battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
+                else {
                     displayBattleCell(textViewArrayActivityMultiplayerOpponent[i][j]);
                 }
-                else;
             }
         }
+    }
+
+    private boolean zatopiony(int nOmasts, int sNumber) {
+        int counter=0;
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts()==nOmasts
+                        &&battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber()==sNumber
+                        &&battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
+                    counter++;
+                }else;
+            }
+        }return counter==nOmasts;
     }
 
     private void showMyBattleField() {
@@ -707,7 +697,7 @@ public class MultiplayerActivity extends AppCompatActivity {
         textViewArrayActivityMultiplayerOpponent[i][j].setClickable(false);
         battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).setHit(true);
         if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
-            displayShipCell(textViewArrayActivityMultiplayerOpponent[i][j]);
+            showOpponentBattleField();
             databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
             checkShipCounters();
             updateShipsHit();
