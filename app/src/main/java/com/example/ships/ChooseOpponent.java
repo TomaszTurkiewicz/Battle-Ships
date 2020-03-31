@@ -29,7 +29,7 @@ public class ChooseOpponent extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private int numberOfUsers;
-    List<User> list = new ArrayList<>();
+    private List<User> list;
     private ProgressDialog progressDialog;
     private String userID;
     private boolean accepted;
@@ -59,6 +59,7 @@ public class ChooseOpponent extends AppCompatActivity {
 
                 numberOfUsers = (int) dataSnapshot.getChildrenCount();
                 ranking = new Ranking(numberOfUsers);
+                list = new ArrayList<>();
 
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     User user = postSnapshot.getValue(User.class);
@@ -93,13 +94,34 @@ public class ChooseOpponent extends AppCompatActivity {
     private void invite(int position) {
         if(!ranking.getRanking(position).getId().equals(userID)){
             String opponentID = ranking.getRanking(position).getId();
-            accepted=true;
-            databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
-            databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
-            databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
-            Intent intent = new Intent(ChooseOpponent.this,MainActivity.class);
-            startActivity(intent);
-            finish();
+            databaseReference.child(userID).child("index").child("opponent").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(!dataSnapshot.getValue().equals("")){
+                        Intent intent = new Intent(ChooseOpponent.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                        accepted=true;
+                        databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
+                        databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
+                        databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
+                        Intent intent = new Intent(ChooseOpponent.this,MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+
         }else;
     }
 }
