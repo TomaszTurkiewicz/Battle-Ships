@@ -195,7 +195,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/tableLayoutPlayerBattleField"
         app:layout_constraintHorizontal_bias="0.9">
-        
+
             <TextView
                 android:id="@+id/player2CellGame_1x1"
                 android:layout_width="@dimen/FieldSize"
