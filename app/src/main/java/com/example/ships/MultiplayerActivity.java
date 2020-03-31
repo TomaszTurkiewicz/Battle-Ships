@@ -700,42 +700,63 @@ public class MultiplayerActivity extends AppCompatActivity {
 
 
     private void shoot(int i, int j) {
-        textViewArrayActivityMultiplayerOpponent[i][j].setClickable(false);
-        battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).setHit(true);
-        if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
-            showOpponentBattleField();
-            databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
-            checkShipCounters();
-            updateShipsHit();
-            if(battleFieldForDataBaseOpponent.showBattleField().allShipsHit()){
 
-                //TODO wykasować grę i nabić punkty
-                databaseReferenceFight.child("winner").setValue(user.getId());
+        databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                if(user.getIndex().getOpponent().isEmpty()){
+                    Intent intent = new Intent(MultiplayerActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    textViewArrayActivityMultiplayerOpponent[i][j].setClickable(false);
+                    battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).setHit(true);
 
-                int score = user.getScore();
-                if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
-                    score = score+5;
-                }else{
-                    score = score+50;
+                    if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
+                        showOpponentBattleField();
+                        databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
+                        checkShipCounters();
+                        updateShipsHit();
+                        if(battleFieldForDataBaseOpponent.showBattleField().allShipsHit()){
+
+                            //TODO wykasować grę i nabić punkty
+                            databaseReferenceFight.child("winner").setValue(user.getId());
+
+                            int score = user.getScore();
+                            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                                score = score+5;
+                            }else{
+                                score = score+50;
+                            }
+
+                            user.setScore(score);
+                            databaseReferenceMy.setValue(user);
+
+                            Intent intent = new Intent(MultiplayerActivity.this,WinPlayerOne.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }else{
+                        displayWaterCell(textViewArrayActivityMultiplayerOpponent[i][j]);
+                        disableClickable();
+                        databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
+
+                        databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
+
+                        mHandler.postDelayed(game, deelay);
+                    }
                 }
-
-                user.setScore(score);
-                databaseReferenceMy.setValue(user);
-
-                Intent intent = new Intent(MultiplayerActivity.this,WinPlayerOne.class);
-                startActivity(intent);
-                finish();
             }
-        }else{
-            displayWaterCell(textViewArrayActivityMultiplayerOpponent[i][j]);
-            disableClickable();
-            databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
 
-            databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            mHandler.postDelayed(game, deelay);
-        }
+            }
+        });
+
     }
+
 
     private void updateShipsHit() {
 
