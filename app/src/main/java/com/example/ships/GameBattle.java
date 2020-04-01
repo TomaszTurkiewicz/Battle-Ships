@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ships.classes.BattleField;
 import com.example.ships.classes.GameDifficulty;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
-import com.example.ships.singletons.BattleFieldPlayerTwoSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -86,7 +85,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private long noOfGames;
     private long score;
     private int deelay=1000;
-    private int deelayFast=100;
 
 
 
@@ -141,7 +139,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 width= location2[0]-location1[0];
             }
         });
-
         layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -150,7 +147,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
             }
         });
-
         layout.setOnTouchListener(this);
 
        if(GameDifficulty.getInstance().getRandom()) {
@@ -161,14 +157,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
         battleFieldOpponentActivityRandomGame.createFleet();
 
-
-
-
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                BattleFieldPlayerTwoSingleton.getInstance().storeOneCell(battleFieldOpponentActivityRandomGame, i, j);
-            }
-        }
 
         displayBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGameMe, battleFieldMeActivityRandomGame);
 
@@ -325,17 +313,12 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             hideBattleFiledAvailablePlayerOne();
             enableTouchListener=true;
         }
-        else if(!myTurn){
+        else{
             hideBattleFiledAvailablePlayerTwo();
             showBattleFieldAvailablePlayerOne();
             shoot();
             mHandler.postDelayed(game,deelay);
         }
-        else{
-            myTurn=true;
-            mHandler.postDelayed(game,deelay);
-        }
-
     }
 
     private void pokazStatki() {
@@ -517,8 +500,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         if (newShoot) {
             Random random = new Random();
             int shoot = random.nextInt(ShootTable.size()-1);
-       //     int i = shoot / 100;
-       //     int j = shoot % 10;
             int i=ShootTable.get(shoot)/10;
             int j=ShootTable.get(shoot)%10;
             if (battleFieldMeActivityRandomGame.getBattleField(i, j).isHit()) {
@@ -1367,16 +1348,13 @@ else
     private void hitCell(int x, int y) {
         battleFieldOpponentActivityRandomGame.getBattleField(x,y).setHit(true);
         if(battleFieldOpponentActivityRandomGame.getBattleField(x,y).isShip()){
-
+            battleFieldOpponent[x][y]=SHIP_RED;
             updateCounters(battleFieldOpponentActivityRandomGame.getBattleField(x,y).getNumberOfMasts(),
                     battleFieldOpponentActivityRandomGame.getBattleField(x,y).getShipNumber());
-
             showCounters();
             if(myWin()){
                 mHandler.postDelayed(game,deelay);
             }
-
-            battleFieldOpponent[x][y]=SHIP_BROWN;
             pokazStatki();
         }else{
             battleFieldOpponent[x][y]=WATER;
@@ -1486,38 +1464,81 @@ else
         switch (number){
             case 41:
                 shipFourMastsCounter++;
+                if(shipFourMastsCounter==4){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
                 break;
             case 31:
                 shipThreeMastsCounterFirst++;
+                if(shipThreeMastsCounterFirst==3){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
                 break;
             case 32:
                 shipThreeMastsCounterSecond++;
+                if(shipThreeMastsCounterSecond==3){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
                 break;
             case 21:
                 shipTwoMastsCounterFirst++;
+                if(shipTwoMastsCounterFirst==2){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
                 break;
             case 22:
                 shipTwoMastsCounterSecond++;
+                if(shipTwoMastsCounterSecond==2){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
                 break;
             case 23:
                 shipTwoMastsCounterThird++;
+                if(shipTwoMastsCounterThird==2){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
                 break;
             case 11:
                 shipOneMastsCounterFirst++;
+                if(shipOneMastsCounterFirst==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
                 break;
             case 12:
                 shipOneMastsCounterSecond++;
+                if(shipOneMastsCounterSecond==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
                 break;
             case 13:
                 shipOneMastsCounterThird++;
+                if(shipOneMastsCounterThird==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
                 break;
             case 14:
                 shipOneMastsCounterFourth++;
+                if(shipOneMastsCounterFourth==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
                 break;
             default:
         }
 
 
+
+
+    }
+
+    private void updateBattleField(int numberOfMasts, int shipNumber) {
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).getShipNumber()==shipNumber&&
+                battleFieldOpponentActivityRandomGame.getBattleField(i,j).getNumberOfMasts()==numberOfMasts){
+                    battleFieldOpponent[i][j]=SHIP_BROWN;
+                }
+            }
+        }
     }
 
     private boolean myWin(){
