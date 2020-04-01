@@ -54,21 +54,25 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private final static int SHIP_BROWN = 3;
 
     private TextView[] ShipFourMasts = new TextView[4];
-    private int ShipFourMastsCounter = 0;
+    private int shipFourMastsCounter = 0;
     private TextView[] ShipThreeMastsFirst = new TextView[3];
-    private int ShipThreeMastsCounterFirst = 0;
+    private int shipThreeMastsCounterFirst = 0;
     private TextView[] ShipThreeMastsSecond = new TextView[3];
-    private int ShipThreeMastsCounterSecond = 0;
+    private int shipThreeMastsCounterSecond = 0;
     private TextView[] ShipTwoMastsFirst = new TextView[2];
-    private int ShipTwoMastsCounterFirst = 0;
+    private int shipTwoMastsCounterFirst = 0;
     private TextView[] ShipTwoMastsSecond = new TextView[2];
-    private int ShipTwoMastsCounterSecond = 0;
+    private int shipTwoMastsCounterSecond = 0;
     private TextView[] ShipTwoMastsThird = new TextView[2];
-    private int ShipTwoMastsCounterThird = 0;
+    private int shipTwoMastsCounterThird = 0;
     private TextView[] ShipOneMastsFirst = new TextView[1];
+    private int shipOneMastsCounterFirst = 0;
     private TextView[] ShipOneMastsSecond = new TextView[1];
+    private int shipOneMastsCounterSecond = 0;
     private TextView[] ShipOneMastsThird = new TextView[1];
+    private int shipOneMastsCounterThird = 0;
     private TextView[] ShipOneMastsFourth = new TextView[1];
+    private int shipOneMastsCounterFourth = 0;
     private boolean myTurn;
     private int level = GameDifficulty.getInstance().getLevel();
     private boolean newShoot=true;
@@ -154,8 +158,11 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
        }else{
            battleFieldMeActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
        }
-        battleFieldOpponentActivityRandomGame=battleFieldMeActivityRandomGame;
- //       battleFieldOpponentActivityRandomGame.createFleet();
+
+        battleFieldOpponentActivityRandomGame.createFleet();
+
+
+
 
         for(int i=0;i<10;i++){
             for(int j=0;j<10;j++){
@@ -255,11 +262,11 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     };
 
     private void play() {
-        if(!battleFieldOpponentActivityRandomGame.allShipsHit()&&!battleFieldMeActivityRandomGame.allShipsHit()) //game
+        if(!myWin()&&!battleFieldMeActivityRandomGame.allShipsHit()) //game
         {
             battle();
         }
-        else if (battleFieldOpponentActivityRandomGame.allShipsHit()&&!battleFieldMeActivityRandomGame.allShipsHit())      // allShipsHit player
+        else if (myWin()&&!battleFieldMeActivityRandomGame.allShipsHit())      // allShipsHit player
         {
 
             if(loggedIn) {
@@ -270,7 +277,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             startActivity(intent);
             finish();
         }
-        else if (!battleFieldOpponentActivityRandomGame.allShipsHit()&& battleFieldMeActivityRandomGame.allShipsHit())     // allShipsHit computer
+        else if (!myWin()&& battleFieldMeActivityRandomGame.allShipsHit())     // allShipsHit computer
         {
 
             Intent intent = new Intent(getApplicationContext(),WinPlayerTwo.class);
@@ -344,9 +351,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                     layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell));
                 }else if(battleFieldOpponent[i][j]==BATTLE_CELL){
                     layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell));
-                }else{
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.green_field));
-                }
+                }else;
 
             }
         }
@@ -1362,6 +1367,15 @@ else
     private void hitCell(int x, int y) {
         battleFieldOpponentActivityRandomGame.getBattleField(x,y).setHit(true);
         if(battleFieldOpponentActivityRandomGame.getBattleField(x,y).isShip()){
+
+            updateCounters(battleFieldOpponentActivityRandomGame.getBattleField(x,y).getNumberOfMasts(),
+                    battleFieldOpponentActivityRandomGame.getBattleField(x,y).getShipNumber());
+
+            showCounters();
+            if(myWin()){
+                mHandler.postDelayed(game,deelay);
+            }
+
             battleFieldOpponent[x][y]=SHIP_BROWN;
             pokazStatki();
         }else{
@@ -1372,6 +1386,155 @@ else
             mHandler.postDelayed(game,deelay);
         }
 
+    }
+
+    private void showCounters() {
+        if (level==0){
+            if(!(shipFourMastsCounter==0)){
+                for(int i=0;i<shipFourMastsCounter;i++){
+                    ShipFourMasts[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(!(shipThreeMastsCounterFirst==0)){
+                for(int i=0;i<shipThreeMastsCounterFirst;i++){
+                    ShipThreeMastsFirst[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(!(shipThreeMastsCounterSecond==0)){
+                for(int i=0;i<shipThreeMastsCounterSecond;i++){
+                    ShipThreeMastsSecond[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(!(shipTwoMastsCounterFirst==0)){
+                for(int i=0;i<shipTwoMastsCounterFirst;i++){
+                    ShipTwoMastsFirst[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(!(shipTwoMastsCounterSecond==0)){
+                for(int i=0;i<shipTwoMastsCounterSecond;i++){
+                    ShipTwoMastsSecond[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(!(shipTwoMastsCounterThird==0)){
+                for(int i=0;i<shipTwoMastsCounterThird;i++){
+                    ShipTwoMastsThird[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(!(shipOneMastsCounterFirst==0)){
+                    ShipOneMastsFirst[0].setBackground(getDrawable(R.drawable.ship_cell));
+            }
+            if(!(shipOneMastsCounterSecond==0)){
+                ShipOneMastsSecond[0].setBackground(getDrawable(R.drawable.ship_cell));
+            }
+            if(!(shipOneMastsCounterThird==0)){
+                ShipOneMastsThird[0].setBackground(getDrawable(R.drawable.ship_cell));
+            }
+            if(!(shipOneMastsCounterFourth==0)){
+                ShipOneMastsFourth[0].setBackground(getDrawable(R.drawable.ship_cell));
+            }
+        }
+        else{
+            if(shipFourMastsCounter==4){
+                for(int i=0;i<shipFourMastsCounter;i++){
+                    ShipFourMasts[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(shipThreeMastsCounterFirst==3){
+                for(int i=0;i<shipThreeMastsCounterFirst;i++){
+                    ShipThreeMastsFirst[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(shipThreeMastsCounterSecond==3){
+                for(int i=0;i<shipThreeMastsCounterSecond;i++){
+                    ShipThreeMastsSecond[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(shipTwoMastsCounterFirst==2){
+                for(int i=0;i<shipTwoMastsCounterFirst;i++){
+                    ShipTwoMastsFirst[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(shipTwoMastsCounterSecond==2){
+                for(int i=0;i<shipTwoMastsCounterSecond;i++){
+                    ShipTwoMastsSecond[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(shipTwoMastsCounterThird==2){
+                for(int i=0;i<shipTwoMastsCounterThird;i++){
+                    ShipTwoMastsThird[i].setBackground(getDrawable(R.drawable.ship_cell));
+                }
+            }
+            if(shipOneMastsCounterFirst==1){
+                ShipOneMastsFirst[0].setBackground(getDrawable(R.drawable.ship_cell));
+            }
+            if(shipOneMastsCounterSecond==1){
+                ShipOneMastsSecond[0].setBackground(getDrawable(R.drawable.ship_cell));
+            }
+            if(shipOneMastsCounterThird==1){
+                ShipOneMastsThird[0].setBackground(getDrawable(R.drawable.ship_cell));
+            }
+            if(shipOneMastsCounterFourth==1){
+                ShipOneMastsFourth[0].setBackground(getDrawable(R.drawable.ship_cell));
+            }
+        }
+
+    }
+
+    private void updateCounters(int numberOfMasts, int shipNumber) {
+        int number = 10*numberOfMasts+shipNumber;
+
+        switch (number){
+            case 41:
+                shipFourMastsCounter++;
+                break;
+            case 31:
+                shipThreeMastsCounterFirst++;
+                break;
+            case 32:
+                shipThreeMastsCounterSecond++;
+                break;
+            case 21:
+                shipTwoMastsCounterFirst++;
+                break;
+            case 22:
+                shipTwoMastsCounterSecond++;
+                break;
+            case 23:
+                shipTwoMastsCounterThird++;
+                break;
+            case 11:
+                shipOneMastsCounterFirst++;
+                break;
+            case 12:
+                shipOneMastsCounterSecond++;
+                break;
+            case 13:
+                shipOneMastsCounterThird++;
+                break;
+            case 14:
+                shipOneMastsCounterFourth++;
+                break;
+            default:
+        }
+
+
+    }
+
+    private boolean myWin(){
+        return counterSum()==20;
+    }
+
+    private int counterSum() {
+        return shipFourMastsCounter+
+                shipThreeMastsCounterFirst+
+                shipThreeMastsCounterSecond+
+                shipTwoMastsCounterFirst+
+                shipTwoMastsCounterSecond+
+                shipTwoMastsCounterThird+
+                shipOneMastsCounterFirst+
+                shipOneMastsCounterSecond+
+                shipOneMastsCounterThird+
+                shipOneMastsCounterFourth;
     }
 
 }
