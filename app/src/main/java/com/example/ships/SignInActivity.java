@@ -162,9 +162,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 }
-// TODO OnTouch evenet
 // TODO change progressDialog na progressBar
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO Rejestracja przez Facebook
 //TODO animacja
-//TODO wymyślić jak zrobić grę na dwie osoby

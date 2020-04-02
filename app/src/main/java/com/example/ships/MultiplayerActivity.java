@@ -4,7 +4,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -24,7 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MultiplayerActivity extends AppCompatActivity {
+public class MultiplayerActivity extends AppCompatActivity implements View.OnTouchListener{
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -37,7 +42,6 @@ public class MultiplayerActivity extends AppCompatActivity {
     private Handler mHandler = new Handler();
     private int deelay = 1000;
     private TextView[][] textViewArrayActivityMultiplayerMe = new TextView[10][10];
-    private TextView[][] textViewArrayActivityMultiplayerOpponent = new TextView[10][10];
     private TextView[] ShipFourMasts = new TextView[4];
     private TextView[] ShipThreeMastsFirst = new TextView[3];
     private TextView[] ShipThreeMastsSecond = new TextView[3];
@@ -55,10 +59,27 @@ public class MultiplayerActivity extends AppCompatActivity {
     private boolean battleFieldsSet;
     private TextView turnTextView;
     private ImageButton leaveButton;
+    private boolean enableTouchListener;
+    private TextView tv1,tv2,tv11;
+    private GridLayout layout;
+    int[]location1 = new int[2];
+    int[]location2 = new int[2];
+    int[]location11 = new int[2];
+    private int height, width;
+    int[]locationLayout = new int [2];
+    private int battleFieldOpponent[][] = new int[10][10];
+    private final static int BATTLE_CELL = 0;
+    private final static int WATER = 1;
+    private final static int SHIP_RED = 2;
+    private final static int SHIP_BROWN = 3;
+    private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_multiplayer);
         initializeTextViews();
         leaveButton = findViewById(R.id.leaveMultiplayer);
@@ -69,8 +90,46 @@ public class MultiplayerActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
         leaveButton.setVisibility(View.GONE);
-
+        enableTouchListener=false;
         battleFieldsSet=false;
+        tv1=findViewById(R.id.OpponentMultiplayerCellGame_1x1);
+        tv2=findViewById(R.id.OpponentMultiplayerCellGame_1x2);
+        tv11=findViewById(R.id.OpponentMultiplayerCellGame_2x1);
+        layout = findViewById(R.id.tableLayoutOpponentMultiplayerBattleField);
+
+        tv1.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                tv1.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                tv1.getLocationOnScreen(location1);
+            }
+        });
+        tv2.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                tv2.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                tv2.getLocationOnScreen(location2);
+            }
+        });
+        tv11.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                tv11.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                tv11.getLocationOnScreen(location11);
+                height=location11[1]-location1[1];
+                width= location2[0]-location1[0];
+            }
+        });
+        layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                layout.getLocationOnScreen(locationLayout);
+
+            }
+        });
+        layout.setOnTouchListener(this);
+
         game.run();
 
     }
@@ -186,116 +245,6 @@ public class MultiplayerActivity extends AppCompatActivity {
         textViewArrayActivityMultiplayerMe[9][8]=findViewById(R.id.playerMyMultiplayerCellGame_10x9);
         textViewArrayActivityMultiplayerMe[9][9]=findViewById(R.id.playerMyMultiplayerCellGame_10x10);
 
-        textViewArrayActivityMultiplayerOpponent[0][0]=findViewById(R.id.OpponentMultiplayerCellGame_1x1);
-        textViewArrayActivityMultiplayerOpponent[0][1]=findViewById(R.id.OpponentMultiplayerCellGame_1x2);
-        textViewArrayActivityMultiplayerOpponent[0][2]=findViewById(R.id.OpponentMultiplayerCellGame_1x3);
-        textViewArrayActivityMultiplayerOpponent[0][3]=findViewById(R.id.OpponentMultiplayerCellGame_1x4);
-        textViewArrayActivityMultiplayerOpponent[0][4]=findViewById(R.id.OpponentMultiplayerCellGame_1x5);
-        textViewArrayActivityMultiplayerOpponent[0][5]=findViewById(R.id.OpponentMultiplayerCellGame_1x6);
-        textViewArrayActivityMultiplayerOpponent[0][6]=findViewById(R.id.OpponentMultiplayerCellGame_1x7);
-        textViewArrayActivityMultiplayerOpponent[0][7]=findViewById(R.id.OpponentMultiplayerCellGame_1x8);
-        textViewArrayActivityMultiplayerOpponent[0][8]=findViewById(R.id.OpponentMultiplayerCellGame_1x9);
-        textViewArrayActivityMultiplayerOpponent[0][9]=findViewById(R.id.OpponentMultiplayerCellGame_1x10);
-
-        textViewArrayActivityMultiplayerOpponent[1][0]=findViewById(R.id.OpponentMultiplayerCellGame_2x1);
-        textViewArrayActivityMultiplayerOpponent[1][1]=findViewById(R.id.OpponentMultiplayerCellGame_2x2);
-        textViewArrayActivityMultiplayerOpponent[1][2]=findViewById(R.id.OpponentMultiplayerCellGame_2x3);
-        textViewArrayActivityMultiplayerOpponent[1][3]=findViewById(R.id.OpponentMultiplayerCellGame_2x4);
-        textViewArrayActivityMultiplayerOpponent[1][4]=findViewById(R.id.OpponentMultiplayerCellGame_2x5);
-        textViewArrayActivityMultiplayerOpponent[1][5]=findViewById(R.id.OpponentMultiplayerCellGame_2x6);
-        textViewArrayActivityMultiplayerOpponent[1][6]=findViewById(R.id.OpponentMultiplayerCellGame_2x7);
-        textViewArrayActivityMultiplayerOpponent[1][7]=findViewById(R.id.OpponentMultiplayerCellGame_2x8);
-        textViewArrayActivityMultiplayerOpponent[1][8]=findViewById(R.id.OpponentMultiplayerCellGame_2x9);
-        textViewArrayActivityMultiplayerOpponent[1][9]=findViewById(R.id.OpponentMultiplayerCellGame_2x10);
-
-        textViewArrayActivityMultiplayerOpponent[2][0]=findViewById(R.id.OpponentMultiplayerCellGame_3x1);
-        textViewArrayActivityMultiplayerOpponent[2][1]=findViewById(R.id.OpponentMultiplayerCellGame_3x2);
-        textViewArrayActivityMultiplayerOpponent[2][2]=findViewById(R.id.OpponentMultiplayerCellGame_3x3);
-        textViewArrayActivityMultiplayerOpponent[2][3]=findViewById(R.id.OpponentMultiplayerCellGame_3x4);
-        textViewArrayActivityMultiplayerOpponent[2][4]=findViewById(R.id.OpponentMultiplayerCellGame_3x5);
-        textViewArrayActivityMultiplayerOpponent[2][5]=findViewById(R.id.OpponentMultiplayerCellGame_3x6);
-        textViewArrayActivityMultiplayerOpponent[2][6]=findViewById(R.id.OpponentMultiplayerCellGame_3x7);
-        textViewArrayActivityMultiplayerOpponent[2][7]=findViewById(R.id.OpponentMultiplayerCellGame_3x8);
-        textViewArrayActivityMultiplayerOpponent[2][8]=findViewById(R.id.OpponentMultiplayerCellGame_3x9);
-        textViewArrayActivityMultiplayerOpponent[2][9]=findViewById(R.id.OpponentMultiplayerCellGame_3x10);
-
-        textViewArrayActivityMultiplayerOpponent[3][0]=findViewById(R.id.OpponentMultiplayerCellGame_4x1);
-        textViewArrayActivityMultiplayerOpponent[3][1]=findViewById(R.id.OpponentMultiplayerCellGame_4x2);
-        textViewArrayActivityMultiplayerOpponent[3][2]=findViewById(R.id.OpponentMultiplayerCellGame_4x3);
-        textViewArrayActivityMultiplayerOpponent[3][3]=findViewById(R.id.OpponentMultiplayerCellGame_4x4);
-        textViewArrayActivityMultiplayerOpponent[3][4]=findViewById(R.id.OpponentMultiplayerCellGame_4x5);
-        textViewArrayActivityMultiplayerOpponent[3][5]=findViewById(R.id.OpponentMultiplayerCellGame_4x6);
-        textViewArrayActivityMultiplayerOpponent[3][6]=findViewById(R.id.OpponentMultiplayerCellGame_4x7);
-        textViewArrayActivityMultiplayerOpponent[3][7]=findViewById(R.id.OpponentMultiplayerCellGame_4x8);
-        textViewArrayActivityMultiplayerOpponent[3][8]=findViewById(R.id.OpponentMultiplayerCellGame_4x9);
-        textViewArrayActivityMultiplayerOpponent[3][9]=findViewById(R.id.OpponentMultiplayerCellGame_4x10);
-
-        textViewArrayActivityMultiplayerOpponent[4][0]=findViewById(R.id.OpponentMultiplayerCellGame_5x1);
-        textViewArrayActivityMultiplayerOpponent[4][1]=findViewById(R.id.OpponentMultiplayerCellGame_5x2);
-        textViewArrayActivityMultiplayerOpponent[4][2]=findViewById(R.id.OpponentMultiplayerCellGame_5x3);
-        textViewArrayActivityMultiplayerOpponent[4][3]=findViewById(R.id.OpponentMultiplayerCellGame_5x4);
-        textViewArrayActivityMultiplayerOpponent[4][4]=findViewById(R.id.OpponentMultiplayerCellGame_5x5);
-        textViewArrayActivityMultiplayerOpponent[4][5]=findViewById(R.id.OpponentMultiplayerCellGame_5x6);
-        textViewArrayActivityMultiplayerOpponent[4][6]=findViewById(R.id.OpponentMultiplayerCellGame_5x7);
-        textViewArrayActivityMultiplayerOpponent[4][7]=findViewById(R.id.OpponentMultiplayerCellGame_5x8);
-        textViewArrayActivityMultiplayerOpponent[4][8]=findViewById(R.id.OpponentMultiplayerCellGame_5x9);
-        textViewArrayActivityMultiplayerOpponent[4][9]=findViewById(R.id.OpponentMultiplayerCellGame_5x10);
-
-        textViewArrayActivityMultiplayerOpponent[5][0]=findViewById(R.id.OpponentMultiplayerCellGame_6x1);
-        textViewArrayActivityMultiplayerOpponent[5][1]=findViewById(R.id.OpponentMultiplayerCellGame_6x2);
-        textViewArrayActivityMultiplayerOpponent[5][2]=findViewById(R.id.OpponentMultiplayerCellGame_6x3);
-        textViewArrayActivityMultiplayerOpponent[5][3]=findViewById(R.id.OpponentMultiplayerCellGame_6x4);
-        textViewArrayActivityMultiplayerOpponent[5][4]=findViewById(R.id.OpponentMultiplayerCellGame_6x5);
-        textViewArrayActivityMultiplayerOpponent[5][5]=findViewById(R.id.OpponentMultiplayerCellGame_6x6);
-        textViewArrayActivityMultiplayerOpponent[5][6]=findViewById(R.id.OpponentMultiplayerCellGame_6x7);
-        textViewArrayActivityMultiplayerOpponent[5][7]=findViewById(R.id.OpponentMultiplayerCellGame_6x8);
-        textViewArrayActivityMultiplayerOpponent[5][8]=findViewById(R.id.OpponentMultiplayerCellGame_6x9);
-        textViewArrayActivityMultiplayerOpponent[5][9]=findViewById(R.id.OpponentMultiplayerCellGame_6x10);
-
-        textViewArrayActivityMultiplayerOpponent[6][0]=findViewById(R.id.OpponentMultiplayerCellGame_7x1);
-        textViewArrayActivityMultiplayerOpponent[6][1]=findViewById(R.id.OpponentMultiplayerCellGame_7x2);
-        textViewArrayActivityMultiplayerOpponent[6][2]=findViewById(R.id.OpponentMultiplayerCellGame_7x3);
-        textViewArrayActivityMultiplayerOpponent[6][3]=findViewById(R.id.OpponentMultiplayerCellGame_7x4);
-        textViewArrayActivityMultiplayerOpponent[6][4]=findViewById(R.id.OpponentMultiplayerCellGame_7x5);
-        textViewArrayActivityMultiplayerOpponent[6][5]=findViewById(R.id.OpponentMultiplayerCellGame_7x6);
-        textViewArrayActivityMultiplayerOpponent[6][6]=findViewById(R.id.OpponentMultiplayerCellGame_7x7);
-        textViewArrayActivityMultiplayerOpponent[6][7]=findViewById(R.id.OpponentMultiplayerCellGame_7x8);
-        textViewArrayActivityMultiplayerOpponent[6][8]=findViewById(R.id.OpponentMultiplayerCellGame_7x9);
-        textViewArrayActivityMultiplayerOpponent[6][9]=findViewById(R.id.OpponentMultiplayerCellGame_7x10);
-
-        textViewArrayActivityMultiplayerOpponent[7][0]=findViewById(R.id.OpponentMultiplayerCellGame_8x1);
-        textViewArrayActivityMultiplayerOpponent[7][1]=findViewById(R.id.OpponentMultiplayerCellGame_8x2);
-        textViewArrayActivityMultiplayerOpponent[7][2]=findViewById(R.id.OpponentMultiplayerCellGame_8x3);
-        textViewArrayActivityMultiplayerOpponent[7][3]=findViewById(R.id.OpponentMultiplayerCellGame_8x4);
-        textViewArrayActivityMultiplayerOpponent[7][4]=findViewById(R.id.OpponentMultiplayerCellGame_8x5);
-        textViewArrayActivityMultiplayerOpponent[7][5]=findViewById(R.id.OpponentMultiplayerCellGame_8x6);
-        textViewArrayActivityMultiplayerOpponent[7][6]=findViewById(R.id.OpponentMultiplayerCellGame_8x7);
-        textViewArrayActivityMultiplayerOpponent[7][7]=findViewById(R.id.OpponentMultiplayerCellGame_8x8);
-        textViewArrayActivityMultiplayerOpponent[7][8]=findViewById(R.id.OpponentMultiplayerCellGame_8x9);
-        textViewArrayActivityMultiplayerOpponent[7][9]=findViewById(R.id.OpponentMultiplayerCellGame_8x10);
-
-        textViewArrayActivityMultiplayerOpponent[8][0]=findViewById(R.id.OpponentMultiplayerCellGame_9x1);
-        textViewArrayActivityMultiplayerOpponent[8][1]=findViewById(R.id.OpponentMultiplayerCellGame_9x2);
-        textViewArrayActivityMultiplayerOpponent[8][2]=findViewById(R.id.OpponentMultiplayerCellGame_9x3);
-        textViewArrayActivityMultiplayerOpponent[8][3]=findViewById(R.id.OpponentMultiplayerCellGame_9x4);
-        textViewArrayActivityMultiplayerOpponent[8][4]=findViewById(R.id.OpponentMultiplayerCellGame_9x5);
-        textViewArrayActivityMultiplayerOpponent[8][5]=findViewById(R.id.OpponentMultiplayerCellGame_9x6);
-        textViewArrayActivityMultiplayerOpponent[8][6]=findViewById(R.id.OpponentMultiplayerCellGame_9x7);
-        textViewArrayActivityMultiplayerOpponent[8][7]=findViewById(R.id.OpponentMultiplayerCellGame_9x8);
-        textViewArrayActivityMultiplayerOpponent[8][8]=findViewById(R.id.OpponentMultiplayerCellGame_9x9);
-        textViewArrayActivityMultiplayerOpponent[8][9]=findViewById(R.id.OpponentMultiplayerCellGame_9x10);
-
-        textViewArrayActivityMultiplayerOpponent[9][0]=findViewById(R.id.OpponentMultiplayerCellGame_10x1);
-        textViewArrayActivityMultiplayerOpponent[9][1]=findViewById(R.id.OpponentMultiplayerCellGame_10x2);
-        textViewArrayActivityMultiplayerOpponent[9][2]=findViewById(R.id.OpponentMultiplayerCellGame_10x3);
-        textViewArrayActivityMultiplayerOpponent[9][3]=findViewById(R.id.OpponentMultiplayerCellGame_10x4);
-        textViewArrayActivityMultiplayerOpponent[9][4]=findViewById(R.id.OpponentMultiplayerCellGame_10x5);
-        textViewArrayActivityMultiplayerOpponent[9][5]=findViewById(R.id.OpponentMultiplayerCellGame_10x6);
-        textViewArrayActivityMultiplayerOpponent[9][6]=findViewById(R.id.OpponentMultiplayerCellGame_10x7);
-        textViewArrayActivityMultiplayerOpponent[9][7]=findViewById(R.id.OpponentMultiplayerCellGame_10x8);
-        textViewArrayActivityMultiplayerOpponent[9][8]=findViewById(R.id.OpponentMultiplayerCellGame_10x9);
-        textViewArrayActivityMultiplayerOpponent[9][9]=findViewById(R.id.OpponentMultiplayerCellGame_10x10);
-
         ShipFourMasts[0]=findViewById(R.id.FourCellShip1MultiplayerActivity);
         ShipFourMasts[1]=findViewById(R.id.FourCellShip2MultiplayerActivity);
         ShipFourMasts[2]=findViewById(R.id.FourCellShip3MultiplayerActivity);
@@ -357,7 +306,6 @@ public class MultiplayerActivity extends AppCompatActivity {
 
     private void makeMove() {
 
-        showShipsHit();
         databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -367,11 +315,12 @@ public class MultiplayerActivity extends AppCompatActivity {
                     battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                     battleFieldForDataBaseMy.listToField();
 
-
-
-                    readClicable();
-                    showMyBattleField();
                     showOpponentBattleField();
+                    hideBattleFiledAvailableMy();
+
+                    enableTouchListener=true;
+
+
 
                     // TODO napierdalaj przeciwnika i zapisuj do bazy.
                 }
@@ -391,7 +340,7 @@ public class MultiplayerActivity extends AppCompatActivity {
                         battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                         battleFieldForDataBaseMy.listToField();
                         //TODO wyświtlanie moje pola bitwy
-                        showOpponentBattleField();
+                        hideBattleFieldOpponent();
                         showMyBattleField();
                         mHandler.postDelayed(game, deelay);
                     }
@@ -403,36 +352,54 @@ public class MultiplayerActivity extends AppCompatActivity {
         });
     }
 
-    private void showShipsHit() {
+    private void hideBattleFieldOpponent() {
+        for(int i =0;i<10;i++){
+            for(int j = 0; j<10;j++){
+                if(battleFieldOpponent[i][j]==SHIP_BROWN){
+                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.ship_cell_hidden));
+                }
+                else if(battleFieldOpponent[i][j]==SHIP_RED){
+                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.ship_cell_hidden));
+                }else if(battleFieldOpponent[i][j]==WATER){
+                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_hiden));
+                }else{
+                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_hidden));
+                }
 
-    }
-
-    private void disableClickable() {
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                textViewArrayActivityMultiplayerOpponent[i][j].setClickable(false);
             }
         }
     }
 
-    private void readClicable() {
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                textViewArrayActivityMultiplayerOpponent[i][j]
-                        .setClickable(!battleFieldForDataBaseOpponent
-                                .showBattleField()
-                                .getBattleField(i,j)
-                                .isHit());
+    private void hideBattleFiledAvailableMy() {
+        for(int i =0;i<10;i++){
+            for(int j = 0; j<10;j++){
+                //jest statek i został trafiony
+                if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
+                        && battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
+                    displayShipCellHidden(textViewArrayActivityMultiplayerMe,i,j);
+                }
+
+                // woda i została trafiony
+                else if(!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
+                        && battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
+                    displayWaterCellHidden(textViewArrayActivityMultiplayerMe,i,j);
+                }
+
+                // jest statek i nie został trafiony
+                else if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
+                        &&!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
+                    displayWidmoShipHidden(textViewArrayActivityMultiplayerMe,i,j);
+                }
+                // nie ma statku i nie został trafiony
+                else if(!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
+                        &&!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
+                    displayBattleCellHidden(textViewArrayActivityMultiplayerMe,i,j);
+                }
+
+                else;
             }
         }
     }
-
-
-
-    private void displayShipCellRed(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.red_ship));
-    }
-
 
 
     private void createFields() {
@@ -493,13 +460,19 @@ public class MultiplayerActivity extends AppCompatActivity {
                                 showMyBattleField();
                                 battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
                                 battleFieldForDataBaseOpponent.listToField();
-                                disableClickable();
 
                                 if (battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated()&&
                                 battleFieldForDataBaseMy.getDifficulty().isSet()&&battleFieldForDataBaseOpponent.getDifficulty().isSet()) {
                                     battleFieldsSet=true;
+
+                                    initializeOpponentArrayBattleField();
+
                                     checkShipCounters();
+
+                                    showOpponentBattleField();
+
                                     updateShipsHit();
+
 
                                     mHandler.postDelayed(game, deelay);
 
@@ -527,6 +500,43 @@ public class MultiplayerActivity extends AppCompatActivity {
         });
     }
 
+    private void showOpponentBattleField() {
+        for(int i =0;i<10;i++){
+            for(int j = 0; j<10;j++){
+                if(battleFieldOpponent[i][j]==SHIP_BROWN){
+                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.ship_cell));
+                }
+                else if(battleFieldOpponent[i][j]==SHIP_RED){
+                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.red_ship));
+                }else if(battleFieldOpponent[i][j]==WATER){
+                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell));
+                }else if(battleFieldOpponent[i][j]==BATTLE_CELL){
+                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell));
+                }else;
+
+            }
+        }
+    }
+
+    private void initializeOpponentArrayBattleField() {
+        for(int i = 0; i<10;i++){
+            for(int j=0; j<10;j++){
+                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()&&
+                battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
+                    battleFieldOpponent[i][j]=SHIP_RED;
+                } else if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()&&
+                        !battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
+                    battleFieldOpponent[i][j]=WATER;
+                }else{
+                    battleFieldOpponent[i][j]=BATTLE_CELL;
+                }
+
+
+
+            }
+        }
+    }
+
     private void checkShipCounters() {
         shipFourMastsCounter=0;
         shipThreeMastsCounterFirst=0;
@@ -545,42 +555,93 @@ public class MultiplayerActivity extends AppCompatActivity {
                 battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
                     int numberOfMasts = battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts();
                     int shipNumber = battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber();
-                    if(numberOfMasts==4){
-                        shipFourMastsCounter++;
-                    }else if(numberOfMasts==3){
-                        if(shipNumber==1){
-                            shipThreeMastsCounterFirst++;
-                        }else if(shipNumber==2){
-                            shipThreeMastsCounterSecond++;
-                        }else;
-
-                    }else if(numberOfMasts==2){
-                        if(shipNumber==1){
-                            shipTwoMastsCounterFirst++;
-                        }else if(shipNumber==2){
-                            shipTwoMastsCounterSecond++;
-                        }else if(shipNumber==3){
-                            shipTwoMastsCounterThird++;
-                        }else;
-
-
-                    }else if(numberOfMasts==1){
-                        if(shipNumber==1){
-                            shipOneMastsCounterFirst++;
-                        }else if(shipNumber==2){
-                            shipOneMastsCounterSecond++;
-                        }else if(shipNumber==3){
-                            shipOneMastsCounterThird++;
-                        }else if(shipNumber==4){
-                            shipOneMastsCounterFourth++;
-                        }else;
-
-
-                    }else;
+                    updateCounters(numberOfMasts,shipNumber);
                 }
             }
         }
 
+    }
+
+    private void updateCounters(int numberOfMasts, int shipNumber) {
+        int number = 10*numberOfMasts+shipNumber;
+
+        switch (number){
+            case 41:
+                shipFourMastsCounter++;
+                if(shipFourMastsCounter==4){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 31:
+                shipThreeMastsCounterFirst++;
+                if(shipThreeMastsCounterFirst==3){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 32:
+                shipThreeMastsCounterSecond++;
+                if(shipThreeMastsCounterSecond==3){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 21:
+                shipTwoMastsCounterFirst++;
+                if(shipTwoMastsCounterFirst==2){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 22:
+                shipTwoMastsCounterSecond++;
+                if(shipTwoMastsCounterSecond==2){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 23:
+                shipTwoMastsCounterThird++;
+                if(shipTwoMastsCounterThird==2){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 11:
+                shipOneMastsCounterFirst++;
+                if(shipOneMastsCounterFirst==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 12:
+                shipOneMastsCounterSecond++;
+                if(shipOneMastsCounterSecond==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 13:
+                shipOneMastsCounterThird++;
+                if(shipOneMastsCounterThird==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 14:
+                shipOneMastsCounterFourth++;
+                if(shipOneMastsCounterFourth==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            default:
+        }
+
+
+
+    }
+
+    private void updateBattleField(int numberOfMasts, int shipNumber) {
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber()==shipNumber&&
+                        battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts()==numberOfMasts){
+                    battleFieldOpponent[i][j]=SHIP_BROWN;
+                }
+            }
+        }
     }
 
     private void chooseDifficulty() {
@@ -607,47 +668,6 @@ public class MultiplayerActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-    }
-
-    private void showOpponentBattleField() {
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                //jest statek i został trafiony
-                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()
-                        &&battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
-
-                    if(zatopiony(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts(),
-                    battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber())){
-                        displayShipCell(textViewArrayActivityMultiplayerOpponent[i][j]);
-                    }else{
-                    displayShipCellRed(textViewArrayActivityMultiplayerOpponent[i][j]);
-                    }
-                }
-
-                // woda i została trafiony
-                else if(!battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()
-                        &&battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
-                    displayWaterCell(textViewArrayActivityMultiplayerOpponent[i][j]);
-                }
-
-                else {
-                    displayBattleCell(textViewArrayActivityMultiplayerOpponent[i][j]);
-                }
-            }
-        }
-    }
-
-    private boolean zatopiony(int nOmasts, int sNumber) {
-        int counter=0;
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts()==nOmasts
-                        &&battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber()==sNumber
-                        &&battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
-                    counter++;
-                }else;
-            }
-        }return counter==nOmasts;
     }
 
     private void showMyBattleField() {
@@ -695,66 +715,6 @@ public class MultiplayerActivity extends AppCompatActivity {
 
     private void displayShipCell(TextView textView) {
             textView.setBackground(getResources().getDrawable(R.drawable.ship_cell));
-    }
-
-
-
-    private void shoot(int i, int j) {
-
-        databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                if(user.getIndex().getOpponent().isEmpty()){
-                    Intent intent = new Intent(MultiplayerActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }else {
-                    textViewArrayActivityMultiplayerOpponent[i][j].setClickable(false);
-                    battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).setHit(true);
-
-                    if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
-                        showOpponentBattleField();
-                        databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
-                        checkShipCounters();
-                        updateShipsHit();
-                        if(battleFieldForDataBaseOpponent.showBattleField().allShipsHit()){
-
-                            //TODO wykasować grę i nabić punkty
-                            databaseReferenceFight.child("winner").setValue(user.getId());
-
-                            int score = user.getScore();
-                            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
-                                score = score+5;
-                            }else{
-                                score = score+50;
-                            }
-
-                            user.setScore(score);
-                            databaseReferenceMy.setValue(user);
-
-                            Intent intent = new Intent(MultiplayerActivity.this,WinPlayerOne.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }else{
-                        displayWaterCell(textViewArrayActivityMultiplayerOpponent[i][j]);
-                        disableClickable();
-                        databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
-
-                        databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
-
-                        mHandler.postDelayed(game, deelay);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
 
@@ -871,406 +831,6 @@ public class MultiplayerActivity extends AppCompatActivity {
         }
     }
 
-    public void clickMeCellGame_1x1(View view) {
-        shoot(0,0);
-    }
-
-    public void clickMeCellGame_1x2(View view) {
-        shoot(0,1);
-    }
-
-    public void clickMeCellGame_1x3(View view) {
-        shoot(0,2);
-    }
-
-    public void clickMeCellGame_1x4(View view) {
-        shoot(0,3);
-    }
-
-    public void clickMeCellGame_1x5(View view) {
-        shoot(0,4);
-    }
-
-    public void clickMeCellGame_1x6(View view) {
-        shoot(0,5);
-    }
-
-    public void clickMeCellGame_1x7(View view) {
-        shoot(0,6);
-    }
-
-    public void clickMeCellGame_1x8(View view) {
-        shoot(0,7);
-    }
-
-    public void clickMeCellGame_1x9(View view) {
-        shoot(0,8);
-    }
-
-    public void clickMeCellGame_1x10(View view) {
-        shoot(0,9);
-    }
-
-    public void clickMeCellGame_2x1(View view) {
-        shoot(1,0);
-    }
-
-    public void clickMeCellGame_2x2(View view) {
-        shoot(1,1);
-    }
-
-    public void clickMeCellGame_2x3(View view) {
-        shoot(1,2);
-    }
-
-    public void clickMeCellGame_2x4(View view) {
-        shoot(1,3);
-    }
-
-    public void clickMeCellGame_2x5(View view) {
-        shoot(1,4);
-    }
-
-    public void clickMeCellGame_2x6(View view) {
-        shoot(1,5);
-    }
-
-    public void clickMeCellGame_2x7(View view) {
-        shoot(1,6);
-    }
-
-    public void clickMeCellGame_2x8(View view) {
-        shoot(1,7);
-    }
-
-    public void clickMeCellGame_2x9(View view) {
-        shoot(1,8);
-    }
-
-    public void clickMeCellGame_2x10(View view) {
-        shoot(1,9);
-    }
-
-    public void clickMeCellGame_3x1(View view) {
-        shoot(2,0);
-    }
-
-    public void clickMeCellGame_3x2(View view) {
-        shoot(2,1);
-    }
-
-    public void clickMeCellGame_3x3(View view) {
-        shoot(2,2);
-    }
-
-    public void clickMeCellGame_3x4(View view) {
-        shoot(2,3);
-    }
-
-    public void clickMeCellGame_3x5(View view) {
-        shoot(2,4);
-    }
-
-    public void clickMeCellGame_3x6(View view) {
-        shoot(2,5);
-    }
-
-    public void clickMeCellGame_3x7(View view) {
-        shoot(2,6);
-    }
-
-    public void clickMeCellGame_3x8(View view) {
-        shoot(2,7);
-    }
-
-    public void clickMeCellGame_3x9(View view) {
-        shoot(2,8);
-    }
-
-    public void clickMeCellGame_3x10(View view) {
-        shoot(2,9);
-    }
-
-    public void clickMeCellGame_4x1(View view) {
-        shoot(3,0);
-    }
-
-    public void clickMeCellGame_4x2(View view) {
-        shoot(3,1);
-    }
-
-    public void clickMeCellGame_4x3(View view) {
-        shoot(3,2);
-    }
-
-    public void clickMeCellGame_4x4(View view) {
-        shoot(3,3);
-    }
-
-    public void clickMeCellGame_4x5(View view) {
-        shoot(3,4);
-    }
-
-    public void clickMeCellGame_4x6(View view) {
-        shoot(3,5);
-    }
-
-    public void clickMeCellGame_4x7(View view) {
-        shoot(3,6);
-    }
-
-    public void clickMeCellGame_4x8(View view) {
-        shoot(3,7);
-    }
-
-    public void clickMeCellGame_4x9(View view) {
-        shoot(3,8);
-    }
-
-    public void clickMeCellGame_4x10(View view) {
-        shoot(3,9);
-    }
-
-    public void clickMeCellGame_5x1(View view) {
-        shoot(4,0);
-    }
-
-    public void clickMeCellGame_5x2(View view) {
-        shoot(4,1);
-    }
-
-    public void clickMeCellGame_5x3(View view) {
-        shoot(4,2);
-    }
-
-    public void clickMeCellGame_5x4(View view) {
-        shoot(4,3);
-    }
-
-    public void clickMeCellGame_5x5(View view) {
-        shoot(4,4);
-    }
-
-    public void clickMeCellGame_5x6(View view) {
-        shoot(4,5);
-    }
-
-    public void clickMeCellGame_5x7(View view) {
-        shoot(4,6);
-    }
-
-    public void clickMeCellGame_5x8(View view) {
-        shoot(4,7);
-    }
-
-    public void clickMeCellGame_5x9(View view) {
-        shoot(4,8);
-    }
-
-    public void clickMeCellGame_5x10(View view) {
-        shoot(4,9);
-    }
-
-    public void clickMeCellGame_6x1(View view) {
-        shoot(5,0);
-    }
-
-    public void clickMeCellGame_6x2(View view) {
-        shoot(5,1);
-    }
-
-    public void clickMeCellGame_6x3(View view) {
-        shoot(5,2);
-    }
-
-    public void clickMeCellGame_6x4(View view) {
-        shoot(5,3);
-    }
-
-    public void clickMeCellGame_6x5(View view) {
-        shoot(5,4);
-    }
-
-    public void clickMeCellGame_6x6(View view) {
-        shoot(5,5);
-    }
-
-    public void clickMeCellGame_6x7(View view) {
-        shoot(5,6);
-    }
-
-    public void clickMeCellGame_6x8(View view) {
-        shoot(5,7);
-    }
-
-    public void clickMeCellGame_6x9(View view) {
-        shoot(5,8);
-    }
-
-    public void clickMeCellGame_6x10(View view) {
-        shoot(5,9);
-    }
-
-    public void clickMeCellGame_7x1(View view) {
-        shoot(6,0);
-    }
-
-    public void clickMeCellGame_7x2(View view) {
-        shoot(6,1);
-    }
-
-    public void clickMeCellGame_7x3(View view) {
-        shoot(6,2);
-    }
-
-    public void clickMeCellGame_7x4(View view) {
-        shoot(6,3);
-    }
-
-    public void clickMeCellGame_7x5(View view) {
-        shoot(6,4);
-    }
-
-    public void clickMeCellGame_7x6(View view) {
-        shoot(6,5);
-    }
-
-    public void clickMeCellGame_7x7(View view) {
-        shoot(6,6);
-    }
-
-    public void clickMeCellGame_7x8(View view) {
-        shoot(6,7);
-    }
-
-    public void clickMeCellGame_7x9(View view) {
-        shoot(6,8);
-    }
-
-    public void clickMeCellGame_7x10(View view) {
-        shoot(6,9);
-    }
-
-    public void clickMeCellGame_8x1(View view) {
-        shoot(7,0);
-    }
-
-    public void clickMeCellGame_8x2(View view) {
-        shoot(7,1);
-    }
-
-    public void clickMeCellGame_8x3(View view) {
-        shoot(7,2);
-    }
-
-    public void clickMeCellGame_8x4(View view) {
-        shoot(7,3);
-    }
-
-    public void clickMeCellGame_8x5(View view) {
-        shoot(7,4);
-    }
-
-    public void clickMeCellGame_8x6(View view) {
-        shoot(7,5);
-    }
-
-    public void clickMeCellGame_8x7(View view) {
-        shoot(7,6);
-    }
-
-    public void clickMeCellGame_8x8(View view) {
-        shoot(7,7);
-    }
-
-    public void clickMeCellGame_8x9(View view) {
-        shoot(7,8);
-    }
-
-    public void clickMeCellGame_8x10(View view) {
-        shoot(7,9);
-    }
-
-    public void clickMeCellGame_9x1(View view) {
-        shoot(8,0);
-    }
-
-    public void clickMeCellGame_9x2(View view) {
-        shoot(8,1);
-    }
-
-    public void clickMeCellGame_9x3(View view) {
-        shoot(8,2);
-    }
-
-    public void clickMeCellGame_9x4(View view) {
-        shoot(8,3);
-    }
-
-    public void clickMeCellGame_9x5(View view) {
-        shoot(8,4);
-    }
-
-    public void clickMeCellGame_9x6(View view) {
-        shoot(8,5);
-    }
-
-    public void clickMeCellGame_9x7(View view) {
-        shoot(8,6);
-    }
-
-    public void clickMeCellGame_9x8(View view) {
-        shoot(8,7);
-    }
-
-    public void clickMeCellGame_9x9(View view) {
-        shoot(8,8);
-    }
-
-    public void clickMeCellGame_9x10(View view) {
-        shoot(8,9);
-    }
-
-    public void clickMeCellGame_10x1(View view) {
-        shoot(9,0);
-    }
-
-    public void clickMeCellGame_10x2(View view) {
-        shoot(9,1);
-    }
-
-    public void clickMeCellGame_10x3(View view) {
-        shoot(9,2);
-    }
-
-    public void clickMeCellGame_10x4(View view) {
-        shoot(9,3);
-    }
-
-    public void clickMeCellGame_10x5(View view) {
-        shoot(9,4);
-    }
-
-    public void clickMeCellGame_10x6(View view) {
-        shoot(9,5);
-    }
-
-    public void clickMeCellGame_10x7(View view) {
-        shoot(9,6);
-    }
-
-    public void clickMeCellGame_10x8(View view) {
-        shoot(9,7);
-    }
-
-    public void clickMeCellGame_10x9(View view) {
-        shoot(9,8);
-    }
-
-    public void clickMeCellGame_10x10(View view) {
-        shoot(9,9);
-    }
-
     public void leaveMultiplayer(View view) {
 
         databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -1296,5 +856,231 @@ public class MultiplayerActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        if(enableTouchListener) {
+            final int X = (int) event.getRawX();
+            final int Y = (int) event.getRawY();
+            int x = (X - location1[0]) / width;
+            int y = (Y - location1[1]) / height;
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_DOWN:
+
+                    if(battleFieldOpponent[y][x]==BATTLE_CELL){
+                        for (int i = 0; i < 10; i++) {
+                            for (int j = 0; j < 10; j++) {
+                                if (x == j || y == i) {
+                                    if(battleFieldOpponent[i][j]==BATTLE_CELL){
+                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.battle_cell_green_field));
+                                    }else if(battleFieldOpponent[i][j]==WATER){
+                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.water_cell_green_field));
+                                    }else{
+                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.ship_cell_green_field));
+                                    }
+                                }
+                            }
+                        }
+                    }else {
+                        for (int i = 0; i < 10; i++) {
+                            for (int j = 0; j < 10; j++) {
+                                if (x == j || y == i) {
+                                    if(battleFieldOpponent[i][j]==BATTLE_CELL){
+                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.battle_cell_red_field));
+                                    }else if(battleFieldOpponent[i][j]==WATER){
+                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.water_cell_red_field));
+                                    }else{
+                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.ship_cell_red_field));
+                                    }
+
+
+                                }
+                            }
+                        }
+                    }
+                    break;
+
+                case MotionEvent.ACTION_MOVE:
+
+                    if(x>=0&&x<=9&&y>=0&&y<=9){
+                        showOpponentBattleField();
+                        if(battleFieldOpponent[y][x]==BATTLE_CELL){
+                            for (int i = 0; i < 10; i++) {
+                                for (int j = 0; j < 10; j++) {
+                                    if (x == j || y == i) {
+                                        if(battleFieldOpponent[i][j]==BATTLE_CELL){
+                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.battle_cell_green_field));
+                                        }else if(battleFieldOpponent[i][j]==WATER){
+                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.water_cell_green_field));
+                                        }else{
+                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.ship_cell_green_field));
+                                        }
+                                    }
+                                }
+                            }
+                        }else {
+                            for (int i = 0; i < 10; i++) {
+                                for (int j = 0; j < 10; j++) {
+                                    if (x == j || y == i) {
+                                        if(battleFieldOpponent[i][j]==BATTLE_CELL){
+                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.battle_cell_red_field));
+                                        }else if(battleFieldOpponent[i][j]==WATER){
+                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.water_cell_red_field));
+                                        }else{
+                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.ship_cell_red_field));
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                       showOpponentBattleField();
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+
+                    if(x>=0&&x<=9&&y>=0&&y<=9){
+                        if(battleFieldOpponent[y][x]==BATTLE_CELL) {
+                            hitCell(y, x);
+
+                        }else
+                            showOpponentBattleField();
+                    }else;
+
+                    break;
+            }
+        }else;
+        layout.invalidate();
+        return true;
+
+
+
+
+    }
+
+    private void hitCell(int x, int y) {
+
+        databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                if(user.getIndex().getOpponent().isEmpty()){
+                    Intent intent = new Intent(MultiplayerActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+
+                    battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).setHit(true);
+                    databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
+                    if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).isShip()){
+                        battleFieldOpponent[x][y]=SHIP_RED;
+                        updateCounters(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getNumberOfMasts(),
+                                battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getShipNumber());
+                        updateShipsHit();
+                        showOpponentBattleField();
+                        if(myWin()){
+                            databaseReferenceFight.child("winner").setValue(user.getId());
+                            int score = user.getScore();
+                            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                                score = score+5;
+                            }else{
+                                score = score+50;
+                            }
+                            user.setScore(score);
+                            databaseReferenceMy.setValue(user);
+
+                            Intent intent = new Intent(MultiplayerActivity.this,WinPlayerOne.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                    }else{
+                        battleFieldOpponent[x][y]=WATER;
+                        showOpponentBattleField();
+                        enableTouchListener=false;
+                        databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
+                        mHandler.postDelayed(game,deelay);
+
+                    }
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private boolean myWin(){
+        return counterSum()==20;
+    }
+
+    private int counterSum() {
+        return shipFourMastsCounter+
+                shipThreeMastsCounterFirst+
+                shipThreeMastsCounterSecond+
+                shipTwoMastsCounterFirst+
+                shipTwoMastsCounterSecond+
+                shipTwoMastsCounterThird+
+                shipOneMastsCounterFirst+
+                shipOneMastsCounterSecond+
+                shipOneMastsCounterThird+
+                shipOneMastsCounterFourth;
+    }
+
+    private void displayShipCellHidden(TextView[][] TextView, int i, int j){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell_hidden));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell_hidden));
+        }
+    }
+    private void displayWaterCellHidden(TextView[][] TextView,int i, int j){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_hiden));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell_hiden));
+        }
+
+    }
+
+    private void displayWidmoShipHidden(TextView[][] TextView,int i, int j){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.widmo_ship_hidden));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.widmo_ship_hidden));
+        }
+    }
+
+    private void displayBattleCellHidden(TextView[][] TextView,int i, int j){
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_hidden));
+        } else {
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_hidden));
+        }
     }
 }

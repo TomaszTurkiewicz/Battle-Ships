@@ -33,7 +33,6 @@ public class ChooseOpponent extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private String userID;
     private boolean accepted;
-//TODO change textview invitation for layout invitation with buttons
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

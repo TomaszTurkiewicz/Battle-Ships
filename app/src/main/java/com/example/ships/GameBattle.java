@@ -1354,7 +1354,7 @@ else
                                             tv = (TextView) layout.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.ship_cell_red_field));
                                         }
-                                        
+
                                     }
                                 }
                             }
