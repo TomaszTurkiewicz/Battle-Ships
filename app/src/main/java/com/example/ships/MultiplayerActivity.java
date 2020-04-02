@@ -40,6 +40,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private BattleFieldForDataBase battleFieldForDataBaseMy = new BattleFieldForDataBase();
     private BattleFieldForDataBase battleFieldForDataBaseOpponent = new BattleFieldForDataBase();
     private Handler mHandler = new Handler();
+    private Handler mHandler2 = new Handler();
     private int deelay = 1000;
     private TextView[][] textViewArrayActivityMultiplayerMe = new TextView[10][10];
     private TextView[] ShipFourMasts = new TextView[4];
@@ -270,6 +271,35 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         ShipOneMastsFourth[0]=findViewById(R.id.OneCellShip4MultiplayerActivity);
     }
 
+    private Runnable checkGameIndex = new Runnable() {
+        @Override
+        public void run() {
+            databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    user = dataSnapshot.getValue(User.class);
+
+                    if(user.getIndex().getGameIndex().isEmpty()){
+                        mHandler2.removeCallbacks(checkGameIndex);
+                        Intent intent = new Intent(MultiplayerActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        mHandler2.postDelayed(checkGameIndex,deelay);
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    };
+
+
     private Runnable game = new Runnable() {
         @Override
         public void run() {
@@ -319,6 +349,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     hideBattleFiledAvailableMy();
 
                     enableTouchListener=true;
+                    checkGameIndex.run();
 
 
 
@@ -832,7 +863,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     public void leaveMultiplayer(View view) {
-
+        mHandler.removeCallbacks(game);
         databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -979,7 +1010,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                if(user.getIndex().getOpponent().isEmpty()){
+                if(user.getIndex().getGameIndex().isEmpty()){
                     Intent intent = new Intent(MultiplayerActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
