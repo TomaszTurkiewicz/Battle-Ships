@@ -75,6 +75,26 @@ public class MainActivity extends AppCompatActivity {
 
                     if (dataSnapshot.exists()) {
                         user=dataSnapshot.getValue(User.class);
+                        databaseReferenceMy.child("idToken").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+                                if(!dataSnapshot1.exists()){
+                                    user.setIdToken(SharedPreferencesManager.getInstance(MainActivity.this).getToken());
+                                    databaseReferenceMy.setValue(user);
+                                }else{
+                                    if(!dataSnapshot1.equals(SharedPreferencesManager.getInstance(MainActivity.this).getToken())){
+                                        user.setIdToken(SharedPreferencesManager.getInstance(MainActivity.this).getToken());
+                                        databaseReferenceMy.setValue(user);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
                         userName.setText(user.getName());
                     } else {
 
@@ -85,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         user.setNoOfGames(0);
                         user.setScore(0);
                         user.setIndex(new FightIndex());
+                        user.setIdToken(SharedPreferencesManager.getInstance(MainActivity.this).getToken());
                         databaseReferenceMy.setValue(user);
 
                     }
