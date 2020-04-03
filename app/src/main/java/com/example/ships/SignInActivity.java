@@ -98,6 +98,10 @@ public class SignInActivity extends AppCompatActivity {
                 });
 
         userLogout.setOnClickListener(view -> {
+
+            databaseReference.child(userID).child("idToken").removeValue();
+
+
             firebaseAuth.signOut();
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

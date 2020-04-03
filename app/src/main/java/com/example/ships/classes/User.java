@@ -8,6 +8,7 @@ public class User {
     private int score;
     private int noOfGames;
     private FightIndex index;
+    private String idToken;
 
     public String getIdToken() {
         return idToken;
@@ -17,7 +18,7 @@ public class User {
         this.idToken = idToken;
     }
 
-    private String idToken;
+
 
     public User() {
     }

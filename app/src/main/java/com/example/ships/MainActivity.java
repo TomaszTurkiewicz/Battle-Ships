@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             userID = firebaseUser.getUid();
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
-
+            FirebaseMessaging.getInstance().subscribeToTopic(userID);
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (dataSnapshot.exists()) {
                         user=dataSnapshot.getValue(User.class);
+
                         databaseReferenceMy.child("idToken").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {

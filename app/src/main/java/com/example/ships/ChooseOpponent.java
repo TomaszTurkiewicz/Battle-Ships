@@ -4,12 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ships.adapters.RecyclerViewAdapterChooseOpponent;
 import com.example.ships.classes.Ranking;
 import com.example.ships.classes.User;
@@ -21,8 +27,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChooseOpponent extends AppCompatActivity {
 
@@ -36,6 +47,14 @@ public class ChooseOpponent extends AppCompatActivity {
     private boolean accepted;
     private Handler mHandler = new Handler();
     private int deelay = 1000;
+    String NOTIFICATION_TITLE;
+    String NOTIFICATION_MESSAGE;
+    String TOPIC;
+    private String TAG= "NOTIFICATION TAG";
+    private String FCM_API="https://fcm.googleapis.com/fcm/send";
+    private String serverKey= "key=" + "AAAAUhITVm0:APA91bGLIOR5L7HQyh64ejoejk-nQFBWP9RxDqtzzjoSXCmROqs7JO_uDDyuW5VuTfJBxtKY_RG8q5_CnpKJsN3qHtVvgiAkuDM2J9T68mk0LzKCcRKgRbj3DQ-A1a8uzZ07wz8OlirQ";
+    private String contentType= "application/json";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,14 +144,39 @@ public class ChooseOpponent extends AppCompatActivity {
                                     initRanking();
                                 }else{
 
-                                    accepted=true;
-                                    databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
-                                    databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
-                                    databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
-                                    Intent intent = new Intent(ChooseOpponent.this,MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
+
+                                                TOPIC = "/topics/"+ opponentID;
+
+                                                NOTIFICATION_TITLE = "Invitation from: ";
+                                                NOTIFICATION_MESSAGE = ranking.getRanking(position).getName();
+
+                                                JSONObject notification = new JSONObject();
+                                                JSONObject notificationBody = new JSONObject();
+
+                                                try{
+                                                    notificationBody.put("title",NOTIFICATION_TITLE);
+                                                    notificationBody.put("message",NOTIFICATION_MESSAGE);
+
+                                                    notification.put("to",TOPIC);
+                                                    notification.put("data",notificationBody);
+                                                } catch (JSONException e){
+                                                    Log.e(TAG,"onCreate: "+e.getMessage());
+                                                }
+                                                sendNotification(notification);
+
+
+                                            accepted=true;
+                                            databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
+                                            databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
+                                            databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
+                                            Intent intent = new Intent(ChooseOpponent.this,MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
+
+
+
+                                        }
+
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -146,5 +190,36 @@ public class ChooseOpponent extends AppCompatActivity {
             });
         }else;
     }
+
+    private void sendNotification(JSONObject notification) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: " + response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ChooseOpponent.this, "Request error", Toast.LENGTH_LONG).show();
+                        Log.i(TAG, "onErrorResponse: Didn't work");
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+
+
+
+        }
+
 
 }
