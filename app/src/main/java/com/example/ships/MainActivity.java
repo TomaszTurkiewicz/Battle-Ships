@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceMy, databaseReferenceOpponent;
     private Button multiplayerBtn;
+    private TextView textViewToken;
 
     private String userID;
     private String newUserName;
@@ -49,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         userName=findViewById(R.id.userName);
         loggedIn=findViewById(R.id.loggedIn);
+
+        textViewToken=findViewById(R.id.textViewToken);
+        textViewToken.setText(SharedPreferencesManager.getInstance(this).getToken());
+
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
@@ -269,3 +274,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+
+// TODO notifications when someone invite me or made a move while app is not running
+// TODO change app life cycle (just finish() instead of intent new Intent
+// TODO Red dot next to multiplayer button when someone invited me or made a move
+// TODO change creating own battle field to constraint layout
+// TODO create creating own battle field for multiplayer
+// TODO change choose difficulty activity for singleplayer (random plus not random in one activity) get rid off two buttons from main activity
+// TODO drawable for battle fields...
+// TODO change buttons styles...

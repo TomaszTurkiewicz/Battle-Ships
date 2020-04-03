@@ -124,6 +124,7 @@ public class ChooseOpponent extends AppCompatActivity {
                                 if(!dataSnapshot1.getValue().equals("")){
                                     initRanking();
                                 }else{
+
                                     accepted=true;
                                     databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
                                     databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
@@ -145,4 +146,5 @@ public class ChooseOpponent extends AppCompatActivity {
             });
         }else;
     }
+
 }
