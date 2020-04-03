@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
+
+
             userName.setClickable(true);
             userName.setOnClickListener(v->{
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
