@@ -26,7 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             userID = firebaseUser.getUid();
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
-            FirebaseMessaging.getInstance().subscribeToTopic(userID);
+
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -298,7 +297,8 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
-// TODO notifications when someone invite me or made a move while app is not running
+
+// TODO delete token from database
 // TODO change app life cycle (just finish() instead of intent new Intent
 // TODO Red dot next to multiplayer button when someone invited me or made a move
 // TODO change creating own battle field to constraint layout

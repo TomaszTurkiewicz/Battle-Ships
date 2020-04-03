@@ -44,6 +44,7 @@ public class ChooseOpponent extends AppCompatActivity {
     private List<User> list= new ArrayList<>();;
     private ProgressDialog progressDialog;
     private String userID;
+    private User me = new User();
     private boolean accepted;
     private Handler mHandler = new Handler();
     private int deelay = 1000;
@@ -65,6 +66,18 @@ public class ChooseOpponent extends AppCompatActivity {
         userID = firebaseUser.getUid();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference(getString(R.string.firebasepath_user));
+        databaseReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                me = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating ranking...");
         progressDialog.show();
@@ -148,7 +161,7 @@ public class ChooseOpponent extends AppCompatActivity {
                                                 TOPIC = "/topics/"+ opponentID;
 
                                                 NOTIFICATION_TITLE = "Invitation from: ";
-                                                NOTIFICATION_MESSAGE = ranking.getRanking(position).getName();
+                                                NOTIFICATION_MESSAGE = me.getName();
 
                                                 JSONObject notification = new JSONObject();
                                                 JSONObject notificationBody = new JSONObject();

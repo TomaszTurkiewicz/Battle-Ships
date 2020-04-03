@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SignInActivity extends AppCompatActivity {
     private Button userLogout;
@@ -81,8 +82,10 @@ public class SignInActivity extends AppCompatActivity {
             builder.setPositiveButton("YES", (dialog, which) -> {
                 dialog.dismiss();
                 databaseReference.child(userID).removeValue();
+
                 firebaseUser.delete().addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
                         Toast.makeText(SignInActivity.this,"Account Deleted",Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -100,9 +103,10 @@ public class SignInActivity extends AppCompatActivity {
         userLogout.setOnClickListener(view -> {
 
             databaseReference.child(userID).child("idToken").removeValue();
-
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
 
             firebaseAuth.signOut();
+
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -149,6 +153,11 @@ public class SignInActivity extends AppCompatActivity {
 
                     if(task.isSuccessful()){
                         progressDialog.dismiss();
+
+                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                        String userID = firebaseUser.getUid();
+                        FirebaseMessaging.getInstance().subscribeToTopic(userID);
+
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(intent);
                         finish();

@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class EmailAndPassLogIn extends AppCompatActivity {
 
@@ -79,6 +81,9 @@ public class EmailAndPassLogIn extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             if(firebaseAuth.getCurrentUser().isEmailVerified()){
+                                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                                String userID = firebaseUser.getUid();
+                                FirebaseMessaging.getInstance().subscribeToTopic(userID);
                                 startActivity(new Intent(EmailAndPassLogIn.this, MainActivity.class));
                                 progressDialog.dismiss();
                                 finish();
