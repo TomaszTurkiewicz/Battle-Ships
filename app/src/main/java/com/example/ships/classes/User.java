@@ -8,16 +8,6 @@ public class User {
     private int score;
     private int noOfGames;
     private FightIndex index;
-    private String idToken;
-
-    public String getIdToken() {
-        return idToken;
-    }
-
-    public void setIdToken(String idToken) {
-        this.idToken = idToken;
-    }
-
 
 
     public User() {

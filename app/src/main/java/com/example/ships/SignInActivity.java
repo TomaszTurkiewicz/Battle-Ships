@@ -102,7 +102,7 @@ public class SignInActivity extends AppCompatActivity {
 
         userLogout.setOnClickListener(view -> {
 
-            databaseReference.child(userID).child("idToken").removeValue();
+
             FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
 
             firebaseAuth.signOut();

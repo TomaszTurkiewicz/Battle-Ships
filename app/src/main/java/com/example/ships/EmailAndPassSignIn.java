@@ -171,7 +171,6 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         user.setNoOfGames(0);
         user.setScore(0);
         user.setIndex(new FightIndex());
-        user.setIdToken(SharedPreferencesManager.getInstance(EmailAndPassSignIn.this).getToken());
     }
 
 }

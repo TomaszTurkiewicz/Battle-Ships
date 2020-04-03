@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceMy, databaseReferenceOpponent;
     private Button multiplayerBtn;
-    private TextView textViewToken;
 
     private String userID;
     private String newUserName;
@@ -51,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
         userName=findViewById(R.id.userName);
         loggedIn=findViewById(R.id.loggedIn);
 
-        textViewToken=findViewById(R.id.textViewToken);
-        textViewToken.setText(SharedPreferencesManager.getInstance(this).getToken());
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -75,27 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
                     if (dataSnapshot.exists()) {
                         user=dataSnapshot.getValue(User.class);
-
-                        databaseReferenceMy.child("idToken").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
-                                if(!dataSnapshot1.exists()){
-                                    user.setIdToken(SharedPreferencesManager.getInstance(MainActivity.this).getToken());
-                                    databaseReferenceMy.setValue(user);
-                                }else{
-                                    if(!dataSnapshot1.equals(SharedPreferencesManager.getInstance(MainActivity.this).getToken())){
-                                        user.setIdToken(SharedPreferencesManager.getInstance(MainActivity.this).getToken());
-                                        databaseReferenceMy.setValue(user);
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-
                         userName.setText(user.getName());
                     } else {
 
@@ -106,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                         user.setNoOfGames(0);
                         user.setScore(0);
                         user.setIndex(new FightIndex());
-                        user.setIdToken(SharedPreferencesManager.getInstance(MainActivity.this).getToken());
                         databaseReferenceMy.setValue(user);
 
                     }
@@ -298,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
 }
 
 
-// TODO delete token from database
+
 // TODO change app life cycle (just finish() instead of intent new Intent
 // TODO Red dot next to multiplayer button when someone invited me or made a move
 // TODO change creating own battle field to constraint layout
