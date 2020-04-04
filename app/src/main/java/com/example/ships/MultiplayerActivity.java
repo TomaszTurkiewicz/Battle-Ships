@@ -451,6 +451,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
 
     private void createFields() {
+        hideBattleFieldOpponent();
+        hideBattleFiledAvailableMy();
         turnTextView.setText("WAITING FOR OPPONENT");
         databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -504,7 +506,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
                                 }
                                 // pokaż moje statki
-                                showMyBattleField();
+                                hideBattleFiledAvailableMy();
                                 battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
                                 battleFieldForDataBaseOpponent.listToField();
 
@@ -516,7 +518,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
                                     checkShipCounters();
 
-                                    showOpponentBattleField();
+                                    hideBattleFieldOpponent();
 
                                     updateShipsHit();
 
