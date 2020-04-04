@@ -6,13 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textViewToken"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="token"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <Button
         android:id="@+id/randomGame"
         android:layout_width="150dp"

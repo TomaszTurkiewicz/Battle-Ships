@@ -47,9 +47,9 @@ public class ChooseOpponent extends AppCompatActivity {
     private boolean accepted;
     private Handler mHandler = new Handler();
     private int deelay = 1000;
-    String NOTIFICATION_TITLE;
-    String NOTIFICATION_MESSAGE;
-    String TOPIC;
+    private String NOTIFICATION_TITLE;
+    private String NOTIFICATION_MESSAGE;
+    private String TOPIC;
     private String TAG= "NOTIFICATION TAG";
     private String FCM_API="https://fcm.googleapis.com/fcm/send";
     private String serverKey= "key=" + "AAAAUhITVm0:APA91bGLIOR5L7HQyh64ejoejk-nQFBWP9RxDqtzzjoSXCmROqs7JO_uDDyuW5VuTfJBxtKY_RG8q5_CnpKJsN3qHtVvgiAkuDM2J9T68mk0LzKCcRKgRbj3DQ-A1a8uzZ07wz8OlirQ";
@@ -156,18 +156,18 @@ public class ChooseOpponent extends AppCompatActivity {
 
                                                 TOPIC = "/topics/"+ opponentID;
 
-                                                NOTIFICATION_TITLE = "Invitation from: ";
-                                                NOTIFICATION_MESSAGE = me.getName();
+                                                NOTIFICATION_TITLE = "Invitation from: "+ me.getName();
+                      //                          NOTIFICATION_MESSAGE = me.getName();
 
                                                 JSONObject notification = new JSONObject();
                                                 JSONObject notificationBody = new JSONObject();
 
                                                 try{
                                                     notificationBody.put("title",NOTIFICATION_TITLE);
-                                                    notificationBody.put("message",NOTIFICATION_MESSAGE);
+                      //                              notificationBody.put("message",NOTIFICATION_MESSAGE);
 
                                                     notification.put("to",TOPIC);
-                                                    notification.put("data",notificationBody);
+                                                    notification.put("notification",notificationBody);
                                                 } catch (JSONException e){
                                                     Log.e(TAG,"onCreate: "+e.getMessage());
                                                 }

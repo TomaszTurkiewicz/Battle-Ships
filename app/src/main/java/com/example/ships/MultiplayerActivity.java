@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -12,11 +13,16 @@ import android.view.WindowManager;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ships.classes.BattleFieldForDataBase;
 import com.example.ships.classes.Difficulty;
 import com.example.ships.classes.FightIndex;
@@ -29,8 +35,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class MultiplayerActivity extends AppCompatActivity implements View.OnTouchListener{
 
+    private static String TAG = "NOTIFICATION TAG";
+    private static String FCM_API="https://fcm.googleapis.com/fcm/send";
+    private static String TOPIC;
+    private static String NOTIFICATION_MESSAGE;
+    private static String NOTIFICATION_TITLE;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
@@ -74,6 +91,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private final static int SHIP_RED = 2;
     private final static int SHIP_BROWN = 3;
     private TextView tv;
+    private String serverKey= "key=" + "AAAAUhITVm0:APA91bGLIOR5L7HQyh64ejoejk-nQFBWP9RxDqtzzjoSXCmROqs7JO_uDDyuW5VuTfJBxtKY_RG8q5_CnpKJsN3qHtVvgiAkuDM2J9T68mk0LzKCcRKgRbj3DQ-A1a8uzZ07wz8OlirQ";
+    private String contentType= "application/json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1040,6 +1059,27 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         showOpponentBattleField();
                         enableTouchListener=false;
                         databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
+
+                        TOPIC = "/topics/"+ user.getIndex().getOpponent();
+
+                        NOTIFICATION_TITLE = "Your move";
+          //              NOTIFICATION_MESSAGE = "Your move";
+
+                        JSONObject notification = new JSONObject();
+                        JSONObject notificationBody = new JSONObject();
+
+                        try{
+                            notificationBody.put("title",NOTIFICATION_TITLE);
+          //                  notificationBody.put("message",NOTIFICATION_MESSAGE);
+
+                            notification.put("to",TOPIC);
+                            notification.put("notification",notificationBody);
+          //                  notification.put("data",notificationBody);
+                        } catch (JSONException e){
+                            Log.e(TAG,"onCreate: "+e.getMessage());
+                        }
+                        sendNotification(notification);
+
                         mHandler.postDelayed(game,deelay);
 
                     }
@@ -1054,6 +1094,37 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
             }
         });
+
+    }
+
+    private void sendNotification(JSONObject notification) {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: " + response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MultiplayerActivity.this, "Request error", Toast.LENGTH_LONG).show();
+                        Log.i(TAG, "onErrorResponse: Didn't work");
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+
+
 
     }
 

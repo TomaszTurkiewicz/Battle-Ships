@@ -274,7 +274,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO notification when is your move
+
+// TODO gray battle fields when not ready (multiplayer)
 // TODO Red dot next to multiplayer button when someone invited me or made a move
 // TODO change creating own battle field to constraint layout
 // TODO create creating own battle field for multiplayer
