@@ -484,6 +484,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                 databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
                                 databaseReferenceFight.child("turn").setValue(user.getId());
                                 databaseReferenceFight.child("winner").setValue("");
+                                databaseReferenceFight.child("ready").setValue(false);
                                 mHandler.postDelayed(game, deelay);
                             } else {
                                 battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
@@ -512,6 +513,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
                                 if (battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated()&&
                                 battleFieldForDataBaseMy.getDifficulty().isSet()&&battleFieldForDataBaseOpponent.getDifficulty().isSet()) {
+                                    databaseReferenceFight.child("ready").setValue(true);
                                     battleFieldsSet=true;
 
                                     initializeOpponentArrayBattleField();

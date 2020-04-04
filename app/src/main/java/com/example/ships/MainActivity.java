@@ -4,11 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,12 +31,13 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
+
     private TextView userName;
     private TextView loggedIn;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReferenceMy, databaseReferenceOpponent;
+    private DatabaseReference databaseReferenceMy, databaseReferenceOpponent,databaseReferenceBattle;
     private Button multiplayerBtn;
 
     private String userID;
@@ -42,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private User user = new User();
     private User opponentUser = new User();
     private ImageButton accountBtn;
+    private ImageView redDotMultiplayerIV;
+    private Handler mHandler = new Handler();
+    private int deelay = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +61,22 @@ public class MainActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
 
         accountBtn=findViewById(R.id.accountButton);
-
+        redDotMultiplayerIV = findViewById(R.id.redDotMultiplayer);
+        redDotMultiplayerIV.setVisibility(View.GONE);
         multiplayerBtn=findViewById(R.id.multiplayer);
+        multiplayerBtn.setText("MULTIPLAYER");
 
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         if(firebaseUser != null && firebaseUser.isEmailVerified()){
             loggedIn.setText("Zalogowany jako: ");
             accountBtn.setBackgroundColor(Color.RED);
             userID = firebaseUser.getUid();
+
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
 
@@ -73,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
                     if (dataSnapshot.exists()) {
                         user=dataSnapshot.getValue(User.class);
                         userName.setText(user.getName());
+
+
+
                     } else {
 
                         userName.setText(firebaseUser.getEmail());
@@ -112,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                 builder.show();
             });
-
+            checkMyOpponentAndMove.run();
             multiplayerBtn.setVisibility(View.VISIBLE);
             multiplayerBtn.setClickable(true);
             multiplayerBtn.setOnClickListener(v->{
@@ -126,8 +144,10 @@ public class MainActivity extends AppCompatActivity {
                             user=dataSnapshot.getValue(User.class);
 
                             if(user.getIndex().getOpponent().isEmpty()){
+                                mHandler.removeCallbacks(checkMyOpponentAndMove);
                                 Intent intent = new Intent(getApplicationContext(),ChooseOpponent.class);
                                 startActivity(intent);
+
 
                             }else{
                                 databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
@@ -139,9 +159,9 @@ public class MainActivity extends AppCompatActivity {
                                             opponentUser=dataSnapshot.getValue(User.class);
                                             if(user.getIndex().isAccepted()&&opponentUser.getIndex().isAccepted()){
                                                 Toast.makeText(MainActivity.this,"You can fight",Toast.LENGTH_LONG).show();
-
-                                                    Intent intent = new Intent(MainActivity.this,MultiplayerActivity.class);
-                                                    startActivity(intent);
+                                                mHandler.removeCallbacks(checkMyOpponentAndMove);
+                                                Intent intent = new Intent(MainActivity.this,MultiplayerActivity.class);
+                                                startActivity(intent);
 
 
 
@@ -237,12 +257,13 @@ public class MainActivity extends AppCompatActivity {
             loggedIn.setText("niezalogowany");
             userName.setClickable(false);
             multiplayerBtn.setVisibility(View.GONE);
+            redDotMultiplayerIV.setVisibility(View.GONE);
             multiplayerBtn.setClickable(false);
         }
     }
 
-
     public void randomGame(View view) {
+        mHandler.removeCallbacks(checkMyOpponentAndMove);
         GameDifficulty.getInstance().setRandom(true);
         Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
         startActivity(intent);
@@ -250,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void notRandomGame(View view) {
+        mHandler.removeCallbacks(checkMyOpponentAndMove);
         GameDifficulty.getInstance().setRandom(false);
         Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
         startActivity(intent);
@@ -258,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickSignIn(View view) {
+        mHandler.removeCallbacks(checkMyOpponentAndMove);
         Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
         startActivity(intent);
         finish();
@@ -265,10 +288,68 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void ranking(View view) {
+        mHandler.removeCallbacks(checkMyOpponentAndMove);
         Intent intent = new Intent(getApplicationContext(),Scores.class);
         startActivity(intent);
         finish();
     }
+
+    private Runnable checkMyOpponentAndMove = new Runnable() {
+        @Override
+        public void run() {
+            databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    user = dataSnapshot.getValue(User.class);
+                    if(!user.getIndex().getOpponent().equals("")&&!user.getIndex().isAccepted()) {
+                        redDotMultiplayerIV.setVisibility(View.VISIBLE);
+                        multiplayerBtn.setText("ACCEPT INVITATION");
+                        mHandler.postDelayed(checkMyOpponentAndMove, deelay);
+                    }else if(!user.getIndex().getGameIndex().equals("")){
+                        databaseReferenceBattle = firebaseDatabase.getReference("Battle").child(user.getIndex().getGameIndex());
+                        databaseReferenceBattle.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    String turn = dataSnapshot.child("turn").getValue().toString();
+                                    boolean ready = (boolean) dataSnapshot.child("ready").getValue();
+                                    if(user.getId().equals(turn)&&ready){
+                                        redDotMultiplayerIV.setVisibility(View.VISIBLE);
+                                        multiplayerBtn.setText("MY MOVE");
+                                        mHandler.postDelayed(checkMyOpponentAndMove,deelay);
+                                    }else{
+
+                                        redDotMultiplayerIV.setVisibility(View.GONE);
+                                        multiplayerBtn.setText("FIGHT");
+                                        mHandler.postDelayed(checkMyOpponentAndMove,deelay);
+                                    }
+                                }else{
+                                    redDotMultiplayerIV.setVisibility(View.GONE);
+                                    multiplayerBtn.setText("FIGHT");
+                                    mHandler.postDelayed(checkMyOpponentAndMove,deelay);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }else{
+                        redDotMultiplayerIV.setVisibility(View.GONE);
+                        multiplayerBtn.setText("MULTIPLAYER");
+                        mHandler.postDelayed(checkMyOpponentAndMove,deelay);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    };
 
 }
 
@@ -276,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO Red dot next to multiplayer button when someone invited me or made a move
+
 // TODO change creating own battle field to constraint layout
 // TODO create creating own battle field for multiplayer
 // TODO change choose difficulty activity for singleplayer (random plus not random in one activity) get rid off two buttons from main activity
