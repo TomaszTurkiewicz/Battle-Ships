@@ -1,6 +1,5 @@
 package com.example.ships;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -18,9 +17,7 @@ public class WinPlayerTwo extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Do something after 5s = 5000ms
-            Intent intent = new Intent(WinPlayerTwo.this,MainActivity.class);
-            startActivity(intent);
+
             finish();
             }
         }, 2000);

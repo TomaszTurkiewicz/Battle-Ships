@@ -281,8 +281,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
                     if(user.getIndex().getGameIndex().isEmpty()){
                         mHandler2.removeCallbacks(checkGameIndex);
-                        Intent intent = new Intent(MultiplayerActivity.this, MainActivity.class);
-                        startActivity(intent);
+
                         finish();
                     }else{
                         mHandler2.postDelayed(checkGameIndex,deelay);
@@ -318,8 +317,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
                 if(user.getIndex().getOpponent().isEmpty()){
-                    Intent intent = new Intent(MultiplayerActivity.this, MainActivity.class);
-                    startActivity(intent);
+
                     finish();
                 }else{
                     makeMove();
@@ -441,8 +439,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 user = dataSnapshot.getValue(User.class);
 
                 if(user.getIndex().getOpponent().isEmpty()){
-                    Intent intent = new Intent(MultiplayerActivity.this, MainActivity.class);
-                    startActivity(intent);
+
                     finish();
                 }else {
 
@@ -876,8 +873,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 user.setIndex(new FightIndex());
                 databaseReferenceMy.setValue(user);
                 databaseReferenceFight.removeValue();
-                Intent intent = new Intent(MultiplayerActivity.this,MainActivity.class);
-                startActivity(intent);
+
                 finish();
             }
 
@@ -1011,8 +1007,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
                 if(user.getIndex().getGameIndex().isEmpty()){
-                    Intent intent = new Intent(MultiplayerActivity.this, MainActivity.class);
-                    startActivity(intent);
+
                     finish();
                 }else{
 

@@ -1,7 +1,6 @@
 package com.example.ships;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -94,8 +93,6 @@ public class ChooseOpponent extends AppCompatActivity {
                       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                           if(!dataSnapshot.getValue().equals("")){
                               mHandler.removeCallbacks(checkMyOpponentIndex);
-                              Intent intent = new Intent(ChooseOpponent.this, MainActivity.class);
-                              startActivity(intent);
                               finish();
                           }else{
                            mHandler.postDelayed(checkMyOpponentIndex,deelay);
@@ -145,8 +142,7 @@ public class ChooseOpponent extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(!dataSnapshot.getValue().equals("")){
-                        Intent intent = new Intent(ChooseOpponent.this, MainActivity.class);
-                        startActivity(intent);
+                        mHandler.removeCallbacks(checkMyOpponentIndex);
                         finish();
                     }
                     else{
@@ -182,8 +178,7 @@ public class ChooseOpponent extends AppCompatActivity {
                                             databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
                                             databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
                                             databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
-                                            Intent intent = new Intent(ChooseOpponent.this,MainActivity.class);
-                                            startActivity(intent);
+                                    mHandler.removeCallbacks(checkMyOpponentIndex);
                                             finish();
 
 

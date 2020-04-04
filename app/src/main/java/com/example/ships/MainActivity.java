@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                             if(user.getIndex().getOpponent().isEmpty()){
                                 Intent intent = new Intent(getApplicationContext(),ChooseOpponent.class);
                                 startActivity(intent);
-                                finish();
+
                             }else{
                                 databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
                                 databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
                                                     Intent intent = new Intent(MainActivity.this,MultiplayerActivity.class);
                                                     startActivity(intent);
-                                                    finish();
+
 
 
                                             }else if(user.getIndex().isAccepted()&&!opponentUser.getIndex().isAccepted()){
@@ -246,14 +246,14 @@ public class MainActivity extends AppCompatActivity {
         GameDifficulty.getInstance().setRandom(true);
         Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
         startActivity(intent);
-        finish();
+
     }
 
     public void notRandomGame(View view) {
         GameDifficulty.getInstance().setRandom(false);
         Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
         startActivity(intent);
-        finish();
+
     }
 
 
@@ -274,10 +274,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO change app life cycle (just finish() instead of intent new Intent
+// TODO notification when is your move
 // TODO Red dot next to multiplayer button when someone invited me or made a move
 // TODO change creating own battle field to constraint layout
 // TODO create creating own battle field for multiplayer
 // TODO change choose difficulty activity for singleplayer (random plus not random in one activity) get rid off two buttons from main activity
 // TODO drawable for battle fields...
 // TODO change buttons styles...
+// TODO add leaving button in single game
+// TODO change notification
+// TODO when accepting fight move to multiplayer activity
