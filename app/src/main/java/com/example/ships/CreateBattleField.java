@@ -1,11 +1,13 @@
 package com.example.ships;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ships.classes.BattleField;
@@ -966,6 +968,8 @@ public class CreateBattleField extends AppCompatActivity {
                         }
                     } else{
                         setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+
                     }
                 }
                 else if((i > 0) && (i < 9) && j == 0){
@@ -983,6 +987,7 @@ public class CreateBattleField extends AppCompatActivity {
                         }
                     }else{
                         setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
                     }
                 }
                 else if(i==9&&j==0){
@@ -998,6 +1003,7 @@ public class CreateBattleField extends AppCompatActivity {
                         }
                     }else{
                         setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
                     }
                 }
                 else if (i == 0 && ((j > 0) && (j < 9))){
@@ -1015,6 +1021,7 @@ public class CreateBattleField extends AppCompatActivity {
                         }
                     }else{
                         setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
                     }
                 }
                 else if (((i > 0) && (i < 9)) && ((j > 0) && (j < 9))){
@@ -1035,6 +1042,7 @@ public class CreateBattleField extends AppCompatActivity {
                         }
                     }else{
                         setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
                     }
                 }
                 else if (i == 9 && ((j > 0) && (j < 9))) {
@@ -1052,6 +1060,7 @@ public class CreateBattleField extends AppCompatActivity {
                         }
                     }else{
                         setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
                     }
                 }
                 else if (i == 0 && j == 9) {
@@ -1067,6 +1076,7 @@ public class CreateBattleField extends AppCompatActivity {
                         }
                     }else{
                         setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
                     }
                 }
                 else if (((i > 0) && (i < 9)) && (j == 9)) {
@@ -1084,6 +1094,7 @@ public class CreateBattleField extends AppCompatActivity {
                         }
                     }else{
                         setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
                     }
                 }
                 else if ((i == 9) && (j == 9)){
@@ -1099,6 +1110,7 @@ public class CreateBattleField extends AppCompatActivity {
                         }
                     }else{
                         setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
                     }
                 }
                 else;
@@ -1621,16 +1633,38 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     public void onClickReset(View view) {
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(0);
-                battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(0);
-                battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(false);
-                TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateBattleField.this);
+        builder.setCancelable(true);
+        builder.setTitle("RESETING");
+        builder.setMessage("Do you want to reset ships?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                for(int i=0;i<10;i++){
+                    for(int j=0;j<10;j++){
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(0);
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(0);
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(false);
+                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                    }
+                }
+                choosenShip=0;
+                updateScreen();
+
+
             }
-        }
-        choosenShip=0;
-        updateScreen();
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     public void deleteUncomplitedShips(){
