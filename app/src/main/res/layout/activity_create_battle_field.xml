@@ -6,133 +6,196 @@
     android:layout_height="match_parent"
     tools:context=".CreateBattleField">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TableLayout
-            android:id="@+id/tableLayoutPlayerBattleFieldCreateBattleField"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/TableSizePlusJeden"
-            android:layout_gravity="center"
-            android:layout_columnWeight="1">
+         <LinearLayout
+        android:id="@+id/LinearLayoutCreateBattleFieldActivityLetters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@id/tableLayoutPlayerBattleFieldCreateBattleField"
+        app:layout_constraintBottom_toTopOf="@id/tableLayoutPlayerBattleFieldCreateBattleField">
 
-            <LinearLayout
-                android:id="@+id/LinearLayoutCreateBattleFieldActivityLetters"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_1x"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.675"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0">
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/a"
+            android:gravity="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
 
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text=""
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/b"
+            android:gravity="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
 
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/a"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/c"
+            android:gravity="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
 
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/b"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/d"
+            android:gravity="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
 
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/c"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/e"
+            android:gravity="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
 
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/d"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/f"
+            android:gravity="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
 
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/e"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/g"
+            android:gravity="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
 
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/f"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/h"
+            android:gravity="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
 
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/g"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/i"
+            android:gravity="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
 
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/h"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/j"
+            android:gravity="center"
+            android:textColor="@color/border_color"
+            android:textSize="@dimen/TextSize" />
+    </LinearLayout>
 
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/i"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
-
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/j"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleField_1x"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_2x"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+        <LinearLayout
+            android:id="@+id/LinearLayoutCreateBattleFieldActivityLetters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="@id/tableLayoutPlayerBattleFieldCreateBattleField"
+            app:layout_constraintEnd_toStartOf="@id/tableLayoutPlayerBattleFieldCreateBattleField">
 
                 <TextView
                     android:layout_width="@dimen/FieldSize"
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/one"
-                    android:textAlignment="center"
+                    android:gravity="center"
                     android:textColor="@color/border_color"
                     android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/two"
+                    android:gravity="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/three"
+                    android:gravity="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/four"
+                    android:gravity="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/five"
+                    android:gravity="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/six"
+                    android:gravity="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/seven"
+                    android:gravity="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/eight"
+                    android:gravity="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/nine"
+                    android:gravity="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+
+                <TextView
+                    android:layout_width="@dimen/FieldSize"
+                    android:layout_height="@dimen/FieldSize"
+                    android:text="@string/ten"
+                    android:gravity="center"
+                    android:textColor="@color/border_color"
+                    android:textSize="@dimen/TextSize" />
+        </LinearLayout>
+
+        <GridLayout
+            android:id="@+id/tableLayoutPlayerBattleFieldCreateBattleField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:columnCount="10"
+            android:rowCount="10"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintVertical_bias="0.5">
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleField_1x1"
@@ -203,24 +266,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:onClick="clickCreateBattleField_1x10"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleField_2x"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_3x"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/two"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleField_2x1"
@@ -291,24 +337,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:onClick="clickCreateBattleField_2x10"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleField_3x"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_4x"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/three"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleField_3x1"
@@ -379,24 +408,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:onClick="clickCreateBattleField_3x10"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleField_4x"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_5x"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/four"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleField_4x1"
@@ -467,24 +479,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:onClick="clickCreateBattleField_4x10"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleField_5x"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_6x"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/five"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleField_5x1"
@@ -555,24 +550,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:onClick="clickCreateBattleField_5x10"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleField_6x"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_7x"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/six"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleField_6x1"
@@ -643,24 +621,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:onClick="clickCreateBattleField_6x10"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleField_7x"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_8x"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/seven"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleField_7x1"
@@ -731,24 +692,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:onClick="clickCreateBattleField_7x10"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleField_8x"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_9x"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/eight"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleField_8x1"
@@ -819,24 +763,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:onClick="clickCreateBattleField_8x10"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleField_9x"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@+id/playerLinearLayoutCreateBattleField_10x"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/nine"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleField_9x1"
@@ -907,24 +834,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:onClick="clickCreateBattleField_9x10"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleField_10x"
-                android:layout_width="@dimen/TableSizePlusJeden"
-                android:layout_height="@dimen/FieldSize"
-                android:gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"
-                    android:text="@string/ten"
-                    android:textAlignment="center"
-                    android:textColor="@color/border_color"
-                    android:textSize="@dimen/TextSize" />
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleField_10x1"
@@ -995,53 +905,49 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:onClick="clickCreateBattleField_10x10"/>
-            </LinearLayout>
-
-        </TableLayout>
 
 
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/Distance50dp"
-            android:columnCount="4"
-            android:rowCount="7">
+        </GridLayout>
+
+
+
 
             <ImageButton
                 android:id="@+id/deleteButton"
-                android:layout_row="0"
-                android:layout_column="1"
                 android:src="@drawable/delete"
-                android:onClick="onClickDelete"/>
+                android:onClick="onClickDelete"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.1"
+                app:layout_constraintHorizontal_bias="0.6"/>
 
             <ImageButton
                 android:id="@+id/resetButton"
-                android:layout_row="0"
-                android:layout_column="3"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
                 android:src="@drawable/reset"
-                android:onClick="onClickReset"/>
+                android:onClick="onClickReset"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.1"
+                app:layout_constraintHorizontal_bias="0.7"/>
 
-            <TextView
-                android:layout_height="@dimen/FieldSize"
-                android:layout_row="1"
-                android:layout_column="0"/>
 
             <TextView
                 android:id="@+id/fourMastsCounterTextView"
                 android:textColor="@color/border_color"
                 android:layout_height="@dimen/FieldSize"
                 android:layout_width="@dimen/FieldSize"
-                android:layout_row="2"
-                android:layout_column="0"
-                android:layout_gravity="center_vertical|center_horizontal"/>
-
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleFieldFourMast"
-                android:layout_width="@dimen/TableSizeSmall"
-                android:layout_height="@dimen/Distance50dp"
                 android:gravity="center"
-                android:layout_row="2"
-                android:layout_column="1">
+                app:layout_constraintEnd_toStartOf="@id/playerCellGameCreateBattleFieldFourMasts1"
+                app:layout_constraintTop_toTopOf="@id/playerCellGameCreateBattleFieldFourMasts1"/>
+
 
             <TextView
                 android:id="@+id/playerCellGameCreateBattleFieldFourMasts1"
@@ -1049,7 +955,13 @@
                 android:layout_height="@dimen/FieldSize"
                 android:background="@drawable/battle_cell"
                 android:clickable="true"
-                android:onClick="onClickputFourMastsShip"/>
+                android:onClick="onClickputFourMastsShip"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintVertical_bias="0.4"/>
 
             <TextView
                 android:id="@+id/playerCellGameCreateBattleFieldFourMasts2"
@@ -1057,7 +969,9 @@
                 android:layout_height="@dimen/FieldSize"
                 android:background="@drawable/battle_cell"
                 android:clickable="true"
-                android:onClick="onClickputFourMastsShip"/>
+                android:onClick="onClickputFourMastsShip"
+                app:layout_constraintTop_toTopOf="@id/playerCellGameCreateBattleFieldFourMasts1"
+                app:layout_constraintStart_toEndOf="@id/playerCellGameCreateBattleFieldFourMasts1"/>
 
             <TextView
                 android:id="@+id/playerCellGameCreateBattleFieldFourMasts3"
@@ -1065,7 +979,9 @@
                 android:layout_height="@dimen/FieldSize"
                 android:background="@drawable/battle_cell"
                 android:clickable="true"
-                android:onClick="onClickputFourMastsShip"/>
+                android:onClick="onClickputFourMastsShip"
+                app:layout_constraintTop_toTopOf="@id/playerCellGameCreateBattleFieldFourMasts2"
+                app:layout_constraintStart_toEndOf="@id/playerCellGameCreateBattleFieldFourMasts2"/>
 
             <TextView
                 android:id="@+id/playerCellGameCreateBattleFieldFourMasts4"
@@ -1073,26 +989,20 @@
                 android:layout_height="@dimen/FieldSize"
                 android:background="@drawable/battle_cell"
                 android:clickable="true"
-                android:onClick="onClickputFourMastsShip"/>
+                android:onClick="onClickputFourMastsShip"
+                app:layout_constraintTop_toTopOf="@id/playerCellGameCreateBattleFieldFourMasts3"
+                app:layout_constraintStart_toEndOf="@id/playerCellGameCreateBattleFieldFourMasts3"/>
 
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/threeMastsCounterTextView"
                 android:textColor="@color/border_color"
                 android:layout_height="@dimen/FieldSize"
                 android:layout_width="@dimen/FieldSize"
-                android:layout_row="3"
-                android:layout_column="0"
-                android:layout_gravity="center_horizontal|center_vertical"/>
-
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleFieldThreeMast"
-                android:layout_width="@dimen/TableSizeSmall"
-                android:layout_height="@dimen/Distance50dp"
                 android:gravity="center"
-                android:layout_row="3"
-                android:layout_column="1">
+                app:layout_constraintEnd_toStartOf="@id/playerCellGameCreateBattleFieldThreeMasts1"
+                app:layout_constraintTop_toTopOf="@id/playerCellGameCreateBattleFieldThreeMasts1"/>
+
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleFieldThreeMasts1"
@@ -1100,7 +1010,13 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:clickable="true"
-                    android:onClick="onClickputThreeMastsShip"/>
+                    android:onClick="onClickputThreeMastsShip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.6"
+                    app:layout_constraintVertical_bias="0.55"/>
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleFieldThreeMasts2"
@@ -1108,7 +1024,9 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:clickable="true"
-                    android:onClick="onClickputThreeMastsShip"/>
+                    android:onClick="onClickputThreeMastsShip"
+                    app:layout_constraintStart_toEndOf="@id/playerCellGameCreateBattleFieldThreeMasts1"
+                    app:layout_constraintTop_toTopOf="@id/playerCellGameCreateBattleFieldThreeMasts1"/>
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleFieldThreeMasts3"
@@ -1116,31 +1034,20 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:clickable="true"
-                    android:onClick="onClickputThreeMastsShip"/>
+                    android:onClick="onClickputThreeMastsShip"
+                    app:layout_constraintStart_toEndOf="@id/playerCellGameCreateBattleFieldThreeMasts2"
+                    app:layout_constraintTop_toTopOf="@id/playerCellGameCreateBattleFieldThreeMasts2"/>
 
-                <TextView
-                    android:id="@+id/playerCellGameCreateBattleFieldThreeMasts4"
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"/>
-
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/twoMastsCounterTextView"
                 android:textColor="@color/border_color"
                 android:layout_height="@dimen/FieldSize"
                 android:layout_width="@dimen/FieldSize"
-                android:layout_row="4"
-                android:layout_column="0"
-                android:layout_gravity="center_horizontal|center_vertical"/>
-
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleFieldTwoMast"
-                android:layout_width="@dimen/TableSizeSmall"
-                android:layout_height="@dimen/Distance50dp"
                 android:gravity="center"
-                android:layout_row="4"
-                android:layout_column="1">
+                app:layout_constraintTop_toTopOf="@id/playerCellGameCreateBattleFieldTwoMasts1"
+                app:layout_constraintEnd_toStartOf="@id/playerCellGameCreateBattleFieldTwoMasts1"/>
+
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleFieldTwoMasts1"
@@ -1148,7 +1055,13 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:clickable="true"
-                    android:onClick="onClickputTwoMastsShip"/>
+                    android:onClick="onClickputTwoMastsShip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.6"
+                    app:layout_constraintVertical_bias="0.7"/>
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleFieldTwoMasts2"
@@ -1156,36 +1069,21 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:clickable="true"
-                    android:onClick="onClickputTwoMastsShip"/>
+                    android:onClick="onClickputTwoMastsShip"
+                    app:layout_constraintTop_toTopOf="@id/playerCellGameCreateBattleFieldTwoMasts1"
+                    app:layout_constraintStart_toEndOf="@id/playerCellGameCreateBattleFieldTwoMasts1"/>
 
-                <TextView
-                    android:id="@+id/playerCellGameCreateBattleFieldTwoMasts3"
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize" />
 
-                <TextView
-                    android:id="@+id/playerCellGameCreateBattleFieldTwoMasts4"
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"/>
-
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/oneMastsCounterTextView"
                 android:textColor="@color/border_color"
                 android:layout_height="@dimen/FieldSize"
                 android:layout_width="@dimen/FieldSize"
-                android:layout_row="5"
-                android:layout_column="0"
-                android:layout_gravity="center_horizontal|center_vertical"/>
-
-            <LinearLayout
-                android:id="@+id/playerLinearLayoutCreateBattleFieldOneMast"
-                android:layout_width="@dimen/TableSizeSmall"
-                android:layout_height="@dimen/Distance50dp"
                 android:gravity="center"
-                android:layout_row="5"
-                android:layout_column="1">
+                app:layout_constraintTop_toTopOf="@id/playerCellGameCreateBattleFieldOneMasts1"
+                app:layout_constraintEnd_toStartOf="@id/playerCellGameCreateBattleFieldOneMasts1"/>
+
 
                 <TextView
                     android:id="@+id/playerCellGameCreateBattleFieldOneMasts1"
@@ -1193,43 +1091,44 @@
                     android:layout_height="@dimen/FieldSize"
                     android:background="@drawable/battle_cell"
                     android:clickable="true"
-                    android:onClick="onClickputOneMastsShip"/>
+                    android:onClick="onClickputOneMastsShip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.6"
+                    app:layout_constraintVertical_bias="0.85"/>
 
-                <TextView
-                    android:id="@+id/playerCellGameCreateBattleFieldOneMasts2"
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"/>
-
-                <TextView
-                    android:id="@+id/playerCellGameCreateBattleFieldOneMasts3"
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize" />
-
-                <TextView
-                    android:id="@+id/playerCellGameCreateBattleFieldOneMasts4"
-                    android:layout_width="@dimen/FieldSize"
-                    android:layout_height="@dimen/FieldSize"/>
-
-            </LinearLayout>
 
             <Button
                 android:id="@+id/playButton"
-                android:layout_column="3"
-                android:layout_row="4"
                 android:text="@string/play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textColor="@color/border_color"
-                android:onClick="onClickStartGame"/>
+                android:onClick="onClickStartGame"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="0.8"
+                app:layout_constraintHorizontal_bias="0.9"/>
 
             <Button
                 android:id="@+id/backButton"
-                android:layout_column="3"
-                android:layout_row="6"
                 android:text="@string/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textColor="@color/border_color"
-                android:onClick="onClickBack"/>
-        </GridLayout>
+                android:onClick="onClickBack"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="0.1"
+                app:layout_constraintHorizontal_bias="0.9"/>
 
-    </LinearLayout>
+
 
 
 
