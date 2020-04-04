@@ -7,18 +7,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ships.classes.BattleField;
+import com.example.ships.classes.BattleFieldForDataBase;
+import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.PointIJ;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 //TODO change layout... constraint
 public class CreateBattleField extends AppCompatActivity {
 
     BattleField battleFieldPlayerCreateBattleFieldActivity = new BattleField();
     TextView[][] TextViewArrayActivityCreateBattleField = new TextView[10][10];
+    private BattleFieldForDataBase battleFieldForDataBase = new BattleFieldForDataBase();
+
     TextView[] FourMastsShip = new TextView[4];
     TextView[] ThreeMastsShip = new TextView[3];
     TextView[] TwoMastsShip = new TextView[2];
@@ -27,6 +39,9 @@ public class CreateBattleField extends AppCompatActivity {
     TextView ThreeMastsCounter;
     TextView TwoMastsCounter;
     TextView OneMastsCounter;
+
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReferenceMy, databaseReferenceFight;
     private int fourMastsCounter;
     private int threeMastsCounter1;
     private int threeMastsCounter2;
@@ -47,21 +62,42 @@ public class CreateBattleField extends AppCompatActivity {
     PointIJ secondPointMastsShip = new PointIJ();
     int shipNumber;
     Button startButton;
-
-
-
+    private boolean multiplayerMode;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+    private String userID;
+    private String gameIndex;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_battle_field);
-
+        multiplayerMode= GameDifficulty.getInstance().isMultiplayerMode();
         initializeBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityCreateBattleField);
         FourMastsCounter = (TextView)findViewById(R.id.fourMastsCounterTextView);
         ThreeMastsCounter = (TextView)findViewById(R.id.threeMastsCounterTextView);
         TwoMastsCounter = (TextView)findViewById(R.id.twoMastsCounterTextView);
         OneMastsCounter = (TextView)findViewById(R.id.oneMastsCounterTextView);
+        if(multiplayerMode){
+            firebaseAuth = FirebaseAuth.getInstance();
+            firebaseUser = firebaseAuth.getCurrentUser();
+            userID = firebaseUser.getUid();
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            databaseReferenceMy = firebaseDatabase.getReference("User").child(userID);
+            databaseReferenceFight = firebaseDatabase.getReference("Battle");
+            databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    gameIndex = dataSnapshot.child("index").child("gameIndex").getValue().toString();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+
+        }
         initializeFourMastsShipTextView(FourMastsShip);
         initializeThreeMastsShipTextView(ThreeMastsShip);
         initializeTwoMastsShipTextView(TwoMastsShip);
@@ -120,6 +156,16 @@ public class CreateBattleField extends AppCompatActivity {
         if(leftFourMasts==0&&leftThreeMasts==0&&leftTwoMasts==0&&leftOneMasts==0){
             startButton.setClickable(true);
             startButton.setVisibility(View.VISIBLE);
+            if(multiplayerMode){
+                for(int i=0; i<10;i++){
+                    for(int j=0; j<10; j++){
+                        battleFieldForDataBase.showBattleField().makeShip(i,j,battleFieldPlayerCreateBattleFieldActivity.getBattleField(i,j));
+                    }
+                }
+            battleFieldForDataBase.fieldToList();
+                battleFieldForDataBase.setCreated(true);
+            }
+
         }
         else{
             startButton.setClickable(false);
@@ -490,10 +536,18 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     public void onClickStartGame(View view) {
-        BattleFieldPlayerOneSingleton.getInstance().storeBattleField(battleFieldPlayerCreateBattleFieldActivity);
-        Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
-        startActivity(intent);
-        finish();
+        if(multiplayerMode){
+            databaseReferenceFight.child(userID).setValue(battleFieldForDataBase);
+            Intent intent = new Intent(getApplicationContext(), MultiplayerActivity.class);
+            startActivity(intent);
+            finish();
+
+        }else {
+            BattleFieldPlayerOneSingleton.getInstance().storeBattleField(battleFieldPlayerCreateBattleFieldActivity);
+            Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void onClickputOneMastsShip(View view) {

@@ -4,6 +4,17 @@ public class GameDifficulty {
 
     private int level;
     private boolean random;
+    private boolean multiplayerMode;
+
+
+    public boolean isMultiplayerMode() {
+        return multiplayerMode;
+    }
+
+    public void setMultiplayerMode(boolean multiplayerMode) {
+        this.multiplayerMode = multiplayerMode;
+    }
+
 
     private static final GameDifficulty ourInstance = new GameDifficulty();
 

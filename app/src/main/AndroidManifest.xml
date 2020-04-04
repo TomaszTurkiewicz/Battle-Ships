@@ -12,6 +12,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
 
+
         <service
             android:name=".MyFirebaseMessagingService"
             android:permission="com.google.android.c2dm.permission.SEND">

@@ -273,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
     public void notRandomGame(View view) {
         mHandler.removeCallbacks(checkMyOpponentAndMove);
         GameDifficulty.getInstance().setRandom(false);
+        GameDifficulty.getInstance().setMultiplayerMode(false);
         Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
         startActivity(intent);
 

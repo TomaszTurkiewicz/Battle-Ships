@@ -49,7 +49,7 @@ public class BattleFieldForDataBase {
         created=true;
     }
 
-    private void fieldToList(){
+    public void fieldToList(){
         for(int i=0;i<10;i++){
             for(int j=0;j<10;j++){
                 int index = 10*i+j;
