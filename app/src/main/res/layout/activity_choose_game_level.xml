@@ -6,49 +6,122 @@
     android:layout_height="match_parent"
     tools:context=".ChooseGameLevel">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CREATE RANDOM BATTLE FIELD"
+        android:textSize="40sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.1"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CREATE YOUR OWN BATTLE FIELD"
+        android:textSize="40sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.7"/>
+
 
     <Button
-        android:id="@+id/tooEasy"
+        android:id="@+id/tooEasyRandom"
         android:layout_width="110dp"
         android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:onClick="tooEasyGame"
-        android:text="@string/tooEasy"
+        android:onClick="tooEasyGameRandom"
+        android:text="@string/easy"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintVertical_bias="0.3"
         />
 
 
     <Button
-        android:id="@+id/normal"
+        android:id="@+id/normalRandom"
         android:layout_width="110dp"
         android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:onClick="normalGame"
+        android:onClick="normalGameRandom"
         android:text="@string/normal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.3"
         />
 
     <Button
-        android:id="@+id/expert"
+        android:id="@+id/expertRandom"
         android:layout_width="110dp"
         android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:onClick="expertGame"
+        android:onClick="expertGameRandom"
         android:text="@string/expert"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintVertical_bias="0.3"
         />
 
+
+    <Button
+        android:id="@+id/tooEasyNotRandom"
+        android:layout_width="110dp"
+        android:layout_height="60dp"
+        android:onClick="tooEasyGameNotRandom"
+        android:text="@string/easy"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintVertical_bias="0.9"
+        />
+
+
+    <Button
+        android:id="@+id/normalNotRandom"
+        android:layout_width="110dp"
+        android:layout_height="60dp"
+        android:onClick="normalGameNotRandom"
+        android:text="@string/normal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.9"
+        />
+
+
+
+    <Button
+        android:id="@+id/expertNotRandom"
+        android:layout_width="110dp"
+        android:layout_height="60dp"
+        android:onClick="expertGameNotRandom"
+        android:text="@string/expert"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintVertical_bias="0.9"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/border_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

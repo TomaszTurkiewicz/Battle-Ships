@@ -58,11 +58,12 @@
     <string name="resend_ver_email">RESEND VER EMAIL</string>
     <string name="reset_password">RESET PASSWORD</string>
     <string name="login_with_google">LOGIN WITH GOOGLE</string>
-    <string name="multiplayer">MULTIPLAYER</string>
+    <string name="multi_player">MULTI PLAYER</string>
     <string name="invite">INVITE</string>
     <string name="fightWith">FIGHT WITH</string>
     <string name="firebasepath_user">User</string>
     <string name="firebasepath_index">index</string>
     <string name="firebasepath_opponent">opponent</string>
     <string name="firebasepath_accepted">accepted</string>
+    <string name="easy">EASY</string>
 </resources>

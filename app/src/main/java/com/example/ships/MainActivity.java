@@ -19,7 +19,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ships.classes.FightIndex;
-import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView redDotMultiplayerIV;
     private Handler mHandler = new Handler();
     private int deelay = 1000;
+    private boolean logIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         redDotMultiplayerIV = findViewById(R.id.redDotMultiplayer);
         redDotMultiplayerIV.setVisibility(View.GONE);
         multiplayerBtn=findViewById(R.id.multiplayer);
-        multiplayerBtn.setText("MULTIPLAYER");
+        multiplayerBtn.setText("MULTI PLAYER");
 
 
     }
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(firebaseUser != null && firebaseUser.isEmailVerified()){
+            logIn=true;
             loggedIn.setText("Zalogowany jako: ");
             accountBtn.setBackgroundColor(Color.RED);
             userID = firebaseUser.getUid();
@@ -259,25 +260,22 @@ public class MainActivity extends AppCompatActivity {
             multiplayerBtn.setVisibility(View.GONE);
             redDotMultiplayerIV.setVisibility(View.GONE);
             multiplayerBtn.setClickable(false);
+            logIn=false;
         }
     }
 
     public void randomGame(View view) {
-        mHandler.removeCallbacks(checkMyOpponentAndMove);
-        GameDifficulty.getInstance().setRandom(true);
+
+
+    }
+    public void singleGame(View view) {
+        if(logIn) {
+            mHandler.removeCallbacks(checkMyOpponentAndMove);
+        }
         Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
         startActivity(intent);
-
     }
 
-    public void notRandomGame(View view) {
-        mHandler.removeCallbacks(checkMyOpponentAndMove);
-        GameDifficulty.getInstance().setRandom(false);
-        GameDifficulty.getInstance().setMultiplayerMode(false);
-        Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
-        startActivity(intent);
-
-    }
 
 
     public void onClickSignIn(View view) {
@@ -339,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }else{
                         redDotMultiplayerIV.setVisibility(View.GONE);
-                        multiplayerBtn.setText("MULTIPLAYER");
+                        multiplayerBtn.setText("MULTI PLAYER");
                         mHandler.postDelayed(checkMyOpponentAndMove,deelay);
                     }
                 }
@@ -352,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
 }
 
 
@@ -361,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO change choose difficulty activity for singleplayer (random plus not random in one activity) get rid off two buttons from main activity
+
 // TODO drawable for battle fields...
 // TODO change buttons styles...
 // TODO add leaving button in single game

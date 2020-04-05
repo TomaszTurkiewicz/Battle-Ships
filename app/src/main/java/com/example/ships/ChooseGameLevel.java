@@ -17,24 +17,53 @@ public class ChooseGameLevel extends AppCompatActivity {
         setContentView(R.layout.activity_choose_game_level);
     }
 
-    public void tooEasyGame(View view) {
+    public void tooEasyGameRandom(View view) {
         GameDifficulty.getInstance().setLevel(0);
+        GameDifficulty.getInstance().setRandom(true);
         Intent intent = new Intent(getApplicationContext(), GameBattle.class);
         startActivity(intent);
         finish();
     }
 
-
-    public void normalGame(View view){
+    public void normalGameRandom(View view) {
         GameDifficulty.getInstance().setLevel(2);
-     Intent intent = new Intent(getApplicationContext(), GameBattle.class);
-     startActivity(intent);
-     finish();
-}
-
-    public void expertGame(View view) {
-        GameDifficulty.getInstance().setLevel(3);
+        GameDifficulty.getInstance().setRandom(true);
         Intent intent = new Intent(getApplicationContext(), GameBattle.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void expertGameRandom(View view) {
+        GameDifficulty.getInstance().setLevel(3);
+        GameDifficulty.getInstance().setRandom(true);
+        Intent intent = new Intent(getApplicationContext(), GameBattle.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void tooEasyGameNotRandom(View view) {
+        GameDifficulty.getInstance().setLevel(0);
+        GameDifficulty.getInstance().setRandom(false);
+        GameDifficulty.getInstance().setMultiplayerMode(false);
+        Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void normalGameNotRandom(View view) {
+        GameDifficulty.getInstance().setLevel(2);
+        GameDifficulty.getInstance().setRandom(false);
+        GameDifficulty.getInstance().setMultiplayerMode(false);
+        Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void expertGameNotRandom(View view) {
+        GameDifficulty.getInstance().setLevel(3);
+        GameDifficulty.getInstance().setRandom(false);
+        GameDifficulty.getInstance().setMultiplayerMode(false);
+        Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
         startActivity(intent);
         finish();
     }

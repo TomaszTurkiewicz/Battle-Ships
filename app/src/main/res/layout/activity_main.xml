@@ -16,38 +16,24 @@
         android:elevation="3dp"/>
     <Button
         android:id="@+id/randomGame"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_gravity="center"
-        android:onClick="randomGame"
-        android:text="@string/random_game"
+        android:onClick="singleGame"
+        android:text="SINGLE PLAYER"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintVertical_bias="0.33"/>
-
-    <Button
-        android:id="@+id/notRandomGame"
-        android:layout_width="150dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:onClick="notRandomGame"
-        android:text="@string/not_random_game"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintVertical_bias="0.66"/>
+        app:layout_constraintVertical_bias="0.5"/>
 
     <Button
         android:id="@+id/multiplayer"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_gravity="center"
-        android:text="@string/multiplayer"
+        android:text="@string/multi_player"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

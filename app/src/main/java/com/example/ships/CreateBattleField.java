@@ -568,7 +568,7 @@ public class CreateBattleField extends AppCompatActivity {
 
         }else {
             BattleFieldPlayerOneSingleton.getInstance().storeBattleField(battleFieldPlayerCreateBattleFieldActivity);
-            Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
+            Intent intent = new Intent(getApplicationContext(), GameBattle.class);
             startActivity(intent);
             finish();
         }
