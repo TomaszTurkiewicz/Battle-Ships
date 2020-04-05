@@ -210,6 +210,10 @@ public class MainActivity extends AppCompatActivity {
                                                         opponentUser.getIndex().setGameIndex(opponentUser.getId()+user.getId());
                                                         databaseReferenceMy.setValue(user);
                                                         databaseReferenceOpponent.setValue(opponentUser);
+                                                        mHandler.removeCallbacks(checkMyOpponentAndMove);
+                                                        Intent intent = new Intent(MainActivity.this,MultiplayerActivity.class);
+                                                        startActivity(intent);
+
                                                     }
                                                 });
                                                 builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -264,10 +268,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void randomGame(View view) {
 
-
-    }
     public void singleGame(View view) {
         if(logIn) {
             mHandler.removeCallbacks(checkMyOpponentAndMove);
@@ -365,4 +366,3 @@ public class MainActivity extends AppCompatActivity {
 // TODO change buttons styles...
 // TODO add leaving button in single game
 // TODO change notification
-// TODO when accepting fight move to multiplayer activity
