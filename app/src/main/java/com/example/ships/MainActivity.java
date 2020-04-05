@@ -362,6 +362,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO drawable for battle fields...
+// TODO drawable for battle fields... FINISH IT FIRST!!!
 // TODO change buttons styles...
 // TODO change notification

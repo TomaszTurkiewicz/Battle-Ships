@@ -26,7 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-//TODO change layout... constraint
+
 public class CreateBattleField extends AppCompatActivity {
 
     BattleField battleFieldPlayerCreateBattleFieldActivity = new BattleField();

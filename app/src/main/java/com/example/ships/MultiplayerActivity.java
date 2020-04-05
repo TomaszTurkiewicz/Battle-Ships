@@ -364,16 +364,9 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     turnTextView.setText("MY MOVE");
                     battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                     battleFieldForDataBaseMy.listToField();
-
                     showOpponentBattleField();
                     hideBattleFiledAvailableMy();
-
                     enableTouchListener=true;
-
-
-
-
-                    // TODO napierdalaj przeciwnika i zapisuj do bazy.
                 }
                 else{
                     turnTextView.setText("NOT MY MOVE");
@@ -390,7 +383,6 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     }else{
                         battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                         battleFieldForDataBaseMy.listToField();
-                        //TODO wyświtlanie moje pola bitwy
                         hideBattleFieldOpponent();
                         showMyBattleField();
                         mHandler.postDelayed(game, deelay);
