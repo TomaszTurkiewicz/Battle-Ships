@@ -1,6 +1,7 @@
 package com.example.ships;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,10 +15,12 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ships.classes.BattleField;
 import com.example.ships.classes.GameDifficulty;
+import com.example.ships.classes.User;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -1596,29 +1599,68 @@ else
     public void leaveSinglePlayer(View view) {
         if (loggedIn) {
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    score = (Long) dataSnapshot.child("score").getValue();
-
-
+                    User user = dataSnapshot.getValue(User.class);
+                    int minusPoints;
                     if(level==0){
-                        score = score-1;
+                        minusPoints=1;
                     }else if(level==2){
-                        score = score-10;
+                        minusPoints=10;
                     }else if(level==3){
-                        score = score-100;
-                    }else;
+                        minusPoints=100;
+                    }else
+                        minusPoints=0;
 
-                    databaseReference.child("score").setValue(score);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
+                    builder.setCancelable(true);
+                    builder.setTitle("Leaving game");
+                    builder.setMessage("Do you want to quit game?"+"\n"+"You will lose "+minusPoints+" points");
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int myScore = user.getScore();
+                            myScore=myScore-minusPoints;
+                            user.setScore(myScore);
+                            databaseReference.setValue(user);
+                            finish();
+                        }
+                    });
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mHandler.postDelayed(game,deelay);
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
+
         }
-        finish();
+        else {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
+            builder.setCancelable(true);
+            builder.setTitle("Leaving game");
+            builder.setMessage("Do you want to quit game?");
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mHandler.postDelayed(game,deelay);
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 }

@@ -153,6 +153,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         layout.setOnTouchListener(this);
 
         game.run();
+        checkGameIndex.run();
 
     }
 
@@ -368,7 +369,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     hideBattleFiledAvailableMy();
 
                     enableTouchListener=true;
-                    checkGameIndex.run();
+
 
 
 
@@ -909,16 +910,44 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User opponent=dataSnapshot.getValue(User.class);
-                int score = opponent.getScore();
-                score = score+50;
-                opponent.setScore(score);
-                opponent.setIndex(new FightIndex());
-                databaseReferenceOpponent.setValue(opponent);
-                user.setIndex(new FightIndex());
-                databaseReferenceMy.setValue(user);
-                databaseReferenceFight.removeValue();
 
-                finish();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
+                builder.setCancelable(true);
+                builder.setTitle("Leaving game");
+                builder.setMessage("Do you want to quit game?"+"\n"+opponent.getName()+" will get 50 points for nothing"+"\n"+"You will lose 50 points");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int score = opponent.getScore();
+                        score = score+50;
+                        opponent.setScore(score);
+                        opponent.setIndex(new FightIndex());
+                        databaseReferenceOpponent.setValue(opponent);
+                        int myScore = user.getScore();
+                        myScore=myScore-50;
+                        user.setScore(myScore);
+                        user.setIndex(new FightIndex());
+                        databaseReferenceMy.setValue(user);
+                        databaseReferenceFight.removeValue();
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mHandler.postDelayed(game,deelay);
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+
+
+
+
+
+
             }
 
             @Override
@@ -926,6 +955,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
             }
         });
+
+
 
     }
 
