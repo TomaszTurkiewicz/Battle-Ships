@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -72,6 +74,8 @@ public class CreateBattleField extends AppCompatActivity {
     private Handler mHandler = new Handler();
     private int deelay = 1000;
     private User user = new User();
+    private ImageButton delete, reset;
+    private Button backButton;
 
 
     @Override
@@ -84,6 +88,9 @@ public class CreateBattleField extends AppCompatActivity {
         ThreeMastsCounter = (TextView)findViewById(R.id.threeMastsCounterTextView);
         TwoMastsCounter = (TextView)findViewById(R.id.twoMastsCounterTextView);
         OneMastsCounter = (TextView)findViewById(R.id.oneMastsCounterTextView);
+        delete = findViewById(R.id.deleteButton);
+        reset = findViewById(R.id.resetButton);
+        backButton = findViewById(R.id.backButton);
         if(multiplayerMode){
             firebaseAuth = FirebaseAuth.getInstance();
             firebaseUser = firebaseAuth.getCurrentUser();
@@ -111,6 +118,24 @@ public class CreateBattleField extends AppCompatActivity {
         initializeOneMastsShipTextView(OneMastsShip);
         startButton=findViewById(R.id.playButton);
             updateScreen();
+
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        int variable = backButton.getHeight();
+        ViewGroup.LayoutParams params = reset.getLayoutParams();
+        params.height = variable;
+        params.width = variable;
+        reset.setLayoutParams(params);
+
+        ViewGroup.LayoutParams params1 = delete.getLayoutParams();
+        params1.height = variable;
+        params1.width = variable;
+        delete.setLayoutParams(params1);
+
+
 
     }
 

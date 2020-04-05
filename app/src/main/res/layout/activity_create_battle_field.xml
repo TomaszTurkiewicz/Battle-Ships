@@ -19,7 +19,7 @@
             android:layout_height="@dimen/FieldSize"
             android:text="@string/a"
             android:gravity="center"
-            android:textColor="@color/border_color"
+            android:textColor="@color/pen"
             android:textSize="@dimen/TextSize" />
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_height="@dimen/FieldSize"
             android:text="@string/b"
             android:gravity="center"
-            android:textColor="@color/border_color"
+            android:textColor="@color/pen"
             android:textSize="@dimen/TextSize" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_height="@dimen/FieldSize"
             android:text="@string/c"
             android:gravity="center"
-            android:textColor="@color/border_color"
+            android:textColor="@color/pen"
             android:textSize="@dimen/TextSize" />
 
         <TextView
@@ -43,7 +43,7 @@
             android:layout_height="@dimen/FieldSize"
             android:text="@string/d"
             android:gravity="center"
-            android:textColor="@color/border_color"
+            android:textColor="@color/pen"
             android:textSize="@dimen/TextSize" />
 
         <TextView
@@ -51,7 +51,7 @@
             android:layout_height="@dimen/FieldSize"
             android:text="@string/e"
             android:gravity="center"
-            android:textColor="@color/border_color"
+            android:textColor="@color/pen"
             android:textSize="@dimen/TextSize" />
 
         <TextView
@@ -59,7 +59,7 @@
             android:layout_height="@dimen/FieldSize"
             android:text="@string/f"
             android:gravity="center"
-            android:textColor="@color/border_color"
+            android:textColor="@color/pen"
             android:textSize="@dimen/TextSize" />
 
         <TextView
@@ -67,7 +67,7 @@
             android:layout_height="@dimen/FieldSize"
             android:text="@string/g"
             android:gravity="center"
-            android:textColor="@color/border_color"
+            android:textColor="@color/pen"
             android:textSize="@dimen/TextSize" />
 
         <TextView
@@ -75,7 +75,7 @@
             android:layout_height="@dimen/FieldSize"
             android:text="@string/h"
             android:gravity="center"
-            android:textColor="@color/border_color"
+            android:textColor="@color/pen"
             android:textSize="@dimen/TextSize" />
 
         <TextView
@@ -83,7 +83,7 @@
             android:layout_height="@dimen/FieldSize"
             android:text="@string/i"
             android:gravity="center"
-            android:textColor="@color/border_color"
+            android:textColor="@color/pen"
             android:textSize="@dimen/TextSize" />
 
         <TextView
@@ -91,7 +91,7 @@
             android:layout_height="@dimen/FieldSize"
             android:text="@string/j"
             android:gravity="center"
-            android:textColor="@color/border_color"
+            android:textColor="@color/pen"
             android:textSize="@dimen/TextSize" />
     </LinearLayout>
 
@@ -108,7 +108,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/one"
                     android:gravity="center"
-                    android:textColor="@color/border_color"
+                    android:textColor="@color/pen"
                     android:textSize="@dimen/TextSize" />
 
                 <TextView
@@ -116,7 +116,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/two"
                     android:gravity="center"
-                    android:textColor="@color/border_color"
+                    android:textColor="@color/pen"
                     android:textSize="@dimen/TextSize" />
 
                 <TextView
@@ -124,7 +124,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/three"
                     android:gravity="center"
-                    android:textColor="@color/border_color"
+                    android:textColor="@color/pen"
                     android:textSize="@dimen/TextSize" />
 
                 <TextView
@@ -132,7 +132,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/four"
                     android:gravity="center"
-                    android:textColor="@color/border_color"
+                    android:textColor="@color/pen"
                     android:textSize="@dimen/TextSize" />
 
                 <TextView
@@ -140,7 +140,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/five"
                     android:gravity="center"
-                    android:textColor="@color/border_color"
+                    android:textColor="@color/pen"
                     android:textSize="@dimen/TextSize" />
 
                 <TextView
@@ -148,7 +148,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/six"
                     android:gravity="center"
-                    android:textColor="@color/border_color"
+                    android:textColor="@color/pen"
                     android:textSize="@dimen/TextSize" />
 
                 <TextView
@@ -156,7 +156,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/seven"
                     android:gravity="center"
-                    android:textColor="@color/border_color"
+                    android:textColor="@color/pen"
                     android:textSize="@dimen/TextSize" />
 
                 <TextView
@@ -164,7 +164,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/eight"
                     android:gravity="center"
-                    android:textColor="@color/border_color"
+                    android:textColor="@color/pen"
                     android:textSize="@dimen/TextSize" />
 
                 <TextView
@@ -172,7 +172,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/nine"
                     android:gravity="center"
-                    android:textColor="@color/border_color"
+                    android:textColor="@color/pen"
                     android:textSize="@dimen/TextSize" />
 
                 <TextView
@@ -180,7 +180,7 @@
                     android:layout_height="@dimen/FieldSize"
                     android:text="@string/ten"
                     android:gravity="center"
-                    android:textColor="@color/border_color"
+                    android:textColor="@color/pen"
                     android:textSize="@dimen/TextSize" />
         </LinearLayout>
 
@@ -809,12 +809,10 @@
 
         </GridLayout>
 
-
-
-
             <ImageButton
                 android:id="@+id/deleteButton"
                 android:src="@drawable/delete"
+                android:background="@color/WHITE"
                 android:onClick="onClickDelete"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
@@ -830,6 +828,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:src="@drawable/reset"
+                android:background="@color/WHITE"
                 android:onClick="onClickReset"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

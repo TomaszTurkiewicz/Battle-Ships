@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/leaveSinglePlayer"
         android:src="@drawable/leave"
+        android:background="@color/WHITE"
         android:onClick="leaveSinglePlayer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -713,125 +714,197 @@
 
     </GridLayout>
 
+
     <LinearLayout
-        android:id="@+id/tableLayoutPlayerBattleField"
-        android:layout_width="@dimen/TableSizePlusJeden"
-        android:layout_height="@dimen/TableSizePlusJeden"
+        android:id="@+id/LinearLayoutMainActivityLetters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@id/tableLayoutPlayerBattleField"
+        app:layout_constraintBottom_toTopOf="@id/tableLayoutPlayerBattleField">
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/a"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/b"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/c"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/d"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/e"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/f"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/g"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/h"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/i"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/j"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LinearLayoutMainActivityNumbers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@id/tableLayoutPlayerBattleField"
+        app:layout_constraintTop_toTopOf="@id/tableLayoutPlayerBattleField">
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/one"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/two"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/three"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/four"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/five"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/six"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/seven"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/eight"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/nine"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+
+        <TextView
+            android:layout_width="@dimen/FieldSize"
+            android:layout_height="@dimen/FieldSize"
+            android:text="@string/ten"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/TextSize" />
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/tableLayoutPlayerBattleField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.3"
-        app:layout_constraintHorizontal_bias="0.1">
-
-        <LinearLayout
-            android:id="@+id/LinearLayoutMainActivityLetters"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text=""
-                android:textAlignment="center"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/a"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/b"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/c"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/d"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/e"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/f"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/g"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/h"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/i"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/j"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayout_1x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/one"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
+        app:layout_constraintHorizontal_bias="0.2"
+        android:columnCount="10"
+        android:rowCount="10">
 
             <TextView
                 android:id="@+id/playerCellGame_1x1"
@@ -882,21 +955,6 @@
                 android:id="@+id/playerCellGame_1x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayout_2x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/two"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
 
             <TextView
                 android:id="@+id/playerCellGame_2x1"
@@ -947,21 +1005,6 @@
                 android:id="@+id/playerCellGame_2x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayout_3x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/three"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
 
             <TextView
                 android:id="@+id/playerCellGame_3x1"
@@ -1012,21 +1055,6 @@
                 android:id="@+id/playerCellGame_3x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayout_4x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/four"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
 
             <TextView
                 android:id="@+id/playerCellGame_4x1"
@@ -1077,21 +1105,6 @@
                 android:id="@+id/playerCellGame_4x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayout_5x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/five"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
 
             <TextView
                 android:id="@+id/playerCellGame_5x1"
@@ -1142,21 +1155,6 @@
                 android:id="@+id/playerCellGame_5x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayout_6x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/six"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
 
             <TextView
                 android:id="@+id/playerCellGame_6x1"
@@ -1207,21 +1205,6 @@
                 android:id="@+id/playerCellGame_6x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayout_7x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/seven"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
 
             <TextView
                 android:id="@+id/playerCellGame_7x1"
@@ -1272,21 +1255,6 @@
                 android:id="@+id/playerCellGame_7x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayout_8x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/eight"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
 
             <TextView
                 android:id="@+id/playerCellGame_8x1"
@@ -1337,21 +1305,6 @@
                 android:id="@+id/playerCellGame_8x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayout_9x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/nine"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
 
             <TextView
                 android:id="@+id/playerCellGame_9x1"
@@ -1402,21 +1355,6 @@
                 android:id="@+id/playerCellGame_9x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/playerLinearLayout_10x"
-            android:layout_width="@dimen/TableSizePlusJeden"
-            android:layout_height="@dimen/FieldSize"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="@dimen/FieldSize"
-                android:layout_height="@dimen/FieldSize"
-                android:text="@string/ten"
-                android:gravity="center"
-                android:textColor="@color/pen"
-                android:textSize="@dimen/TextSize" />
 
             <TextView
                 android:id="@+id/playerCellGame_10x1"
@@ -1467,9 +1405,8 @@
                 android:id="@+id/playerCellGame_10x10"
                 android:layout_width="@dimen/FieldSize"
                 android:layout_height="@dimen/FieldSize"/>
-        </LinearLayout>
 
-    </LinearLayout>
+    </GridLayout>
 
     <LinearLayout
         android:id="@+id/LinearLayoutMainActivityShips"
