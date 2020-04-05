@@ -3,6 +3,7 @@ package com.example.ships;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.example.ships.classes.BattleField;
 import com.example.ships.classes.BattleFieldForDataBase;
 import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.PointIJ;
+import com.example.ships.classes.User;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -67,6 +69,9 @@ public class CreateBattleField extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private String userID;
     private String gameIndex;
+    private Handler mHandler = new Handler();
+    private int deelay = 1000;
+    private User user = new User();
 
 
     @Override
@@ -85,17 +90,19 @@ public class CreateBattleField extends AppCompatActivity {
             userID = firebaseUser.getUid();
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReferenceMy = firebaseDatabase.getReference("User").child(userID);
-            databaseReferenceFight = firebaseDatabase.getReference("Battle");
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     gameIndex = dataSnapshot.child("index").child("gameIndex").getValue().toString();
+                    databaseReferenceFight = firebaseDatabase.getReference("Battle").child(gameIndex);
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
+            checkGameIndex.run();
+
 
         }
         initializeFourMastsShipTextView(FourMastsShip);
@@ -162,7 +169,7 @@ public class CreateBattleField extends AppCompatActivity {
                         battleFieldForDataBase.showBattleField().makeShip(i,j,battleFieldPlayerCreateBattleFieldActivity.getBattleField(i,j));
                     }
                 }
-            battleFieldForDataBase.fieldToList();
+                battleFieldForDataBase.fieldToList();
                 battleFieldForDataBase.setCreated(true);
             }
 
@@ -537,10 +544,27 @@ public class CreateBattleField extends AppCompatActivity {
 
     public void onClickStartGame(View view) {
         if(multiplayerMode){
-            databaseReferenceFight.child(userID).setValue(battleFieldForDataBase);
-            Intent intent = new Intent(getApplicationContext(), MultiplayerActivity.class);
-            startActivity(intent);
-            finish();
+            databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        mHandler.removeCallbacks(checkGameIndex);
+                        databaseReferenceFight.child(userID).setValue(battleFieldForDataBase);
+                        Intent intent = new Intent(getApplicationContext(), MultiplayerActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        mHandler.removeCallbacks(checkGameIndex);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
 
         }else {
             BattleFieldPlayerOneSingleton.getInstance().storeBattleField(battleFieldPlayerCreateBattleFieldActivity);
@@ -1805,4 +1829,24 @@ public class CreateBattleField extends AppCompatActivity {
             }
         }
     }
+    private Runnable checkGameIndex = new Runnable() {
+        @Override
+        public void run() {
+            databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    user = dataSnapshot.getValue(User.class);
+                    if(user.getIndex().getGameIndex().isEmpty()){
+                        mHandler.removeCallbacks(checkGameIndex);
+                        finish();
+                    }else{
+                        mHandler.postDelayed(checkGameIndex,deelay);
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
+    };
 }

@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO create creating own battle field for multiplayer
+
 // TODO change choose difficulty activity for singleplayer (random plus not random in one activity) get rid off two buttons from main activity
 // TODO drawable for battle fields...
 // TODO change buttons styles...

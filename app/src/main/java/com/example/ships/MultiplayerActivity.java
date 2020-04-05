@@ -24,8 +24,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ships.classes.BattleFieldForDataBase;
-import com.example.ships.classes.Difficulty;
 import com.example.ships.classes.FightIndex;
+import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -93,6 +93,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private TextView tv;
     private String serverKey= "key=" + "AAAAUhITVm0:APA91bGLIOR5L7HQyh64ejoejk-nQFBWP9RxDqtzzjoSXCmROqs7JO_uDDyuW5VuTfJBxtKY_RG8q5_CnpKJsN3qHtVvgiAkuDM2J9T68mk0LzKCcRKgRbj3DQ-A1a8uzZ07wz8OlirQ";
     private String contentType= "application/json";
+    private boolean battleFieldUpToDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +113,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         leaveButton.setVisibility(View.GONE);
         enableTouchListener=false;
         battleFieldsSet=false;
+        battleFieldUpToDate=false;
         tv1=findViewById(R.id.OpponentMultiplayerCellGame_1x1);
         tv2=findViewById(R.id.OpponentMultiplayerCellGame_1x2);
         tv11=findViewById(R.id.OpponentMultiplayerCellGame_2x1);
@@ -463,78 +465,66 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
                     finish();
                 }else {
-
                     databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
-
                     databaseReferenceFight = firebaseDatabase.getReference("Battle").child(user.getIndex().getGameIndex());
                     leaveButton.setVisibility(View.VISIBLE);
                     databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (!dataSnapshot.exists()) {
-                                battleFieldForDataBaseMy.create();
+                                askForCreatingGame();
                                 int noOfGames = user.getNoOfGames();
                                 noOfGames = noOfGames+1;
                                 user.setNoOfGames(noOfGames);
-
-                                chooseDifficulty();
-
                                 databaseReferenceMy.setValue(user);
-                                databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
-                                databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
                                 databaseReferenceFight.child("turn").setValue(user.getId());
                                 databaseReferenceFight.child("winner").setValue("");
                                 databaseReferenceFight.child("ready").setValue(false);
-                                mHandler.postDelayed(game, deelay);
                             } else {
-                                battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
-
-                                if (!battleFieldForDataBaseMy.isCreated()) {
-                                    battleFieldForDataBaseMy.create();
-
-                                    databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
+                                if(!dataSnapshot.child(userID).exists()){
+                                    askForCreatingGame();
                                     int noOfGames = user.getNoOfGames();
                                     noOfGames = noOfGames+1;
                                     user.setNoOfGames(noOfGames);
                                     databaseReferenceMy.setValue(user);
-
-                                    chooseDifficulty();
-
-
-
                                 }else{
-                                    battleFieldForDataBaseMy.listToField();
-
+                                    if(!battleFieldUpToDate){
+                                        battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
+                                        battleFieldForDataBaseMy.listToField();
+                                        battleFieldUpToDate=true;
+                                    }
+                                    hideBattleFiledAvailableMy();
+                                    if(dataSnapshot.child(userID).child("difficulty").child("set").getValue().equals(false)){
+                                        chooseDifficulty(dataSnapshot);
+                                    }else{
+                                        if(dataSnapshot.child(user.getIndex().getOpponent()).exists()){
+                                            if(dataSnapshot.child(user.getIndex().getOpponent()).child("difficulty").exists()) {
+                                                battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
+                                                battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
+                                                battleFieldForDataBaseOpponent.listToField();
+                                                battleFieldForDataBaseMy.listToField();
+                                                if(battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated() &&
+                                                        battleFieldForDataBaseMy.getDifficulty().isSet() && battleFieldForDataBaseOpponent.getDifficulty().isSet()) {
+                                                        databaseReferenceFight.child("ready").setValue(true);
+                                                        battleFieldsSet = true;
+                                                        initializeOpponentArrayBattleField();
+                                                        checkShipCounters();
+                                                        hideBattleFieldOpponent();
+                                                        updateShipsHit();
+                                                        mHandler.postDelayed(game, deelay);
+                                                    }else{
+                                                    mHandler.postDelayed(game, deelay);
+                                                    }
+                                                }else{
+                                                mHandler.postDelayed(game,deelay);
+                                            }
+                                        }else{
+                                            mHandler.postDelayed(game,deelay);
+                                        }
+                                    }
                                 }
-                                // pokaż moje statki
-                                hideBattleFiledAvailableMy();
-                                battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
-                                battleFieldForDataBaseOpponent.listToField();
-
-                                if (battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated()&&
-                                battleFieldForDataBaseMy.getDifficulty().isSet()&&battleFieldForDataBaseOpponent.getDifficulty().isSet()) {
-                                    databaseReferenceFight.child("ready").setValue(true);
-                                    battleFieldsSet=true;
-
-                                    initializeOpponentArrayBattleField();
-
-                                    checkShipCounters();
-
-                                    hideBattleFieldOpponent();
-
-                                    updateShipsHit();
-
-
-                                    mHandler.postDelayed(game, deelay);
-
-                                } else {
-                                    mHandler.postDelayed(game, deelay);
-                                }
-
                             }
-
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -549,6 +539,36 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
             }
         });
+    }
+
+    private void askForCreatingGame() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
+        builder.setCancelable(true);
+        builder.setTitle("CREATE BATTLE FIELD");
+        builder.setMessage("How would you like to do it?");
+        builder.setPositiveButton("BY MYSELF", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                GameDifficulty.getInstance().setMultiplayerMode(true);
+                Intent intent = new Intent(MultiplayerActivity.this, CreateBattleField.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("RANDOM", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                battleFieldForDataBaseMy.create();
+                battleFieldUpToDate=true;
+                databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
+                mHandler.postDelayed(game,deelay);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+
     }
 
     private void showOpponentBattleField() {
@@ -695,7 +715,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }
     }
 
-    private void chooseDifficulty() {
+    private void chooseDifficulty(DataSnapshot dataSnapshot) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
         builder.setCancelable(true);
@@ -704,16 +724,17 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         builder.setPositiveButton("NORMAL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                battleFieldForDataBaseMy.setDifficulty(new Difficulty(false,true));
-                databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
+                databaseReferenceFight.child(userID).child("difficulty").child("easy").setValue(false);
+                databaseReferenceFight.child(userID).child("difficulty").child("set").setValue(true);
+                mHandler.postDelayed(game,deelay);
             }
         });
         builder.setNegativeButton("EASY", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                    battleFieldForDataBaseMy.setDifficulty(new Difficulty(true,true));
-                databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
+                databaseReferenceFight.child(userID).child("difficulty").child("easy").setValue(true);
+                databaseReferenceFight.child(userID).child("difficulty").child("set").setValue(true);
+                mHandler.postDelayed(game,deelay);
             }
         });
         AlertDialog dialog = builder.create();
