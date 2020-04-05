@@ -1593,4 +1593,32 @@ else
                 shipOneMastsCounterFourth;
     }
 
+    public void leaveSinglePlayer(View view) {
+        if (loggedIn) {
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    score = (Long) dataSnapshot.child("score").getValue();
+
+
+                    if(level==0){
+                        score = score-1;
+                    }else if(level==2){
+                        score = score-10;
+                    }else if(level==3){
+                        score = score-100;
+                    }else;
+
+                    databaseReference.child("score").setValue(score);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+        finish();
+    }
 }
