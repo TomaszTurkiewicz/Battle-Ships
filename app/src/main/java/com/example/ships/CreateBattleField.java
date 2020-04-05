@@ -196,27 +196,27 @@ public class CreateBattleField extends AppCompatActivity {
     private void setNoShipColor(TextView[][] TextView, int i, int j) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell));
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell));
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
         }
     }
 
     private void setShipColor(TextView[][] TextView, int i, int j) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell));
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell));
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
         }
     }
 
     private void setGreyColor(TextView[][] TextView, int i, int j) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_hidden));
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_hidden));
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
         }
     }
 
@@ -305,27 +305,27 @@ public class CreateBattleField extends AppCompatActivity {
     private void setBlank (TextView[] TextView, int i){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell));
+            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x));
         } else {
-            TextView[i].setBackground(getResources().getDrawable(R.drawable.battle_cell));
+            TextView[i].setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
         }
     }
 
     private void setRed (TextView[] TextView, int i){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.red_ship));
+            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_normal_x));
         } else {
-            TextView[i].setBackground(getResources().getDrawable(R.drawable.red_ship));
+            TextView[i].setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_normal_x));
         }
     }
 
     private void setGrey (TextView[] TextView, int i){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.widmo_ship_cell));
+            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
         } else {
-            TextView[i].setBackground(getResources().getDrawable(R.drawable.widmo_ship_cell));
+            TextView[i].setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
         }
     }
 

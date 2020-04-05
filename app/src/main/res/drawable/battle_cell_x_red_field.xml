@@ -5,18 +5,19 @@
 
     <!-- View background color -->
     <solid
-        android:color="@color/water" >
+        android:color="@color/background_color_red" >
     </solid>
 
     <!-- View border color and width -->
     <stroke
-        android:width="3dp"
-        android:color="@color/RED" >
+        android:width="1dp"
+        android:color="@color/pen" >
     </stroke>
 
     <!-- The radius makes the corners rounded -->
     <corners
         android:radius="0dp"   >
     </corners>
+
 
 </shape>

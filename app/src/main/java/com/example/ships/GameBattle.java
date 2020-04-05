@@ -545,18 +545,18 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private void displayWaterCellHit(TextView[][] TextView, int i, int j) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_hit));
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x_hit));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell_hit));
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell_x_hit));
         }
     }
 
     private void displayShipCellHit(TextView[][] TextView, int i, int j) {
         final int sdk = Build.VERSION.SDK_INT;
         if(sdk < Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell_hit));
+            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell_x_hit));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell_hit));
+            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell_x_hit));
         }
     }
 
@@ -1289,13 +1289,13 @@ else
                                 if (x == j || y == i) {
                                     if(battleFieldOpponent[i][j]==BATTLE_CELL){
                                         tv = (TextView) layout.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.battle_cell_green_field));
+                                        tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
                                     }else if(battleFieldOpponent[i][j]==WATER){
                                         tv = (TextView) layout.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.water_cell_green_field));
+                                        tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
                                     }else{
                                         tv = (TextView) layout.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.ship_cell_green_field));
+                                        tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
                                     }
                                 }
                             }
@@ -1306,13 +1306,13 @@ else
                                 if (x == j || y == i) {
                                     if(battleFieldOpponent[i][j]==BATTLE_CELL){
                                         tv = (TextView) layout.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.battle_cell_red_field));
+                                        tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
                                     }else if(battleFieldOpponent[i][j]==WATER){
                                         tv = (TextView) layout.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.water_cell_red_field));
+                                        tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
                                     }else{
                                         tv = (TextView) layout.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.ship_cell_red_field));
+                                        tv.setBackground(getDrawable(R.drawable.ship_cell_x_red_field));
                                     }
 
 
@@ -1332,13 +1332,13 @@ else
                                     if (x == j || y == i) {
                                         if(battleFieldOpponent[i][j]==BATTLE_CELL){
                                             tv = (TextView) layout.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.battle_cell_green_field));
+                                            tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
                                         }else if(battleFieldOpponent[i][j]==WATER){
                                             tv = (TextView) layout.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.water_cell_green_field));
+                                            tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
                                         }else{
                                             tv = (TextView) layout.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.ship_cell_green_field));
+                                            tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
                                         }
                                     }
                                 }
@@ -1349,13 +1349,13 @@ else
                                     if (x == j || y == i) {
                                         if(battleFieldOpponent[i][j]==BATTLE_CELL){
                                             tv = (TextView) layout.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.battle_cell_red_field));
+                                            tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
                                         }else if(battleFieldOpponent[i][j]==WATER){
                                             tv = (TextView) layout.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.water_cell_red_field));
+                                            tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
                                         }else{
                                             tv = (TextView) layout.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.ship_cell_red_field));
+                                            tv.setBackground(getDrawable(R.drawable.ship_cell_x_red_field));
                                         }
 
                                     }

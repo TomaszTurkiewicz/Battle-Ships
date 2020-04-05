@@ -5,7 +5,7 @@
             android:shape="rectangle" >
             <!-- View background color -->
             <solid
-                android:color="@color/WHITE" >
+                android:color="@color/background_color_red" >
             </solid>
             <!-- View border color and width -->
             <stroke
@@ -28,7 +28,7 @@
                 android:shape="line" >
                 <stroke
                     android:width="2dp"
-                    android:color="@color/widmoShip" />
+                    android:color="@color/pen_red" />
             </shape>
         </rotate>
     </item>
@@ -42,7 +42,7 @@
                 android:shape="line" >
                 <stroke
                     android:width="2dp"
-                    android:color="@color/widmoShip" />
+                    android:color="@color/pen_red" />
             </shape>
         </rotate>
     </item>
