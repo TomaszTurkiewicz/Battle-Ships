@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#008577</color>
+
     <color name="colorPrimaryDark">#00574B</color>
+
     <color name="colorAccent">#D81B60</color>
     <color name="background_color">#F5FAC3</color>
     <color name="background_color_green">#CDF8C1</color>
@@ -22,6 +24,7 @@
     <color name="RED">#D60606</color>
     <color name="WHITE">#FFFFFF</color>
     <color name="pen">#1429A3</color>
+    <color name="pen_light">#C3C9EC</color>
     <color name="pen_red">#A80F32</color>
 
 

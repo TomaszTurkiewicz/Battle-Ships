@@ -3,6 +3,7 @@ package com.example.ships;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Shader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -17,8 +18,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.ships.classes.FightIndex;
+import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceMy, databaseReferenceOpponent,databaseReferenceBattle;
     private Button multiplayerBtn;
-
+    private ConstraintLayout constraintLayout;
     private String userID;
     private String newUserName;
     private User user = new User();
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        constraintLayout = findViewById(R.id.mainActivityLayout);
         userName=findViewById(R.id.userName);
         loggedIn=findViewById(R.id.loggedIn);
 
@@ -65,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         redDotMultiplayerIV.setVisibility(View.GONE);
         multiplayerBtn=findViewById(R.id.multiplayer);
         multiplayerBtn.setText("MULTI PLAYER");
-
+        constraintLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT));
 
     }
 
@@ -73,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(firebaseUser != null && firebaseUser.isEmailVerified()){
+
+
+
+
+
             logIn=true;
             loggedIn.setText("Zalogowany jako: ");
             accountBtn.setBackgroundColor(Color.RED);
@@ -351,15 +360,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
-}
-
-
-
-
-
-
-
+    }
 
 
 

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/mainActivityLayout">
 
     <ImageView
         android:id="@+id/redDotMultiplayer"
@@ -13,7 +14,7 @@
         android:background="@drawable/red_dot"
         app:layout_constraintTop_toTopOf="@id/multiplayer"
         app:layout_constraintEnd_toEndOf="@id/multiplayer"
-        android:elevation="3dp"/>
+        android:elevation="3dp" />
     <Button
         android:id="@+id/randomGame"
         android:layout_width="wrap_content"
