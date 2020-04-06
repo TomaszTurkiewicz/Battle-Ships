@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO drawable for battle fields... FINISH IT FIRST!!!
+
 // TODO change buttons styles...
 // TODO change notification
-// TODO sprawdzić back button w creating battle field activity co robi jak się wejdzie z multiplayera
+

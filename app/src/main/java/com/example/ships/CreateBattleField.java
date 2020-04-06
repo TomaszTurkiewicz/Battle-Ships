@@ -76,6 +76,7 @@ public class CreateBattleField extends AppCompatActivity {
     private User user = new User();
     private ImageButton delete, reset;
     private Button backButton;
+    private int noOfGames;
 
 
     @Override
@@ -196,6 +197,8 @@ public class CreateBattleField extends AppCompatActivity {
                 }
                 battleFieldForDataBase.fieldToList();
                 battleFieldForDataBase.setCreated(true);
+                noOfGames = user.getNoOfGames();
+                noOfGames = noOfGames+1;
             }
 
         }
@@ -562,8 +565,6 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     public void onClickBack(View view) {
-        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-        startActivity(intent);
         finish();
     }
 
@@ -575,6 +576,8 @@ public class CreateBattleField extends AppCompatActivity {
                     if(dataSnapshot.exists()){
                         mHandler.removeCallbacks(checkGameIndex);
                         databaseReferenceFight.child(userID).setValue(battleFieldForDataBase);
+                        user.setNoOfGames(noOfGames);
+                        databaseReferenceMy.setValue(user);
                         Intent intent = new Intent(getApplicationContext(), MultiplayerActivity.class);
                         startActivity(intent);
                         finish();

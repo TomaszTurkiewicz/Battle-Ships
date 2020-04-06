@@ -466,20 +466,14 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (!dataSnapshot.exists()) {
                                 askForCreatingGame();
-                                int noOfGames = user.getNoOfGames();
-                                noOfGames = noOfGames+1;
-                                user.setNoOfGames(noOfGames);
-                                databaseReferenceMy.setValue(user);
+
                                 databaseReferenceFight.child("turn").setValue(user.getId());
                                 databaseReferenceFight.child("winner").setValue("");
                                 databaseReferenceFight.child("ready").setValue(false);
                             } else {
                                 if(!dataSnapshot.child(userID).exists()){
                                     askForCreatingGame();
-                                    int noOfGames = user.getNoOfGames();
-                                    noOfGames = noOfGames+1;
-                                    user.setNoOfGames(noOfGames);
-                                    databaseReferenceMy.setValue(user);
+
                                 }else{
                                     if(!battleFieldUpToDate){
                                         battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
@@ -554,7 +548,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             public void onClick(DialogInterface dialog, int which) {
                 battleFieldForDataBaseMy.create();
                 battleFieldUpToDate=true;
-                databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
+                databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);                                int noOfGames = user.getNoOfGames();
+                noOfGames = noOfGames+1;
+                user.setNoOfGames(noOfGames);
+                databaseReferenceMy.setValue(user);
                 mHandler.postDelayed(game,deelay);
             }
         });
