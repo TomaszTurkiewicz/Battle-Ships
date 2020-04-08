@@ -8,120 +8,122 @@
     android:id="@+id/chooseGameLevelActivityLayout">
 
     <TextView
+        android:id="@+id/randomGameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CREATE RANDOM BATTLE FIELD"
-        android:textSize="40sp"
+        android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.1"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textColor="@color/pen"
+        android:includeFontPadding="false"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:gravity="center"/>
     <TextView
+        android:id="@+id/notRandomGameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CREATE YOUR OWN BATTLE FIELD"
-        android:textSize="40sp"
+        android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.7"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textColor="@color/pen"
+        android:includeFontPadding="false"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:gravity="center"/>
 
 
     <Button
         android:id="@+id/tooEasyRandom"
-        android:layout_width="110dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:onClick="tooEasyGameRandom"
         android:text="@string/easy"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintVertical_bias="0.3"
-        />
-
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp" />
 
     <Button
         android:id="@+id/normalRandom"
-        android:layout_width="110dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:onClick="normalGameRandom"
         android:text="@string/normal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.3"
-        />
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp" />
 
     <Button
         android:id="@+id/expertRandom"
-        android:layout_width="110dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:onClick="expertGameRandom"
         android:text="@string/expert"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintVertical_bias="0.3"
-        />
-
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp" />
 
     <Button
         android:id="@+id/tooEasyNotRandom"
-        android:layout_width="110dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:onClick="tooEasyGameNotRandom"
         android:text="@string/easy"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintVertical_bias="0.9"
-        />
-
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp" />
 
     <Button
         android:id="@+id/normalNotRandom"
-        android:layout_width="110dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:onClick="normalGameNotRandom"
         android:text="@string/normal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.9"
-        />
-
-
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp" />
 
     <Button
         android:id="@+id/expertNotRandom"
-        android:layout_width="110dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:onClick="expertGameNotRandom"
         android:text="@string/expert"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintVertical_bias="0.9"
-        />
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@color/border_color"
+    <TextView
+        android:id="@+id/breakLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen_red"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

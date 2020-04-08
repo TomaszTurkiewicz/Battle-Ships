@@ -92,14 +92,19 @@ public class MainActivity extends AppCompatActivity {
         }else{
             square=devWidth;
         }
+        int widthOffSet = width%square;
+        int heightOffSet = height%square;
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("square",square);
+        editor.putInt("width",width);
+        editor.putInt("height",height);
+        editor.putInt("widthOffSet",widthOffSet);
+        editor.putInt("heightOffSet",heightOffSet);
         editor.commit();
 
-        int widthOffSet = width%square;
-        int heightOffSet = height%square;
+
 
         constraintLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
 
@@ -120,19 +125,19 @@ public class MainActivity extends AppCompatActivity {
 
         set.clone(constraintLayout);
         set.connect(singlePlayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,8*square);
-        set.connect(singlePlayerBtn.getId(),ConstraintSet.START,constraintLayout.getId(),ConstraintSet.START,5*square);
+        set.connect(singlePlayerBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,5*square);
 
         set.connect(multiplayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,8*square);
-        set.connect(multiplayerBtn.getId(),ConstraintSet.START,constraintLayout.getId(),ConstraintSet.START,width-widthOffSet-13*square);
+        set.connect(multiplayerBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-13*square);
 
         set.connect(ranking.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-4*square);
-        set.connect(ranking.getId(),ConstraintSet.START,constraintLayout.getId(),ConstraintSet.START,width-widthOffSet-9*square);
+        set.connect(ranking.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-9*square);
 
         set.connect(loggedIn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
-        set.connect(loggedIn.getId(),ConstraintSet.START,constraintLayout.getId(),ConstraintSet.START,square);
+        set.connect(loggedIn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,square);
 
         set.connect(accountBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
-        set.connect(accountBtn.getId(),ConstraintSet.START,constraintLayout.getId(),ConstraintSet.START,width-widthOffSet-3*square);
+        set.connect(accountBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-3*square);
 
         set.applyTo(constraintLayout);
 
