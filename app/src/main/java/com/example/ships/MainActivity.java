@@ -2,12 +2,15 @@ package com.example.ships;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Shader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.TileDrawable;
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceMy, databaseReferenceOpponent,databaseReferenceBattle;
-    private Button multiplayerBtn;
+    private Button multiplayerBtn, singlePlayerBtn, ranking;
     private ConstraintLayout constraintLayout;
     private String userID;
     private String newUserName;
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler = new Handler();
     private int deelay = 1000;
     private boolean logIn;
+    private int square;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +65,73 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout = findViewById(R.id.mainActivityLayout);
         userName=findViewById(R.id.userName);
         loggedIn=findViewById(R.id.loggedIn);
-
-
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-
         accountBtn=findViewById(R.id.accountButton);
         redDotMultiplayerIV = findViewById(R.id.redDotMultiplayer);
         redDotMultiplayerIV.setVisibility(View.GONE);
+        singlePlayerBtn = findViewById(R.id.singlePlayer);
         multiplayerBtn=findViewById(R.id.multiplayer);
+        ranking=findViewById(R.id.ranking);
         multiplayerBtn.setText("MULTI PLAYER");
-        constraintLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT));
+        accountBtn.setBackgroundResource(R.drawable.account_box);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        int devWidth = width/32;
+        int devHeight = height/19;
+
+        if(devWidth>devHeight){
+            square=devHeight;
+        }else{
+            square=devWidth;
+        }
+
+        int widthOffSet = width%square;
+        int heightOffSet = height%square;
+
+        constraintLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
+
+        ConstraintSet set = new ConstraintSet();
+
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(8*square,2*square);
+        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(8*square,2*square);
+        ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(8*square,2*square);
+        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(2*square,2*square);
+        loggedIn.setLayoutParams(params3);
+        loggedIn.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        userName.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        singlePlayerBtn.setLayoutParams(params);
+        multiplayerBtn.setLayoutParams(params1);
+        ranking.setLayoutParams(params2);
+        accountBtn.setLayoutParams(params4);
+
+        set.clone(constraintLayout);
+        set.connect(singlePlayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,8*square);
+        set.connect(singlePlayerBtn.getId(),ConstraintSet.START,constraintLayout.getId(),ConstraintSet.START,5*square);
+
+        set.connect(multiplayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,8*square);
+        set.connect(multiplayerBtn.getId(),ConstraintSet.START,constraintLayout.getId(),ConstraintSet.START,width-widthOffSet-13*square);
+
+        set.connect(ranking.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-4*square);
+        set.connect(ranking.getId(),ConstraintSet.START,constraintLayout.getId(),ConstraintSet.START,width-widthOffSet-9*square);
+
+        set.connect(loggedIn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
+        set.connect(loggedIn.getId(),ConstraintSet.START,constraintLayout.getId(),ConstraintSet.START,square);
+
+        set.connect(accountBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
+        set.connect(accountBtn.getId(),ConstraintSet.START,constraintLayout.getId(),ConstraintSet.START,width-widthOffSet-3*square);
+
+        set.applyTo(constraintLayout);
+
+
+
+
 
     }
 
@@ -84,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
             logIn=true;
             loggedIn.setText("Zalogowany jako: ");
-            accountBtn.setBackgroundColor(Color.RED);
+            accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
             userID = firebaseUser.getUid();
 
             firebaseDatabase = FirebaseDatabase.getInstance();
@@ -273,6 +335,8 @@ public class MainActivity extends AppCompatActivity {
             multiplayerBtn.setVisibility(View.GONE);
             redDotMultiplayerIV.setVisibility(View.GONE);
             multiplayerBtn.setClickable(false);
+            accountBtn.setBackgroundResource(R.drawable.account_box);
+
             logIn=false;
         }
     }
@@ -300,7 +364,7 @@ public class MainActivity extends AppCompatActivity {
         mHandler.removeCallbacks(checkMyOpponentAndMove);
         Intent intent = new Intent(getApplicationContext(),Scores.class);
         startActivity(intent);
-        finish();
+
     }
 
     private Runnable checkMyOpponentAndMove = new Runnable() {
@@ -360,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    }
+}
 
 
 

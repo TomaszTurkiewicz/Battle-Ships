@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:padding="0dp"
+    android:layout_margin="0dp"
     tools:context=".MainActivity"
     android:id="@+id/mainActivityLayout">
 
@@ -16,18 +19,19 @@
         app:layout_constraintEnd_toEndOf="@id/multiplayer"
         android:elevation="3dp" />
     <Button
-        android:id="@+id/randomGame"
+        android:id="@+id/singlePlayer"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:onClick="singleGame"
         android:text="SINGLE PLAYER"
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintVertical_bias="0.5"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="0dp"
+        android:padding="0dp"/>
 
     <Button
         android:id="@+id/multiplayer"
@@ -35,51 +39,62 @@
         android:layout_height="60dp"
         android:layout_gravity="center"
         android:text="@string/multi_player"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintVertical_bias="0.5"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="0dp"
+        android:padding="0dp"/>
 
     <ImageButton
         android:id="@+id/accountButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:onClick="onClickSignIn"
-        android:src="@drawable/account"
+        android:background="#00000000"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="@dimen/FieldSize"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="0dp"/>
 
     <TextView
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/loggedIn"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/FieldSize"/>
+        app:layout_constraintStart_toEndOf="@id/loggedIn"
+        app:layout_constraintTop_toTopOf="@id/loggedIn"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:gravity="center"
+        android:includeFontPadding="false"/>
 
     <TextView
         android:id="@+id/loggedIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/FieldSize"
-        android:layout_marginLeft="@dimen/FieldSize"/>
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:includeFontPadding="false"/>
 
 
     <Button
         android:id="@+id/ranking"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:onClick="ranking"
         android:text="@string/ranking"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="@dimen/FieldSize"/>
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="0dp"
+        android:padding="0dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.example.ships;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Shader;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,9 +18,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.ships.classes.BattleField;
 import com.example.ships.classes.GameDifficulty;
+import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +41,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private Handler mHandler = new Handler();
     private BattleField battleFieldMeActivityRandomGame = new BattleField();
      private BattleField battleFieldOpponentActivityRandomGame = new BattleField();
-
+    private ConstraintLayout mainLayout;
      private TextView tv1,tv2,tv11;
      private GridLayout layout;
      int[]location1 = new int[2];
@@ -108,7 +111,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_random_game_battle);
-
+        mainLayout = findViewById(R.id.randomGameActivityLayout);
+        mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,100));
         enableTouchListener=false;
         initializeTable(ShootTable);
 

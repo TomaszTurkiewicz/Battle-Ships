@@ -17,9 +17,9 @@ public class TileDrawable extends Drawable {
 
     private final Paint paint;
 
-    public TileDrawable(Drawable drawable, Shader.TileMode tileMode) {
+    public TileDrawable(Drawable drawable, Shader.TileMode tileMode, int x) {
         paint = new Paint();
-        paint.setShader(new BitmapShader(getBitmap(drawable), tileMode, tileMode));
+        paint.setShader(new BitmapShader(getBitmap(drawable,x), tileMode, tileMode));
     }
 
     @Override
@@ -41,12 +41,12 @@ public class TileDrawable extends Drawable {
     public int getOpacity() {
         return PixelFormat.TRANSLUCENT;
     }
-    private Bitmap getBitmap(Drawable drawable) {
+    private Bitmap getBitmap(Drawable drawable, int x) {
         if (drawable instanceof BitmapDrawable)
             return ((BitmapDrawable) drawable).getBitmap();
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(x, x, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.setBounds(0, 0, x, x);
         drawable.draw(canvas);
         return bitmap;
     }
