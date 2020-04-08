@@ -1,7 +1,9 @@
 package com.example.ships;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Shader;
 import android.os.Bundle;
@@ -90,6 +92,11 @@ public class MainActivity extends AppCompatActivity {
         }else{
             square=devWidth;
         }
+
+        SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("square",square);
+        editor.commit();
 
         int widthOffSet = width%square;
         int heightOffSet = height%square;
