@@ -1,23 +1,31 @@
 package com.example.ships;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Shader;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.ships.classes.BattleField;
 import com.example.ships.classes.BattleFieldForDataBase;
 import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.PointIJ;
+import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,18 +39,14 @@ import com.google.firebase.database.ValueEventListener;
 
 public class CreateBattleField extends AppCompatActivity {
 
-    BattleField battleFieldPlayerCreateBattleFieldActivity = new BattleField();
-    TextView[][] TextViewArrayActivityCreateBattleField = new TextView[10][10];
+    private BattleField battleFieldPlayerCreateBattleFieldActivity = new BattleField();
+    private TextView[][] TextViewArrayActivityCreateBattleField = new TextView[10][10];
     private BattleFieldForDataBase battleFieldForDataBase = new BattleFieldForDataBase();
 
-    TextView[] FourMastsShip = new TextView[4];
-    TextView[] ThreeMastsShip = new TextView[3];
-    TextView[] TwoMastsShip = new TextView[2];
-    TextView[] OneMastsShip = new TextView[1];
-    TextView FourMastsCounter;
-    TextView ThreeMastsCounter;
-    TextView TwoMastsCounter;
-    TextView OneMastsCounter;
+    private TextView FourMastsCounter;
+    private TextView ThreeMastsCounter;
+    private TextView TwoMastsCounter;
+    private TextView OneMastsCounter;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceMy, databaseReferenceFight;
@@ -65,7 +69,7 @@ public class CreateBattleField extends AppCompatActivity {
     PointIJ firstPointMastsShip = new PointIJ();
     PointIJ secondPointMastsShip = new PointIJ();
     int shipNumber;
-    Button startButton;
+    private Button startButton;
     private boolean multiplayerMode;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
@@ -77,6 +81,11 @@ public class CreateBattleField extends AppCompatActivity {
     private ImageButton delete, reset;
     private Button backButton;
     private int noOfGames;
+    private ConstraintLayout constraintLayout;
+    private GridLayout gridLayout;
+    private LinearLayout linearLayoutLetters, linearLayoutNumbers;
+    private LinearLayout linearLayoutFourMasts, linearLayoutThreeMasts, linearLayoutTwoMasts, linearLayoutOneMasts;
+
 
 
     @Override
@@ -92,6 +101,134 @@ public class CreateBattleField extends AppCompatActivity {
         delete = findViewById(R.id.deleteButton);
         reset = findViewById(R.id.resetButton);
         backButton = findViewById(R.id.backButton);
+        constraintLayout=findViewById(R.id.createBattleFieldActivityLayout);
+        gridLayout=findViewById(R.id.tableLayoutPlayerBattleFieldCreateBattleField);
+        linearLayoutLetters=findViewById(R.id.LinearLayoutCreateBattleFieldActivityLetters);
+        linearLayoutNumbers=findViewById(R.id.LinearLayoutCreateBattleFieldActivityNumbers);
+        reset.setBackgroundResource(R.drawable.reset);
+        delete.setBackgroundResource(R.drawable.delete);
+        startButton=findViewById(R.id.playButton);
+        linearLayoutFourMasts=findViewById(R.id.linearLayoutFourMastsShip);
+        linearLayoutThreeMasts=findViewById(R.id.linearLayoutThreeMastsShip);
+        linearLayoutTwoMasts=findViewById(R.id.linearLayoutTwoMastsShip);
+        linearLayoutOneMasts=findViewById(R.id.linearLayoutOneMastsShip);
+
+        SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
+        int square = sp.getInt("square",-1);
+        int width = sp.getInt("width",-1);
+        int height = sp.getInt("height",-1);
+        int widthOffSet = sp.getInt("widthOffSet",-1);
+        int heightOffSet = sp.getInt("heightOffSet",-1);
+        float textSize = (square*9)/10;
+        int rightEnd = width-widthOffSet;
+
+
+        constraintLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
+
+        ConstraintSet set = new ConstraintSet();
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(10*square,10*square);
+        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(10*square,square);
+        ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(square,10*square);
+        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(6*square,2*square);
+        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(4*square,square);
+        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(3*square,square);
+        ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(2*square,square);
+        ConstraintLayout.LayoutParams params9 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params10 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params11 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params12 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params13 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params14 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params17 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params18 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params20 = new ConstraintLayout.LayoutParams(14 * square,2 * square);
+
+        gridLayout.setLayoutParams(params);
+        linearLayoutLetters.setLayoutParams(params1);
+        linearLayoutNumbers.setLayoutParams(params2);
+        backButton.setLayoutParams(params3);
+        backButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        reset.setLayoutParams(params4);
+        delete.setLayoutParams(params5);
+        linearLayoutFourMasts.setLayoutParams(params6);
+        linearLayoutThreeMasts.setLayoutParams(params7);
+        linearLayoutTwoMasts.setLayoutParams(params8);
+        linearLayoutOneMasts.setLayoutParams(params9);
+
+        FourMastsCounter.setLayoutParams(params10);
+        ThreeMastsCounter.setLayoutParams(params14);
+        TwoMastsCounter.setLayoutParams(params17);
+        OneMastsCounter.setLayoutParams(params19);
+        startButton.setLayoutParams(params20);
+        startButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        FourMastsCounter.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        ThreeMastsCounter.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        TwoMastsCounter.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        OneMastsCounter.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        for(int i=0;i<10;i++){
+            TextView tv = (TextView) linearLayoutLetters.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        }
+        for(int i=0;i<10;i++){
+            TextView tv = (TextView) linearLayoutNumbers.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        }
+
+
+        set.clone(constraintLayout);
+
+        set.connect(gridLayout.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,4*square);
+        set.connect(gridLayout.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,5*square);
+
+        set.connect(linearLayoutLetters.getId(),ConstraintSet.BOTTOM,gridLayout.getId(),ConstraintSet.TOP,0);
+        set.connect(linearLayoutLetters.getId(),ConstraintSet.LEFT,gridLayout.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(linearLayoutNumbers.getId(),ConstraintSet.TOP,gridLayout.getId(),ConstraintSet.TOP,0);
+        set.connect(linearLayoutNumbers.getId(),ConstraintSet.RIGHT,gridLayout.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(backButton.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
+        set.connect(backButton.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-7*square);
+
+        set.connect(reset.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
+        set.connect(reset.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-11*square);
+
+        set.connect(delete.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
+        set.connect(delete.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-15*square);
+
+        set.connect(linearLayoutFourMasts.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,6*square);
+        set.connect(linearLayoutFourMasts.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-13*square);
+
+        set.connect(FourMastsCounter.getId(),ConstraintSet.TOP,linearLayoutFourMasts.getId(),ConstraintSet.TOP,0);
+        set.connect(FourMastsCounter.getId(),ConstraintSet.RIGHT,linearLayoutFourMasts.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(linearLayoutThreeMasts.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,10*square);
+        set.connect(linearLayoutThreeMasts.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-13*square);
+
+        set.connect(ThreeMastsCounter.getId(),ConstraintSet.TOP,linearLayoutThreeMasts.getId(),ConstraintSet.TOP,0);
+        set.connect(ThreeMastsCounter.getId(),ConstraintSet.RIGHT,linearLayoutThreeMasts.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(linearLayoutTwoMasts.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,10*square);
+        set.connect(linearLayoutTwoMasts.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-6*square);
+
+        set.connect(TwoMastsCounter.getId(),ConstraintSet.TOP,linearLayoutTwoMasts.getId(),ConstraintSet.TOP,0);
+        set.connect(TwoMastsCounter.getId(),ConstraintSet.RIGHT,linearLayoutTwoMasts.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(linearLayoutOneMasts.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,6*square);
+        set.connect(linearLayoutOneMasts.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-5*square);
+
+        set.connect(OneMastsCounter.getId(),ConstraintSet.TOP,linearLayoutOneMasts.getId(),ConstraintSet.TOP,0);
+        set.connect(OneMastsCounter.getId(),ConstraintSet.RIGHT,linearLayoutOneMasts.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(startButton.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,14*square);
+        set.connect(startButton.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-15*square);
+
+        set.applyTo(constraintLayout);
+
         if(multiplayerMode){
             firebaseAuth = FirebaseAuth.getInstance();
             firebaseUser = firebaseAuth.getCurrentUser();
@@ -113,66 +250,41 @@ public class CreateBattleField extends AppCompatActivity {
 
 
         }
-        initializeFourMastsShipTextView(FourMastsShip);
-        initializeThreeMastsShipTextView(ThreeMastsShip);
-        initializeTwoMastsShipTextView(TwoMastsShip);
-        initializeOneMastsShipTextView(OneMastsShip);
-        startButton=findViewById(R.id.playButton);
+
             updateScreen();
 
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        int variable = backButton.getHeight();
-        ViewGroup.LayoutParams params = reset.getLayoutParams();
-        params.height = variable;
-        params.width = variable;
-        reset.setLayoutParams(params);
-
-        ViewGroup.LayoutParams params1 = delete.getLayoutParams();
-        params1.height = variable;
-        params1.width = variable;
-        delete.setLayoutParams(params1);
-
-
-
-    }
-
     private void disableOneMastsTextView(){
-        setGrey(OneMastsShip,0);
-        OneMastsShip[0].setClickable(false);
+        setGrey((TextView) linearLayoutOneMasts.getChildAt(0));
+        linearLayoutOneMasts.setClickable(false);
         choosenShip=0;
     }
 
     private void disableTwoMastsTextView(){
-        setGrey(TwoMastsShip,0);
-        setGrey(TwoMastsShip,1);
-        TwoMastsShip[0].setClickable(false);
-        TwoMastsShip[1].setClickable(false);
+        setGrey((TextView) linearLayoutTwoMasts.getChildAt(0));
+        setGrey((TextView) linearLayoutTwoMasts.getChildAt(1));
+        linearLayoutTwoMasts.setClickable(false);
+
         choosenShip=0;
     }
 
     private void disableThreeMastsTextView(){
-        setGrey(ThreeMastsShip,0);
-        setGrey(ThreeMastsShip,1);
-        setGrey(ThreeMastsShip,2);
-        ThreeMastsShip[0].setClickable(false);
-        ThreeMastsShip[1].setClickable(false);
-        ThreeMastsShip[2].setClickable(false);
+        setGrey((TextView) linearLayoutThreeMasts.getChildAt(0));
+        setGrey((TextView) linearLayoutThreeMasts.getChildAt(1));
+        setGrey((TextView) linearLayoutThreeMasts.getChildAt(2));
+        linearLayoutThreeMasts.setClickable(false);
+
         choosenShip=0;
     }
 
     private void disableFourMastsTextView(){
-        setGrey(FourMastsShip,0);
-        setGrey(FourMastsShip,1);
-        setGrey(FourMastsShip,2);
-        setGrey(FourMastsShip,3);
-        FourMastsShip[0].setClickable(false);
-        FourMastsShip[1].setClickable(false);
-        FourMastsShip[2].setClickable(false);
-        FourMastsShip[3].setClickable(false);
+        setGrey((TextView) linearLayoutFourMasts.getChildAt(0));
+        setGrey((TextView) linearLayoutFourMasts.getChildAt(1));
+        setGrey((TextView) linearLayoutFourMasts.getChildAt(2));
+        setGrey((TextView) linearLayoutFourMasts.getChildAt(3));
+        linearLayoutFourMasts.setClickable(false);
+
         choosenShip=0;
     }
 
@@ -265,8 +377,8 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void enableOneMastsTextView() {
-        setBlank(OneMastsShip,0);
-        OneMastsShip[0].setClickable(true);
+        setBlank((TextView) linearLayoutOneMasts.getChildAt(0));
+        linearLayoutOneMasts.setClickable(true);
     }
 
     private void updateTextViewTwoMastsShipCounter() {
@@ -278,10 +390,9 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void enableTwoMastsTextView() {
-        setBlank(TwoMastsShip,0);
-        setBlank(TwoMastsShip,1);
-        TwoMastsShip[0].setClickable(true);
-        TwoMastsShip[1].setClickable(true);
+        setBlank((TextView) linearLayoutTwoMasts.getChildAt(0));
+        setBlank((TextView) linearLayoutTwoMasts.getChildAt(1));
+        linearLayoutTwoMasts.setClickable(true);
     }
 
     private void updateTextViewThreeMastsShipCounter() {
@@ -295,19 +406,15 @@ public class CreateBattleField extends AppCompatActivity {
     private void enableThreeMastsTextView() {
 
         if(choosenShip==3){
-        setRed(ThreeMastsShip,0);
-        setRed(ThreeMastsShip,1);
-        setRed(ThreeMastsShip,2);
-        ThreeMastsShip[0].setClickable(true);
-        ThreeMastsShip[1].setClickable(true);
-        ThreeMastsShip[2].setClickable(true);
+        setRed((TextView) linearLayoutThreeMasts.getChildAt(0));
+        setRed((TextView) linearLayoutThreeMasts.getChildAt(1));
+        setRed((TextView) linearLayoutThreeMasts.getChildAt(2));
+        linearLayoutThreeMasts.setClickable(true);
     }else{
-            setBlank(ThreeMastsShip,0);
-            setBlank(ThreeMastsShip,1);
-            setBlank(ThreeMastsShip,2);
-            ThreeMastsShip[0].setClickable(true);
-            ThreeMastsShip[1].setClickable(true);
-            ThreeMastsShip[2].setClickable(true);
+            setBlank((TextView) linearLayoutThreeMasts.getChildAt(0));
+            setBlank((TextView) linearLayoutThreeMasts.getChildAt(1));
+            setBlank((TextView) linearLayoutThreeMasts.getChildAt(2));
+            linearLayoutThreeMasts.setClickable(true);
         }
     }
 
@@ -320,40 +427,38 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void enableFourMastsTextView() {
-        setBlank(FourMastsShip,0);
-        setBlank(FourMastsShip,1);
-        setBlank(FourMastsShip,2);
-        setBlank(FourMastsShip,3);
-        FourMastsShip[0].setClickable(true);
-        FourMastsShip[1].setClickable(true);
-        FourMastsShip[2].setClickable(true);
-        FourMastsShip[3].setClickable(true);
+        setBlank((TextView) linearLayoutFourMasts.getChildAt(0));
+        setBlank((TextView) linearLayoutFourMasts.getChildAt(1));
+        setBlank((TextView) linearLayoutFourMasts.getChildAt(2));
+        setBlank((TextView) linearLayoutFourMasts.getChildAt(3));
+        linearLayoutFourMasts.setClickable(true);
+
     }
 
-    private void setBlank (TextView[] TextView, int i){
+    private void setBlank (TextView TextView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x));
+            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x));
         } else {
-            TextView[i].setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
+            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
         }
     }
 
-    private void setRed (TextView[] TextView, int i){
+    private void setRed (TextView TextView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_normal_x));
+            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_normal_x));
         } else {
-            TextView[i].setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_normal_x));
+            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_normal_x));
         }
     }
 
-    private void setGrey (TextView[] TextView, int i){
+    private void setGrey (TextView TextView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
         } else {
-            TextView[i].setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
         }
     }
 
@@ -430,27 +535,11 @@ public class CreateBattleField extends AppCompatActivity {
         }
     }
 
-    private void initializeOneMastsShipTextView(TextView[] oneMastsShip) {
-        oneMastsShip[0]=(TextView)findViewById(R.id.playerCellGameCreateBattleFieldOneMasts1);
-    }
 
-    private void initializeTwoMastsShipTextView(TextView[] twoMastsShip) {
-        twoMastsShip[0]=(TextView)findViewById(R.id.playerCellGameCreateBattleFieldTwoMasts1);
-        twoMastsShip[1]=(TextView)findViewById(R.id.playerCellGameCreateBattleFieldTwoMasts2);
-    }
 
-    private void initializeThreeMastsShipTextView(TextView[] threeMastsShip) {
-        threeMastsShip[0]=(TextView)findViewById(R.id.playerCellGameCreateBattleFieldThreeMasts1);
-        threeMastsShip[1]=(TextView)findViewById(R.id.playerCellGameCreateBattleFieldThreeMasts2);
-        threeMastsShip[2]=(TextView)findViewById(R.id.playerCellGameCreateBattleFieldThreeMasts3);
-    }
 
-    private void initializeFourMastsShipTextView(TextView[] fourMastsShip) {
-        fourMastsShip[0]=(TextView)findViewById(R.id.playerCellGameCreateBattleFieldFourMasts1);
-        fourMastsShip[1]=(TextView)findViewById(R.id.playerCellGameCreateBattleFieldFourMasts2);
-        fourMastsShip[2]=(TextView)findViewById(R.id.playerCellGameCreateBattleFieldFourMasts3);
-        fourMastsShip[3]=(TextView)findViewById(R.id.playerCellGameCreateBattleFieldFourMasts4);
-    }
+
+
 
     private void initializeBattleFieldActivityRandomGamePlayerOne(TextView[][] textViewArrayActivityCreateBattleField) {
         textViewArrayActivityCreateBattleField[0][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x1);
@@ -711,7 +800,7 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void setRedOneMasts() {
-        setRed(OneMastsShip,0);
+        setRed((TextView) linearLayoutOneMasts.getChildAt(0));
     }
 
     private void activeTwoMasts() {
@@ -728,8 +817,8 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void setRedTwoMasts() {
-        setRed(TwoMastsShip,0);
-        setRed(TwoMastsShip,1);
+        setRed((TextView) linearLayoutTwoMasts.getChildAt(0));
+        setRed((TextView) linearLayoutTwoMasts.getChildAt(1));
     }
 
     private void activeThreeMasts() {
@@ -746,16 +835,16 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void setBlankFourMasts() {
-        setBlank(FourMastsShip,0);
-        setBlank(FourMastsShip,1);
-        setBlank(FourMastsShip,2);
-        setBlank(FourMastsShip,3);
+        setBlank((TextView) linearLayoutFourMasts.getChildAt(0));
+        setBlank((TextView) linearLayoutFourMasts.getChildAt(1));
+        setBlank((TextView) linearLayoutFourMasts.getChildAt(2));
+        setBlank((TextView) linearLayoutFourMasts.getChildAt(3));
     }
 
     private void setRedThreeMasts() {
-        setRed(ThreeMastsShip,0);
-        setRed(ThreeMastsShip,1);
-        setRed(ThreeMastsShip,2);
+        setRed((TextView) linearLayoutThreeMasts.getChildAt(0));
+        setRed((TextView) linearLayoutThreeMasts.getChildAt(1));
+        setRed((TextView) linearLayoutThreeMasts.getChildAt(2));
     }
 
     private void activeFourMasts() {
@@ -772,25 +861,25 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void setBlankOneMasts() {
-        setBlank(OneMastsShip,0);
+        setBlank((TextView) linearLayoutOneMasts.getChildAt(0));
     }
 
     private void setBlankTwoMasts() {
-        setBlank(TwoMastsShip,0);
-        setBlank(TwoMastsShip,1);
+        setBlank((TextView) linearLayoutTwoMasts.getChildAt(0));
+        setBlank((TextView) linearLayoutTwoMasts.getChildAt(1));
     }
 
     private void setBlankThreeMasts() {
-        setBlank(ThreeMastsShip,0);
-        setBlank(ThreeMastsShip,1);
-        setBlank(ThreeMastsShip,2);
+        setBlank((TextView) linearLayoutThreeMasts.getChildAt(0));
+        setBlank((TextView) linearLayoutThreeMasts.getChildAt(1));
+        setBlank((TextView) linearLayoutThreeMasts.getChildAt(2));
     }
 
     private void setRedFourMasts() {
-        setRed(FourMastsShip,0);
-        setRed(FourMastsShip,1);
-        setRed(FourMastsShip,2);
-        setRed(FourMastsShip,3);
+        setRed((TextView) linearLayoutFourMasts.getChildAt(0));
+        setRed((TextView) linearLayoutFourMasts.getChildAt(1));
+        setRed((TextView) linearLayoutFourMasts.getChildAt(2));
+        setRed((TextView) linearLayoutFourMasts.getChildAt(3));
     }
 
     public void putShip(int i, int j, int numberOfMasts){
@@ -1878,3 +1967,5 @@ public class CreateBattleField extends AppCompatActivity {
         }
     };
 }
+
+// TODO set linearlayouts clickable not textviews
