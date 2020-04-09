@@ -67,7 +67,6 @@ public class CreateBattleField extends AppCompatActivity {
     int shipNumberFlag;
     PointIJ firstPointMastsShip = new PointIJ();
     PointIJ secondPointMastsShip = new PointIJ();
-    int shipNumber;
     private Button startButton;
     private boolean multiplayerMode;
     private FirebaseAuth firebaseAuth;
@@ -135,14 +134,8 @@ public class CreateBattleField extends AppCompatActivity {
         ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(2*square,square);
         ConstraintLayout.LayoutParams params9 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params10 = new ConstraintLayout.LayoutParams(square,square);
-        ConstraintLayout.LayoutParams params11 = new ConstraintLayout.LayoutParams(square,square);
-        ConstraintLayout.LayoutParams params12 = new ConstraintLayout.LayoutParams(square,square);
-        ConstraintLayout.LayoutParams params13 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params14 = new ConstraintLayout.LayoutParams(square,square);
-        ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square,square);
-        ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params17 = new ConstraintLayout.LayoutParams(square,square);
-        ConstraintLayout.LayoutParams params18 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params20 = new ConstraintLayout.LayoutParams(14 * square,2 * square);
 
@@ -319,17 +312,7 @@ public class CreateBattleField extends AppCompatActivity {
         }
     }
 
-//    private void updateBattleField() {
-//        for(int i=0;i<10;i++){
-//            for(int j=0;j<10;j++){
-//                if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-//                    setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-//                }else{
-//                    setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-//                }
-//            }
-//        }
-//    }
+
 
     private void setNoShipColor(TextView textView) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
@@ -1854,5 +1837,3 @@ public class CreateBattleField extends AppCompatActivity {
         }
     };
 }
-
-// TODO set linearlayouts clickable not textviews

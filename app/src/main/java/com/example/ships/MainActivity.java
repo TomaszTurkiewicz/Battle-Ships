@@ -452,4 +452,5 @@ public class MainActivity extends AppCompatActivity {
 // TODO change buttons styles...
 // TODO Add notification when accepting and not accepting invitation
 // TODO change notification
+// TODO block back button during game
 
