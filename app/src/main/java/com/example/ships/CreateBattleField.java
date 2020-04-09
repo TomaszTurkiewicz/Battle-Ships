@@ -40,7 +40,6 @@ import com.google.firebase.database.ValueEventListener;
 public class CreateBattleField extends AppCompatActivity {
 
     private BattleField battleFieldPlayerCreateBattleFieldActivity = new BattleField();
-    private TextView[][] TextViewArrayActivityCreateBattleField = new TextView[10][10];
     private BattleFieldForDataBase battleFieldForDataBase = new BattleFieldForDataBase();
 
     private TextView FourMastsCounter;
@@ -93,7 +92,6 @@ public class CreateBattleField extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_battle_field);
         multiplayerMode= GameDifficulty.getInstance().isMultiplayerMode();
-        initializeBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityCreateBattleField);
         FourMastsCounter = (TextView)findViewById(R.id.fourMastsCounterTextView);
         ThreeMastsCounter = (TextView)findViewById(R.id.threeMastsCounterTextView);
         TwoMastsCounter = (TextView)findViewById(R.id.twoMastsCounterTextView);
@@ -321,42 +319,42 @@ public class CreateBattleField extends AppCompatActivity {
         }
     }
 
-    private void updateBattleField() {
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-                    setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                }else{
-                    setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                }
-            }
+//    private void updateBattleField() {
+//        for(int i=0;i<10;i++){
+//            for(int j=0;j<10;j++){
+//                if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
+//                    setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+//                }else{
+//                    setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
+//                }
+//            }
+//        }
+//    }
+
+    private void setNoShipColor(TextView textView) {
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x));
+        } else {
+            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
         }
     }
 
-    private void setNoShipColor(TextView[][] TextView, int i, int j) {
+    private void setShipColor(TextView textView) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
+            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
         }
     }
 
-    private void setShipColor(TextView[][] TextView, int i, int j) {
+    private void setGreyColor(TextView textView) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
-        }
-    }
-
-    private void setGreyColor(TextView[][] TextView, int i, int j) {
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
-        } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
+            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
         }
     }
 
@@ -541,117 +539,6 @@ public class CreateBattleField extends AppCompatActivity {
 
 
 
-    private void initializeBattleFieldActivityRandomGamePlayerOne(TextView[][] textViewArrayActivityCreateBattleField) {
-        textViewArrayActivityCreateBattleField[0][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x1);
-        textViewArrayActivityCreateBattleField[0][1]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x2);
-        textViewArrayActivityCreateBattleField[0][2]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x3);
-        textViewArrayActivityCreateBattleField[0][3]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x4);
-        textViewArrayActivityCreateBattleField[0][4]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x5);
-        textViewArrayActivityCreateBattleField[0][5]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x6);
-        textViewArrayActivityCreateBattleField[0][6]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x7);
-        textViewArrayActivityCreateBattleField[0][7]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x8);
-        textViewArrayActivityCreateBattleField[0][8]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x9);
-        textViewArrayActivityCreateBattleField[0][9]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_1x10);
-
-        textViewArrayActivityCreateBattleField[1][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_2x1);
-        textViewArrayActivityCreateBattleField[1][1]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_2x2);
-        textViewArrayActivityCreateBattleField[1][2]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_2x3);
-        textViewArrayActivityCreateBattleField[1][3]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_2x4);
-        textViewArrayActivityCreateBattleField[1][4]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_2x5);
-        textViewArrayActivityCreateBattleField[1][5]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_2x6);
-        textViewArrayActivityCreateBattleField[1][6]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_2x7);
-        textViewArrayActivityCreateBattleField[1][7]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_2x8);
-        textViewArrayActivityCreateBattleField[1][8]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_2x9);
-        textViewArrayActivityCreateBattleField[1][9]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_2x10);
-
-        textViewArrayActivityCreateBattleField[2][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_3x1);
-        textViewArrayActivityCreateBattleField[2][1]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_3x2);
-        textViewArrayActivityCreateBattleField[2][2]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_3x3);
-        textViewArrayActivityCreateBattleField[2][3]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_3x4);
-        textViewArrayActivityCreateBattleField[2][4]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_3x5);
-        textViewArrayActivityCreateBattleField[2][5]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_3x6);
-        textViewArrayActivityCreateBattleField[2][6]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_3x7);
-        textViewArrayActivityCreateBattleField[2][7]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_3x8);
-        textViewArrayActivityCreateBattleField[2][8]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_3x9);
-        textViewArrayActivityCreateBattleField[2][9]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_3x10);
-
-        textViewArrayActivityCreateBattleField[3][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_4x1);
-        textViewArrayActivityCreateBattleField[3][1]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_4x2);
-        textViewArrayActivityCreateBattleField[3][2]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_4x3);
-        textViewArrayActivityCreateBattleField[3][3]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_4x4);
-        textViewArrayActivityCreateBattleField[3][4]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_4x5);
-        textViewArrayActivityCreateBattleField[3][5]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_4x6);
-        textViewArrayActivityCreateBattleField[3][6]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_4x7);
-        textViewArrayActivityCreateBattleField[3][7]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_4x8);
-        textViewArrayActivityCreateBattleField[3][8]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_4x9);
-        textViewArrayActivityCreateBattleField[3][9]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_4x10);
-
-        textViewArrayActivityCreateBattleField[4][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_5x1);
-        textViewArrayActivityCreateBattleField[4][1]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_5x2);
-        textViewArrayActivityCreateBattleField[4][2]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_5x3);
-        textViewArrayActivityCreateBattleField[4][3]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_5x4);
-        textViewArrayActivityCreateBattleField[4][4]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_5x5);
-        textViewArrayActivityCreateBattleField[4][5]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_5x6);
-        textViewArrayActivityCreateBattleField[4][6]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_5x7);
-        textViewArrayActivityCreateBattleField[4][7]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_5x8);
-        textViewArrayActivityCreateBattleField[4][8]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_5x9);
-        textViewArrayActivityCreateBattleField[4][9]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_5x10);
-
-        textViewArrayActivityCreateBattleField[5][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_6x1);
-        textViewArrayActivityCreateBattleField[5][1]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_6x2);
-        textViewArrayActivityCreateBattleField[5][2]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_6x3);
-        textViewArrayActivityCreateBattleField[5][3]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_6x4);
-        textViewArrayActivityCreateBattleField[5][4]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_6x5);
-        textViewArrayActivityCreateBattleField[5][5]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_6x6);
-        textViewArrayActivityCreateBattleField[5][6]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_6x7);
-        textViewArrayActivityCreateBattleField[5][7]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_6x8);
-        textViewArrayActivityCreateBattleField[5][8]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_6x9);
-        textViewArrayActivityCreateBattleField[5][9]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_6x10);
-
-        textViewArrayActivityCreateBattleField[6][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_7x1);
-        textViewArrayActivityCreateBattleField[6][1]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_7x2);
-        textViewArrayActivityCreateBattleField[6][2]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_7x3);
-        textViewArrayActivityCreateBattleField[6][3]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_7x4);
-        textViewArrayActivityCreateBattleField[6][4]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_7x5);
-        textViewArrayActivityCreateBattleField[6][5]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_7x6);
-        textViewArrayActivityCreateBattleField[6][6]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_7x7);
-        textViewArrayActivityCreateBattleField[6][7]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_7x8);
-        textViewArrayActivityCreateBattleField[6][8]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_7x9);
-        textViewArrayActivityCreateBattleField[6][9]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_7x10);
-
-        textViewArrayActivityCreateBattleField[7][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_8x1);
-        textViewArrayActivityCreateBattleField[7][1]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_8x2);
-        textViewArrayActivityCreateBattleField[7][2]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_8x3);
-        textViewArrayActivityCreateBattleField[7][3]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_8x4);
-        textViewArrayActivityCreateBattleField[7][4]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_8x5);
-        textViewArrayActivityCreateBattleField[7][5]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_8x6);
-        textViewArrayActivityCreateBattleField[7][6]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_8x7);
-        textViewArrayActivityCreateBattleField[7][7]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_8x8);
-        textViewArrayActivityCreateBattleField[7][8]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_8x9);
-        textViewArrayActivityCreateBattleField[7][9]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_8x10);
-
-        textViewArrayActivityCreateBattleField[8][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_9x1);
-        textViewArrayActivityCreateBattleField[8][1]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_9x2);
-        textViewArrayActivityCreateBattleField[8][2]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_9x3);
-        textViewArrayActivityCreateBattleField[8][3]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_9x4);
-        textViewArrayActivityCreateBattleField[8][4]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_9x5);
-        textViewArrayActivityCreateBattleField[8][5]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_9x6);
-        textViewArrayActivityCreateBattleField[8][6]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_9x7);
-        textViewArrayActivityCreateBattleField[8][7]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_9x8);
-        textViewArrayActivityCreateBattleField[8][8]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_9x9);
-        textViewArrayActivityCreateBattleField[8][9]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_9x10);
-
-        textViewArrayActivityCreateBattleField[9][0]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_10x1);
-        textViewArrayActivityCreateBattleField[9][1]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_10x2);
-        textViewArrayActivityCreateBattleField[9][2]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_10x3);
-        textViewArrayActivityCreateBattleField[9][3]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_10x4);
-        textViewArrayActivityCreateBattleField[9][4]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_10x5);
-        textViewArrayActivityCreateBattleField[9][5]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_10x6);
-        textViewArrayActivityCreateBattleField[9][6]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_10x7);
-        textViewArrayActivityCreateBattleField[9][7]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_10x8);
-        textViewArrayActivityCreateBattleField[9][8]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_10x9);
-        textViewArrayActivityCreateBattleField[9][9]=(TextView)findViewById(R.id.playerCellGameCreateBattleField_10x10);
-    }
 
     public void onClickBack(View view) {
         finish();
@@ -893,8 +780,8 @@ public class CreateBattleField extends AppCompatActivity {
                     firstPointMastsShip.setI(i);
                     firstPointMastsShip.setJ(j);
                     checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                    setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                    TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                    setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                    gridLayout.getChildAt(10*i+j).setClickable(false);
                     //                    updateBattleField();
                 }else if(fourMastsCounter==1){
                     if(conditionIJ(i,j,numberOfMasts)) {
@@ -904,8 +791,8 @@ public class CreateBattleField extends AppCompatActivity {
                         secondPointMastsShip.setI(i);
                         secondPointMastsShip.setJ(j);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                        setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
 //                        updateBattleField();
                     }
                 }
@@ -916,8 +803,8 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(1);
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                             checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                            TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                            gridLayout.getChildAt(10*i+j).setClickable(false);
                             //                            updateBattleField();
                         }
                     }else if(firstPointMastsShip.getJ()== secondPointMastsShip.getJ()){
@@ -926,8 +813,8 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(1);
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                             checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                            TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                            gridLayout.getChildAt(10*i+j).setClickable(false);
 //                            updateBattleField();
 
                         }
@@ -969,8 +856,8 @@ public class CreateBattleField extends AppCompatActivity {
                         firstPointMastsShip.setI(i);
                         firstPointMastsShip.setJ(j);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                        setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
 //                        updateBattleField();
                     }
                     else if(threeMastsCounter1==1){
@@ -981,8 +868,8 @@ public class CreateBattleField extends AppCompatActivity {
                             secondPointMastsShip.setI(i);
                             secondPointMastsShip.setJ(j);
                             checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                            TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                            gridLayout.getChildAt(10*i+j).setClickable(false);
 //                            updateBattleField();
                         }
                     }else{
@@ -1017,8 +904,8 @@ public class CreateBattleField extends AppCompatActivity {
                         firstPointMastsShip.setI(i);
                         firstPointMastsShip.setJ(j);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                        setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
                         //                        updateBattleField();
                     } else if (threeMastsCounter2 == 1) {
                         if (conditionIJ(i, j, numberOfMasts)) {
@@ -1028,8 +915,8 @@ public class CreateBattleField extends AppCompatActivity {
                             secondPointMastsShip.setI(i);
                             secondPointMastsShip.setJ(j);
                             checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                            TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                            gridLayout.getChildAt(10*i+j).setClickable(false);
  //                           updateBattleField();
                         }
                     } else {
@@ -1065,8 +952,8 @@ public class CreateBattleField extends AppCompatActivity {
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(shipNumberFlag);
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                        setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
  //                       updateBattleField();
                     }
                     else {
@@ -1088,8 +975,8 @@ public class CreateBattleField extends AppCompatActivity {
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(shipNumberFlag);
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                        setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
  //                       updateBattleField();
                     }
                     else {
@@ -1111,8 +998,8 @@ public class CreateBattleField extends AppCompatActivity {
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(shipNumberFlag);
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(true);
                         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-                        setShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        setShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
  //                       updateBattleField();
                     }
                     else {
@@ -1155,15 +1042,15 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j+1].isShip()){
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
                         if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-                        setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                        setShipColor((TextView) gridLayout.getChildAt(10*i+j));
                         }else{
-                            setGreyColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setGreyColor((TextView) gridLayout.getChildAt(10*i+j));
                         }
                     } else{
-                        setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                        setNoShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(true);
 
                     }
                 }
@@ -1174,15 +1061,15 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j+1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j+1].isShip()){
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
                         if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
                         }else{
-                            setGreyColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setGreyColor((TextView) gridLayout.getChildAt(10*i+j));
                         }
                     }else{
-                        setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                        setNoShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(true);
                     }
                 }
                 else if(i==9&&j==0){
@@ -1190,15 +1077,15 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j+1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j+1].isShip()){
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
                         if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
                         }else{
-                            setGreyColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setGreyColor((TextView) gridLayout.getChildAt(10*i+j));
                         }
                     }else{
-                        setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                        setNoShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(true);
                     }
                 }
                 else if (i == 0 && ((j > 0) && (j < 9))){
@@ -1208,15 +1095,15 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j+1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j-1].isShip()){
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
                         if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
                         }else{
-                            setGreyColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setGreyColor((TextView) gridLayout.getChildAt(10*i+j));
                         }
                     }else{
-                        setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                        setNoShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(true);
                     }
                 }
                 else if (((i > 0) && (i < 9)) && ((j > 0) && (j < 9))){
@@ -1229,15 +1116,15 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j-1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j-1].isShip()){
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
                         if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
                         }else{
-                            setGreyColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setGreyColor((TextView) gridLayout.getChildAt(10*i+j));
                         }
                     }else{
-                        setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                        setNoShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(true);
                     }
                 }
                 else if (i == 9 && ((j > 0) && (j < 9))) {
@@ -1247,15 +1134,15 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j+1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j-1].isShip()){
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
                         if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
                         }else{
-                            setGreyColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setGreyColor((TextView) gridLayout.getChildAt(10*i+j));
                         }
                     }else{
-                        setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                        setNoShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(true);
                     }
                 }
                 else if (i == 0 && j == 9) {
@@ -1263,15 +1150,15 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j-1].isShip()){
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
                         if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
                         }else{
-                            setGreyColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setGreyColor((TextView) gridLayout.getChildAt(10*i+j));
                         }
                     }else{
-                        setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                        setNoShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(true);
                     }
                 }
                 else if (((i > 0) && (i < 9)) && (j == 9)) {
@@ -1281,15 +1168,15 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j-1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i+1][j-1].isShip()){
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
                         if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
                         }else{
-                            setGreyColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setGreyColor((TextView) gridLayout.getChildAt(10*i+j));
                         }
                     }else{
-                        setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                        setNoShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(true);
                     }
                 }
                 else if ((i == 9) && (j == 9)){
@@ -1297,15 +1184,15 @@ public class CreateBattleField extends AppCompatActivity {
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i][j-1].isShip()||
                             battleFieldPlayerCreateBattleFieldActivity.battleField[i-1][j-1].isShip()){
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(false);
+                        gridLayout.getChildAt(10*i+j).setClickable(false);
                         if(battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].isShip()){
-                            setShipColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setShipColor((TextView) gridLayout.getChildAt(10*i+j));
                         }else{
-                            setGreyColor(TextViewArrayActivityCreateBattleField,i,j);
+                            setGreyColor((TextView) gridLayout.getChildAt(10*i+j));
                         }
                     }else{
-                        setNoShipColor(TextViewArrayActivityCreateBattleField,i,j);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                        setNoShipColor((TextView) gridLayout.getChildAt(10*i+j));
+                        gridLayout.getChildAt(10*i+j).setClickable(true);
                     }
                 }
                 else;
@@ -1842,7 +1729,7 @@ public class CreateBattleField extends AppCompatActivity {
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(0);
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(0);
                         battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(false);
-                        TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                        gridLayout.getChildAt(10*i+j).setClickable(true);
                     }
                 }
                 choosenShip=0;
@@ -1942,7 +1829,7 @@ public class CreateBattleField extends AppCompatActivity {
         choosenShip=5;
         for(int i=0;i<10;i++){
             for(int j=0;j<10;j++){
-                TextViewArrayActivityCreateBattleField[i][j].setClickable(true);
+                gridLayout.getChildAt(10*i+j).setClickable(true);
             }
         }
     }

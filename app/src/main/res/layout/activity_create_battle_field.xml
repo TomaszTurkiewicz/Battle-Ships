@@ -235,7 +235,6 @@
             android:rowCount="10">
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_1x1"
                     android:onClick="clickCreateBattleField_1x1"
                     android:height="0dp"
                     android:width="0dp"
@@ -243,7 +242,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_1x2"
                     android:onClick="clickCreateBattleField_1x2"
                     android:height="0dp"
                     android:width="0dp"
@@ -251,7 +249,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_1x3"
                     android:onClick="clickCreateBattleField_1x3"
                     android:height="0dp"
                     android:width="0dp"
@@ -259,7 +256,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_1x4"
                     android:onClick="clickCreateBattleField_1x4"
                     android:height="0dp"
                     android:width="0dp"
@@ -267,7 +263,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_1x5"
                     android:onClick="clickCreateBattleField_1x5"
                     android:height="0dp"
                     android:width="0dp"
@@ -275,7 +270,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_1x6"
                     android:onClick="clickCreateBattleField_1x6"
                     android:height="0dp"
                     android:width="0dp"
@@ -283,7 +277,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_1x7"
                     android:onClick="clickCreateBattleField_1x7"
                     android:height="0dp"
                     android:width="0dp"
@@ -291,14 +284,13 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_1x8"
-                    android:onClick="clickCreateBattleField_1x8"                    android:height="0dp"
+                    android:onClick="clickCreateBattleField_1x8"
+                    android:height="0dp"
                     android:width="0dp"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_1x9"
                     android:onClick="clickCreateBattleField_1x9"
                     android:height="0dp"
                     android:width="0dp"
@@ -306,7 +298,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_1x10"
                     android:onClick="clickCreateBattleField_1x10"                    android:height="0dp"
                     android:width="0dp"
                     android:layout_rowWeight="1"
@@ -314,7 +305,6 @@
 
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_2x1"
                     android:onClick="clickCreateBattleField_2x1"
                     android:height="0dp"
                     android:width="0dp"
@@ -322,7 +312,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_2x2"
                     android:onClick="clickCreateBattleField_2x2"
                     android:height="0dp"
                     android:width="0dp"
@@ -330,7 +319,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_2x3"
                     android:onClick="clickCreateBattleField_2x3"
                     android:height="0dp"
                     android:width="0dp"
@@ -338,7 +326,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_2x4"
                     android:onClick="clickCreateBattleField_2x4"
                     android:height="0dp"
                     android:width="0dp"
@@ -346,7 +333,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_2x5"
                     android:onClick="clickCreateBattleField_2x5"
                     android:height="0dp"
                     android:width="0dp"
@@ -354,7 +340,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_2x6"
                     android:onClick="clickCreateBattleField_2x6"
                     android:height="0dp"
                     android:width="0dp"
@@ -362,7 +347,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_2x7"
                     android:onClick="clickCreateBattleField_2x7"
                     android:height="0dp"
                     android:width="0dp"
@@ -370,7 +354,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_2x8"
                     android:onClick="clickCreateBattleField_2x8"
                     android:height="0dp"
                     android:width="0dp"
@@ -378,7 +361,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_2x9"
                     android:onClick="clickCreateBattleField_2x9"
                     android:height="0dp"
                     android:width="0dp"
@@ -386,7 +368,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_2x10"
                     android:onClick="clickCreateBattleField_2x10"
                     android:height="0dp"
                     android:width="0dp"
@@ -395,7 +376,6 @@
 
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_3x1"
                     android:onClick="clickCreateBattleField_3x1"
                     android:height="0dp"
                     android:width="0dp"
@@ -403,7 +383,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_3x2"
                     android:onClick="clickCreateBattleField_3x2"
                     android:height="0dp"
                     android:width="0dp"
@@ -411,7 +390,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_3x3"
                     android:onClick="clickCreateBattleField_3x3"
                     android:height="0dp"
                     android:width="0dp"
@@ -419,7 +397,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_3x4"
                     android:onClick="clickCreateBattleField_3x4"
                     android:height="0dp"
                     android:width="0dp"
@@ -427,7 +404,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_3x5"
                     android:onClick="clickCreateBattleField_3x5"
                     android:height="0dp"
                     android:width="0dp"
@@ -435,7 +411,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_3x6"
                     android:onClick="clickCreateBattleField_3x6"
                     android:height="0dp"
                     android:width="0dp"
@@ -443,7 +418,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_3x7"
                     android:onClick="clickCreateBattleField_3x7"
                     android:height="0dp"
                     android:width="0dp"
@@ -451,7 +425,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_3x8"
                     android:onClick="clickCreateBattleField_3x8"
                     android:height="0dp"
                     android:width="0dp"
@@ -459,7 +432,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_3x9"
                     android:onClick="clickCreateBattleField_3x9"
                     android:height="0dp"
                     android:width="0dp"
@@ -467,7 +439,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_3x10"
                     android:onClick="clickCreateBattleField_3x10"
                     android:height="0dp"
                     android:width="0dp"
@@ -476,7 +447,6 @@
 
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_4x1"
                     android:onClick="clickCreateBattleField_4x1"
                     android:height="0dp"
                     android:width="0dp"
@@ -484,7 +454,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_4x2"
                     android:onClick="clickCreateBattleField_4x2"
                     android:height="0dp"
                     android:width="0dp"
@@ -492,7 +461,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_4x3"
                     android:onClick="clickCreateBattleField_4x3"
                     android:height="0dp"
                     android:width="0dp"
@@ -500,7 +468,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_4x4"
                     android:onClick="clickCreateBattleField_4x4"
                     android:height="0dp"
                     android:width="0dp"
@@ -508,7 +475,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_4x5"
                     android:onClick="clickCreateBattleField_4x5"
                     android:height="0dp"
                     android:width="0dp"
@@ -516,7 +482,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_4x6"
                     android:onClick="clickCreateBattleField_4x6"
                     android:height="0dp"
                     android:width="0dp"
@@ -524,7 +489,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_4x7"
                     android:onClick="clickCreateBattleField_4x7"
                     android:height="0dp"
                     android:width="0dp"
@@ -532,7 +496,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_4x8"
                     android:onClick="clickCreateBattleField_4x8"
                     android:height="0dp"
                     android:width="0dp"
@@ -540,7 +503,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_4x9"
                     android:onClick="clickCreateBattleField_4x9"
                     android:height="0dp"
                     android:width="0dp"
@@ -548,7 +510,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_4x10"
                     android:onClick="clickCreateBattleField_4x10"
                     android:height="0dp"
                     android:width="0dp"
@@ -557,7 +518,6 @@
 
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_5x1"
                     android:onClick="clickCreateBattleField_5x1"
                     android:height="0dp"
                     android:width="0dp"
@@ -565,7 +525,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_5x2"
                     android:onClick="clickCreateBattleField_5x2"
                     android:height="0dp"
                     android:width="0dp"
@@ -573,7 +532,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_5x3"
                     android:onClick="clickCreateBattleField_5x3"
                     android:height="0dp"
                     android:width="0dp"
@@ -581,7 +539,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_5x4"
                     android:onClick="clickCreateBattleField_5x4"
                     android:height="0dp"
                     android:width="0dp"
@@ -589,7 +546,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_5x5"
                     android:onClick="clickCreateBattleField_5x5"
                     android:height="0dp"
                     android:width="0dp"
@@ -597,7 +553,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_5x6"
                     android:onClick="clickCreateBattleField_5x6"
                     android:height="0dp"
                     android:width="0dp"
@@ -605,7 +560,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_5x7"
                     android:onClick="clickCreateBattleField_5x7"
                     android:height="0dp"
                     android:width="0dp"
@@ -613,7 +567,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_5x8"
                     android:onClick="clickCreateBattleField_5x8"
                     android:height="0dp"
                     android:width="0dp"
@@ -621,7 +574,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_5x9"
                     android:onClick="clickCreateBattleField_5x9"
                     android:height="0dp"
                     android:width="0dp"
@@ -629,7 +581,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_5x10"
                     android:onClick="clickCreateBattleField_5x10"
                     android:height="0dp"
                     android:width="0dp"
@@ -638,7 +589,6 @@
 
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_6x1"
                     android:onClick="clickCreateBattleField_6x1"
                     android:height="0dp"
                     android:width="0dp"
@@ -646,7 +596,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_6x2"
                     android:onClick="clickCreateBattleField_6x2"
                     android:height="0dp"
                     android:width="0dp"
@@ -654,7 +603,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_6x3"
                     android:onClick="clickCreateBattleField_6x3"
                     android:height="0dp"
                     android:width="0dp"
@@ -662,7 +610,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_6x4"
                     android:onClick="clickCreateBattleField_6x4"
                     android:height="0dp"
                     android:width="0dp"
@@ -670,7 +617,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_6x5"
                     android:onClick="clickCreateBattleField_6x5"
                     android:height="0dp"
                     android:width="0dp"
@@ -678,7 +624,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_6x6"
                     android:onClick="clickCreateBattleField_6x6"
                     android:height="0dp"
                     android:width="0dp"
@@ -686,7 +631,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_6x7"
                     android:onClick="clickCreateBattleField_6x7"
                     android:height="0dp"
                     android:width="0dp"
@@ -694,7 +638,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_6x8"
                     android:onClick="clickCreateBattleField_6x8"
                     android:height="0dp"
                     android:width="0dp"
@@ -702,7 +645,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_6x9"
                     android:onClick="clickCreateBattleField_6x9"
                     android:height="0dp"
                     android:width="0dp"
@@ -710,7 +652,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_6x10"
                     android:onClick="clickCreateBattleField_6x10"
                     android:height="0dp"
                     android:width="0dp"
@@ -719,7 +660,6 @@
 
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_7x1"
                     android:onClick="clickCreateBattleField_7x1"
                     android:height="0dp"
                     android:width="0dp"
@@ -727,7 +667,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_7x2"
                     android:onClick="clickCreateBattleField_7x2"
                     android:height="0dp"
                     android:width="0dp"
@@ -735,7 +674,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_7x3"
                     android:onClick="clickCreateBattleField_7x3"
                     android:height="0dp"
                     android:width="0dp"
@@ -743,7 +681,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_7x4"
                     android:onClick="clickCreateBattleField_7x4"
                     android:height="0dp"
                     android:width="0dp"
@@ -751,7 +688,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_7x5"
                     android:onClick="clickCreateBattleField_7x5"
                     android:height="0dp"
                     android:width="0dp"
@@ -759,7 +695,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_7x6"
                     android:onClick="clickCreateBattleField_7x6"
                     android:height="0dp"
                     android:width="0dp"
@@ -767,7 +702,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_7x7"
                     android:onClick="clickCreateBattleField_7x7"
                     android:height="0dp"
                     android:width="0dp"
@@ -775,7 +709,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_7x8"
                     android:onClick="clickCreateBattleField_7x8"
                     android:height="0dp"
                     android:width="0dp"
@@ -783,7 +716,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_7x9"
                     android:onClick="clickCreateBattleField_7x9"
                     android:height="0dp"
                     android:width="0dp"
@@ -791,7 +723,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_7x10"
                     android:onClick="clickCreateBattleField_7x10"
                     android:height="0dp"
                     android:width="0dp"
@@ -800,7 +731,6 @@
 
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_8x1"
                     android:onClick="clickCreateBattleField_8x1"
                     android:height="0dp"
                     android:width="0dp"
@@ -808,7 +738,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_8x2"
                     android:onClick="clickCreateBattleField_8x2"
                     android:height="0dp"
                     android:width="0dp"
@@ -816,7 +745,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_8x3"
                     android:onClick="clickCreateBattleField_8x3"
                     android:height="0dp"
                     android:width="0dp"
@@ -824,7 +752,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_8x4"
                     android:onClick="clickCreateBattleField_8x4"
                     android:height="0dp"
                     android:width="0dp"
@@ -832,7 +759,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_8x5"
                     android:onClick="clickCreateBattleField_8x5"
                     android:height="0dp"
                     android:width="0dp"
@@ -840,7 +766,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_8x6"
                     android:onClick="clickCreateBattleField_8x6"
                     android:height="0dp"
                     android:width="0dp"
@@ -848,7 +773,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_8x7"
                     android:onClick="clickCreateBattleField_8x7"
                     android:height="0dp"
                     android:width="0dp"
@@ -856,7 +780,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_8x8"
                     android:onClick="clickCreateBattleField_8x8"
                     android:height="0dp"
                     android:width="0dp"
@@ -864,7 +787,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_8x9"
                     android:onClick="clickCreateBattleField_8x9"
                     android:height="0dp"
                     android:width="0dp"
@@ -872,7 +794,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_8x10"
                     android:onClick="clickCreateBattleField_8x10"
                     android:height="0dp"
                     android:width="0dp"
@@ -881,7 +802,6 @@
 
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_9x1"
                     android:onClick="clickCreateBattleField_9x1"
                     android:height="0dp"
                     android:width="0dp"
@@ -889,7 +809,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_9x2"
                     android:onClick="clickCreateBattleField_9x2"
                     android:height="0dp"
                     android:width="0dp"
@@ -897,7 +816,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_9x3"
                     android:onClick="clickCreateBattleField_9x3"
                     android:height="0dp"
                     android:width="0dp"
@@ -905,7 +823,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_9x4"
                     android:onClick="clickCreateBattleField_9x4"
                     android:height="0dp"
                     android:width="0dp"
@@ -913,7 +830,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_9x5"
                     android:onClick="clickCreateBattleField_9x5"
                     android:height="0dp"
                     android:width="0dp"
@@ -921,7 +837,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_9x6"
                     android:onClick="clickCreateBattleField_9x6"
                     android:height="0dp"
                     android:width="0dp"
@@ -929,7 +844,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_9x7"
                     android:onClick="clickCreateBattleField_9x7"
                     android:height="0dp"
                     android:width="0dp"
@@ -937,7 +851,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_9x8"
                     android:onClick="clickCreateBattleField_9x8"
                     android:height="0dp"
                     android:width="0dp"
@@ -945,7 +858,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_9x9"
                     android:onClick="clickCreateBattleField_9x9"
                     android:height="0dp"
                     android:width="0dp"
@@ -953,7 +865,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_9x10"
                     android:onClick="clickCreateBattleField_9x10"
                     android:height="0dp"
                     android:width="0dp"
@@ -962,7 +873,6 @@
 
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_10x1"
                     android:onClick="clickCreateBattleField_10x1"
                     android:height="0dp"
                     android:width="0dp"
@@ -970,7 +880,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_10x2"
                     android:onClick="clickCreateBattleField_10x2"
                     android:height="0dp"
                     android:width="0dp"
@@ -978,7 +887,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_10x3"
                     android:onClick="clickCreateBattleField_10x3"
                     android:height="0dp"
                     android:width="0dp"
@@ -986,7 +894,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_10x4"
                     android:onClick="clickCreateBattleField_10x4"
                     android:height="0dp"
                     android:width="0dp"
@@ -994,7 +901,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_10x5"
                     android:onClick="clickCreateBattleField_10x5"
                     android:height="0dp"
                     android:width="0dp"
@@ -1002,7 +908,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_10x6"
                     android:onClick="clickCreateBattleField_10x6"
                     android:height="0dp"
                     android:width="0dp"
@@ -1010,7 +915,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_10x7"
                     android:onClick="clickCreateBattleField_10x7"
                     android:height="0dp"
                     android:width="0dp"
@@ -1018,7 +922,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_10x8"
                     android:onClick="clickCreateBattleField_10x8"
                     android:height="0dp"
                     android:width="0dp"
@@ -1026,7 +929,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_10x9"
                     android:onClick="clickCreateBattleField_10x9"
                     android:height="0dp"
                     android:width="0dp"
@@ -1034,7 +936,6 @@
                     android:layout_columnWeight="1"/>
 
                 <TextView
-                    android:id="@+id/playerCellGameCreateBattleField_10x10"
                     android:onClick="clickCreateBattleField_10x10"
                     android:height="0dp"
                     android:width="0dp"
