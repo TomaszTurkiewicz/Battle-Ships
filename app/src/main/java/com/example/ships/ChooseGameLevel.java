@@ -93,6 +93,12 @@ public class ChooseGameLevel extends AppCompatActivity {
         expertNotRandom.setLayoutParams(params6);
         randomGame.setLayoutParams(params7);
         notRandomGame.setLayoutParams(params8);
+        easyRandom.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        normalRandom.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        expertRandom.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        easyNotRandom.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        normalNotRandom.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        expertNotRandom.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         notRandomGame.setTextSize(TypedValue.COMPLEX_UNIT_PX,2*square);
         randomGame.setTextSize(TypedValue.COMPLEX_UNIT_PX,2*square);
 

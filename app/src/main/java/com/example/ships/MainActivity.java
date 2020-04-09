@@ -115,13 +115,18 @@ public class MainActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(8*square,2*square);
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(square,square);
         loggedIn.setLayoutParams(params3);
         loggedIn.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         userName.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         singlePlayerBtn.setLayoutParams(params);
+        singlePlayerBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         multiplayerBtn.setLayoutParams(params1);
+        multiplayerBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         ranking.setLayoutParams(params2);
+        ranking.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         accountBtn.setLayoutParams(params4);
+        redDotMultiplayerIV.setLayoutParams(params5);
 
         set.clone(constraintLayout);
         set.connect(singlePlayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,8*square);
@@ -138,6 +143,10 @@ public class MainActivity extends AppCompatActivity {
 
         set.connect(accountBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
         set.connect(accountBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-3*square);
+
+        set.connect(redDotMultiplayerIV.getId(),ConstraintSet.BOTTOM,multiplayerBtn.getId(),ConstraintSet.BOTTOM,2*square-square/2);
+        set.connect(redDotMultiplayerIV.getId(),ConstraintSet.LEFT,multiplayerBtn.getId(),ConstraintSet.LEFT,8*square-square/2);
+
 
         set.applyTo(constraintLayout);
 
@@ -388,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
                     user = dataSnapshot.getValue(User.class);
                     if(!user.getIndex().getOpponent().equals("")&&!user.getIndex().isAccepted()) {
                         redDotMultiplayerIV.setVisibility(View.VISIBLE);
-                        multiplayerBtn.setText("ACCEPT INVITATION");
+                        multiplayerBtn.setText("ACCEPT");
                         mHandler.postDelayed(checkMyOpponentAndMove, deelay);
                     }else if(!user.getIndex().getGameIndex().equals("")){
                         databaseReferenceBattle = firebaseDatabase.getReference("Battle").child(user.getIndex().getGameIndex());
@@ -441,5 +450,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 // TODO change buttons styles...
+// TODO Add notification when accepting and not accepting invitation
 // TODO change notification
 
