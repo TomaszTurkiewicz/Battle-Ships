@@ -1,10 +1,14 @@
 package com.example.ships;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Shader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -12,12 +16,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -26,6 +33,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ships.classes.BattleFieldForDataBase;
 import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.GameDifficulty;
+import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -59,17 +67,6 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private Handler mHandler = new Handler();
     private Handler mHandler2 = new Handler();
     private int deelay = 1000;
-    private TextView[][] textViewArrayActivityMultiplayerMe = new TextView[10][10];
-    private TextView[] ShipFourMasts = new TextView[4];
-    private TextView[] ShipThreeMastsFirst = new TextView[3];
-    private TextView[] ShipThreeMastsSecond = new TextView[3];
-    private TextView[] ShipTwoMastsFirst = new TextView[2];
-    private TextView[] ShipTwoMastsSecond = new TextView[2];
-    private TextView[] ShipTwoMastsThird = new TextView[2];
-    private TextView[] ShipOneMastsFirst = new TextView[1];
-    private TextView[] ShipOneMastsSecond = new TextView[1];
-    private TextView[] ShipOneMastsThird = new TextView[1];
-    private TextView[] ShipOneMastsFourth = new TextView[1];
     private int shipFourMastsCounter,
             shipThreeMastsCounterFirst, shipThreeMastsCounterSecond,
             shipTwoMastsCounterFirst, shipTwoMastsCounterSecond, shipTwoMastsCounterThird,
@@ -78,11 +75,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private TextView turnTextView;
     private ImageButton leaveButton;
     private boolean enableTouchListener;
-    private TextView tv1,tv2,tv11;
-    private GridLayout layout;
-    int[]location1 = new int[2];
-    int[]location2 = new int[2];
-    int[]location11 = new int[2];
+    private GridLayout layoutOpponent, layoutMy;
+
     private int height, width;
     int[]locationLayout = new int [2];
     private int battleFieldOpponent[][] = new int[10][10];
@@ -94,6 +88,13 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private String serverKey= "key=" + "AAAAUhITVm0:APA91bGLIOR5L7HQyh64ejoejk-nQFBWP9RxDqtzzjoSXCmROqs7JO_uDDyuW5VuTfJBxtKY_RG8q5_CnpKJsN3qHtVvgiAkuDM2J9T68mk0LzKCcRKgRbj3DQ-A1a8uzZ07wz8OlirQ";
     private String contentType= "application/json";
     private boolean battleFieldUpToDate;
+    private ConstraintLayout mainLayout;
+    private LinearLayout linearLayoutLettersMy, linearLayoutNumbersMy, linearLayoutLettersOpponent, linearLayoutNumbersOpponent;
+    private int marginTop;
+    private int marginLeft;
+    private LinearLayout fourMasts,threeMastsFirst, threeMastsSecond, twoMastsFirst,twoMastsSecond,twoMastsThird,oneMastsFirst,oneMastsSecond,oneMastsThird,oneMastsFourth;
+    private int marginLeftForShips;
+    private int marginDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +103,25 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_multiplayer);
-        initializeTextViews();
+        mainLayout=findViewById(R.id.multiplayerActivityLayout);
+        layoutMy=findViewById(R.id.gridLayoutMultiplayerBattleMy);
+        layoutOpponent=findViewById(R.id.gridLayoutMultiplayerBattleOpponent);
+        linearLayoutLettersMy=findViewById(R.id.linearLayoutMultiplayerActivityLettersMy);
+        linearLayoutLettersOpponent=findViewById(R.id.linearLayoutMultiplayerActivityLettersOpponent);
+        linearLayoutNumbersMy=findViewById(R.id.linearLayoutMultiplayerActivityNumbersMy);
+        linearLayoutNumbersOpponent=findViewById(R.id.linearLayoutMultiplayerActivityNumbersOpponent);
+        fourMasts=findViewById(R.id.linearLayoutMultiplayerShipFourMasts);
+        threeMastsFirst=findViewById(R.id.linearLayoutMultiplayerShipThreeMastsFirst);
+        threeMastsSecond=findViewById(R.id.linearLayoutMultiplayerShipThreeMastsSecond);
+        twoMastsFirst=findViewById(R.id.linearLayoutMultiplayerShipTwoMastsFirst);
+        twoMastsSecond=findViewById(R.id.linearLayoutMultiplayerShipTwoMastsSecond);
+        twoMastsThird=findViewById(R.id.linearLayoutMultiplayerShipTwoMastsThird);
+        oneMastsFirst=findViewById(R.id.linearLayoutMultiplayerShipOneMastsFirst);
+        oneMastsSecond=findViewById(R.id.linearLayoutMultiplayerShipOneMastsSecond);
+        oneMastsThird=findViewById(R.id.linearLayoutMultiplayerShipOneMastsThird);
+        oneMastsFourth=findViewById(R.id.linearLayoutMultiplayerShipOneMastsFourth);
         leaveButton = findViewById(R.id.leaveMultiplayer);
+        leaveButton.setBackgroundResource(R.drawable.leave);
         turnTextView=findViewById(R.id.turn);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -114,184 +132,157 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         enableTouchListener=false;
         battleFieldsSet=false;
         battleFieldUpToDate=false;
-        tv1=findViewById(R.id.OpponentMultiplayerCellGame_1x1);
-        tv2=findViewById(R.id.OpponentMultiplayerCellGame_1x2);
-        tv11=findViewById(R.id.OpponentMultiplayerCellGame_2x1);
-        layout = findViewById(R.id.tableLayoutOpponentMultiplayerBattleField);
 
-        tv1.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
+        int square = sp.getInt("square",-1);
+        int screenWidth = sp.getInt("width",-1);
+        int screenHeight = sp.getInt("height",-1);
+        int screenWidthOffSet = sp.getInt("widthOffSet",-1);
+        int screenHeightOffSet = sp.getInt("heightOffSet",-1);
+        float textSize = (square*9)/10;
+        marginTop = 4*square;
+        marginLeft = screenWidth-screenWidthOffSet-14*square;
+        mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
+
+
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(10*square,10*square);
+        ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(10*square,square);
+        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(square,10*square);
+        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(10*square,10*square);
+        ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(10*square,square);
+        ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(square,10*square);
+        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(4*square,square);
+        ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(3*square,square);
+        ConstraintLayout.LayoutParams params9 = new ConstraintLayout.LayoutParams(3*square,square);
+        ConstraintLayout.LayoutParams params10 = new ConstraintLayout.LayoutParams(2*square,square);
+        ConstraintLayout.LayoutParams params11 = new ConstraintLayout.LayoutParams(2*square,square);
+        ConstraintLayout.LayoutParams params12 = new ConstraintLayout.LayoutParams(2*square,square);
+        ConstraintLayout.LayoutParams params13 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params14 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square,square);
+
+        leaveButton.setLayoutParams(params);
+        layoutMy.setLayoutParams(params1);
+        linearLayoutLettersMy.setLayoutParams(params2);
+        linearLayoutNumbersMy.setLayoutParams(params3);
+        layoutOpponent.setLayoutParams(params4);
+        linearLayoutLettersOpponent.setLayoutParams(params5);
+        linearLayoutNumbersOpponent.setLayoutParams(params6);
+        fourMasts.setLayoutParams(params7);
+        threeMastsFirst.setLayoutParams(params8);
+        threeMastsSecond.setLayoutParams(params9);
+        twoMastsFirst.setLayoutParams(params10);
+        twoMastsSecond.setLayoutParams(params11);
+        twoMastsThird.setLayoutParams(params12);
+        oneMastsFirst.setLayoutParams(params13);
+        oneMastsSecond.setLayoutParams(params14);
+        oneMastsThird.setLayoutParams(params15);
+        oneMastsFourth.setLayoutParams(params16);
+
+        for(int i = 0; i<10; i++){
+            TextView tv = (TextView)linearLayoutLettersMy.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        }
+        for(int i = 0; i<10; i++){
+            TextView tv = (TextView)linearLayoutNumbersMy.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        }
+        for(int i = 0; i<10; i++){
+            TextView tv = (TextView)linearLayoutLettersOpponent.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        }
+        for(int i = 0; i<10; i++){
+            TextView tv = (TextView)linearLayoutNumbersOpponent.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        }
+
+        marginDown = screenHeight-screenHeightOffSet-2*square;
+
+        if(((screenWidth-screenWidthOffSet)/square)%2==0){
+            marginLeftForShips=(screenWidth-screenWidthOffSet)/2-15*square;
+        }else{
+            marginLeftForShips=(screenWidth-screenWidthOffSet-square)/2-15*square;
+        }
+
+        ConstraintSet set = new ConstraintSet();
+        set.clone(mainLayout);
+
+        set.connect(leaveButton.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,square);
+        set.connect(leaveButton.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.connect(layoutMy.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,4*square);
+        set.connect(layoutMy.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,5*square);
+
+        set.connect(linearLayoutLettersMy.getId(),ConstraintSet.BOTTOM,layoutMy.getId(),ConstraintSet.TOP,0);
+        set.connect(linearLayoutLettersMy.getId(),ConstraintSet.LEFT,layoutMy.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(linearLayoutNumbersMy.getId(),ConstraintSet.TOP,layoutMy.getId(),ConstraintSet.TOP,0);
+        set.connect(linearLayoutNumbersMy.getId(),ConstraintSet.RIGHT,layoutMy.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(layoutOpponent.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginTop);
+        set.connect(layoutOpponent.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(linearLayoutLettersOpponent.getId(),ConstraintSet.BOTTOM,layoutOpponent.getId(),ConstraintSet.TOP,0);
+        set.connect(linearLayoutLettersOpponent.getId(),ConstraintSet.LEFT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(linearLayoutNumbersOpponent.getId(),ConstraintSet.TOP,layoutOpponent.getId(),ConstraintSet.TOP,0);
+        set.connect(linearLayoutNumbersOpponent.getId(),ConstraintSet.RIGHT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(fourMasts.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginDown);
+        set.connect(fourMasts.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeftForShips);
+
+        set.connect(threeMastsFirst.getId(),ConstraintSet.TOP,fourMasts.getId(),ConstraintSet.TOP,0);
+        set.connect(threeMastsFirst.getId(),ConstraintSet.LEFT,fourMasts.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(threeMastsSecond.getId(),ConstraintSet.TOP,threeMastsFirst.getId(),ConstraintSet.TOP,0);
+        set.connect(threeMastsSecond.getId(),ConstraintSet.LEFT,threeMastsFirst.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(twoMastsFirst.getId(),ConstraintSet.TOP,threeMastsSecond.getId(),ConstraintSet.TOP,0);
+        set.connect(twoMastsFirst.getId(),ConstraintSet.LEFT,threeMastsSecond.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(twoMastsSecond.getId(),ConstraintSet.TOP,twoMastsFirst.getId(),ConstraintSet.TOP,0);
+        set.connect(twoMastsSecond.getId(),ConstraintSet.LEFT,twoMastsFirst.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(twoMastsThird.getId(),ConstraintSet.TOP,twoMastsSecond.getId(),ConstraintSet.TOP,0);
+        set.connect(twoMastsThird.getId(),ConstraintSet.LEFT,twoMastsSecond.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(oneMastsFirst.getId(),ConstraintSet.TOP,twoMastsThird.getId(),ConstraintSet.TOP,0);
+        set.connect(oneMastsFirst.getId(),ConstraintSet.LEFT,twoMastsThird.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(oneMastsSecond.getId(),ConstraintSet.TOP,oneMastsFirst.getId(),ConstraintSet.TOP,0);
+        set.connect(oneMastsSecond.getId(),ConstraintSet.LEFT,oneMastsFirst.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(oneMastsThird.getId(),ConstraintSet.TOP,oneMastsSecond.getId(),ConstraintSet.TOP,0);
+        set.connect(oneMastsThird.getId(),ConstraintSet.LEFT,oneMastsSecond.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(oneMastsFourth.getId(),ConstraintSet.TOP,oneMastsThird.getId(),ConstraintSet.TOP,0);
+        set.connect(oneMastsFourth.getId(),ConstraintSet.LEFT,oneMastsThird.getId(),ConstraintSet.RIGHT,square);
+
+        set.applyTo(mainLayout);
+
+        height=square;
+        width=square;
+
+
+
+
+        layoutOpponent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                tv1.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                tv1.getLocationOnScreen(location1);
-            }
-        });
-        tv2.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                tv2.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                tv2.getLocationOnScreen(location2);
-            }
-        });
-        tv11.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                tv11.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                tv11.getLocationOnScreen(location11);
-                height=location11[1]-location1[1];
-                width= location2[0]-location1[0];
-            }
-        });
-        layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                layout.getLocationOnScreen(locationLayout);
+                layoutOpponent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                layoutOpponent.getLocationOnScreen(locationLayout);
 
             }
         });
-        layout.setOnTouchListener(this);
+        layoutOpponent.setOnTouchListener(this);
 
         game.run();
         checkGameIndex.run();
 
     }
 
-    private void initializeTextViews() {
-        textViewArrayActivityMultiplayerMe[0][0]=findViewById(R.id.playerMyMultiplayerCellGame_1x1);
-        textViewArrayActivityMultiplayerMe[0][1]=findViewById(R.id.playerMyMultiplayerCellGame_1x2);
-        textViewArrayActivityMultiplayerMe[0][2]=findViewById(R.id.playerMyMultiplayerCellGame_1x3);
-        textViewArrayActivityMultiplayerMe[0][3]=findViewById(R.id.playerMyMultiplayerCellGame_1x4);
-        textViewArrayActivityMultiplayerMe[0][4]=findViewById(R.id.playerMyMultiplayerCellGame_1x5);
-        textViewArrayActivityMultiplayerMe[0][5]=findViewById(R.id.playerMyMultiplayerCellGame_1x6);
-        textViewArrayActivityMultiplayerMe[0][6]=findViewById(R.id.playerMyMultiplayerCellGame_1x7);
-        textViewArrayActivityMultiplayerMe[0][7]=findViewById(R.id.playerMyMultiplayerCellGame_1x8);
-        textViewArrayActivityMultiplayerMe[0][8]=findViewById(R.id.playerMyMultiplayerCellGame_1x9);
-        textViewArrayActivityMultiplayerMe[0][9]=findViewById(R.id.playerMyMultiplayerCellGame_1x10);
-
-        textViewArrayActivityMultiplayerMe[1][0]=findViewById(R.id.playerMyMultiplayerCellGame_2x1);
-        textViewArrayActivityMultiplayerMe[1][1]=findViewById(R.id.playerMyMultiplayerCellGame_2x2);
-        textViewArrayActivityMultiplayerMe[1][2]=findViewById(R.id.playerMyMultiplayerCellGame_2x3);
-        textViewArrayActivityMultiplayerMe[1][3]=findViewById(R.id.playerMyMultiplayerCellGame_2x4);
-        textViewArrayActivityMultiplayerMe[1][4]=findViewById(R.id.playerMyMultiplayerCellGame_2x5);
-        textViewArrayActivityMultiplayerMe[1][5]=findViewById(R.id.playerMyMultiplayerCellGame_2x6);
-        textViewArrayActivityMultiplayerMe[1][6]=findViewById(R.id.playerMyMultiplayerCellGame_2x7);
-        textViewArrayActivityMultiplayerMe[1][7]=findViewById(R.id.playerMyMultiplayerCellGame_2x8);
-        textViewArrayActivityMultiplayerMe[1][8]=findViewById(R.id.playerMyMultiplayerCellGame_2x9);
-        textViewArrayActivityMultiplayerMe[1][9]=findViewById(R.id.playerMyMultiplayerCellGame_2x10);
-
-        textViewArrayActivityMultiplayerMe[2][0]=findViewById(R.id.playerMyMultiplayerCellGame_3x1);
-        textViewArrayActivityMultiplayerMe[2][1]=findViewById(R.id.playerMyMultiplayerCellGame_3x2);
-        textViewArrayActivityMultiplayerMe[2][2]=findViewById(R.id.playerMyMultiplayerCellGame_3x3);
-        textViewArrayActivityMultiplayerMe[2][3]=findViewById(R.id.playerMyMultiplayerCellGame_3x4);
-        textViewArrayActivityMultiplayerMe[2][4]=findViewById(R.id.playerMyMultiplayerCellGame_3x5);
-        textViewArrayActivityMultiplayerMe[2][5]=findViewById(R.id.playerMyMultiplayerCellGame_3x6);
-        textViewArrayActivityMultiplayerMe[2][6]=findViewById(R.id.playerMyMultiplayerCellGame_3x7);
-        textViewArrayActivityMultiplayerMe[2][7]=findViewById(R.id.playerMyMultiplayerCellGame_3x8);
-        textViewArrayActivityMultiplayerMe[2][8]=findViewById(R.id.playerMyMultiplayerCellGame_3x9);
-        textViewArrayActivityMultiplayerMe[2][9]=findViewById(R.id.playerMyMultiplayerCellGame_3x10);
-
-        textViewArrayActivityMultiplayerMe[3][0]=findViewById(R.id.playerMyMultiplayerCellGame_4x1);
-        textViewArrayActivityMultiplayerMe[3][1]=findViewById(R.id.playerMyMultiplayerCellGame_4x2);
-        textViewArrayActivityMultiplayerMe[3][2]=findViewById(R.id.playerMyMultiplayerCellGame_4x3);
-        textViewArrayActivityMultiplayerMe[3][3]=findViewById(R.id.playerMyMultiplayerCellGame_4x4);
-        textViewArrayActivityMultiplayerMe[3][4]=findViewById(R.id.playerMyMultiplayerCellGame_4x5);
-        textViewArrayActivityMultiplayerMe[3][5]=findViewById(R.id.playerMyMultiplayerCellGame_4x6);
-        textViewArrayActivityMultiplayerMe[3][6]=findViewById(R.id.playerMyMultiplayerCellGame_4x7);
-        textViewArrayActivityMultiplayerMe[3][7]=findViewById(R.id.playerMyMultiplayerCellGame_4x8);
-        textViewArrayActivityMultiplayerMe[3][8]=findViewById(R.id.playerMyMultiplayerCellGame_4x9);
-        textViewArrayActivityMultiplayerMe[3][9]=findViewById(R.id.playerMyMultiplayerCellGame_4x10);
-
-        textViewArrayActivityMultiplayerMe[4][0]=findViewById(R.id.playerMyMultiplayerCellGame_5x1);
-        textViewArrayActivityMultiplayerMe[4][1]=findViewById(R.id.playerMyMultiplayerCellGame_5x2);
-        textViewArrayActivityMultiplayerMe[4][2]=findViewById(R.id.playerMyMultiplayerCellGame_5x3);
-        textViewArrayActivityMultiplayerMe[4][3]=findViewById(R.id.playerMyMultiplayerCellGame_5x4);
-        textViewArrayActivityMultiplayerMe[4][4]=findViewById(R.id.playerMyMultiplayerCellGame_5x5);
-        textViewArrayActivityMultiplayerMe[4][5]=findViewById(R.id.playerMyMultiplayerCellGame_5x6);
-        textViewArrayActivityMultiplayerMe[4][6]=findViewById(R.id.playerMyMultiplayerCellGame_5x7);
-        textViewArrayActivityMultiplayerMe[4][7]=findViewById(R.id.playerMyMultiplayerCellGame_5x8);
-        textViewArrayActivityMultiplayerMe[4][8]=findViewById(R.id.playerMyMultiplayerCellGame_5x9);
-        textViewArrayActivityMultiplayerMe[4][9]=findViewById(R.id.playerMyMultiplayerCellGame_5x10);
-
-        textViewArrayActivityMultiplayerMe[5][0]=findViewById(R.id.playerMyMultiplayerCellGame_6x1);
-        textViewArrayActivityMultiplayerMe[5][1]=findViewById(R.id.playerMyMultiplayerCellGame_6x2);
-        textViewArrayActivityMultiplayerMe[5][2]=findViewById(R.id.playerMyMultiplayerCellGame_6x3);
-        textViewArrayActivityMultiplayerMe[5][3]=findViewById(R.id.playerMyMultiplayerCellGame_6x4);
-        textViewArrayActivityMultiplayerMe[5][4]=findViewById(R.id.playerMyMultiplayerCellGame_6x5);
-        textViewArrayActivityMultiplayerMe[5][5]=findViewById(R.id.playerMyMultiplayerCellGame_6x6);
-        textViewArrayActivityMultiplayerMe[5][6]=findViewById(R.id.playerMyMultiplayerCellGame_6x7);
-        textViewArrayActivityMultiplayerMe[5][7]=findViewById(R.id.playerMyMultiplayerCellGame_6x8);
-        textViewArrayActivityMultiplayerMe[5][8]=findViewById(R.id.playerMyMultiplayerCellGame_6x9);
-        textViewArrayActivityMultiplayerMe[5][9]=findViewById(R.id.playerMyMultiplayerCellGame_6x10);
-
-        textViewArrayActivityMultiplayerMe[6][0]=findViewById(R.id.playerMyMultiplayerCellGame_7x1);
-        textViewArrayActivityMultiplayerMe[6][1]=findViewById(R.id.playerMyMultiplayerCellGame_7x2);
-        textViewArrayActivityMultiplayerMe[6][2]=findViewById(R.id.playerMyMultiplayerCellGame_7x3);
-        textViewArrayActivityMultiplayerMe[6][3]=findViewById(R.id.playerMyMultiplayerCellGame_7x4);
-        textViewArrayActivityMultiplayerMe[6][4]=findViewById(R.id.playerMyMultiplayerCellGame_7x5);
-        textViewArrayActivityMultiplayerMe[6][5]=findViewById(R.id.playerMyMultiplayerCellGame_7x6);
-        textViewArrayActivityMultiplayerMe[6][6]=findViewById(R.id.playerMyMultiplayerCellGame_7x7);
-        textViewArrayActivityMultiplayerMe[6][7]=findViewById(R.id.playerMyMultiplayerCellGame_7x8);
-        textViewArrayActivityMultiplayerMe[6][8]=findViewById(R.id.playerMyMultiplayerCellGame_7x9);
-        textViewArrayActivityMultiplayerMe[6][9]=findViewById(R.id.playerMyMultiplayerCellGame_7x10);
-
-        textViewArrayActivityMultiplayerMe[7][0]=findViewById(R.id.playerMyMultiplayerCellGame_8x1);
-        textViewArrayActivityMultiplayerMe[7][1]=findViewById(R.id.playerMyMultiplayerCellGame_8x2);
-        textViewArrayActivityMultiplayerMe[7][2]=findViewById(R.id.playerMyMultiplayerCellGame_8x3);
-        textViewArrayActivityMultiplayerMe[7][3]=findViewById(R.id.playerMyMultiplayerCellGame_8x4);
-        textViewArrayActivityMultiplayerMe[7][4]=findViewById(R.id.playerMyMultiplayerCellGame_8x5);
-        textViewArrayActivityMultiplayerMe[7][5]=findViewById(R.id.playerMyMultiplayerCellGame_8x6);
-        textViewArrayActivityMultiplayerMe[7][6]=findViewById(R.id.playerMyMultiplayerCellGame_8x7);
-        textViewArrayActivityMultiplayerMe[7][7]=findViewById(R.id.playerMyMultiplayerCellGame_8x8);
-        textViewArrayActivityMultiplayerMe[7][8]=findViewById(R.id.playerMyMultiplayerCellGame_8x9);
-        textViewArrayActivityMultiplayerMe[7][9]=findViewById(R.id.playerMyMultiplayerCellGame_8x10);
-
-        textViewArrayActivityMultiplayerMe[8][0]=findViewById(R.id.playerMyMultiplayerCellGame_9x1);
-        textViewArrayActivityMultiplayerMe[8][1]=findViewById(R.id.playerMyMultiplayerCellGame_9x2);
-        textViewArrayActivityMultiplayerMe[8][2]=findViewById(R.id.playerMyMultiplayerCellGame_9x3);
-        textViewArrayActivityMultiplayerMe[8][3]=findViewById(R.id.playerMyMultiplayerCellGame_9x4);
-        textViewArrayActivityMultiplayerMe[8][4]=findViewById(R.id.playerMyMultiplayerCellGame_9x5);
-        textViewArrayActivityMultiplayerMe[8][5]=findViewById(R.id.playerMyMultiplayerCellGame_9x6);
-        textViewArrayActivityMultiplayerMe[8][6]=findViewById(R.id.playerMyMultiplayerCellGame_9x7);
-        textViewArrayActivityMultiplayerMe[8][7]=findViewById(R.id.playerMyMultiplayerCellGame_9x8);
-        textViewArrayActivityMultiplayerMe[8][8]=findViewById(R.id.playerMyMultiplayerCellGame_9x9);
-        textViewArrayActivityMultiplayerMe[8][9]=findViewById(R.id.playerMyMultiplayerCellGame_9x10);
-
-        textViewArrayActivityMultiplayerMe[9][0]=findViewById(R.id.playerMyMultiplayerCellGame_10x1);
-        textViewArrayActivityMultiplayerMe[9][1]=findViewById(R.id.playerMyMultiplayerCellGame_10x2);
-        textViewArrayActivityMultiplayerMe[9][2]=findViewById(R.id.playerMyMultiplayerCellGame_10x3);
-        textViewArrayActivityMultiplayerMe[9][3]=findViewById(R.id.playerMyMultiplayerCellGame_10x4);
-        textViewArrayActivityMultiplayerMe[9][4]=findViewById(R.id.playerMyMultiplayerCellGame_10x5);
-        textViewArrayActivityMultiplayerMe[9][5]=findViewById(R.id.playerMyMultiplayerCellGame_10x6);
-        textViewArrayActivityMultiplayerMe[9][6]=findViewById(R.id.playerMyMultiplayerCellGame_10x7);
-        textViewArrayActivityMultiplayerMe[9][7]=findViewById(R.id.playerMyMultiplayerCellGame_10x8);
-        textViewArrayActivityMultiplayerMe[9][8]=findViewById(R.id.playerMyMultiplayerCellGame_10x9);
-        textViewArrayActivityMultiplayerMe[9][9]=findViewById(R.id.playerMyMultiplayerCellGame_10x10);
-
-        ShipFourMasts[0]=findViewById(R.id.FourCellShip1MultiplayerActivity);
-        ShipFourMasts[1]=findViewById(R.id.FourCellShip2MultiplayerActivity);
-        ShipFourMasts[2]=findViewById(R.id.FourCellShip3MultiplayerActivity);
-        ShipFourMasts[3]=findViewById(R.id.FourCellShip4MultiplayerActivity);
-
-        ShipThreeMastsFirst[0]=findViewById(R.id.ThreeCellShip11MultiplayerActivity);
-        ShipThreeMastsFirst[1]=findViewById(R.id.ThreeCellShip12MultiplayerActivity);
-        ShipThreeMastsFirst[2]=findViewById(R.id.ThreeCellShip13MultiplayerActivity);
-        ShipThreeMastsSecond[0]=findViewById(R.id.ThreeCellShip21MultiplayerActivity);
-        ShipThreeMastsSecond[1]=findViewById(R.id.ThreeCellShip22MultiplayerActivity);
-        ShipThreeMastsSecond[2]=findViewById(R.id.ThreeCellShip23MultiplayerActivity);
-
-        ShipTwoMastsFirst[0]=findViewById(R.id.TwoCellShip11MultiplayerActivity);
-        ShipTwoMastsFirst[1]=findViewById(R.id.TwoCellShip12MultiplayerActivity);
-        ShipTwoMastsSecond[0]=findViewById(R.id.TwoCellShip21MultiplayerActivity);
-        ShipTwoMastsSecond[1]=findViewById(R.id.TwoCellShip22MultiplayerActivity);
-        ShipTwoMastsThird[0]=findViewById(R.id.TwoCellShip31MultiplayerActivity);
-        ShipTwoMastsThird[1]=findViewById(R.id.TwoCellShip32MultiplayerActivity);
-
-        ShipOneMastsFirst[0]=findViewById(R.id.OneCellShip1MultiplayerActivity);
-        ShipOneMastsSecond[0]=findViewById(R.id.OneCellShip2MultiplayerActivity);
-        ShipOneMastsThird[0]=findViewById(R.id.OneCellShip3MultiplayerActivity);
-        ShipOneMastsFourth[0]=findViewById(R.id.OneCellShip4MultiplayerActivity);
-    }
 
     private Runnable checkGameIndex = new Runnable() {
         @Override
@@ -399,14 +390,14 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         for(int i =0;i<10;i++){
             for(int j = 0; j<10;j++){
                 if(battleFieldOpponent[i][j]==SHIP_BROWN){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
                 }
                 else if(battleFieldOpponent[i][j]==SHIP_RED){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
                 }else if(battleFieldOpponent[i][j]==WATER){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x_hidden));
                 }else{
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x_hidden));
                 }
 
             }
@@ -419,24 +410,24 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 //jest statek i został trafiony
                 if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
                         && battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayShipCellHidden(textViewArrayActivityMultiplayerMe,i,j);
+                    displayShipCellHidden((TextView) layoutMy.getChildAt(10*i+j));
                 }
 
                 // woda i została trafiony
                 else if(!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
                         && battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayWaterCellHidden(textViewArrayActivityMultiplayerMe,i,j);
+                    displayWaterCellHidden((TextView) layoutMy.getChildAt(10*i+j));
                 }
 
                 // jest statek i nie został trafiony
                 else if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
                         &&!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayWidmoShipHidden(textViewArrayActivityMultiplayerMe,i,j);
+                    displayWidmoShipHidden((TextView) layoutMy.getChildAt(10*i+j));
                 }
                 // nie ma statku i nie został trafiony
                 else if(!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
                         &&!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayBattleCellHidden(textViewArrayActivityMultiplayerMe,i,j);
+                    displayBattleCellHidden((TextView) layoutMy.getChildAt(10*i+j));
                 }
 
                 else;
@@ -565,14 +556,14 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         for(int i =0;i<10;i++){
             for(int j = 0; j<10;j++){
                 if(battleFieldOpponent[i][j]==SHIP_BROWN){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
                 else if(battleFieldOpponent[i][j]==SHIP_RED){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_normal_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_normal_x));
                 }else if(battleFieldOpponent[i][j]==WATER){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x));
                 }else if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x));
                 }else;
 
             }
@@ -738,24 +729,24 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 //jest statek i został trafiony
                 if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
                         &&battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayShipCell(textViewArrayActivityMultiplayerMe[i][j]);
+                    displayShipCell((TextView) layoutMy.getChildAt(10*i+j));
                 }
 
                 // woda i została trafiony
                 else if(!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
                         &&battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayWaterCell(textViewArrayActivityMultiplayerMe[i][j]);
+                    displayWaterCell((TextView) layoutMy.getChildAt(10*i+j));
                 }
 
                 // jest statek i nie został trafiony
                 else if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
                         &&!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayWidmoShip(textViewArrayActivityMultiplayerMe[i][j]);
+                    displayWidmoShip((TextView) layoutMy.getChildAt(10*i+j));
                 }
                 // nie ma statku i nie został trafiony
                 else if(!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
                         &&!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayBattleCell(textViewArrayActivityMultiplayerMe[i][j]);
+                    displayBattleCell((TextView) layoutMy.getChildAt(10*i+j));
                 }
                 else;
             }
@@ -786,12 +777,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipFourMastsCounter;i++){
-                    ShipFourMasts[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    fourMasts.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }else{
                 if(shipFourMastsCounter==4){
                     for(int i=0;i<shipFourMastsCounter;i++){
-                        ShipFourMasts[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        fourMasts.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                     }
                 }
             }
@@ -801,12 +792,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipThreeMastsCounterFirst;i++){
-                    ShipThreeMastsFirst[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    threeMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }else{
                 if(shipThreeMastsCounterFirst==3){
                     for(int i=0;i<shipThreeMastsCounterFirst;i++){
-                        ShipThreeMastsFirst[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        threeMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                     }
                 }
             }
@@ -816,12 +807,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipThreeMastsCounterSecond;i++){
-                    ShipThreeMastsSecond[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    threeMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }else{
                 if(shipThreeMastsCounterSecond==3){
                     for(int i=0;i<shipThreeMastsCounterSecond;i++){
-                        ShipThreeMastsSecond[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        threeMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                     }
                 }
             }
@@ -831,12 +822,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipTwoMastsCounterFirst;i++){
-                    ShipTwoMastsFirst[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }else{
                 if(shipTwoMastsCounterFirst==2){
                     for(int i=0;i<shipTwoMastsCounterFirst;i++){
-                        ShipTwoMastsFirst[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        twoMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                     }
                 }
             }
@@ -846,12 +837,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipTwoMastsCounterSecond;i++){
-                    ShipTwoMastsSecond[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }else{
                 if(shipTwoMastsCounterSecond==2){
                     for(int i=0;i<shipTwoMastsCounterSecond;i++){
-                        ShipTwoMastsSecond[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        twoMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                     }
                 }
             }
@@ -861,12 +852,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipTwoMastsCounterThird;i++){
-                    ShipTwoMastsThird[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsThird.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }else{
                 if(shipTwoMastsCounterThird==2){
                     for(int i=0;i<shipTwoMastsCounterThird;i++){
-                        ShipTwoMastsThird[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        twoMastsThird.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                     }
                 }
             }
@@ -874,22 +865,22 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
         if(shipOneMastsCounterFirst==0){
         }else{
-            ShipOneMastsFirst[shipOneMastsCounterFirst-1].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            oneMastsFirst.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
         }
 
         if(shipOneMastsCounterSecond==0){
         }else{
-            ShipOneMastsSecond[shipOneMastsCounterSecond-1].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            oneMastsSecond.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
         }
 
         if(shipOneMastsCounterThird==0){
         }else{
-            ShipOneMastsThird[shipOneMastsCounterThird-1].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            oneMastsThird.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
         }
 
         if(shipOneMastsCounterFourth==0){
         }else{
-            ShipOneMastsFourth[shipOneMastsCounterFourth-1].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            oneMastsFourth.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
         }
     }
 
@@ -955,8 +946,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         if(enableTouchListener) {
             final int X = (int) event.getRawX();
             final int Y = (int) event.getRawY();
-            int x = (X - location1[0]) / width;
-            int y = (Y - location1[1]) / height;
+            int x = (X - locationLayout[0]) / width;
+            int y = (Y - locationLayout[1]) / height;
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
 
@@ -965,13 +956,13 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                             for (int j = 0; j < 10; j++) {
                                 if (x == j || y == i) {
                                     if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
                                     }else if(battleFieldOpponent[i][j]==WATER){
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
                                     }else{
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
                                     }
                                 }
@@ -982,13 +973,13 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                             for (int j = 0; j < 10; j++) {
                                 if (x == j || y == i) {
                                     if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
                                     }else if(battleFieldOpponent[i][j]==WATER){
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
                                     }else{
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.ship_cell_x_red_field));
                                     }
 
@@ -1008,13 +999,13 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                 for (int j = 0; j < 10; j++) {
                                     if (x == j || y == i) {
                                         if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
                                         }else if(battleFieldOpponent[i][j]==WATER){
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
                                         }else{
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
                                         }
                                     }
@@ -1025,13 +1016,13 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                 for (int j = 0; j < 10; j++) {
                                     if (x == j || y == i) {
                                         if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
                                         }else if(battleFieldOpponent[i][j]==WATER){
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
                                         }else{
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.ship_cell_x_red_field));
                                         }
 
@@ -1056,7 +1047,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     break;
             }
         }else;
-        layout.invalidate();
+        layoutOpponent.invalidate();
         return true;
 
 
@@ -1190,39 +1181,39 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 shipOneMastsCounterFourth;
     }
 
-    private void displayShipCellHidden(TextView[][] TextView, int i, int j){
+    private void displayShipCellHidden(TextView TextView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
         }
     }
-    private void displayWaterCellHidden(TextView[][] TextView,int i, int j){
+    private void displayWaterCellHidden(TextView TextView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x_hidden));
+            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x_hidden));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell_x_hidden));
+            TextView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hidden));
         }
 
     }
 
-    private void displayWidmoShipHidden(TextView[][] TextView,int i, int j){
+    private void displayWidmoShipHidden(TextView TextView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
+            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
+            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
         }
     }
 
-    private void displayBattleCellHidden(TextView[][] TextView,int i, int j){
+    private void displayBattleCellHidden(TextView TextView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
+            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
+            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
         }
     }
 }
