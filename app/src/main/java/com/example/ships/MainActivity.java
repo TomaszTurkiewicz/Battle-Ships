@@ -13,6 +13,8 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         constraintLayout = findViewById(R.id.mainActivityLayout);
         userName=findViewById(R.id.userName);
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         int height = size.y;
 
         int devWidth = width/32;
-        int devHeight = height/19;
+        int devHeight = height/18;
 
         if(devWidth>devHeight){
             square=devHeight;
@@ -453,4 +457,5 @@ public class MainActivity extends AppCompatActivity {
 // TODO Add notification when accepting and not accepting invitation
 // TODO change notification
 // TODO block back button during game
+// TODO different points in multiplayer depending on difficulty (50 and 25)
 

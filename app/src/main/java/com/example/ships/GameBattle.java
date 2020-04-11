@@ -1,24 +1,30 @@
 package com.example.ships;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Shader;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.ships.classes.BattleField;
 import com.example.ships.classes.GameDifficulty;
@@ -42,15 +48,10 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private BattleField battleFieldMeActivityRandomGame = new BattleField();
      private BattleField battleFieldOpponentActivityRandomGame = new BattleField();
     private ConstraintLayout mainLayout;
-     private TextView tv1,tv2,tv11;
-     private GridLayout layout;
-     int[]location1 = new int[2];
-     int[]location2 = new int[2];
-     int[]location11 = new int[2];
-     int[]locationLayout = new int [2];
-     private int height, width;
 
-    private TextView[][] TextViewArrayActivityRandomGameMe = new TextView[10][10];
+     private GridLayout layoutOpponent, layoutMy;
+
+     private int height, width;
 
     private int battleFieldOpponent[][] = new int[10][10];
     private final static int BATTLE_CELL = 0;
@@ -58,25 +59,15 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private final static int SHIP_RED = 2;
     private final static int SHIP_BROWN = 3;
 
-    private TextView[] ShipFourMasts = new TextView[4];
     private int shipFourMastsCounter = 0;
-    private TextView[] ShipThreeMastsFirst = new TextView[3];
     private int shipThreeMastsCounterFirst = 0;
-    private TextView[] ShipThreeMastsSecond = new TextView[3];
     private int shipThreeMastsCounterSecond = 0;
-    private TextView[] ShipTwoMastsFirst = new TextView[2];
     private int shipTwoMastsCounterFirst = 0;
-    private TextView[] ShipTwoMastsSecond = new TextView[2];
     private int shipTwoMastsCounterSecond = 0;
-    private TextView[] ShipTwoMastsThird = new TextView[2];
     private int shipTwoMastsCounterThird = 0;
-    private TextView[] ShipOneMastsFirst = new TextView[1];
     private int shipOneMastsCounterFirst = 0;
-    private TextView[] ShipOneMastsSecond = new TextView[1];
     private int shipOneMastsCounterSecond = 0;
-    private TextView[] ShipOneMastsThird = new TextView[1];
     private int shipOneMastsCounterThird = 0;
-    private TextView[] ShipOneMastsFourth = new TextView[1];
     private int shipOneMastsCounterFourth = 0;
     private boolean myTurn;
     private int level = GameDifficulty.getInstance().getLevel();
@@ -91,7 +82,9 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private long noOfGames;
     private long score;
     private int deelay=1000;
-
+    private LinearLayout linearLayoutLettersMy, linearLayoutNumbersMy, linearLayoutLettersOpponent, linearLayoutNumbersOpponent;
+    int[]locationLayout = new int [2];
+    private LinearLayout fourMasts,threeMastsFirst, threeMastsSecond, twoMastsFirst,twoMastsSecond,twoMastsThird,oneMastsFirst,oneMastsSecond,oneMastsThird,oneMastsFourth;
 
 
 
@@ -102,6 +95,11 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private DatabaseReference databaseReference;
     private String userID;
     private TextView tv;
+    private ImageButton leave;
+    private int marginTop;
+    private int marginLeft;
+    private int marginLeftForShips;
+    private int marginDown;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -112,49 +110,173 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_random_game_battle);
         mainLayout = findViewById(R.id.randomGameActivityLayout);
-        mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,100));
+        leave = findViewById(R.id.leaveSinglePlayer);
+        leave.setBackgroundResource(R.drawable.leave);
+        layoutMy=findViewById(R.id.gridLayoutBattleMy);
+        linearLayoutLettersMy=findViewById(R.id.LinearLayoutGameBattleActivityLettersMy);
+        linearLayoutNumbersMy=findViewById(R.id.LinearLayoutGameBattleActivityNumbersMy);
+        layoutOpponent = findViewById(R.id.gridLayoutBattleOpponent);
+        linearLayoutLettersOpponent=findViewById(R.id.linearLayoutSingleBattleLetterOpponent);
+        linearLayoutNumbersOpponent=findViewById(R.id.linearLayoutSingleBattleNumbersOpponent);
+        fourMasts=findViewById(R.id.linearLayoutSingleBattleShipFourMasts);
+        threeMastsFirst=findViewById(R.id.linearLayoutSingleBattleShipThreeMastsFirst);
+        threeMastsSecond=findViewById(R.id.linearLayoutSingleBattleShipThreeMastsSecond);
+        twoMastsFirst=findViewById(R.id.linearLayoutSingleBattleShipTwoMastsFirst);
+        twoMastsSecond=findViewById(R.id.linearLayoutSingleBattleShipTwoMastsSecond);
+        twoMastsThird=findViewById(R.id.linearLayoutSingleBattleShipTwoMastsThird);
+        oneMastsFirst=findViewById(R.id.linearLayoutSingleBattleShipOneMastsFirst);
+        oneMastsSecond=findViewById(R.id.linearLayoutSingleBattleShipOneMastsSecond);
+        oneMastsThird=findViewById(R.id.linearLayoutSingleBattleShipOneMastsThird);
+        oneMastsFourth=findViewById(R.id.linearLayoutSingleBattleShipOneMastsFourth);
+        SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
+        int square = sp.getInt("square",-1);
+        int screenWidth = sp.getInt("width",-1);
+        int screenHeight = sp.getInt("height",-1);
+        int screenWidthOffSet = sp.getInt("widthOffSet",-1);
+        int screenHeightOffSet = sp.getInt("heightOffSet",-1);
+        float textSize = (square*9)/10;
+
+        mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
+
+
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(10*square,10*square);
+        ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(10*square,square);
+        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(square,10*square);
+        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(10*square,10*square);
+        ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(10*square,square);
+        ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(square,10*square);
+        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(4*square,square);
+        ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(3*square,square);
+        ConstraintLayout.LayoutParams params9 = new ConstraintLayout.LayoutParams(3*square,square);
+        ConstraintLayout.LayoutParams params10 = new ConstraintLayout.LayoutParams(2*square,square);
+        ConstraintLayout.LayoutParams params11 = new ConstraintLayout.LayoutParams(2*square,square);
+        ConstraintLayout.LayoutParams params12 = new ConstraintLayout.LayoutParams(2*square,square);
+        ConstraintLayout.LayoutParams params13 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params14 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square,square);
+
+        leave.setLayoutParams(params);
+        layoutMy.setLayoutParams(params1);
+        linearLayoutLettersMy.setLayoutParams(params2);
+        linearLayoutNumbersMy.setLayoutParams(params3);
+        layoutOpponent.setLayoutParams(params4);
+        linearLayoutLettersOpponent.setLayoutParams(params5);
+        linearLayoutNumbersOpponent.setLayoutParams(params6);
+        fourMasts.setLayoutParams(params7);
+        threeMastsFirst.setLayoutParams(params8);
+        threeMastsSecond.setLayoutParams(params9);
+        twoMastsFirst.setLayoutParams(params10);
+        twoMastsSecond.setLayoutParams(params11);
+        twoMastsThird.setLayoutParams(params12);
+        oneMastsFirst.setLayoutParams(params13);
+        oneMastsSecond.setLayoutParams(params14);
+        oneMastsThird.setLayoutParams(params15);
+        oneMastsFourth.setLayoutParams(params16);
+        for(int i = 0; i<10; i++){
+            TextView tv = (TextView)linearLayoutLettersMy.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        }
+
+        for(int i = 0; i<10; i++){
+            TextView tv = (TextView)linearLayoutNumbersMy.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        }
+
+        for(int i = 0; i<10; i++){
+            TextView tv = (TextView)linearLayoutLettersOpponent.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        }
+        for(int i = 0; i<10; i++){
+            TextView tv = (TextView)linearLayoutNumbersOpponent.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        }
+        marginTop = 4*square;
+        marginLeft = screenWidth-screenWidthOffSet-14*square;
+        marginDown = screenHeight-screenHeightOffSet-2*square;
+
+        if(((screenWidth-screenWidthOffSet)/square)%2==0){
+            marginLeftForShips=(screenWidth-screenWidthOffSet)/2-15*square;
+        }else{
+            marginLeftForShips=(screenWidth-screenWidthOffSet-square)/2-15*square;
+        }
+
+        ConstraintSet set = new ConstraintSet();
+        set.clone(mainLayout);
+        set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,square);
+        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.connect(layoutMy.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,4*square);
+        set.connect(layoutMy.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,5*square);
+
+        set.connect(linearLayoutLettersMy.getId(),ConstraintSet.BOTTOM,layoutMy.getId(),ConstraintSet.TOP,0);
+        set.connect(linearLayoutLettersMy.getId(),ConstraintSet.LEFT,layoutMy.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(linearLayoutNumbersMy.getId(),ConstraintSet.TOP,layoutMy.getId(),ConstraintSet.TOP,0);
+        set.connect(linearLayoutNumbersMy.getId(),ConstraintSet.RIGHT,layoutMy.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(layoutOpponent.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginTop);
+        set.connect(layoutOpponent.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(linearLayoutLettersOpponent.getId(),ConstraintSet.BOTTOM,layoutOpponent.getId(),ConstraintSet.TOP,0);
+        set.connect(linearLayoutLettersOpponent.getId(),ConstraintSet.LEFT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(linearLayoutNumbersOpponent.getId(),ConstraintSet.TOP,layoutOpponent.getId(),ConstraintSet.TOP,0);
+        set.connect(linearLayoutNumbersOpponent.getId(),ConstraintSet.RIGHT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(fourMasts.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginDown);
+        set.connect(fourMasts.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeftForShips);
+
+        set.connect(threeMastsFirst.getId(),ConstraintSet.TOP,fourMasts.getId(),ConstraintSet.TOP,0);
+        set.connect(threeMastsFirst.getId(),ConstraintSet.LEFT,fourMasts.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(threeMastsSecond.getId(),ConstraintSet.TOP,threeMastsFirst.getId(),ConstraintSet.TOP,0);
+        set.connect(threeMastsSecond.getId(),ConstraintSet.LEFT,threeMastsFirst.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(twoMastsFirst.getId(),ConstraintSet.TOP,threeMastsSecond.getId(),ConstraintSet.TOP,0);
+        set.connect(twoMastsFirst.getId(),ConstraintSet.LEFT,threeMastsSecond.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(twoMastsSecond.getId(),ConstraintSet.TOP,twoMastsFirst.getId(),ConstraintSet.TOP,0);
+        set.connect(twoMastsSecond.getId(),ConstraintSet.LEFT,twoMastsFirst.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(twoMastsThird.getId(),ConstraintSet.TOP,twoMastsSecond.getId(),ConstraintSet.TOP,0);
+        set.connect(twoMastsThird.getId(),ConstraintSet.LEFT,twoMastsSecond.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(oneMastsFirst.getId(),ConstraintSet.TOP,twoMastsThird.getId(),ConstraintSet.TOP,0);
+        set.connect(oneMastsFirst.getId(),ConstraintSet.LEFT,twoMastsThird.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(oneMastsSecond.getId(),ConstraintSet.TOP,oneMastsFirst.getId(),ConstraintSet.TOP,0);
+        set.connect(oneMastsSecond.getId(),ConstraintSet.LEFT,oneMastsFirst.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(oneMastsThird.getId(),ConstraintSet.TOP,oneMastsSecond.getId(),ConstraintSet.TOP,0);
+        set.connect(oneMastsThird.getId(),ConstraintSet.LEFT,oneMastsSecond.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(oneMastsFourth.getId(),ConstraintSet.TOP,oneMastsThird.getId(),ConstraintSet.TOP,0);
+        set.connect(oneMastsFourth.getId(),ConstraintSet.LEFT,oneMastsThird.getId(),ConstraintSet.RIGHT,square);
+
+        set.applyTo(mainLayout);
+
         enableTouchListener=false;
         initializeTable(ShootTable);
 
-        initializeShips();
-        initializeBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGameMe);
 
-        tv1=findViewById(R.id.player2CellGame_1x1);
-        tv2=findViewById(R.id.player2CellGame_1x2);
-        tv11=findViewById(R.id.player2CellGame_2x1);
-        layout = findViewById(R.id.tableLayoutPlayer2BattleField);
-        tv1.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+
+
+
+        height=square;
+        width=square;
+
+        layoutOpponent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                tv1.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                tv1.getLocationOnScreen(location1);
-            }
-        });
-        tv2.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                tv2.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                tv2.getLocationOnScreen(location2);
-            }
-        });
-        tv11.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                tv11.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                tv11.getLocationOnScreen(location11);
-                height=location11[1]-location1[1];
-                width= location2[0]-location1[0];
-            }
-        });
-        layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                layout.getLocationOnScreen(locationLayout);
+                layoutOpponent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                layoutOpponent.getLocationOnScreen(locationLayout);
 
             }
         });
-        layout.setOnTouchListener(this);
+        layoutOpponent.setOnTouchListener(this);
 
        if(GameDifficulty.getInstance().getRandom()) {
            battleFieldMeActivityRandomGame.createFleet();
@@ -165,7 +287,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         battleFieldOpponentActivityRandomGame.createFleet();
 
 
-        displayBattleFieldActivityRandomGamePlayerOne(TextViewArrayActivityRandomGameMe, battleFieldMeActivityRandomGame);
+        displayBattleFieldActivityRandomGamePlayerOne(layoutMy, battleFieldMeActivityRandomGame);
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -220,31 +342,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         }return counter==noOfMasts;
     }
 
-    private void initializeShips() {
-        ShipFourMasts[0]=findViewById(R.id.FourCellShip1);
-        ShipFourMasts[1]=findViewById(R.id.FourCellShip2);
-        ShipFourMasts[2]=findViewById(R.id.FourCellShip3);
-        ShipFourMasts[3]=findViewById(R.id.FourCellShip4);
-
-        ShipThreeMastsFirst[0]=findViewById(R.id.ThreeCellShip11);
-        ShipThreeMastsFirst[1]=findViewById(R.id.ThreeCellShip12);
-        ShipThreeMastsFirst[2]=findViewById(R.id.ThreeCellShip13);
-        ShipThreeMastsSecond[0]=findViewById(R.id.ThreeCellShip21);
-        ShipThreeMastsSecond[1]=findViewById(R.id.ThreeCellShip22);
-        ShipThreeMastsSecond[2]=findViewById(R.id.ThreeCellShip23);
-
-        ShipTwoMastsFirst[0]=findViewById(R.id.TwoCellShip11);
-        ShipTwoMastsFirst[1]=findViewById(R.id.TwoCellShip12);
-        ShipTwoMastsSecond[0]=findViewById(R.id.TwoCellShip21);
-        ShipTwoMastsSecond[1]=findViewById(R.id.TwoCellShip22);
-        ShipTwoMastsThird[0]=findViewById(R.id.TwoCellShip31);
-        ShipTwoMastsThird[1]=findViewById(R.id.TwoCellShip32);
-
-        ShipOneMastsFirst[0]=findViewById(R.id.OneCellShip1);
-        ShipOneMastsSecond[0]=findViewById(R.id.OneCellShip2);
-        ShipOneMastsThird[0]=findViewById(R.id.OneCellShip3);
-        ShipOneMastsFourth[0]=findViewById(R.id.OneCellShip4);
-    }
     //TODO opisać planszę
     //TODO wyczyścić kod
 
@@ -333,14 +430,14 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         for(int i =0;i<10;i++){
             for(int j = 0; j<10;j++){
                 if(battleFieldOpponent[i][j]==SHIP_BROWN){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
                 else if(battleFieldOpponent[i][j]==SHIP_RED){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_normal_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_normal_x));
                 }else if(battleFieldOpponent[i][j]==WATER){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x));
                 }else if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x));
                 }else;
 
             }
@@ -354,100 +451,100 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 //jest statek i został trafiony
                 if(battleFieldMeActivityRandomGame.getBattleField(i,j).isShip()
                         && battleFieldMeActivityRandomGame.getBattleField(i,j).isHit()){
-                    displayShipCell(TextViewArrayActivityRandomGameMe,i,j);
+                    displayShipCell((TextView) layoutMy.getChildAt(10*i+j));
                 }
 
                 // woda i została trafiony
                 else if(!battleFieldMeActivityRandomGame.getBattleField(i,j).isShip()
                         && battleFieldMeActivityRandomGame.getBattleField(i,j).isHit()){
-                    displayWaterCell(TextViewArrayActivityRandomGameMe,i,j);
+                    displayWaterCell((TextView) layoutMy.getChildAt(10*i+j));
                 }
 
                 // jest statek i nie został trafiony
                 else if(battleFieldMeActivityRandomGame.getBattleField(i,j).isShip()
                 &&!battleFieldMeActivityRandomGame.getBattleField(i,j).isHit()){
-                    displayWidmoShip(TextViewArrayActivityRandomGameMe,i,j);
+                    displayWidmoShip((TextView) layoutMy.getChildAt(10*i+j));
                 }
                 // nie ma statku i nie został trafiony
                 else if(!battleFieldMeActivityRandomGame.getBattleField(i,j).isShip()
                         &&!battleFieldMeActivityRandomGame.getBattleField(i,j).isHit()){
-                    displayBattleCell(TextViewArrayActivityRandomGameMe,i,j);
+                    displayBattleCell((TextView) layoutMy.getChildAt(10*i+j));
                 }
                 else;
             }
         }
     }
 
-    private void displayBattleCell(TextView[][] TextView, int i, int j) {
+    private void displayBattleCell(TextView textView) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
+            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
         }
     }
 
-    private void displayWidmoShip(TextView[][] TextView, int i, int j){
+    private void displayWidmoShip(TextView textView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
         }
     }
 
-    private void displayWaterCell(TextView[][] TextView, int i, int j) {
+    private void displayWaterCell(TextView textView) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell_x));
+            textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x));
         }
     }
 
-    private void displayShipCell(TextView[][] TextView, int i, int j) {
+    private void displayShipCell(TextView textView) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
         }
     }
 
-    private void displayShipCellHidden(TextView[][] TextView, int i, int j){
+    private void displayShipCellHidden(TextView textView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
         }
     }
 
-    private void displayWaterCellHidden(TextView[][] TextView,int i, int j){
+    private void displayWaterCellHidden(TextView textView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x_hidden));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x_hidden));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell_x_hidden));
+            textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hidden));
         }
 
     }
 
-    private void displayWidmoShipHidden(TextView[][] TextView,int i, int j){
+    private void displayWidmoShipHidden(TextView textView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
+            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
         }
     }
 
-    private void displayBattleCellHidden(TextView[][] TextView,int i, int j){
+    private void displayBattleCellHidden(TextView textView){
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
+            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
         }
     }
 
@@ -457,24 +554,24 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 //jest statek i został trafiony
                 if(battleFieldMeActivityRandomGame.getBattleField(i,j).isShip()
                         && battleFieldMeActivityRandomGame.getBattleField(i,j).isHit()){
-                    displayShipCellHidden(TextViewArrayActivityRandomGameMe,i,j);
+                    displayShipCellHidden((TextView) layoutMy.getChildAt(10*i+j));
                 }
 
                 // woda i została trafiony
                 else if(!battleFieldMeActivityRandomGame.getBattleField(i,j).isShip()
                         && battleFieldMeActivityRandomGame.getBattleField(i,j).isHit()){
-                    displayWaterCellHidden(TextViewArrayActivityRandomGameMe,i,j);
+                    displayWaterCellHidden((TextView) layoutMy.getChildAt(10*i+j));
                 }
 
                 // jest statek i nie został trafiony
                 else if(battleFieldMeActivityRandomGame.getBattleField(i,j).isShip()
                         &&!battleFieldMeActivityRandomGame.getBattleField(i,j).isHit()){
-                        displayWidmoShipHidden(TextViewArrayActivityRandomGameMe,i,j);
+                        displayWidmoShipHidden((TextView) layoutMy.getChildAt(10*i+j));
                 }
                 // nie ma statku i nie został trafiony
                 else if(!battleFieldMeActivityRandomGame.getBattleField(i,j).isShip()
                         &&!battleFieldMeActivityRandomGame.getBattleField(i,j).isHit()){
-                        displayBattleCellHidden(TextViewArrayActivityRandomGameMe,i,j);
+                        displayBattleCellHidden((TextView) layoutMy.getChildAt(10*i+j));
                 }
 
                 else;
@@ -488,14 +585,14 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         for(int i =0;i<10;i++){
             for(int j = 0; j<10;j++){
                 if(battleFieldOpponent[i][j]==SHIP_BROWN){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
                 }
                 else if(battleFieldOpponent[i][j]==SHIP_RED){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
                 }else if(battleFieldOpponent[i][j]==WATER){
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x_hidden));
                 }else{
-                    layout.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x_hidden));
                 }
 
             }
@@ -519,7 +616,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 }
                 else{
                 if (battleFieldMeActivityRandomGame.getBattleField(i, j).isShip()) {
-                    displayShipCellHit(TextViewArrayActivityRandomGameMe,i,j);
+                    displayShipCellHit((TextView) layoutMy.getChildAt(10*i+j));
                     ShootTable.remove(Integer.valueOf(i*10+j));
                     battleFieldMeActivityRandomGame.battleField[i][j].setHit(true);
                     if((level==2||level==3)&&!zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i,j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i,j).getShipNumber()))
@@ -532,7 +629,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                     }else;
 
                 } else {
-                    displayWaterCellHit(TextViewArrayActivityRandomGameMe,i,j);
+                    displayWaterCellHit((TextView) layoutMy.getChildAt(10*i+j));
                     ShootTable.remove(Integer.valueOf(i*10+j));
                     battleFieldMeActivityRandomGame.battleField[i][j].setHit(true);
                     myTurn=true;
@@ -546,21 +643,21 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         }
     }
 
-    private void displayWaterCellHit(TextView[][] TextView, int i, int j) {
+    private void displayWaterCellHit(TextView textView) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x_hit));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x_hit));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.water_cell_x_hit));
+            textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hit));
         }
     }
 
-    private void displayShipCellHit(TextView[][] TextView, int i, int j) {
+    private void displayShipCellHit(TextView textView) {
         final int sdk = Build.VERSION.SDK_INT;
         if(sdk < Build.VERSION_CODES.JELLY_BEAN) {
-            TextView[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell_x_hit));
+            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell_x_hit));
         } else {
-            TextView[i][j].setBackground(getResources().getDrawable(R.drawable.ship_cell_x_hit));
+            textView.setBackground(getResources().getDrawable(R.drawable.ship_cell_x_hit));
         }
     }
 
@@ -677,7 +774,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 if(!battleFieldMeActivityRandomGame.battleField[x][j].isHit()){
                     if(x==0) {
                         if (battleFieldMeActivityRandomGame.battleField[x][j].isShip()) {
-                            displayShipCellHit(TextViewArrayActivityRandomGameMe, x, j);
+                            displayShipCellHit((TextView) layoutMy.getChildAt(10*x+j));
+                //            displayShipCellHit(TextViewArrayActivityRandomGameMe, x, j);
                             ShootTable.remove(Integer.valueOf(x * 10 + j));
                             battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                             if (zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i, j).getShipNumber())) {
@@ -686,7 +784,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 x = x - 1;
                             }
                         } else {
-                            displayWaterCellHit(TextViewArrayActivityRandomGameMe, x, j);
+                            displayWaterCellHit((TextView) layoutMy.getChildAt(10*x+j));
+                  //          displayWaterCellHit(TextViewArrayActivityRandomGameMe, x, j);
                             ShootTable.remove(Integer.valueOf(x * 10 + j));
                             battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                             myTurn=true;
@@ -704,7 +803,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 x = i + 1;
                             }else{
                                 if (battleFieldMeActivityRandomGame.battleField[x][j].isShip()) {
-                                    displayShipCellHit(TextViewArrayActivityRandomGameMe, x, j);
+                                    displayShipCellHit((TextView) layoutMy.getChildAt(10*x+j));
+                        //            displayShipCellHit(TextViewArrayActivityRandomGameMe, x, j);
                                     ShootTable.remove(Integer.valueOf(x * 10 + j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     if (zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i, j).getShipNumber())) {
@@ -713,7 +813,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         x = x - 1;
                                     }
                                 } else {
-                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, x, j);
+                                    displayWaterCellHit((TextView) layoutMy.getChildAt(10*x+j));
+//                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, x, j);
                                     ShootTable.remove(Integer.valueOf(x * 10 + j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     myTurn=true;
@@ -732,7 +833,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 x = i + 1;
                             }else{
                                 if (battleFieldMeActivityRandomGame.battleField[x][j].isShip()) {
-                                    displayShipCellHit(TextViewArrayActivityRandomGameMe, x, j);
+                                    displayShipCellHit((TextView) layoutMy.getChildAt(10*x+j));
+            //                        displayShipCellHit(TextViewArrayActivityRandomGameMe, x, j);
                                     ShootTable.remove(Integer.valueOf(x * 10 + j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     if (zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i, j).getShipNumber())) {
@@ -741,7 +843,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         x = x - 1;
                                     }
                                 } else {
-                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, x, j);
+                                    displayWaterCellHit((TextView) layoutMy.getChildAt(10*x+j));
+            //                        displayWaterCellHit(TextViewArrayActivityRandomGameMe, x, j);
                                     ShootTable.remove(Integer.valueOf(x * 10 + j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     myTurn=true;
@@ -761,7 +864,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 x = i + 1;
                             }else{
                                 if (battleFieldMeActivityRandomGame.battleField[x][j].isShip()) {
-                                    displayShipCellHit(TextViewArrayActivityRandomGameMe, x, j);
+                                    displayShipCellHit((TextView) layoutMy.getChildAt(10*x+j));
+    //                                displayShipCellHit(TextViewArrayActivityRandomGameMe, x, j);
                                     ShootTable.remove(Integer.valueOf(x * 10 + j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     if (zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i, j).getShipNumber())) {
@@ -770,7 +874,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         x = x - 1;
                                     }
                                 } else {
-                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, x, j);
+                                    displayWaterCellHit((TextView) layoutMy.getChildAt(10*x+j));
+ //                                   displayWaterCellHit(TextViewArrayActivityRandomGameMe, x, j);
                                     ShootTable.remove(Integer.valueOf(x * 10 + j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     myTurn=true;
@@ -798,7 +903,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 if(!battleFieldMeActivityRandomGame.battleField[x][j].isHit()){
                     if(x==9){
                         if(battleFieldMeActivityRandomGame.battleField[x][j].isShip()){
-                            displayShipCellHit(TextViewArrayActivityRandomGameMe,x,j);
+                            displayShipCellHit((TextView) layoutMy.getChildAt(10*x+j));
+//                            displayShipCellHit(TextViewArrayActivityRandomGameMe,x,j);
                             ShootTable.remove(Integer.valueOf(x*10+j));
                             battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                             if(zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i,j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i,j).getShipNumber())){
@@ -808,7 +914,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 x=x+1;
                             }
                         }else{
-                            displayWaterCellHit(TextViewArrayActivityRandomGameMe,x,j);
+                            displayWaterCellHit((TextView) layoutMy.getChildAt(10*x+j));
+//                            displayWaterCellHit(TextViewArrayActivityRandomGameMe,x,j);
                             ShootTable.remove(Integer.valueOf(x*10+j));
                             battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                             myTurn=true;
@@ -825,7 +932,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 y=j-1;
                             }else{
                                 if(battleFieldMeActivityRandomGame.battleField[x][j].isShip()){
-                                    displayShipCellHit(TextViewArrayActivityRandomGameMe,x,j);
+                                    displayShipCellHit((TextView) layoutMy.getChildAt(10*x+j));
+                        //            displayShipCellHit(TextViewArrayActivityRandomGameMe,x,j);
                                     ShootTable.remove(Integer.valueOf(x*10+j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     if(zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i,j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i,j).getShipNumber())){
@@ -835,7 +943,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         x=x+1;
                                     }
                                 }else{
-                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe,x,j);
+                                    displayWaterCellHit((TextView) layoutMy.getChildAt(10*x+j));
+//                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe,x,j);
                                     ShootTable.remove(Integer.valueOf(x*10+j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     myTurn=true;
@@ -852,7 +961,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 y = j - 1;
                             } else {
                                 if (battleFieldMeActivityRandomGame.battleField[x][j].isShip()) {
-                                    displayShipCellHit(TextViewArrayActivityRandomGameMe, x, j);
+                                    displayShipCellHit((TextView) layoutMy.getChildAt(10*x+j));
+//                                    displayShipCellHit(TextViewArrayActivityRandomGameMe, x, j);
                                     ShootTable.remove(Integer.valueOf(x * 10 + j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     if (zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i, j).getShipNumber())) {
@@ -861,7 +971,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         x = x + 1;
                                     }
                                 } else {
-                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, x, j);
+                                    displayWaterCellHit((TextView) layoutMy.getChildAt(10*x+j));
+//                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, x, j);
                                     ShootTable.remove(Integer.valueOf(x * 10 + j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     myTurn=true;
@@ -880,7 +991,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 y=j-1;
                             }else{
                                 if(battleFieldMeActivityRandomGame.battleField[x][j].isShip()){
-                                    displayShipCellHit(TextViewArrayActivityRandomGameMe,x,j);
+                                    displayShipCellHit((TextView) layoutMy.getChildAt(10*x+j));
+//                                    displayShipCellHit(TextViewArrayActivityRandomGameMe,x,j);
                                     ShootTable.remove(Integer.valueOf(x*10+j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     if(zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i,j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i,j).getShipNumber())){
@@ -890,7 +1002,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         x=x+1;
                                     }
                                 }else{
-                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe,x,j);
+                                    displayWaterCellHit((TextView) layoutMy.getChildAt(10*x+j));
+//                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe,x,j);
                                     ShootTable.remove(Integer.valueOf(x*10+j));
                                     battleFieldMeActivityRandomGame.battleField[x][j].setHit(true);
                                     myTurn=true;
@@ -915,7 +1028,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 if(!battleFieldMeActivityRandomGame.battleField[i][y].isHit()){
                     if (y == 0) {
                         if (battleFieldMeActivityRandomGame.battleField[i][y].isShip()) {
-                            displayShipCellHit(TextViewArrayActivityRandomGameMe, i, y);
+                            displayShipCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                            displayShipCellHit(TextViewArrayActivityRandomGameMe, i, y);
                             ShootTable.remove(Integer.valueOf(i * 10 + y));
                             battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                             if (zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i, j).getShipNumber())) {
@@ -924,7 +1038,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 y = y - 1;
                             }
                         } else {
-                            displayWaterCellHit(TextViewArrayActivityRandomGameMe, i, y);
+                            displayWaterCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                            displayWaterCellHit(TextViewArrayActivityRandomGameMe, i, y);
                             ShootTable.remove(Integer.valueOf(i * 10 + y));
                             battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                             myTurn=true;
@@ -942,7 +1057,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 y = j + 1;
                             }else{
                                 if (battleFieldMeActivityRandomGame.battleField[i][y].isShip()) {
-                                    displayShipCellHit(TextViewArrayActivityRandomGameMe, i, y);
+                                    displayShipCellHit((TextView) layoutMy.getChildAt(10*i+y));
+         //                           displayShipCellHit(TextViewArrayActivityRandomGameMe, i, y);
                                     ShootTable.remove(Integer.valueOf(i * 10 + y));
                                     battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                     if (zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i, j).getShipNumber())) {
@@ -951,7 +1067,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         y = y - 1;
                                     }
                                 } else {
-                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, i, y);
+                                    displayWaterCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, i, y);
                                     ShootTable.remove(Integer.valueOf(i * 10 + y));
                                     battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                     myTurn=true;
@@ -969,7 +1086,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 y = j + 1;
                             }else{
                                 if (battleFieldMeActivityRandomGame.battleField[i][y].isShip()) {
-                                    displayShipCellHit(TextViewArrayActivityRandomGameMe, i, y);
+                                    displayShipCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                    displayShipCellHit(TextViewArrayActivityRandomGameMe, i, y);
                                     ShootTable.remove(Integer.valueOf(i * 10 + y));
                                     battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                     if (zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i, j).getShipNumber())) {
@@ -978,7 +1096,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         y = y - 1;
                                     }
                                 } else {
-                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, i, y);
+                                    displayWaterCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, i, y);
                                     ShootTable.remove(Integer.valueOf(i * 10 + y));
                                     battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                     myTurn=true;
@@ -998,7 +1117,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 y = j + 1;
                             }else{
                                 if (battleFieldMeActivityRandomGame.battleField[i][y].isShip()) {
-                                    displayShipCellHit(TextViewArrayActivityRandomGameMe, i, y);
+                                    displayShipCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                    displayShipCellHit(TextViewArrayActivityRandomGameMe, i, y);
                                     ShootTable.remove(Integer.valueOf(i * 10 + y));
                                     battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                     if (zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i, j).getShipNumber())) {
@@ -1007,7 +1127,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         y = y - 1;
                                     }
                                 } else {
-                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, i, y);
+                                    displayWaterCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                    displayWaterCellHit(TextViewArrayActivityRandomGameMe, i, y);
                                     ShootTable.remove(Integer.valueOf(i * 10 + y));
                                     battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                     myTurn=true;
@@ -1032,7 +1153,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 if(!battleFieldMeActivityRandomGame.battleField[i][y].isHit()){
                     if(y==9){
                         if(battleFieldMeActivityRandomGame.battleField[i][y].isShip()){
-                            displayShipCellHit(TextViewArrayActivityRandomGameMe,i,y);
+                            displayShipCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                            displayShipCellHit(TextViewArrayActivityRandomGameMe,i,y);
                             ShootTable.remove(Integer.valueOf(i*10+y));
                             battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                             if(zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i,j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i,j).getShipNumber())){
@@ -1042,7 +1164,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 y=y+1;
                             }
                         }else{
-                            displayWaterCellHit(TextViewArrayActivityRandomGameMe,i,y);
+                            displayWaterCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                            displayWaterCellHit(TextViewArrayActivityRandomGameMe,i,y);
                             ShootTable.remove(Integer.valueOf(i*10+y));
                             battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                             myTurn=true;
@@ -1057,7 +1180,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                  direction=5;
                              }else{
                                  if(battleFieldMeActivityRandomGame.battleField[i][y].isShip()){
-                                     displayShipCellHit(TextViewArrayActivityRandomGameMe,i,y);
+                                     displayShipCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                     displayShipCellHit(TextViewArrayActivityRandomGameMe,i,y);
                                      ShootTable.remove(Integer.valueOf(i*10+y));
                                      battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                      if(zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i,j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i,j).getShipNumber())){
@@ -1067,7 +1191,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                          y=y+1;
                                      }
                                  }else{
-                                     displayWaterCellHit(TextViewArrayActivityRandomGameMe,i,y);
+                                     displayWaterCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                     displayWaterCellHit(TextViewArrayActivityRandomGameMe,i,y);
                                      ShootTable.remove(Integer.valueOf(i*10+y));
                                      battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                      myTurn=true;
@@ -1085,7 +1210,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                  direction=5;
                              }else{
                                  if(battleFieldMeActivityRandomGame.battleField[i][y].isShip()){
-                                     displayShipCellHit(TextViewArrayActivityRandomGameMe,i,y);
+                                     displayShipCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                     displayShipCellHit(TextViewArrayActivityRandomGameMe,i,y);
                                      ShootTable.remove(Integer.valueOf(i*10+y));
                                      battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                      if(zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i,j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i,j).getShipNumber())){
@@ -1095,7 +1221,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                          y=y+1;
                                      }
                                  }else{
-                                     displayWaterCellHit(TextViewArrayActivityRandomGameMe,i,y);
+                                     displayWaterCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                     displayWaterCellHit(TextViewArrayActivityRandomGameMe,i,y);
                                      ShootTable.remove(Integer.valueOf(i*10+y));
                                      battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                      myTurn=true;
@@ -1115,7 +1242,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                  direction=5;
                              }else{
                                  if(battleFieldMeActivityRandomGame.battleField[i][y].isShip()){
-                                     displayShipCellHit(TextViewArrayActivityRandomGameMe,i,y);
+                                     displayShipCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                     displayShipCellHit(TextViewArrayActivityRandomGameMe,i,y);
                                      ShootTable.remove(Integer.valueOf(i*10+y));
                                      battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                      if(zatopiony2(battleFieldMeActivityRandomGame.getBattleField(i,j).getNumberOfMasts(), battleFieldMeActivityRandomGame.getBattleField(i,j).getShipNumber())){
@@ -1125,7 +1253,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                          y=y+1;
                                      }
                                  }else{
-                                     displayWaterCellHit(TextViewArrayActivityRandomGameMe,i,y);
+                                     displayWaterCellHit((TextView) layoutMy.getChildAt(10*i+y));
+//                                     displayWaterCellHit(TextViewArrayActivityRandomGameMe,i,y);
                                      ShootTable.remove(Integer.valueOf(i*10+y));
                                      battleFieldMeActivityRandomGame.battleField[i][y].setHit(true);
                                      myTurn=true;
@@ -1149,141 +1278,30 @@ else
     newShoot=true;
     }
 
-    private void displayBattleFieldActivityRandomGamePlayerOne(TextView[][] TextViewArrayActivityRandomGame, BattleField battleFieldPlayerOneActivityRandomGame) {
+    private void displayBattleFieldActivityRandomGamePlayerOne(GridLayout gridLayout, BattleField battleFieldPlayerOneActivityRandomGame) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).isShip()) {
 
                     final int sdk = android.os.Build.VERSION.SDK_INT;
                     if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        TextViewArrayActivityRandomGame[i][j].setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+                        gridLayout.getChildAt(10*i+j).setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
                     } else {
-                        TextViewArrayActivityRandomGame[i][j].setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+                        gridLayout.getChildAt(10*i+j).setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
                     }
                 }
             }
         }
     }
 
-    private void initializeBattleFieldActivityRandomGamePlayerOne(TextView[][] textViewArrayActivityRandomGame) {
-        textViewArrayActivityRandomGame[0][0] = findViewById(R.id.playerCellGame_1x1);
-        textViewArrayActivityRandomGame[0][1] = findViewById(R.id.playerCellGame_1x2);
-        textViewArrayActivityRandomGame[0][2] = findViewById(R.id.playerCellGame_1x3);
-        textViewArrayActivityRandomGame[0][3] = findViewById(R.id.playerCellGame_1x4);
-        textViewArrayActivityRandomGame[0][4] = findViewById(R.id.playerCellGame_1x5);
-        textViewArrayActivityRandomGame[0][5] = findViewById(R.id.playerCellGame_1x6);
-        textViewArrayActivityRandomGame[0][6] = findViewById(R.id.playerCellGame_1x7);
-        textViewArrayActivityRandomGame[0][7] = findViewById(R.id.playerCellGame_1x8);
-        textViewArrayActivityRandomGame[0][8] = findViewById(R.id.playerCellGame_1x9);
-        textViewArrayActivityRandomGame[0][9] = findViewById(R.id.playerCellGame_1x10);
-
-        textViewArrayActivityRandomGame[1][0] = findViewById(R.id.playerCellGame_2x1);
-        textViewArrayActivityRandomGame[1][1] = findViewById(R.id.playerCellGame_2x2);
-        textViewArrayActivityRandomGame[1][2] = findViewById(R.id.playerCellGame_2x3);
-        textViewArrayActivityRandomGame[1][3] = findViewById(R.id.playerCellGame_2x4);
-        textViewArrayActivityRandomGame[1][4] = findViewById(R.id.playerCellGame_2x5);
-        textViewArrayActivityRandomGame[1][5] = findViewById(R.id.playerCellGame_2x6);
-        textViewArrayActivityRandomGame[1][6] = findViewById(R.id.playerCellGame_2x7);
-        textViewArrayActivityRandomGame[1][7] = findViewById(R.id.playerCellGame_2x8);
-        textViewArrayActivityRandomGame[1][8] = findViewById(R.id.playerCellGame_2x9);
-        textViewArrayActivityRandomGame[1][9] = findViewById(R.id.playerCellGame_2x10);
-
-        textViewArrayActivityRandomGame[2][0] = findViewById(R.id.playerCellGame_3x1);
-        textViewArrayActivityRandomGame[2][1] = findViewById(R.id.playerCellGame_3x2);
-        textViewArrayActivityRandomGame[2][2] = findViewById(R.id.playerCellGame_3x3);
-        textViewArrayActivityRandomGame[2][3] = findViewById(R.id.playerCellGame_3x4);
-        textViewArrayActivityRandomGame[2][4] = findViewById(R.id.playerCellGame_3x5);
-        textViewArrayActivityRandomGame[2][5] = findViewById(R.id.playerCellGame_3x6);
-        textViewArrayActivityRandomGame[2][6] = findViewById(R.id.playerCellGame_3x7);
-        textViewArrayActivityRandomGame[2][7] = findViewById(R.id.playerCellGame_3x8);
-        textViewArrayActivityRandomGame[2][8] = findViewById(R.id.playerCellGame_3x9);
-        textViewArrayActivityRandomGame[2][9] = findViewById(R.id.playerCellGame_3x10);
-
-        textViewArrayActivityRandomGame[3][0] = findViewById(R.id.playerCellGame_4x1);
-        textViewArrayActivityRandomGame[3][1] = findViewById(R.id.playerCellGame_4x2);
-        textViewArrayActivityRandomGame[3][2] = findViewById(R.id.playerCellGame_4x3);
-        textViewArrayActivityRandomGame[3][3] = findViewById(R.id.playerCellGame_4x4);
-        textViewArrayActivityRandomGame[3][4] = findViewById(R.id.playerCellGame_4x5);
-        textViewArrayActivityRandomGame[3][5] = findViewById(R.id.playerCellGame_4x6);
-        textViewArrayActivityRandomGame[3][6] = findViewById(R.id.playerCellGame_4x7);
-        textViewArrayActivityRandomGame[3][7] = findViewById(R.id.playerCellGame_4x8);
-        textViewArrayActivityRandomGame[3][8] = findViewById(R.id.playerCellGame_4x9);
-        textViewArrayActivityRandomGame[3][9] = findViewById(R.id.playerCellGame_4x10);
-
-        textViewArrayActivityRandomGame[4][0] = findViewById(R.id.playerCellGame_5x1);
-        textViewArrayActivityRandomGame[4][1] = findViewById(R.id.playerCellGame_5x2);
-        textViewArrayActivityRandomGame[4][2] = findViewById(R.id.playerCellGame_5x3);
-        textViewArrayActivityRandomGame[4][3] = findViewById(R.id.playerCellGame_5x4);
-        textViewArrayActivityRandomGame[4][4] = findViewById(R.id.playerCellGame_5x5);
-        textViewArrayActivityRandomGame[4][5] = findViewById(R.id.playerCellGame_5x6);
-        textViewArrayActivityRandomGame[4][6] = findViewById(R.id.playerCellGame_5x7);
-        textViewArrayActivityRandomGame[4][7] = findViewById(R.id.playerCellGame_5x8);
-        textViewArrayActivityRandomGame[4][8] = findViewById(R.id.playerCellGame_5x9);
-        textViewArrayActivityRandomGame[4][9] = findViewById(R.id.playerCellGame_5x10);
-
-        textViewArrayActivityRandomGame[5][0] = findViewById(R.id.playerCellGame_6x1);
-        textViewArrayActivityRandomGame[5][1] = findViewById(R.id.playerCellGame_6x2);
-        textViewArrayActivityRandomGame[5][2] = findViewById(R.id.playerCellGame_6x3);
-        textViewArrayActivityRandomGame[5][3] = findViewById(R.id.playerCellGame_6x4);
-        textViewArrayActivityRandomGame[5][4] = findViewById(R.id.playerCellGame_6x5);
-        textViewArrayActivityRandomGame[5][5] = findViewById(R.id.playerCellGame_6x6);
-        textViewArrayActivityRandomGame[5][6] = findViewById(R.id.playerCellGame_6x7);
-        textViewArrayActivityRandomGame[5][7] = findViewById(R.id.playerCellGame_6x8);
-        textViewArrayActivityRandomGame[5][8] = findViewById(R.id.playerCellGame_6x9);
-        textViewArrayActivityRandomGame[5][9] = findViewById(R.id.playerCellGame_6x10);
-
-        textViewArrayActivityRandomGame[6][0] = findViewById(R.id.playerCellGame_7x1);
-        textViewArrayActivityRandomGame[6][1] = findViewById(R.id.playerCellGame_7x2);
-        textViewArrayActivityRandomGame[6][2] = findViewById(R.id.playerCellGame_7x3);
-        textViewArrayActivityRandomGame[6][3] = findViewById(R.id.playerCellGame_7x4);
-        textViewArrayActivityRandomGame[6][4] = findViewById(R.id.playerCellGame_7x5);
-        textViewArrayActivityRandomGame[6][5] = findViewById(R.id.playerCellGame_7x6);
-        textViewArrayActivityRandomGame[6][6] = findViewById(R.id.playerCellGame_7x7);
-        textViewArrayActivityRandomGame[6][7] = findViewById(R.id.playerCellGame_7x8);
-        textViewArrayActivityRandomGame[6][8] = findViewById(R.id.playerCellGame_7x9);
-        textViewArrayActivityRandomGame[6][9] = findViewById(R.id.playerCellGame_7x10);
-
-        textViewArrayActivityRandomGame[7][0] = findViewById(R.id.playerCellGame_8x1);
-        textViewArrayActivityRandomGame[7][1] = findViewById(R.id.playerCellGame_8x2);
-        textViewArrayActivityRandomGame[7][2] = findViewById(R.id.playerCellGame_8x3);
-        textViewArrayActivityRandomGame[7][3] = findViewById(R.id.playerCellGame_8x4);
-        textViewArrayActivityRandomGame[7][4] = findViewById(R.id.playerCellGame_8x5);
-        textViewArrayActivityRandomGame[7][5] = findViewById(R.id.playerCellGame_8x6);
-        textViewArrayActivityRandomGame[7][6] = findViewById(R.id.playerCellGame_8x7);
-        textViewArrayActivityRandomGame[7][7] = findViewById(R.id.playerCellGame_8x8);
-        textViewArrayActivityRandomGame[7][8] = findViewById(R.id.playerCellGame_8x9);
-        textViewArrayActivityRandomGame[7][9] = findViewById(R.id.playerCellGame_8x10);
-
-        textViewArrayActivityRandomGame[8][0] = findViewById(R.id.playerCellGame_9x1);
-        textViewArrayActivityRandomGame[8][1] = findViewById(R.id.playerCellGame_9x2);
-        textViewArrayActivityRandomGame[8][2] = findViewById(R.id.playerCellGame_9x3);
-        textViewArrayActivityRandomGame[8][3] = findViewById(R.id.playerCellGame_9x4);
-        textViewArrayActivityRandomGame[8][4] = findViewById(R.id.playerCellGame_9x5);
-        textViewArrayActivityRandomGame[8][5] = findViewById(R.id.playerCellGame_9x6);
-        textViewArrayActivityRandomGame[8][6] = findViewById(R.id.playerCellGame_9x7);
-        textViewArrayActivityRandomGame[8][7] = findViewById(R.id.playerCellGame_9x8);
-        textViewArrayActivityRandomGame[8][8] = findViewById(R.id.playerCellGame_9x9);
-        textViewArrayActivityRandomGame[8][9] = findViewById(R.id.playerCellGame_9x10);
-
-        textViewArrayActivityRandomGame[9][0] = findViewById(R.id.playerCellGame_10x1);
-        textViewArrayActivityRandomGame[9][1] = findViewById(R.id.playerCellGame_10x2);
-        textViewArrayActivityRandomGame[9][2] = findViewById(R.id.playerCellGame_10x3);
-        textViewArrayActivityRandomGame[9][3] = findViewById(R.id.playerCellGame_10x4);
-        textViewArrayActivityRandomGame[9][4] = findViewById(R.id.playerCellGame_10x5);
-        textViewArrayActivityRandomGame[9][5] = findViewById(R.id.playerCellGame_10x6);
-        textViewArrayActivityRandomGame[9][6] = findViewById(R.id.playerCellGame_10x7);
-        textViewArrayActivityRandomGame[9][7] = findViewById(R.id.playerCellGame_10x8);
-        textViewArrayActivityRandomGame[9][8] = findViewById(R.id.playerCellGame_10x9);
-        textViewArrayActivityRandomGame[9][9] = findViewById(R.id.playerCellGame_10x10);
-    }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(enableTouchListener) {
             final int X = (int) event.getRawX();
             final int Y = (int) event.getRawY();
-            int x = (X - location1[0]) / width;
-            int y = (Y - location1[1]) / height;
+            int x = (X - locationLayout[0]) / width;
+            int y = (Y - locationLayout[1]) / height;
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
 
@@ -1292,13 +1310,13 @@ else
                             for (int j = 0; j < 10; j++) {
                                 if (x == j || y == i) {
                                     if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
                                     }else if(battleFieldOpponent[i][j]==WATER){
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
                                     }else{
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
                                     }
                                 }
@@ -1309,13 +1327,13 @@ else
                             for (int j = 0; j < 10; j++) {
                                 if (x == j || y == i) {
                                     if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
                                     }else if(battleFieldOpponent[i][j]==WATER){
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
                                     }else{
-                                        tv = (TextView) layout.getChildAt(10*i+j);
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.ship_cell_x_red_field));
                                     }
 
@@ -1335,13 +1353,13 @@ else
                                 for (int j = 0; j < 10; j++) {
                                     if (x == j || y == i) {
                                         if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
                                         }else if(battleFieldOpponent[i][j]==WATER){
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
                                         }else{
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
                                         }
                                     }
@@ -1352,13 +1370,13 @@ else
                                 for (int j = 0; j < 10; j++) {
                                     if (x == j || y == i) {
                                         if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
                                         }else if(battleFieldOpponent[i][j]==WATER){
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
                                         }else{
-                                            tv = (TextView) layout.getChildAt(10*i+j);
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.ship_cell_x_red_field));
                                         }
 
@@ -1383,7 +1401,7 @@ else
                     break;
             }
         }else;
-        layout.invalidate();
+        layoutOpponent.invalidate();
         return true;
     }
 
@@ -1412,89 +1430,89 @@ else
         if (level==0){
             if(!(shipFourMastsCounter==0)){
                 for(int i=0;i<shipFourMastsCounter;i++){
-                    ShipFourMasts[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    fourMasts.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(!(shipThreeMastsCounterFirst==0)){
                 for(int i=0;i<shipThreeMastsCounterFirst;i++){
-                    ShipThreeMastsFirst[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    threeMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(!(shipThreeMastsCounterSecond==0)){
                 for(int i=0;i<shipThreeMastsCounterSecond;i++){
-                    ShipThreeMastsSecond[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    threeMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(!(shipTwoMastsCounterFirst==0)){
                 for(int i=0;i<shipTwoMastsCounterFirst;i++){
-                    ShipTwoMastsFirst[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(!(shipTwoMastsCounterSecond==0)){
                 for(int i=0;i<shipTwoMastsCounterSecond;i++){
-                    ShipTwoMastsSecond[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(!(shipTwoMastsCounterThird==0)){
                 for(int i=0;i<shipTwoMastsCounterThird;i++){
-                    ShipTwoMastsThird[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsThird.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(!(shipOneMastsCounterFirst==0)){
-                    ShipOneMastsFirst[0].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    oneMastsFirst.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
             }
             if(!(shipOneMastsCounterSecond==0)){
-                ShipOneMastsSecond[0].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                oneMastsSecond.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
             }
             if(!(shipOneMastsCounterThird==0)){
-                ShipOneMastsThird[0].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                oneMastsThird.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
             }
             if(!(shipOneMastsCounterFourth==0)){
-                ShipOneMastsFourth[0].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                oneMastsFourth.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
             }
         }
         else{
             if(shipFourMastsCounter==4){
                 for(int i=0;i<shipFourMastsCounter;i++){
-                    ShipFourMasts[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    fourMasts.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(shipThreeMastsCounterFirst==3){
                 for(int i=0;i<shipThreeMastsCounterFirst;i++){
-                    ShipThreeMastsFirst[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    threeMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(shipThreeMastsCounterSecond==3){
                 for(int i=0;i<shipThreeMastsCounterSecond;i++){
-                    ShipThreeMastsSecond[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    threeMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(shipTwoMastsCounterFirst==2){
                 for(int i=0;i<shipTwoMastsCounterFirst;i++){
-                    ShipTwoMastsFirst[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(shipTwoMastsCounterSecond==2){
                 for(int i=0;i<shipTwoMastsCounterSecond;i++){
-                    ShipTwoMastsSecond[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(shipTwoMastsCounterThird==2){
                 for(int i=0;i<shipTwoMastsCounterThird;i++){
-                    ShipTwoMastsThird[i].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsThird.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
             }
             if(shipOneMastsCounterFirst==1){
-                ShipOneMastsFirst[0].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                oneMastsFirst.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
             }
             if(shipOneMastsCounterSecond==1){
-                ShipOneMastsSecond[0].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                oneMastsSecond.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
             }
             if(shipOneMastsCounterThird==1){
-                ShipOneMastsThird[0].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                oneMastsThird.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
             }
             if(shipOneMastsCounterFourth==1){
-                ShipOneMastsFourth[0].setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                oneMastsFourth.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
             }
         }
 
