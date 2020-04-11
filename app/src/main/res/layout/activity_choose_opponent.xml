@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ChooseOpponent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/constraintLayoutChooseOpponentActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -19,16 +20,18 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/TextSizeMini"
-            android:layout_margin="8dp"
+            android:textColor="@color/pen_red"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:layout_weight="@integer/PositionWeight"
             android:text="@string/position"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/TextSizeMini"
-            android:layout_margin="8dp"
+            android:textColor="@color/pen_red"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:layout_weight="@integer/UserWeight"
             android:text="@string/user"/>
 
@@ -36,18 +39,19 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/TextSizeMini"
-            android:layout_margin="8dp"
+            android:textColor="@color/pen_red"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:layout_weight="@integer/NoOFGamesWeight"
-            android:text="@string/no_of_games"/>
+            android:text="@string/games"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/TextSizeMini"
-            android:layout_margin="8dp"
+            android:textColor="@color/pen_red"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:layout_weight="@integer/ScoreWeight"
-            android:gravity="right"
             android:text="@string/points"/>
     </LinearLayout>
 

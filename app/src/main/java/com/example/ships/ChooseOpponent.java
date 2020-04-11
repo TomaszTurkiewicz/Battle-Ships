@@ -1,13 +1,23 @@
 package com.example.ships;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
+import android.graphics.Shader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ships.adapters.RecyclerViewAdapterChooseOpponent;
 import com.example.ships.classes.Ranking;
+import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,12 +65,19 @@ public class ChooseOpponent extends AppCompatActivity {
     private String FCM_API="https://fcm.googleapis.com/fcm/send";
     private String serverKey= "key=" + "AAAAUhITVm0:APA91bGLIOR5L7HQyh64ejoejk-nQFBWP9RxDqtzzjoSXCmROqs7JO_uDDyuW5VuTfJBxtKY_RG8q5_CnpKJsN3qHtVvgiAkuDM2J9T68mk0LzKCcRKgRbj3DQ-A1a8uzZ07wz8OlirQ";
     private String contentType= "application/json";
+    private int square;
+    private ConstraintLayout mainLayout;
+    private LinearLayout linearLayout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_choose_opponent);
+        mainLayout=findViewById(R.id.constraintLayoutChooseOpponentActivity);
+        linearLayout=findViewById(R.id.LinearLayoutActivityChooseOpponent);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
@@ -76,6 +94,23 @@ public class ChooseOpponent extends AppCompatActivity {
 
             }
         });
+
+        SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
+        square = sp.getInt("square",-1);
+        int screenWidth = sp.getInt("width",-1);
+        int screenHeight = sp.getInt("height",-1);
+        int screenWidthOffSet = sp.getInt("widthOffSet",-1);
+        int screenHeightOffSet = sp.getInt("heightOffSet",-1);
+
+        mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,2*square);
+
+        linearLayout.setLayoutParams(params);
+
+        for(int i = 0; i<linearLayout.getChildCount(); i++){
+            TextView tv = (TextView)linearLayout.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        }
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating ranking...");
@@ -130,8 +165,9 @@ public class ChooseOpponent extends AppCompatActivity {
     private void initRecyclerView() {
         progressDialog.dismiss();
         RecyclerView recyclerView = findViewById(R.id.recyclerViewChooseOpponent);
-        RecyclerViewAdapterChooseOpponent adapter = new RecyclerViewAdapterChooseOpponent(this,ranking,userID);
+        RecyclerViewAdapterChooseOpponent adapter = new RecyclerViewAdapterChooseOpponent(this,ranking,square,userID);
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter.setOnItemClickListener(position -> invite(position));
     }
@@ -231,3 +267,5 @@ public class ChooseOpponent extends AppCompatActivity {
 
 
 }
+
+// TODO invitation with dialog builder (confirmation)
