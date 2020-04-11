@@ -17,7 +17,7 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
 
     private Ranking mRanking;
     private Context mContext;
-    String userId;
+    private String userId;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener{

@@ -66,4 +66,5 @@
     <string name="firebasepath_opponent">opponent</string>
     <string name="firebasepath_accepted">accepted</string>
     <string name="easy">EASY</string>
+    <string name="games">GAMES</string>
 </resources>

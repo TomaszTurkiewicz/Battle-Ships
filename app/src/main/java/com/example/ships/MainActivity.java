@@ -164,11 +164,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(firebaseUser != null && firebaseUser.isEmailVerified()){
-
-
-
-
-
             logIn=true;
             loggedIn.setText("Zalogowany jako: ");
             accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
