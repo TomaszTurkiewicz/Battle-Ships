@@ -1,17 +1,26 @@
 package com.example.ships;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Shader;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.ships.classes.TileDrawable;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,7 +38,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class SignInActivity extends AppCompatActivity {
     private Button userLogout;
     private FirebaseAuth firebaseAuth;
-    private Button deleteUser;
+    private Button deleteUser, loginEmail;
     private String userID;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -38,16 +47,63 @@ public class SignInActivity extends AppCompatActivity {
     private Button login_google;
     private GoogleSignInClient mGoogleSignInClient;
     private ProgressDialog progressDialog;
+    private ConstraintLayout mainLayout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sign_in);
         userLogout=findViewById(R.id.logout);
         firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser firebaseUser;
         deleteUser = findViewById(R.id.deleteUser);
+        login_google = findViewById(R.id.loginGoogle);
+        mainLayout = findViewById(R.id.constraintLayoutSignInActivity);
+        loginEmail = findViewById(R.id.emailAndPassword);
+        SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
+        int square = sp.getInt("square",-1);
+        int screenWidth = sp.getInt("width",-1);
+        int screenHeight = sp.getInt("height",-1);
+        int screenWidthOffSet = sp.getInt("widthOffSet",-1);
+        int screenHeightOffSet = sp.getInt("heightOffSet",-1);
+        int width = screenHeight-screenHeightOffSet-4*square;
+        int marginLeft = 2*square;
+
+        mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
+
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(width,3*square);
+
+
+        loginEmail.setLayoutParams(params);
+        loginEmail.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+
+        login_google.setLayoutParams(params1);
+        login_google.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+
+        userLogout.setLayoutParams(params2);
+        userLogout.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+
+        ConstraintSet set = new ConstraintSet();
+        set.clone(mainLayout);
+
+        set.connect(loginEmail.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,3*square);
+        set.connect(loginEmail.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(login_google.getId(),ConstraintSet.TOP,loginEmail.getId(),ConstraintSet.BOTTOM,3*square);
+        set.connect(login_google.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(userLogout.getId(),ConstraintSet.TOP,login_google.getId(),ConstraintSet.BOTTOM,3*square);
+        set.connect(userLogout.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+
+
+        set.applyTo(mainLayout);
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("User");
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -55,7 +111,7 @@ public class SignInActivity extends AppCompatActivity {
 
         loggedIn = firebaseAuth.getCurrentUser()!= null&&firebaseAuth.getCurrentUser().isEmailVerified();
 
-        login_google = findViewById(R.id.loginGoogle);
+
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
                 .Builder()
                 .requestIdToken(getString(R.string.default_web_client_id))

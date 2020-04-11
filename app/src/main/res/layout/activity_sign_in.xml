@@ -1,41 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".SignInActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SignInActivity"
+    android:id="@+id/constraintLayoutSignInActivity">
 
     <Button
         android:id="@+id/emailAndPassword"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:text="@string/email_and_password"
-        android:onClick="onClickEmailAndPasswordLogin"/>
+        android:onClick="onClickEmailAndPasswordLogin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        />
 
     <Button
         android:id="@+id/loginGoogle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:text="@string/login_with_google"
         android:drawableLeft="@drawable/google_logo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp"
         />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/Distance50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:id="@+id/logout"
-        android:text="@string/logout"/>
+        android:text="@string/logout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:text="@string/delete_user"
-        android:id="@+id/deleteUser"/>
-</LinearLayout>
+        android:id="@+id/deleteUser"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
