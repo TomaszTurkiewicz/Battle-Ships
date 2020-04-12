@@ -13,8 +13,6 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private String newUserName;
     private User user = new User();
     private User opponentUser = new User();
-    private ImageButton accountBtn;
+    private ImageButton accountBtn, leave;
     private ImageView redDotMultiplayerIV;
     private Handler mHandler = new Handler();
     private int deelay = 1000;
@@ -65,8 +63,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
+
         setContentView(R.layout.activity_main);
         constraintLayout = findViewById(R.id.mainActivityLayout);
         userName=findViewById(R.id.userName);
@@ -81,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         ranking=findViewById(R.id.ranking);
         multiplayerBtn.setText("MULTI PLAYER");
         accountBtn.setBackgroundResource(R.drawable.account_box);
+        leave=findViewById(R.id.leaveMainActivity);
+        leave.setBackgroundResource(R.drawable.back);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -118,8 +134,9 @@ public class MainActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(12*square,3*square);
         ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(8*square,2*square);
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(3*square,3*square);
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(2*square,2*square);
         loggedIn.setLayoutParams(params3);
         loggedIn.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         userName.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
@@ -131,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
         ranking.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         accountBtn.setLayoutParams(params4);
         redDotMultiplayerIV.setLayoutParams(params5);
+        leave.setLayoutParams(params6);
 
         set.clone(constraintLayout);
         set.connect(singlePlayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,7*square);
@@ -146,17 +164,15 @@ public class MainActivity extends AppCompatActivity {
         set.connect(loggedIn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,square);
 
         set.connect(accountBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
-        set.connect(accountBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-3*square);
+        set.connect(accountBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-4*square);
 
         set.connect(redDotMultiplayerIV.getId(),ConstraintSet.BOTTOM,multiplayerBtn.getId(),ConstraintSet.BOTTOM,2*square-square/2);
         set.connect(redDotMultiplayerIV.getId(),ConstraintSet.LEFT,multiplayerBtn.getId(),ConstraintSet.LEFT,8*square-square/2);
 
-
+        set.connect(leave.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-4*square);
+        set.connect(leave.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,square);
+        
         set.applyTo(constraintLayout);
-
-
-
-
 
     }
 
@@ -444,11 +460,14 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    public void leaveMainMenuOnClick(View view) {
+        finish();
+    }
 }
 
 
 
-// TODO disable navigation bar
+// TODO disable navigation bar and override back button
 // TODO leave app
 // TODO Add notification when accepting and not accepting invitation
 // TODO change notification
