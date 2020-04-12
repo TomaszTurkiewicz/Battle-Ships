@@ -1,61 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/linearLayoutEmailAndPassLogIn"
-    tools:context=".EmailAndPassLogIn" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintLayoutEmailAndPassLogIn"
+    tools:context=".EmailAndPassLogIn">
 
     <EditText
         android:id="@+id/emailEditTextLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:ems="10"
         android:hint="@string/email"
-        android:inputType="textEmailAddress" />
+        android:textColor="@color/pen"
+        android:background="@drawable/button_background_pen"
+        android:inputType="textEmailAddress"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <EditText
         android:id="@+id/passwordEditTextLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:ems="10"
         android:hint="@string/password"
-        android:inputType="textPassword" />
+        android:textColor="@color/pen"
+        android:background="@drawable/button_background_pen"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <Button
         android:id="@+id/LogInBtnLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="@string/log_in" />
+        android:text="@string/log_in"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/button_background_pen_red"
+        android:textColor="@color/pen_red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
+    <Button
+        android:id="@+id/resendVerificationEmailBtnLogIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/resend_ver_email"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
 
     <Button
         android:id="@+id/forgotPasswordBtnLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:text="@string/forgot_password"
-        android:onClick="goToForgotPasswordActivity"/>
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:onClick="goToForgotPasswordActivity"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
-    <Button
-        android:id="@+id/resendVerificationEmailBtnLogIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="@string/resend_ver_email" />
+
 
     <Button
         android:id="@+id/signInBtnLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:onClick="goToSignIn"
-        android:text="@string/sign_up" />
+        android:text="@string/sign_up"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

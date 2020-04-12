@@ -115,12 +115,11 @@ public class SignInActivity extends AppCompatActivity {
         set.connect(login_facebook.getId(),ConstraintSet.TOP,login_google.getId(),ConstraintSet.BOTTOM,5*square);
         set.connect(login_facebook.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
-        set.connect(userLogout.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,5*square);
-        set.connect(userLogout.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
-
-        set.connect(deleteUser.getId(),ConstraintSet.TOP,userLogout.getId(),ConstraintSet.BOTTOM,10*square);
+        set.connect(deleteUser.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,3*square);
         set.connect(deleteUser.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
+        set.connect(userLogout.getId(),ConstraintSet.TOP,deleteUser.getId(),ConstraintSet.BOTTOM,12*square);
+        set.connect(userLogout.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
         set.applyTo(mainLayout);
 
@@ -260,6 +259,8 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 }
+
+// TODO deleting account with confirmation (alert dialog)
 // TODO change progressDialog na progressBar
 //TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO Rejestracja przez Facebook
