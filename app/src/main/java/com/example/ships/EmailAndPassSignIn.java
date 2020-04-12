@@ -1,17 +1,26 @@
 package com.example.ships;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Shader;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.ships.classes.FightIndex;
+import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +42,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
     private DatabaseReference databaseReferenceUser;
     private User user;
     private Button signup;
+    private ConstraintLayout mainLayout;
 
 
 
@@ -40,14 +50,79 @@ public class EmailAndPassSignIn extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_email_and_pass_sign_in);
-
+        mainLayout = findViewById(R.id.constraintLayoutEmailAndPasswordSignInActivity);
         username = findViewById(R.id.Username);
         email = findViewById(R.id.EmailSignIn);
         emailCofirm = findViewById(R.id.EmailSignInConfirm);
         password = findViewById(R.id.passwordSignIn);
         passwordConfirm = findViewById(R.id.passwordSignInConfirm);
         signup = findViewById(R.id.SignInBtnSignIn);
+
+        SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
+        int square = sp.getInt("square",-1);
+        int screenHeight = sp.getInt("width",-1);
+        int screenWidth = sp.getInt("height",-1);
+        int screenHeightOffSet = sp.getInt("widthOffSet",-1);
+        int screenWidthOffSet = sp.getInt("heightOffSet",-1);
+        int width = screenWidth-screenWidthOffSet-4*square;
+        int marginLeft = 2*square;
+        int textSize = square*9/10;
+        int signInTopMargin = screenHeight-screenHeightOffSet-5*square;
+
+        mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
+
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(width,3*square);
+
+        username.setLayoutParams(params);
+        username.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+
+        email.setLayoutParams(params1);
+        email.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+
+        emailCofirm.setLayoutParams(params2);
+        emailCofirm.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+
+        password.setLayoutParams(params3);
+        password.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+
+        passwordConfirm.setLayoutParams(params4);
+        passwordConfirm.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+
+        signup.setLayoutParams(params5);
+        signup.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+
+        ConstraintSet set = new ConstraintSet();
+        set.clone(mainLayout);
+
+        set.connect(username.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,2*square);
+        set.connect(username.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(email.getId(),ConstraintSet.TOP,username.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(email.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(emailCofirm.getId(),ConstraintSet.TOP,email.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(emailCofirm.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(password.getId(),ConstraintSet.TOP,emailCofirm.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(password.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(passwordConfirm.getId(),ConstraintSet.TOP,password.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(passwordConfirm.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(signup.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,signInTopMargin);
+        set.connect(signup.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.applyTo(mainLayout);
+
+
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
         firebaseDatabase = FirebaseDatabase.getInstance();

@@ -1,62 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".EmailAndPassSignIn"
-    android:orientation="vertical">
+    android:id="@+id/constraintLayoutEmailAndPasswordSignInActivity">
 
     <EditText
         android:id="@+id/Username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:ems="10"
         android:hint="@string/username"
+        android:textColor="@color/pen"
+        android:background="@drawable/button_background_pen"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:inputType="text" />
 
     <EditText
         android:id="@+id/EmailSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:ems="10"
         android:hint="@string/email"
+        android:textColor="@color/pen"
+        android:background="@drawable/button_background_pen"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/EmailSignInConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:ems="10"
         android:hint="@string/confirm_email"
+        android:textColor="@color/pen"
+        android:background="@drawable/button_background_pen"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/passwordSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:ems="10"
         android:hint="@string/password"
+        android:textColor="@color/pen"
+        android:background="@drawable/button_background_pen"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/passwordSignInConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:ems="10"
         android:hint="@string/confirm_password"
+        android:textColor="@color/pen"
+        android:background="@drawable/button_background_pen"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:inputType="textPassword" />
 
     <Button
         android:id="@+id/SignInBtnSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="@string/sign_up" />
+        android:text="@string/sign_up"
+        android:textColor="@color/pen_red"
+        android:background="@drawable/button_background_pen_red"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
