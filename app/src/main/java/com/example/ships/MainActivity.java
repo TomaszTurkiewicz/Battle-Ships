@@ -376,6 +376,7 @@ public class MainActivity extends AppCompatActivity {
         mHandler.removeCallbacks(checkMyOpponentAndMove);
         Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
         startActivity(intent);
+        finish();
     }
 
 

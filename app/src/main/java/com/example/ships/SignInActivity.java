@@ -44,7 +44,7 @@ public class SignInActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private boolean loggedIn;
     static final int GOOGLE_SIGN = 123;
-    private Button login_google;
+    private Button login_google, login_facebook;
     private GoogleSignInClient mGoogleSignInClient;
     private ProgressDialog progressDialog;
     private ConstraintLayout mainLayout;
@@ -63,20 +63,26 @@ public class SignInActivity extends AppCompatActivity {
         login_google = findViewById(R.id.loginGoogle);
         mainLayout = findViewById(R.id.constraintLayoutSignInActivity);
         loginEmail = findViewById(R.id.emailAndPassword);
+        login_facebook = findViewById(R.id.loginFacebbok);
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         int square = sp.getInt("square",-1);
-        int screenWidth = sp.getInt("width",-1);
-        int screenHeight = sp.getInt("height",-1);
-        int screenWidthOffSet = sp.getInt("widthOffSet",-1);
-        int screenHeightOffSet = sp.getInt("heightOffSet",-1);
-        int width = screenHeight-screenHeightOffSet-4*square;
+        int screenHeight = sp.getInt("width",-1);
+        int screenWidth = sp.getInt("height",-1);
+        int screenHeightOffSet = sp.getInt("widthOffSet",-1);
+        int screenWidthOffSet = sp.getInt("heightOffSet",-1);
+        int width = screenWidth-screenWidthOffSet-4*square;
         int marginLeft = 2*square;
+
+
 
         mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
 
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(width,3*square);
 
 
         loginEmail.setLayoutParams(params);
@@ -88,18 +94,32 @@ public class SignInActivity extends AppCompatActivity {
         userLogout.setLayoutParams(params2);
         userLogout.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
 
+        login_facebook.setLayoutParams(params3);
+        login_facebook.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+
+        userLogout.setLayoutParams(params4);
+        userLogout.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+
+        deleteUser.setLayoutParams(params5);
+        deleteUser.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
 
-        set.connect(loginEmail.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,3*square);
+        set.connect(loginEmail.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,5*square);
         set.connect(loginEmail.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
-        set.connect(login_google.getId(),ConstraintSet.TOP,loginEmail.getId(),ConstraintSet.BOTTOM,3*square);
+        set.connect(login_google.getId(),ConstraintSet.TOP,loginEmail.getId(),ConstraintSet.BOTTOM,5*square);
         set.connect(login_google.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
-        set.connect(userLogout.getId(),ConstraintSet.TOP,login_google.getId(),ConstraintSet.BOTTOM,3*square);
+        set.connect(login_facebook.getId(),ConstraintSet.TOP,login_google.getId(),ConstraintSet.BOTTOM,5*square);
+        set.connect(login_facebook.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(userLogout.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,5*square);
         set.connect(userLogout.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
+        set.connect(deleteUser.getId(),ConstraintSet.TOP,userLogout.getId(),ConstraintSet.BOTTOM,10*square);
+        set.connect(deleteUser.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
 
         set.applyTo(mainLayout);
@@ -126,8 +146,17 @@ public class SignInActivity extends AppCompatActivity {
         if(!loggedIn){
             deleteUser.setVisibility(View.GONE);
             userLogout.setVisibility(View.GONE);
+            loginEmail.setVisibility(View.VISIBLE);
+            login_google.setVisibility(View.VISIBLE);
+            login_facebook.setVisibility(View.VISIBLE);
         }else{
             userID = firebaseUser.getUid();
+            deleteUser.setVisibility(View.VISIBLE);
+            userLogout.setVisibility(View.VISIBLE);
+            loginEmail.setVisibility(View.GONE);
+            login_google.setVisibility(View.GONE);
+            login_facebook.setVisibility(View.GONE);
+
         }
 
         deleteUser.setOnClickListener(v -> {
