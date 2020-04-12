@@ -8,9 +8,8 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,11 +24,27 @@ public class ChooseGameLevel extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     private Button easyRandom,normalRandom, expertRandom, easyNotRandom, normalNotRandom, expertNotRandom;
     private TextView breakLine, randomGame, notRandomGame;
+    private ImageButton leave;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
         setContentView(R.layout.activity_choose_game_level);
         constraintLayout=findViewById(R.id.chooseGameLevelActivityLayout);
         easyRandom=findViewById(R.id.tooEasyRandom);
@@ -41,6 +56,8 @@ public class ChooseGameLevel extends AppCompatActivity {
         breakLine=findViewById(R.id.breakLine);
         randomGame=findViewById(R.id.randomGameTextView);
         notRandomGame=findViewById(R.id.notRandomGameTextView);
+        leave = findViewById(R.id.leaveChoseGameLevelActivity);
+        leave.setBackgroundResource(R.drawable.back);
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         int square = sp.getInt("square",-1);
@@ -55,7 +72,7 @@ public class ChooseGameLevel extends AppCompatActivity {
         boolean evenHorizontal = checkEven(width,widthOffSet,square);
         int marginEnd;
         if(evenHorizontal){
-            marginEnd = width-widthOffSet-10*square;
+            marginEnd = width-widthOffSet-8*square;
             horizontalMiddle=(width-widthOffSet)/2;
         }else{
             marginEnd = width-widthOffSet-11*square;
@@ -87,6 +104,7 @@ public class ChooseGameLevel extends AppCompatActivity {
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,lineWidth);
         ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ConstraintLayout.LayoutParams params9 = new ConstraintLayout.LayoutParams(2*square,2*square);
 
         easyRandom.setLayoutParams(params);
         expertRandom.setLayoutParams(params1);
@@ -97,6 +115,7 @@ public class ChooseGameLevel extends AppCompatActivity {
         expertNotRandom.setLayoutParams(params6);
         randomGame.setLayoutParams(params7);
         notRandomGame.setLayoutParams(params8);
+        leave.setLayoutParams(params9);
         easyRandom.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         normalRandom.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         expertRandom.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
@@ -134,6 +153,9 @@ public class ChooseGameLevel extends AppCompatActivity {
 
         set.connect(notRandomGame.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,2*square+middleHeight);
         set.connect(notRandomGame.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,horizontalMiddle-16*square);
+
+        set.connect(leave.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-3*square);
+        set.connect(leave.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,square);
 
         set.applyTo(constraintLayout);
     }
@@ -191,6 +213,10 @@ public class ChooseGameLevel extends AppCompatActivity {
         GameDifficulty.getInstance().setMultiplayerMode(false);
         Intent intent = new Intent(getApplicationContext(),CreateBattleField.class);
         startActivity(intent);
+        finish();
+    }
+
+    public void leaveChoseGameLevelActivity(View view) {
         finish();
     }
 }
