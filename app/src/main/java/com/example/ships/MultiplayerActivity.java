@@ -12,8 +12,6 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -73,7 +71,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             shipOneMastsCounterFirst, shipOneMastsCounterSecond, shipOneMastsCounterThird, shipOneMastsCounterFourth;
     private boolean battleFieldsSet;
     private TextView turnTextView;
-    private ImageButton leaveButton;
+    private ImageButton surrenderButton, leave;
     private boolean enableTouchListener;
     private GridLayout layoutOpponent, layoutMy;
 
@@ -99,8 +97,23 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
 
         setContentView(R.layout.activity_multiplayer);
         mainLayout=findViewById(R.id.multiplayerActivityLayout);
@@ -120,15 +133,17 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         oneMastsSecond=findViewById(R.id.linearLayoutMultiplayerShipOneMastsSecond);
         oneMastsThird=findViewById(R.id.linearLayoutMultiplayerShipOneMastsThird);
         oneMastsFourth=findViewById(R.id.linearLayoutMultiplayerShipOneMastsFourth);
-        leaveButton = findViewById(R.id.leaveMultiplayer);
-        leaveButton.setBackgroundResource(R.drawable.leave);
+        surrenderButton = findViewById(R.id.surrenderMultiplayer);
+        surrenderButton.setBackgroundResource(R.drawable.leave);
         turnTextView=findViewById(R.id.turn);
+        leave=findViewById(R.id.leaveMultiPlayer);
+        leave.setBackgroundResource(R.drawable.back);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
-        leaveButton.setVisibility(View.GONE);
+        surrenderButton.setVisibility(View.GONE);
         enableTouchListener=false;
         battleFieldsSet=false;
         battleFieldUpToDate=false;
@@ -141,7 +156,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         int screenHeightOffSet = sp.getInt("heightOffSet",-1);
         float textSize = (square*9)/10;
         marginTop = 4*square;
-        marginLeft = screenWidth-screenWidthOffSet-14*square;
+        marginLeft = screenWidth-screenWidthOffSet-13*square;
         mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
 
 
@@ -162,8 +177,9 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         ConstraintLayout.LayoutParams params14 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params17 = new ConstraintLayout.LayoutParams(2*square,2*square);
 
-        leaveButton.setLayoutParams(params);
+        surrenderButton.setLayoutParams(params);
         layoutMy.setLayoutParams(params1);
         linearLayoutLettersMy.setLayoutParams(params2);
         linearLayoutNumbersMy.setLayoutParams(params3);
@@ -180,6 +196,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         oneMastsSecond.setLayoutParams(params14);
         oneMastsThird.setLayoutParams(params15);
         oneMastsFourth.setLayoutParams(params16);
+        leave.setLayoutParams(params17);
 
         for(int i = 0; i<10; i++){
             TextView tv = (TextView)linearLayoutLettersMy.getChildAt(i);
@@ -209,8 +226,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
 
-        set.connect(leaveButton.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,square);
-        set.connect(leaveButton.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+        set.connect(surrenderButton.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,square);
+        set.connect(surrenderButton.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
         set.connect(layoutMy.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,4*square);
         set.connect(layoutMy.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,5*square);
@@ -259,6 +276,9 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
         set.connect(oneMastsFourth.getId(),ConstraintSet.TOP,oneMastsThird.getId(),ConstraintSet.TOP,0);
         set.connect(oneMastsFourth.getId(),ConstraintSet.LEFT,oneMastsThird.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginDown-2*square);
+        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
         set.applyTo(mainLayout);
 
@@ -451,7 +471,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 }else {
                     databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
                     databaseReferenceFight = firebaseDatabase.getReference("Battle").child(user.getIndex().getGameIndex());
-                    leaveButton.setVisibility(View.VISIBLE);
+                    surrenderButton.setVisibility(View.VISIBLE);
                     databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -884,7 +904,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }
     }
 
-    public void leaveMultiplayer(View view) {
+    public void surrenderMultiplayer(View view) {
         mHandler.removeCallbacks(game);
         databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -1216,5 +1236,35 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
         }
     }
+
+
+    public void leaveMultiplayerOnClick(View view) {
+        leaveGame();
+    }
+
+    @Override
+    public void onBackPressed() {
+        leaveGame();
+    }
+
+    private void leaveGame() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
+        builder.setCancelable(true);
+        builder.setTitle("Leaving game");
+        builder.setMessage("Do you want to go back to main menu?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mHandler.postDelayed(game,deelay);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 }
-// TODO surrender and leave button
