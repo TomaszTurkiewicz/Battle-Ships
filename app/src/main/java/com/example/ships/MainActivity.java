@@ -27,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.ships.classes.FightIndex;
+import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -166,8 +167,8 @@ public class MainActivity extends AppCompatActivity {
         set.connect(accountBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
         set.connect(accountBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-4*square);
 
-        set.connect(redDotMultiplayerIV.getId(),ConstraintSet.BOTTOM,multiplayerBtn.getId(),ConstraintSet.BOTTOM,2*square-square/2);
-        set.connect(redDotMultiplayerIV.getId(),ConstraintSet.LEFT,multiplayerBtn.getId(),ConstraintSet.LEFT,8*square-square/2);
+        set.connect(redDotMultiplayerIV.getId(),ConstraintSet.BOTTOM,multiplayerBtn.getId(),ConstraintSet.BOTTOM,3*square-square/2);
+        set.connect(redDotMultiplayerIV.getId(),ConstraintSet.LEFT,multiplayerBtn.getId(),ConstraintSet.LEFT,12*square-square/2);
 
         set.connect(leave.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-3*square);
         set.connect(leave.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,square);
@@ -208,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
                         user.setNoOfGames(0);
                         user.setScore(0);
                         user.setIndex(new FightIndex());
+                        user.setSinglePlayerMatch(new SinglePlayerMatch());
                         databaseReferenceMy.setValue(user);
 
                     }
@@ -409,6 +411,8 @@ public class MainActivity extends AppCompatActivity {
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+
                     user = dataSnapshot.getValue(User.class);
                     if(!user.getIndex().getOpponent().equals("")&&!user.getIndex().isAccepted()) {
                         redDotMultiplayerIV.setVisibility(View.VISIBLE);
@@ -450,6 +454,11 @@ public class MainActivity extends AppCompatActivity {
                         multiplayerBtn.setText("MULTI PLAYER");
                         mHandler.postDelayed(checkMyOpponentAndMove,deelay);
                     }
+                    }else{
+                        mHandler.postDelayed(checkMyOpponentAndMove,deelay);
+                    }
+
+
                 }
 
                 @Override
@@ -468,6 +477,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 // TODO disable navigation bar and override back button
+// TODO deleting account - delete battle you are involved in
 // TODO leave app
 // TODO Add notification when accepting and not accepting invitation
 // TODO change notification

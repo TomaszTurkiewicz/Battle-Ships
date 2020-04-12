@@ -8,9 +8,18 @@ public class User {
     private int score;
     private int noOfGames;
     private FightIndex index;
+    private SinglePlayerMatch singlePlayerMatch;
 
 
     public User() {
+    }
+
+    public SinglePlayerMatch getSinglePlayerMatch() {
+        return singlePlayerMatch;
+    }
+
+    public void setSinglePlayerMatch(SinglePlayerMatch singlePlayerMatch) {
+        this.singlePlayerMatch = singlePlayerMatch;
     }
 
     public FightIndex getIndex() {
@@ -21,13 +30,14 @@ public class User {
         this.index = index;
     }
 
-    public User(String id, String name, String email, int score, int noOfGames, FightIndex index) {
+    public User(String id, String name, String email, int score, int noOfGames, FightIndex index, SinglePlayerMatch singlePlayerMatch) {
         this.id=id;
         this.name = name;
         this.email = email;
         this.score = score;
         this.noOfGames = noOfGames;
         this.index = index;
+        this.singlePlayerMatch = singlePlayerMatch;
     }
 
     public String getId() {
@@ -77,5 +87,6 @@ public class User {
         this.score = getScore();
         this.noOfGames = user.getNoOfGames();
         this.index = user.getIndex();
+        this.singlePlayerMatch = user.getSinglePlayerMatch();
     }
 }

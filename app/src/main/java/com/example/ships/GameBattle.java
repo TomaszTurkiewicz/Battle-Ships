@@ -13,8 +13,6 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -95,7 +93,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private DatabaseReference databaseReference;
     private String userID;
     private TextView tv;
-    private ImageButton leave;
+    private ImageButton surrender, leave;
     private int marginTop;
     private int marginLeft;
     private int marginLeftForShips;
@@ -106,12 +104,31 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
+
         setContentView(R.layout.activity_random_game_battle);
         mainLayout = findViewById(R.id.randomGameActivityLayout);
-        leave = findViewById(R.id.leaveSinglePlayer);
-        leave.setBackgroundResource(R.drawable.leave);
+        surrender = findViewById(R.id.surrenderSinglePlayer);
+        surrender.setBackgroundResource(R.drawable.leave);
+        leave=findViewById(R.id.leaveSinglePlayer);
+        leave.setBackgroundResource(R.drawable.back);
         layoutMy=findViewById(R.id.gridLayoutBattleMy);
         linearLayoutLettersMy=findViewById(R.id.LinearLayoutGameBattleActivityLettersMy);
         linearLayoutNumbersMy=findViewById(R.id.LinearLayoutGameBattleActivityNumbersMy);
@@ -156,8 +173,9 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         ConstraintLayout.LayoutParams params14 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square,square);
+        ConstraintLayout.LayoutParams params17 = new ConstraintLayout.LayoutParams(2*square,2*square);
 
-        leave.setLayoutParams(params);
+        surrender.setLayoutParams(params);
         layoutMy.setLayoutParams(params1);
         linearLayoutLettersMy.setLayoutParams(params2);
         linearLayoutNumbersMy.setLayoutParams(params3);
@@ -174,6 +192,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         oneMastsSecond.setLayoutParams(params14);
         oneMastsThird.setLayoutParams(params15);
         oneMastsFourth.setLayoutParams(params16);
+        leave.setLayoutParams(params17);
         for(int i = 0; i<10; i++){
             TextView tv = (TextView)linearLayoutLettersMy.getChildAt(i);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
@@ -193,7 +212,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
         }
         marginTop = 4*square;
-        marginLeft = screenWidth-screenWidthOffSet-14*square;
+        marginLeft = screenWidth-screenWidthOffSet-13*square;
         marginDown = screenHeight-screenHeightOffSet-2*square;
 
         if(((screenWidth-screenWidthOffSet)/square)%2==0){
@@ -204,8 +223,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
-        set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,square);
-        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+        set.connect(surrender.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,square);
+        set.connect(surrender.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
         set.connect(layoutMy.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,4*square);
         set.connect(layoutMy.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,5*square);
@@ -254,6 +273,9 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
         set.connect(oneMastsFourth.getId(),ConstraintSet.TOP,oneMastsThird.getId(),ConstraintSet.TOP,0);
         set.connect(oneMastsFourth.getId(),ConstraintSet.LEFT,oneMastsThird.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginDown-2*square);
+        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
         set.applyTo(mainLayout);
 
@@ -1618,7 +1640,7 @@ else
                 shipOneMastsCounterFourth;
     }
 
-    public void leaveSinglePlayer(View view) {
+    public void surrenderSinglePlayer(View view) {
         if (loggedIn) {
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -1685,7 +1707,36 @@ else
             dialog.show();
         }
     }
+
+    public void leaveMainMenuOnClick(View view) {
+        leaveGame();
+    }
+
+    @Override
+    public void onBackPressed() {
+        leaveGame();
+    }
+
+    private void leaveGame() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
+        builder.setCancelable(true);
+        builder.setTitle("Leaving game");
+        builder.setMessage("Do you want to go back to main menu?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mHandler.postDelayed(game,deelay);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 }
-
-
+// TODO use SinglePlayerMatch instead of two battle fields :..(
 // TODO surrender and leave button (leave has to save game state if logged in)

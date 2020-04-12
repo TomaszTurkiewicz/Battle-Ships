@@ -8,13 +8,22 @@
     tools:context=".GameBattle">
 
     <ImageButton
-        android:id="@+id/leaveSinglePlayer"
+        android:id="@+id/surrenderSinglePlayer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#00000000"
-        android:onClick="leaveSinglePlayer"
+        android:onClick="surrenderSinglePlayer"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/leaveSinglePlayer"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:onClick="leaveMainMenuOnClick"
+        android:background="#00000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <LinearLayout
         android:id="@+id/linearLayoutSingleBattleLetterOpponent"
