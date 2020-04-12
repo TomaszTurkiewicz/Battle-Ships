@@ -1217,3 +1217,4 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }
     }
 }
+// TODO surrender and leave button

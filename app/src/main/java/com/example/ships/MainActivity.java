@@ -114,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
         ConstraintSet set = new ConstraintSet();
 
-        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(8*square,2*square);
-        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(8*square,2*square);
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(12*square,3*square);
+        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(12*square,3*square);
         ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(8*square,2*square);
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(2*square,2*square);
@@ -133,11 +133,11 @@ public class MainActivity extends AppCompatActivity {
         redDotMultiplayerIV.setLayoutParams(params5);
 
         set.clone(constraintLayout);
-        set.connect(singlePlayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,8*square);
-        set.connect(singlePlayerBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,5*square);
+        set.connect(singlePlayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,7*square);
+        set.connect(singlePlayerBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,3*square);
 
-        set.connect(multiplayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,8*square);
-        set.connect(multiplayerBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-13*square);
+        set.connect(multiplayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,7*square);
+        set.connect(multiplayerBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-15*square);
 
         set.connect(ranking.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-4*square);
         set.connect(ranking.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-9*square);
@@ -448,9 +448,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO change buttons styles...
+// TODO disable navigation bar
+// TODO leave app
 // TODO Add notification when accepting and not accepting invitation
 // TODO change notification
 // TODO block back button during game
 // TODO different points in multiplayer depending on difficulty (50 and 25)
+
 

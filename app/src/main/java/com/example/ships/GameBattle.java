@@ -1688,4 +1688,4 @@ else
 }
 
 
-// TODO finsh this activity first!!!
+// TODO surrender and leave button (leave has to save game state if logged in)
