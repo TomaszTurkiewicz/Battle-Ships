@@ -76,8 +76,7 @@ public class CreateBattleField extends AppCompatActivity {
     private Handler mHandler = new Handler();
     private int deelay = 1000;
     private User user = new User();
-    private ImageButton delete, reset;
-    private Button backButton;
+    private ImageButton delete, reset, backButton;
     private int noOfGames;
     private ConstraintLayout constraintLayout;
     private GridLayout gridLayout;
@@ -89,6 +88,24 @@ public class CreateBattleField extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
+
         setContentView(R.layout.activity_create_battle_field);
         multiplayerMode= GameDifficulty.getInstance().isMultiplayerMode();
         FourMastsCounter = (TextView)findViewById(R.id.fourMastsCounterTextView);
@@ -97,7 +114,7 @@ public class CreateBattleField extends AppCompatActivity {
         OneMastsCounter = (TextView)findViewById(R.id.oneMastsCounterTextView);
         delete = findViewById(R.id.deleteButton);
         reset = findViewById(R.id.resetButton);
-        backButton = findViewById(R.id.backButton);
+        backButton = findViewById(R.id.leaveCreateBattleFieldActivity);
         constraintLayout=findViewById(R.id.createBattleFieldActivityLayout);
         gridLayout=findViewById(R.id.tableLayoutPlayerBattleFieldCreateBattleField);
         linearLayoutLetters=findViewById(R.id.LinearLayoutCreateBattleFieldActivityLetters);
@@ -105,6 +122,7 @@ public class CreateBattleField extends AppCompatActivity {
         reset.setBackgroundResource(R.drawable.reset);
         delete.setBackgroundResource(R.drawable.delete);
         startButton=findViewById(R.id.playButton);
+        backButton.setBackgroundResource(R.drawable.back);
         linearLayoutFourMasts=findViewById(R.id.linearLayoutFourMastsShip);
         linearLayoutThreeMasts=findViewById(R.id.linearLayoutThreeMastsShip);
         linearLayoutTwoMasts=findViewById(R.id.linearLayoutTwoMastsShip);
@@ -126,7 +144,7 @@ public class CreateBattleField extends AppCompatActivity {
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(10*square,10*square);
         ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(10*square,square);
         ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(square,10*square);
-        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(6*square,2*square);
+        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(2*square,2*square);
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(2*square,2*square);
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(2*square,2*square);
         ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(4*square,square);
@@ -143,7 +161,6 @@ public class CreateBattleField extends AppCompatActivity {
         linearLayoutLetters.setLayoutParams(params1);
         linearLayoutNumbers.setLayoutParams(params2);
         backButton.setLayoutParams(params3);
-        backButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         reset.setLayoutParams(params4);
         delete.setLayoutParams(params5);
         linearLayoutFourMasts.setLayoutParams(params6);
@@ -182,14 +199,14 @@ public class CreateBattleField extends AppCompatActivity {
         set.connect(linearLayoutNumbers.getId(),ConstraintSet.TOP,gridLayout.getId(),ConstraintSet.TOP,0);
         set.connect(linearLayoutNumbers.getId(),ConstraintSet.RIGHT,gridLayout.getId(),ConstraintSet.LEFT,0);
 
-        set.connect(backButton.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
-        set.connect(backButton.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-7*square);
+        set.connect(backButton.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-3*square);
+        set.connect(backButton.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,square);
 
         set.connect(reset.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
-        set.connect(reset.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-11*square);
+        set.connect(reset.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-6*square);
 
         set.connect(delete.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
-        set.connect(delete.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-15*square);
+        set.connect(delete.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-12*square);
 
         set.connect(linearLayoutFourMasts.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,6*square);
         set.connect(linearLayoutFourMasts.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,rightEnd-13*square);
