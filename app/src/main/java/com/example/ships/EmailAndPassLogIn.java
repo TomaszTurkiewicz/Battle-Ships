@@ -9,10 +9,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,13 +36,29 @@ public class EmailAndPassLogIn extends AppCompatActivity {
     private String password_val;
     private String email_val;
     private ConstraintLayout mainLayout;
+    private ImageButton leave;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
         setContentView(R.layout.activity_email_and_pass_log_in);
         mainLayout = findViewById(R.id.constraintLayoutEmailAndPassLogIn);
         email = findViewById(R.id.emailEditTextLogIn);
@@ -52,7 +67,8 @@ public class EmailAndPassLogIn extends AppCompatActivity {
         resendEmail = findViewById(R.id.resendVerificationEmailBtnLogIn);
         forgotPassword = findViewById(R.id.forgotPasswordBtnLogIn);
         signIn = findViewById(R.id.signInBtnLogIn);
-
+        leave=findViewById(R.id.leaveEmailAndPasswordLogInActivity);
+        leave.setBackgroundResource(R.drawable.back);
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         int square = sp.getInt("square",-1);
         int screenHeight = sp.getInt("width",-1);
@@ -62,7 +78,7 @@ public class EmailAndPassLogIn extends AppCompatActivity {
         int width = screenWidth-screenWidthOffSet-4*square;
         int marginLeft = 2*square;
         int textSize = square*9/10;
-        int signInTopMargin = screenHeight-screenHeightOffSet-5*square;
+        int signInTopMargin = screenHeight-screenHeightOffSet-7*square;
 
         mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
 
@@ -72,6 +88,7 @@ public class EmailAndPassLogIn extends AppCompatActivity {
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(2*square,2*square);
 
         email.setLayoutParams(params);
         email.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
@@ -91,6 +108,8 @@ public class EmailAndPassLogIn extends AppCompatActivity {
         signIn.setLayoutParams(params5);
         signIn.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
 
+        leave.setLayoutParams(params6);
+
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
 
@@ -106,11 +125,14 @@ public class EmailAndPassLogIn extends AppCompatActivity {
         set.connect(forgotPassword.getId(),ConstraintSet.TOP,loginBtn.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(forgotPassword.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
-        set.connect(resendEmail.getId(),ConstraintSet.TOP,forgotPassword.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(resendEmail.getId(),ConstraintSet.TOP,loginBtn.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(resendEmail.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
         set.connect(signIn.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,signInTopMargin);
         set.connect(signIn.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,screenHeight-screenHeightOffSet-3*square);
+        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
         set.applyTo(mainLayout);
 
@@ -164,6 +186,8 @@ public class EmailAndPassLogIn extends AppCompatActivity {
                                 progressDialog.dismiss();
                                 finish();
                             }else{
+
+                                forgotPassword.setVisibility(View.GONE);
                                 resendEmail.setVisibility(View.VISIBLE);
                                 Toast.makeText(EmailAndPassLogIn.this,"Please verify your email address",
                                         Toast.LENGTH_LONG).show();
@@ -192,6 +216,20 @@ public class EmailAndPassLogIn extends AppCompatActivity {
         startActivity(new Intent(EmailAndPassLogIn.this, ForgotPassword.class));
         finish();
 
+    }
+
+    public void leaveEmailAndPasswordLogInActivityOnClick(View view) {
+        goBackToMainMenu();
+    }
+    @Override
+    public void onBackPressed() {
+        goBackToMainMenu();
+    }
+
+    private void goBackToMainMenu() {
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
 

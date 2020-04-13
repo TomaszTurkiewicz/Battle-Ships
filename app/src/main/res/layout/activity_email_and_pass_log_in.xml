@@ -86,5 +86,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
+    <ImageButton
+        android:id="@+id/leaveEmailAndPasswordLogInActivity"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:onClick="leaveEmailAndPasswordLogInActivityOnClick"
+        android:background="#00000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
