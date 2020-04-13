@@ -513,6 +513,20 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     public void battle(){
 
         if(myTurn){
+            if(loggedIn){
+                singlePlayerMatch.setGame(true);
+                singlePlayerMatch.setMyTurn(myTurn);
+                singlePlayerMatch.setDifficulty(level);
+                singlePlayerMatch.setBattleFieldListMyFromArray(battleFieldMeActivityRandomGame);
+                singlePlayerMatch.setBattleFieldListOpponentFromArray(battleFieldOpponentActivityRandomGame);
+                singlePlayerMatch.setPositionI(positionI);
+                singlePlayerMatch.setPositionJ(positionJ);
+                singlePlayerMatch.setNewShoot(newShoot);
+                singlePlayerMatch.setDirection(direction);
+                singlePlayerMatch.setX(x);
+                singlePlayerMatch.setY(y);
+                databaseReference.child("singlePlayerMatch").setValue(singlePlayerMatch);
+            }
 
            pokazStatki();
 
@@ -1402,15 +1416,15 @@ else
         if(enableTouchListener) {
             final int X = (int) event.getRawX();
             final int Y = (int) event.getRawY();
-            int x = (X - locationLayout[0]) / width;
-            int y = (Y - locationLayout[1]) / height;
+            int xOnTouch = (X - locationLayout[0]) / width;
+            int yOnTouch = (Y - locationLayout[1]) / height;
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
 
-                    if(battleFieldOpponent[y][x]==BATTLE_CELL){
+                    if(battleFieldOpponent[yOnTouch][xOnTouch]==BATTLE_CELL){
                         for (int i = 0; i < 10; i++) {
                             for (int j = 0; j < 10; j++) {
-                                if (x == j || y == i) {
+                                if (xOnTouch == j || yOnTouch == i) {
                                     if(battleFieldOpponent[i][j]==BATTLE_CELL){
                                         tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
@@ -1427,7 +1441,7 @@ else
                     }else {
                         for (int i = 0; i < 10; i++) {
                             for (int j = 0; j < 10; j++) {
-                                if (x == j || y == i) {
+                                if (xOnTouch == j || yOnTouch == i) {
                                     if(battleFieldOpponent[i][j]==BATTLE_CELL){
                                         tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
@@ -1448,12 +1462,12 @@ else
 
                 case MotionEvent.ACTION_MOVE:
 
-                    if(x>=0&&x<=9&&y>=0&&y<=9){
+                    if(xOnTouch>=0&&xOnTouch<=9&&yOnTouch>=0&&yOnTouch<=9){
                         pokazStatki();
-                        if(battleFieldOpponent[y][x]==BATTLE_CELL){
+                        if(battleFieldOpponent[yOnTouch][xOnTouch]==BATTLE_CELL){
                             for (int i = 0; i < 10; i++) {
                                 for (int j = 0; j < 10; j++) {
-                                    if (x == j || y == i) {
+                                    if (xOnTouch == j || yOnTouch == i) {
                                         if(battleFieldOpponent[i][j]==BATTLE_CELL){
                                             tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
@@ -1470,7 +1484,7 @@ else
                         }else {
                             for (int i = 0; i < 10; i++) {
                                 for (int j = 0; j < 10; j++) {
-                                    if (x == j || y == i) {
+                                    if (xOnTouch == j || yOnTouch == i) {
                                         if(battleFieldOpponent[i][j]==BATTLE_CELL){
                                             tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
@@ -1492,9 +1506,13 @@ else
                     break;
                 case MotionEvent.ACTION_UP:
 
-                    if(x>=0&&x<=9&&y>=0&&y<=9){
-                        if(battleFieldOpponent[y][x]==BATTLE_CELL) {
-                            hitCell(y, x);
+                    if(xOnTouch>=0&&xOnTouch<=9&&yOnTouch>=0&&yOnTouch<=9){
+                        if(battleFieldOpponent[yOnTouch][xOnTouch]==BATTLE_CELL) {
+
+
+                            hitCell(yOnTouch, xOnTouch);
+
+
 
                         }else
                         pokazStatki();
@@ -1507,22 +1525,51 @@ else
         return true;
     }
 
-    private void hitCell(int x, int y) {
-        battleFieldOpponentActivityRandomGame.getBattleField(x,y).setHit(true);
-        if(battleFieldOpponentActivityRandomGame.getBattleField(x,y).isShip()){
-            battleFieldOpponent[x][y]=SHIP_RED;
-            updateCounters(battleFieldOpponentActivityRandomGame.getBattleField(x,y).getNumberOfMasts(),
-                    battleFieldOpponentActivityRandomGame.getBattleField(x,y).getShipNumber());
+    private void hitCell(int x1, int y1) {
+        battleFieldOpponentActivityRandomGame.getBattleField(x1,y1).setHit(true);
+        if(battleFieldOpponentActivityRandomGame.getBattleField(x1,y1).isShip()){
+            battleFieldOpponent[x1][y1]=SHIP_RED;
+            updateCounters(battleFieldOpponentActivityRandomGame.getBattleField(x1,y1).getNumberOfMasts(),
+                    battleFieldOpponentActivityRandomGame.getBattleField(x1,y1).getShipNumber());
             showCounters();
             if(myWin()){
                 mHandler.postDelayed(game,deelay);
+            }else{
+                if(loggedIn){
+                    singlePlayerMatch.setGame(true);
+                    singlePlayerMatch.setMyTurn(myTurn);
+                    singlePlayerMatch.setDifficulty(level);
+                    singlePlayerMatch.setBattleFieldListMyFromArray(battleFieldMeActivityRandomGame);
+                    singlePlayerMatch.setBattleFieldListOpponentFromArray(battleFieldOpponentActivityRandomGame);
+                    singlePlayerMatch.setPositionI(positionI);
+                    singlePlayerMatch.setPositionJ(positionJ);
+                    singlePlayerMatch.setNewShoot(newShoot);
+                    singlePlayerMatch.setDirection(direction);
+                    singlePlayerMatch.setX(x);
+                    singlePlayerMatch.setY(y);
+                    databaseReference.child("singlePlayerMatch").setValue(singlePlayerMatch);
+                }
             }
             pokazStatki();
         }else{
-            battleFieldOpponent[x][y]=WATER;
+            battleFieldOpponent[x1][y1]=WATER;
             pokazStatki();
             myTurn=false;
             enableTouchListener=false;
+            if(loggedIn){
+                singlePlayerMatch.setGame(true);
+                singlePlayerMatch.setMyTurn(myTurn);
+                singlePlayerMatch.setDifficulty(level);
+                singlePlayerMatch.setBattleFieldListMyFromArray(battleFieldMeActivityRandomGame);
+                singlePlayerMatch.setBattleFieldListOpponentFromArray(battleFieldOpponentActivityRandomGame);
+                singlePlayerMatch.setPositionI(positionI);
+                singlePlayerMatch.setPositionJ(positionJ);
+                singlePlayerMatch.setNewShoot(newShoot);
+                singlePlayerMatch.setDirection(direction);
+                singlePlayerMatch.setX(x);
+                singlePlayerMatch.setY(y);
+                databaseReference.child("singlePlayerMatch").setValue(singlePlayerMatch);
+            }
             mHandler.postDelayed(game,deelay);
         }
 

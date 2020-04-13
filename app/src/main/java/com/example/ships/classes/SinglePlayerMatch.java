@@ -20,7 +20,7 @@ public class SinglePlayerMatch {
         this.difficulty=-1;
         this.game=false;
         this.myTurn=false;
-        this.battleFieldListMy = Arrays.asList(new Ship[100]);
+        this.battleFieldListMy =  Arrays.asList(new Ship[100]);
         this.battleFieldListOpponent = Arrays.asList(new Ship[100]);
         this.positionI=-1;
         this.positionJ=-1;
