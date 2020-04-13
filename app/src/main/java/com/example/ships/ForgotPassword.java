@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Shader;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -101,9 +102,14 @@ public class ForgotPassword extends AppCompatActivity {
 
 
         resetPassword.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
-                firebaseAuth.sendPasswordResetEmail(emailEditText.getText().toString().trim())
+                String email = emailEditText.getText().toString().trim();
+                if(!TextUtils.isEmpty(email)){
+
+                firebaseAuth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -117,6 +123,12 @@ public class ForgotPassword extends AppCompatActivity {
                               }
                             }
                         });
+
+
+                }else{
+                    Toast.makeText(ForgotPassword.this,"Email field is empty",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -140,4 +152,3 @@ public class ForgotPassword extends AppCompatActivity {
 
 
 }
-// TODO empty email field!!!

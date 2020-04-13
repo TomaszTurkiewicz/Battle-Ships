@@ -299,6 +299,5 @@ public class SignInActivity extends AppCompatActivity {
 
 // TODO deleting account with confirmation (alert dialog)
 // TODO change progressDialog na progressBar
-//TODO zmienić main activity aby inaczej wyświetlało kto zalogowany i przycisk account
 //TODO Rejestracja przez Facebook
 //TODO animacja
