@@ -9,9 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -48,17 +47,33 @@ public class SignInActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private ProgressDialog progressDialog;
     private ConstraintLayout mainLayout;
+    private ImageButton leave;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
         setContentView(R.layout.activity_sign_in);
         userLogout=findViewById(R.id.logout);
-        firebaseAuth = FirebaseAuth.getInstance();
-        final FirebaseUser firebaseUser;
+        leave=findViewById(R.id.leaveSignInActivity);
+        leave.setBackgroundResource(R.drawable.back);
         deleteUser = findViewById(R.id.deleteUser);
         login_google = findViewById(R.id.loginGoogle);
         mainLayout = findViewById(R.id.constraintLayoutSignInActivity);
@@ -83,6 +98,7 @@ public class SignInActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(2*square,2*square);
 
 
         loginEmail.setLayoutParams(params);
@@ -103,6 +119,8 @@ public class SignInActivity extends AppCompatActivity {
         deleteUser.setLayoutParams(params5);
         deleteUser.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
 
+        leave.setLayoutParams(params6);
+
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
 
@@ -121,10 +139,15 @@ public class SignInActivity extends AppCompatActivity {
         set.connect(userLogout.getId(),ConstraintSet.TOP,deleteUser.getId(),ConstraintSet.BOTTOM,12*square);
         set.connect(userLogout.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
+        set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,screenHeight-screenHeightOffSet-3*square);
+        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
         set.applyTo(mainLayout);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("User");
+        firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseUser firebaseUser;
         firebaseUser = firebaseAuth.getCurrentUser();
         progressDialog = new ProgressDialog(this);
 
@@ -258,6 +281,20 @@ public class SignInActivity extends AppCompatActivity {
         finish();
     }
 
+    public void leaveSignInActivityOnClick(View view) {
+        goBackToMainMenu();
+    }
+
+    @Override
+    public void onBackPressed() {
+        goBackToMainMenu();
+    }
+
+    private void goBackToMainMenu() {
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
 
 // TODO deleting account with confirmation (alert dialog)
