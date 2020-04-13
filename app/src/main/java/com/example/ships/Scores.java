@@ -6,14 +6,15 @@ import android.content.SharedPreferences;
 import android.graphics.Shader;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,16 +47,37 @@ public class Scores extends AppCompatActivity {
     private LinearLayout linearLayout;
     private int square;
     private String userId;
+    private ImageButton leave;
+    private RecyclerView recyclerView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
         setContentView(R.layout.activity_scores);
         mainLayout=findViewById(R.id.constraintLayoutScoreActivity);
         linearLayout=findViewById(R.id.LinearLayoutActivityScores);
+        recyclerView=findViewById(R.id.recyclerViewScores);
+        leave=findViewById(R.id.leaveScore);
+        leave.setBackgroundResource(R.drawable.back);
+
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
@@ -71,17 +93,27 @@ public class Scores extends AppCompatActivity {
         int screenHeight = sp.getInt("height",-1);
         int screenWidthOffSet = sp.getInt("widthOffSet",-1);
         int screenHeightOffSet = sp.getInt("heightOffSet",-1);
-
+        int mariginTop = screenHeight-screenHeightOffSet-3*square;
         mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
 
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,2*square);
+        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(2*square,2*square);
 
         linearLayout.setLayoutParams(params);
+        leave.setLayoutParams(params1);
 
         for(int i = 0; i<linearLayout.getChildCount(); i++){
             TextView tv = (TextView)linearLayout.getChildAt(i);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         }
+
+        ConstraintSet set = new ConstraintSet();
+
+        set.clone(mainLayout);
+        set.connect(leave.getId(), ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,mariginTop);
+        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.applyTo(mainLayout);
 
 
 
@@ -128,10 +160,13 @@ public class Scores extends AppCompatActivity {
 
     private void initRecyclerView(){
         progressDialog.dismiss();
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewScores);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,ranking,square,userId);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void leaveScoreOnClick(View view) {
+        finish();
     }
 }

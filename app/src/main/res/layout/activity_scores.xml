@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/pen_red"
-            android:gravity="center"
+            android:gravity="center_vertical|right"
             android:layout_gravity="center"
             android:layout_weight="@integer/PositionWeight"
             android:text="@string/position"/>
@@ -29,8 +29,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/pen_red"
-            android:gravity="center"
+            android:gravity="center_vertical|left"
             android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/FieldSize"
             android:layout_weight="@integer/UserWeight"
             android:text="@string/user"/>
 
@@ -61,5 +62,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/LinearLayoutActivityScores"/>
+
+    <ImageButton
+        android:id="@+id/leaveScore"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:onClick="leaveScoreOnClick"
+        android:background="#00000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_margin="@dimen/Distance50dp"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
