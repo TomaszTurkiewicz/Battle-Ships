@@ -1,15 +1,15 @@
 package com.example.ships;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Shader;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,17 +28,35 @@ public class ForgotPassword extends AppCompatActivity {
     private EditText emailEditText;
     private Button resetPassword;
     private ConstraintLayout mainLayout;
+    private ImageButton leave;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
         setContentView(R.layout.activity_forgot_password);
         mainLayout = findViewById(R.id.constraintLayoutForgotPasswordActivity);
         emailEditText = findViewById(R.id.emailForgotPassword);
         resetPassword = findViewById(R.id.forgotPasswordButton);
+        leave=findViewById(R.id.leaveForgotPasswordActivity);
+        leave.setBackgroundResource(R.drawable.back);
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         int square = sp.getInt("square",-1);
@@ -54,11 +72,15 @@ public class ForgotPassword extends AppCompatActivity {
 
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(2*square,2*square);
+
         emailEditText.setLayoutParams(params);
         emailEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
 
         resetPassword.setLayoutParams(params1);
         resetPassword.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+
+        leave.setLayoutParams(params2);
 
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
@@ -68,6 +90,9 @@ public class ForgotPassword extends AppCompatActivity {
 
         set.connect(resetPassword.getId(),ConstraintSet.TOP,emailEditText.getId(),ConstraintSet.BOTTOM,3*square);
         set.connect(resetPassword.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,screenHeight-screenHeightOffSet-3*square);
+        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
         set.applyTo(mainLayout);
 
@@ -97,5 +122,22 @@ public class ForgotPassword extends AppCompatActivity {
 
 
     }
+
+    public void leaveForgotPasswordActivityOnClick(View view) {
+        goBackToMainMenu();
+    }
+    @Override
+    public void onBackPressed() {
+        goBackToMainMenu();
+    }
+
+    private void goBackToMainMenu() {
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+
 }
 // TODO empty email field!!!
