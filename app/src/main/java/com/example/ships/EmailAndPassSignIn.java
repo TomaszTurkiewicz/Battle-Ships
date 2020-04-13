@@ -8,10 +8,10 @@ import android.graphics.Shader;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,6 +44,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
     private User user;
     private Button signup;
     private ConstraintLayout mainLayout;
+    private ImageButton leave;
 
 
 
@@ -51,8 +52,23 @@ public class EmailAndPassSignIn extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
         setContentView(R.layout.activity_email_and_pass_sign_in);
         mainLayout = findViewById(R.id.constraintLayoutEmailAndPasswordSignInActivity);
         username = findViewById(R.id.Username);
@@ -61,6 +77,8 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         password = findViewById(R.id.passwordSignIn);
         passwordConfirm = findViewById(R.id.passwordSignInConfirm);
         signup = findViewById(R.id.SignInBtnSignIn);
+        leave=findViewById(R.id.leaveEmailAndPasswordSignInActivity);
+        leave.setBackgroundResource(R.drawable.back);
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         int square = sp.getInt("square",-1);
@@ -71,7 +89,6 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         int width = screenWidth-screenWidthOffSet-4*square;
         int marginLeft = 2*square;
         int textSize = square*9/10;
-        int signInTopMargin = screenHeight-screenHeightOffSet-5*square;
 
         mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
 
@@ -81,6 +98,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(2*square,2*square);
 
         username.setLayoutParams(params);
         username.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
@@ -100,26 +118,31 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         signup.setLayoutParams(params5);
         signup.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
 
+        leave.setLayoutParams(params6);
+
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
 
-        set.connect(username.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,2*square);
+        set.connect(username.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,square);
         set.connect(username.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
         set.connect(email.getId(),ConstraintSet.TOP,username.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(email.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
-        set.connect(emailCofirm.getId(),ConstraintSet.TOP,email.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(emailCofirm.getId(),ConstraintSet.TOP,email.getId(),ConstraintSet.BOTTOM,square);
         set.connect(emailCofirm.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
         set.connect(password.getId(),ConstraintSet.TOP,emailCofirm.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(password.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
-        set.connect(passwordConfirm.getId(),ConstraintSet.TOP,password.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(passwordConfirm.getId(),ConstraintSet.TOP,password.getId(),ConstraintSet.BOTTOM,square);
         set.connect(passwordConfirm.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
-        set.connect(signup.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,signInTopMargin);
+        set.connect(signup.getId(),ConstraintSet.TOP,passwordConfirm.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(signup.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
+        set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,screenHeight-screenHeightOffSet-3*square);
+        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
         set.applyTo(mainLayout);
 
@@ -250,4 +273,17 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         user.setSinglePlayerMatch(new SinglePlayerMatch());
     }
 
+    public void leaveEmailAndPasswordSignInActivityOnClick(View view) {
+        goBackToMainMenu();
+    }
+    @Override
+    public void onBackPressed() {
+        goBackToMainMenu();
+    }
+
+    private void goBackToMainMenu() {
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
