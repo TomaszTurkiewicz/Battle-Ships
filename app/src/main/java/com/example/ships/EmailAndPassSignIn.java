@@ -20,6 +20,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.ships.classes.FightIndex;
+import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -246,6 +247,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         user.setNoOfGames(0);
         user.setScore(0);
         user.setIndex(new FightIndex());
+        user.setSinglePlayerMatch(new SinglePlayerMatch());
     }
 
 }
