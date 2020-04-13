@@ -9,6 +9,12 @@ public class SinglePlayerMatch {
     private List<Ship> battleFieldListMy;
     private List<Ship> battleFieldListOpponent;
     private boolean myTurn;
+    private int positionI;
+    private int positionJ;
+    private boolean newShoot;
+    private int direction;
+    private int x;
+    private int y;
 
     public SinglePlayerMatch() {
         this.difficulty=-1;
@@ -16,6 +22,60 @@ public class SinglePlayerMatch {
         this.myTurn=false;
         this.battleFieldListMy = Arrays.asList(new Ship[100]);
         this.battleFieldListOpponent = Arrays.asList(new Ship[100]);
+        this.positionI=-1;
+        this.positionJ=-1;
+        this.newShoot=false;
+        this.direction=0;
+        this.x=-1;
+        this.y=-1;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getPositionI() {
+        return positionI;
+    }
+
+    public void setPositionI(int positionI) {
+        this.positionI = positionI;
+    }
+
+    public int getPositionJ() {
+        return positionJ;
+    }
+
+    public void setPositionJ(int positionJ) {
+        this.positionJ = positionJ;
+    }
+
+    public boolean isNewShoot() {
+        return newShoot;
+    }
+
+    public void setNewShoot(boolean newShoot) {
+        this.newShoot = newShoot;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
 
     public boolean isMyTurn() {

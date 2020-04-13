@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private int deelay = 1000;
     private boolean logIn;
     private int square;
+    private boolean ready=false;
 
 
     @Override
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                     if (dataSnapshot.exists()) {
                         user=dataSnapshot.getValue(User.class);
                         userName.setText(user.getName());
-
+                        ready=true;
 
 
                     } else {
@@ -211,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
                         user.setIndex(new FightIndex());
                         user.setSinglePlayerMatch(new SinglePlayerMatch());
                         databaseReferenceMy.setValue(user);
+                        ready=true;
 
                     }
                 }
@@ -245,122 +247,124 @@ public class MainActivity extends AppCompatActivity {
             multiplayerBtn.setClickable(true);
             multiplayerBtn.setOnClickListener(v->{
 
-                databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                        if (dataSnapshot.exists()) {
-                            user=dataSnapshot.getValue(User.class);
-
-                            if(user.getIndex().getOpponent().isEmpty()){
-                                mHandler.removeCallbacks(checkMyOpponentAndMove);
-                                Intent intent = new Intent(getApplicationContext(),ChooseOpponent.class);
-                                startActivity(intent);
+                if(ready) {
 
 
-                            }else{
-                                databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
-                                databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                                        if(dataSnapshot.exists()){
-                                            opponentUser=dataSnapshot.getValue(User.class);
-                                            if(user.getIndex().isAccepted()&&opponentUser.getIndex().isAccepted()){
-                                                Toast.makeText(MainActivity.this,"You can fight",Toast.LENGTH_LONG).show();
-                                                mHandler.removeCallbacks(checkMyOpponentAndMove);
-                                                Intent intent = new Intent(MainActivity.this,MultiplayerActivity.class);
-                                                startActivity(intent);
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                            if (dataSnapshot.exists()) {
+                                user = dataSnapshot.getValue(User.class);
+
+                                if (user.getIndex().getOpponent().isEmpty()) {
+                                    mHandler.removeCallbacks(checkMyOpponentAndMove);
+                                    Intent intent = new Intent(getApplicationContext(), ChooseOpponent.class);
+                                    startActivity(intent);
 
 
-                                            }else if(user.getIndex().isAccepted()&&!opponentUser.getIndex().isAccepted()){
-                                                Toast.makeText(MainActivity.this,"You invited him",Toast.LENGTH_LONG).show();
+                                } else {
+                                    databaseReferenceOpponent = firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
+                                    databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                            if (dataSnapshot.exists()) {
+                                                opponentUser = dataSnapshot.getValue(User.class);
+                                                if (user.getIndex().isAccepted() && opponentUser.getIndex().isAccepted()) {
+                                                    Toast.makeText(MainActivity.this, "You can fight", Toast.LENGTH_LONG).show();
+                                                    mHandler.removeCallbacks(checkMyOpponentAndMove);
+                                                    Intent intent = new Intent(MainActivity.this, MultiplayerActivity.class);
+                                                    startActivity(intent);
 
 
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                                builder.setCancelable(true);
-                                                builder.setTitle("Waiting");
-                                                builder.setMessage("Do you want to wait for accept from: "+"\n"+opponentUser.getName());
-                                                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        // do nothing
-                                                    }
-                                                });
-                                                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        user.getIndex().setOpponent("");
-                                                        user.getIndex().setAccepted(false);
-                                                        opponentUser.getIndex().setOpponent("");
-                                                        opponentUser.getIndex().setAccepted(false);
-                                                        databaseReferenceMy.setValue(user);
-                                                        databaseReferenceOpponent.setValue(opponentUser);
-                                                    }
-                                                });
-                                                AlertDialog dialog = builder.create();
-                                                dialog.show();
+                                                } else if (user.getIndex().isAccepted() && !opponentUser.getIndex().isAccepted()) {
+                                                    Toast.makeText(MainActivity.this, "You invited him", Toast.LENGTH_LONG).show();
 
 
-                                            }else if(!user.getIndex().isAccepted()&&opponentUser.getIndex().isAccepted()){
-                                                Toast.makeText(MainActivity.this,"You have to accept",Toast.LENGTH_LONG).show();
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                                    builder.setCancelable(true);
+                                                    builder.setTitle("Waiting");
+                                                    builder.setMessage("Do you want to wait for accept from: " + "\n" + opponentUser.getName());
+                                                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            // do nothing
+                                                        }
+                                                    });
+                                                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            user.getIndex().setOpponent("");
+                                                            user.getIndex().setAccepted(false);
+                                                            opponentUser.getIndex().setOpponent("");
+                                                            opponentUser.getIndex().setAccepted(false);
+                                                            databaseReferenceMy.setValue(user);
+                                                            databaseReferenceOpponent.setValue(opponentUser);
+                                                        }
+                                                    });
+                                                    AlertDialog dialog = builder.create();
+                                                    dialog.show();
 
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                                builder.setCancelable(true);
-                                                builder.setTitle("Accepting");
-                                                builder.setMessage("Do you want to fight with: "+"\n"+opponentUser.getName());
-                                                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        user.getIndex().setAccepted(true);
-                                                        user.getIndex().setGameIndex(opponentUser.getId()+user.getId());
-                                                        opponentUser.getIndex().setGameIndex(opponentUser.getId()+user.getId());
-                                                        databaseReferenceMy.setValue(user);
-                                                        databaseReferenceOpponent.setValue(opponentUser);
-                                                        mHandler.removeCallbacks(checkMyOpponentAndMove);
-                                                        Intent intent = new Intent(MainActivity.this,MultiplayerActivity.class);
-                                                        startActivity(intent);
 
-                                                    }
-                                                });
-                                                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        user.getIndex().setOpponent("");
-                                                        opponentUser.getIndex().setOpponent("");
-                                                        opponentUser.getIndex().setAccepted(false);
-                                                        databaseReferenceMy.setValue(user);
-                                                        databaseReferenceOpponent.setValue(opponentUser);
-                                                    }
-                                                });
-                                                AlertDialog dialog = builder.create();
-                                                dialog.show();
-                                            }else;
+                                                } else if (!user.getIndex().isAccepted() && opponentUser.getIndex().isAccepted()) {
+                                                    Toast.makeText(MainActivity.this, "You have to accept", Toast.LENGTH_LONG).show();
+
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                                    builder.setCancelable(true);
+                                                    builder.setTitle("Accepting");
+                                                    builder.setMessage("Do you want to fight with: " + "\n" + opponentUser.getName());
+                                                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            user.getIndex().setAccepted(true);
+                                                            user.getIndex().setGameIndex(opponentUser.getId() + user.getId());
+                                                            opponentUser.getIndex().setGameIndex(opponentUser.getId() + user.getId());
+                                                            databaseReferenceMy.setValue(user);
+                                                            databaseReferenceOpponent.setValue(opponentUser);
+                                                            mHandler.removeCallbacks(checkMyOpponentAndMove);
+                                                            Intent intent = new Intent(MainActivity.this, MultiplayerActivity.class);
+                                                            startActivity(intent);
+
+                                                        }
+                                                    });
+                                                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            user.getIndex().setOpponent("");
+                                                            opponentUser.getIndex().setOpponent("");
+                                                            opponentUser.getIndex().setAccepted(false);
+                                                            databaseReferenceMy.setValue(user);
+                                                            databaseReferenceOpponent.setValue(opponentUser);
+                                                        }
+                                                    });
+                                                    AlertDialog dialog = builder.create();
+                                                    dialog.show();
+                                                } else ;
+                                            } else {
+                                                user.getIndex().setAccepted(false);
+                                                user.getIndex().setOpponent("");
+                                                user.getIndex().setGameIndex("");
+                                                databaseReferenceMy.setValue(user);
+                                            }
                                         }
-                                        else{
-                                            user.getIndex().setAccepted(false);
-                                            user.getIndex().setOpponent("");
-                                            user.getIndex().setGameIndex("");
-                                            databaseReferenceMy.setValue(user);
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
                                         }
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    }
-                                });
-                            }
-                        } else ;
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+                                    });
+                                }
+                            } else ;
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
 
 
-
-
+                }
 
 
             });
@@ -382,10 +386,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void singleGame(View view) {
         if(logIn) {
-            mHandler.removeCallbacks(checkMyOpponentAndMove);
-        }
+            if(ready) {
+                mHandler.removeCallbacks(checkMyOpponentAndMove);
+                boolean savedGame = user.getSinglePlayerMatch().isGame();
+
+                if (savedGame) {
+                    Intent intent = new Intent(getApplicationContext(), GameBattle.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
+                    startActivity(intent);
+                }
+
+            }
+        }else{
         Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
         startActivity(intent);
+        }
     }
 
 

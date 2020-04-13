@@ -70,8 +70,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private int shipOneMastsCounterThird = 0;
     private int shipOneMastsCounterFourth = 0;
     private boolean myTurn;
-    private int level = GameDifficulty.getInstance().getLevel();
-    private boolean newShoot=true;
+    private int level;
+    private boolean newShoot;
     private int positionI;
     private int positionJ;
     private int direction;
@@ -85,7 +85,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private LinearLayout linearLayoutLettersMy, linearLayoutNumbersMy, linearLayoutLettersOpponent, linearLayoutNumbersOpponent;
     int[]locationLayout = new int [2];
     private LinearLayout fourMasts,threeMastsFirst, threeMastsSecond, twoMastsFirst,twoMastsSecond,twoMastsThird,oneMastsFirst,oneMastsSecond,oneMastsThird,oneMastsFourth;
-
+    private User user = new User();
 
 
     ArrayList<Integer>ShootTable = new ArrayList<>();
@@ -302,16 +302,9 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         });
         layoutOpponent.setOnTouchListener(this);
 
-       if(GameDifficulty.getInstance().getRandom()) {
-           battleFieldMeActivityRandomGame.createFleet();
-       }else{
-           battleFieldMeActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
-       }
-
-        battleFieldOpponentActivityRandomGame.createFleet();
 
 
-        displayBattleFieldActivityRandomGamePlayerOne(layoutMy, battleFieldMeActivityRandomGame);
+
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -333,18 +326,88 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                noOfGames= (Long) dataSnapshot.child("noOfGames").getValue();
-                noOfGames = noOfGames+1;
-                databaseReference.child("noOfGames").setValue(noOfGames);
-            }
+                user = dataSnapshot.getValue(User.class);
+                boolean savedGame = user.getSinglePlayerMatch().isGame();
+                if(savedGame){
+                    for(int i=0;i<10;i++){
+                        for(int j=0;j<10;j++){
+                            battleFieldMeActivityRandomGame.makeShip(i,j,user.getSinglePlayerMatch().getBattleFieldListMy().get(10*i+j));
+                        }
+                    }
+                    for(int i=0;i<10;i++){
+                        for(int j=0;j<10;j++){
+                            battleFieldOpponentActivityRandomGame.makeShip(i,j,user.getSinglePlayerMatch().getBattleFieldListOpponent().get(10*i+j));
+                        }
+                    }
+                    myTurn=user.getSinglePlayerMatch().isMyTurn();
+                    level=user.getSinglePlayerMatch().getDifficulty();
+                    positionI=user.getSinglePlayerMatch().getPositionI();
+                    positionJ=user.getSinglePlayerMatch().getPositionJ();
+                    newShoot=user.getSinglePlayerMatch().isNewShoot();
+                    direction=user.getSinglePlayerMatch().getDirection();
+                    x=user.getSinglePlayerMatch().getX();
+                    y=user.getSinglePlayerMatch().getY();
+                    updateBattleFieldFromSaved();
+                    for(int i=0;i<10;i++){
+                        for(int j=0;j<10;j++){
+                            if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isShip()&&battleFieldOpponentActivityRandomGame.getBattleField(i,j).isHit()) {
 
+                                updateCounters(battleFieldOpponentActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldOpponentActivityRandomGame.getBattleField(i, j).getShipNumber());
+                            }
+                        }
+                    }
+                    showCounters();
+                    hideBattleFiledAvailablePlayerOne();
+                    hideBattleFiledAvailablePlayerTwo();
+                }else{
+                    if(GameDifficulty.getInstance().getRandom()) {
+                        battleFieldMeActivityRandomGame.createFleet();
+                    }else{
+                        battleFieldMeActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
+                    }
+
+                    battleFieldOpponentActivityRandomGame.createFleet();
+                    level= GameDifficulty.getInstance().getLevel();
+                    noOfGames= (Long) dataSnapshot.child("noOfGames").getValue();
+                    noOfGames = noOfGames+1;
+                    newShoot=true;
+                    databaseReference.child("noOfGames").setValue(noOfGames);
+                    hideBattleFiledAvailablePlayerOne();
+                    hideBattleFiledAvailablePlayerTwo();
+                }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-    }
+    }else{
+
+            if(GameDifficulty.getInstance().getRandom()) {
+                battleFieldMeActivityRandomGame.createFleet();
+            }else{
+                battleFieldMeActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
+            }
+
+            battleFieldOpponentActivityRandomGame.createFleet();
+            hideBattleFiledAvailablePlayerOne();
+            hideBattleFiledAvailablePlayerTwo();
+            newShoot=true;
+        }
         game.run();
+    }
+
+    private void updateBattleFieldFromSaved() {
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isShip()&&battleFieldOpponentActivityRandomGame.getBattleField(i,j).isHit()){
+                    battleFieldOpponent[i][j]=SHIP_RED;
+                }else if(!battleFieldOpponentActivityRandomGame.getBattleField(i,j).isShip()&&battleFieldOpponentActivityRandomGame.getBattleField(i,j).isHit()){
+                    battleFieldOpponent[i][j]=WATER;
+                }else {
+                    battleFieldOpponent[i][j]=BATTLE_CELL;
+                }
+            }
+        }
     }
 
     private void initializeTable(ArrayList<Integer> shootTable) {
@@ -395,6 +458,18 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         }
         else if (!myWin()&& battleFieldMeActivityRandomGame.allShipsHit())     // allShipsHit computer
         {
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    user = dataSnapshot.getValue(User.class);
+                    user.setSinglePlayerMatch(new SinglePlayerMatch());
+                    databaseReference.setValue(user);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
 
             Intent intent = new Intent(getApplicationContext(),WinPlayerTwo.class);
             startActivity(intent);
@@ -410,9 +485,12 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                score= (Long) dataSnapshot.child("score").getValue();
+                user = dataSnapshot.getValue(User.class);
+                score= user.getScore();
                 addPoints();
-                databaseReference.child("score").setValue(score);
+                user.setScore((int) score);
+                user.setSinglePlayerMatch(new SinglePlayerMatch());
+                databaseReference.setValue(user);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -1661,13 +1739,14 @@ else
                     AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
                     builder.setCancelable(true);
                     builder.setTitle("Leaving game");
-                    builder.setMessage("Do you want to quit game?"+"\n"+"You will lose "+minusPoints+" points");
+                    builder.setMessage("Do you want to surrender game?"+"\n"+"You will lose "+minusPoints+" points");
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             int myScore = user.getScore();
                             myScore=myScore-minusPoints;
                             user.setScore(myScore);
+                            user.setSinglePlayerMatch(new SinglePlayerMatch());
                             databaseReference.setValue(user);
                             finish();
                         }
@@ -1726,6 +1805,12 @@ else
             singlePlayerMatch.setDifficulty(level);
             singlePlayerMatch.setBattleFieldListMyFromArray(battleFieldMeActivityRandomGame);
             singlePlayerMatch.setBattleFieldListOpponentFromArray(battleFieldOpponentActivityRandomGame);
+            singlePlayerMatch.setPositionI(positionI);
+            singlePlayerMatch.setPositionJ(positionJ);
+            singlePlayerMatch.setNewShoot(newShoot);
+            singlePlayerMatch.setDirection(direction);
+            singlePlayerMatch.setX(x);
+            singlePlayerMatch.setY(y);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
@@ -1735,8 +1820,10 @@ else
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                databaseReference.child("singlePlayerMatch").setValue(singlePlayerMatch);
 
+                if(loggedIn) {
+                    databaseReference.child("singlePlayerMatch").setValue(singlePlayerMatch);
+                }
 
 
                 finish();
@@ -1752,5 +1839,4 @@ else
         dialog.show();
     }
 }
-// TODO use SinglePlayerMatch instead of two battle fields :..(
-// TODO surrender and leave button (leave has to save game state if logged in)
+
