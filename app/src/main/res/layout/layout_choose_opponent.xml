@@ -13,7 +13,7 @@
         android:textSize="@dimen/TextSize"
         android:textColor="@color/pen"
         android:background="#00000000"
-        android:gravity="center"
+        android:gravity="center_vertical|right"
         android:layout_gravity="center"
         android:layout_weight="@integer/PositionWeight"/>
 
@@ -23,7 +23,8 @@
         android:id="@+id/usernameScoreChooseOpponent"
         android:textSize="@dimen/TextSize"
         android:textColor="@color/pen"
-        android:gravity="center"
+        android:gravity="center_vertical|left"
+        android:layout_marginLeft="@dimen/FieldSize"
         android:layout_gravity="center"
         android:background="#00000000"
         android:layout_weight="@integer/UserWeight"/>

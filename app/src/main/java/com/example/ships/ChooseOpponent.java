@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,16 +69,36 @@ public class ChooseOpponent extends AppCompatActivity {
     private int square;
     private ConstraintLayout mainLayout;
     private LinearLayout linearLayout;
+    private RecyclerView recyclerView;
+    private ImageButton leave;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        getWindow().getDecorView().setSystemUiVisibility(flags);
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                    decorView.setSystemUiVisibility(flags);
+                }
+            }
+        });
         setContentView(R.layout.activity_choose_opponent);
         mainLayout=findViewById(R.id.constraintLayoutChooseOpponentActivity);
         linearLayout=findViewById(R.id.LinearLayoutActivityChooseOpponent);
+        recyclerView = findViewById(R.id.recyclerViewChooseOpponent);
+        leave=findViewById(R.id.leaveChoseOpponent);
+        leave.setBackgroundResource(R.drawable.back);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
@@ -101,16 +122,25 @@ public class ChooseOpponent extends AppCompatActivity {
         int screenHeight = sp.getInt("height",-1);
         int screenWidthOffSet = sp.getInt("widthOffSet",-1);
         int screenHeightOffSet = sp.getInt("heightOffSet",-1);
+        int mariginTop = screenHeight-screenHeightOffSet-3*square;
 
         mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,2*square);
+        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(2*square,2*square);
 
         linearLayout.setLayoutParams(params);
+        leave.setLayoutParams(params1);
 
         for(int i = 0; i<linearLayout.getChildCount(); i++){
             TextView tv = (TextView)linearLayout.getChildAt(i);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         }
+        ConstraintSet set = new ConstraintSet();
+        set.clone(mainLayout);
+        set.connect(leave.getId(), ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,mariginTop);
+        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.applyTo(mainLayout);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating ranking...");
@@ -164,7 +194,6 @@ public class ChooseOpponent extends AppCompatActivity {
     }
     private void initRecyclerView() {
         progressDialog.dismiss();
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewChooseOpponent);
         RecyclerViewAdapterChooseOpponent adapter = new RecyclerViewAdapterChooseOpponent(this,ranking,square,userID);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
@@ -266,6 +295,9 @@ public class ChooseOpponent extends AppCompatActivity {
         }
 
 
+    public void leaveChoseOpponentOnClick(View view) {
+        finish();
+    }
 }
 
 // TODO invitation with dialog builder (confirmation)

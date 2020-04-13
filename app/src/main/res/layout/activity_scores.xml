@@ -70,8 +70,7 @@
         android:onClick="leaveScoreOnClick"
         android:background="#00000000"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_margin="@dimen/Distance50dp"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -483,5 +483,6 @@ public class MainActivity extends AppCompatActivity {
 // TODO change notification
 // TODO block back button during game
 // TODO different points in multiplayer depending on difficulty (50 and 25)
+// TODO change progress dialog in score and choose opponent...
 
 
