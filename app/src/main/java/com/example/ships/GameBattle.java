@@ -26,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.ships.classes.BattleField;
 import com.example.ships.classes.GameDifficulty;
+import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
@@ -45,6 +46,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private Handler mHandler = new Handler();
     private BattleField battleFieldMeActivityRandomGame = new BattleField();
      private BattleField battleFieldOpponentActivityRandomGame = new BattleField();
+     private SinglePlayerMatch singlePlayerMatch = new SinglePlayerMatch();
     private ConstraintLayout mainLayout;
 
      private GridLayout layoutOpponent, layoutMy;
@@ -1718,6 +1720,14 @@ else
     }
 
     private void leaveGame() {
+        if(loggedIn){
+            singlePlayerMatch.setGame(true);
+            singlePlayerMatch.setMyTurn(myTurn);
+            singlePlayerMatch.setDifficulty(level);
+            singlePlayerMatch.setBattleFieldListMyFromArray(battleFieldMeActivityRandomGame);
+            singlePlayerMatch.setBattleFieldListOpponentFromArray(battleFieldOpponentActivityRandomGame);
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
         builder.setCancelable(true);
         builder.setTitle("Leaving game");
@@ -1725,6 +1735,10 @@ else
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                databaseReference.child("singlePlayerMatch").setValue(singlePlayerMatch);
+
+
+
                 finish();
             }
         });

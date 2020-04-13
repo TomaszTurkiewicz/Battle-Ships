@@ -6,32 +6,32 @@ import java.util.List;
 public class SinglePlayerMatch {
     private int difficulty;
     private boolean game;
-    private List<Ship> battleFieldListMy = Arrays.asList(new Ship[100]);
-    private BattleField battleFieldMy = new BattleField();
-    private List<Ship> battleFieldListOpponent = Arrays.asList(new Ship[100]);
-    private BattleField battleFieldOpponent = new BattleField();
+    private List<Ship> battleFieldListMy;
+    private List<Ship> battleFieldListOpponent;
     private boolean myTurn;
 
     public SinglePlayerMatch() {
         this.difficulty=-1;
         this.game=false;
         this.myTurn=false;
-        fieldToList();
+        this.battleFieldListMy = Arrays.asList(new Ship[100]);
+        this.battleFieldListOpponent = Arrays.asList(new Ship[100]);
     }
 
-    private void fieldToList() {
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                int index = 10*i+j;
-                battleFieldListMy.set(index,battleFieldMy.getBattleField(i,j));
-            }
-        }
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                int index = 10*i+j;
-                battleFieldListOpponent.set(index,battleFieldOpponent.getBattleField(i,j));
-            }
-        }
+    public boolean isMyTurn() {
+        return myTurn;
+    }
+
+    public void setBattleFieldListMy(List<Ship> battleFieldListMy) {
+        this.battleFieldListMy = battleFieldListMy;
+    }
+
+    public void setBattleFieldListOpponent(List<Ship> battleFieldListOpponent) {
+        this.battleFieldListOpponent = battleFieldListOpponent;
+    }
+
+    public void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
     }
 
     public int getDifficulty() {
@@ -54,24 +54,27 @@ public class SinglePlayerMatch {
         return battleFieldListMy;
     }
 
-    public void setBattleFieldListMy(List<Ship> battleFieldListMy) {
-        this.battleFieldListMy = battleFieldListMy;
+
+    public void setBattleFieldListMyFromArray(BattleField battleFieldMy) {
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                this.battleFieldListMy.set(i*10+j,battleFieldMy.getBattleField(i,j));
+            }
+        }
     }
+
+
 
     public List<Ship> getBattleFieldListOpponent() {
         return battleFieldListOpponent;
     }
 
-    public void setBattleFieldListOpponent(List<Ship> battleFieldListOpponent) {
-        this.battleFieldListOpponent = battleFieldListOpponent;
-    }
-
-    public boolean isMyTurn() {
-        return myTurn;
-    }
-
-    public void setTurn(boolean myTurn) {
-        this.myTurn = myTurn;
+    public void setBattleFieldListOpponentFromArray(BattleField battleFieldOpponent) {
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                this.battleFieldListOpponent.set(i*10+j,battleFieldOpponent.getBattleField(i,j));
+            }
+        }
     }
 
 }
