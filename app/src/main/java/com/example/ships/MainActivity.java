@@ -1,6 +1,8 @@
 package com.example.ships;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -101,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setContentView(R.layout.activity_main);
+
+
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+
+
         constraintLayout = findViewById(R.id.mainActivityLayout);
         userName=findViewById(R.id.userName);
         loggedIn=findViewById(R.id.loggedIn);
