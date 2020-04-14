@@ -496,9 +496,9 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                         chooseDifficulty(dataSnapshot);
                                     }else{
                                         surrenderButton.setVisibility(View.VISIBLE);
+                                        battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                                         if(dataSnapshot.child(user.getIndex().getOpponent()).exists()){
                                             if(dataSnapshot.child(user.getIndex().getOpponent()).child("difficulty").exists()) {
-                                                battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                                                 battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
                                                 battleFieldForDataBaseOpponent.listToField();
                                                 battleFieldForDataBaseMy.listToField();
@@ -912,22 +912,39 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User opponent=dataSnapshot.getValue(User.class);
-
+                final int[] myScore = {user.getScore()};
+                int myScoreMinus;
+                if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                    myScoreMinus=25;
+                }else{
+                    myScoreMinus=50;
+                }
+                final int[] opponentScore = {opponent.getScore()};
+                int opponentScorePlus;
+                if(battleFieldForDataBaseOpponent.getDifficulty().isSet()){
+                    if(battleFieldForDataBaseOpponent.getDifficulty().isEasy()){
+                        opponentScorePlus=25;
+                    }else{
+                        opponentScorePlus=50;
+                    }
+                }else{
+                    opponentScorePlus=0;
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
                 builder.setCancelable(true);
                 builder.setTitle("Leaving game");
-                builder.setMessage("Do you want to quit game?"+"\n"+opponent.getName()+" will get 50 points for nothing"+"\n"+"You will lose 50 points");
+                builder.setMessage("Do you want to quit game?"+"\n"+opponent.getName()+" will get "+ opponentScorePlus+" points for nothing"+"\n"+"You will lose "+ myScoreMinus+" points");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int score = opponent.getScore();
-                        score = score+50;
-                        opponent.setScore(score);
+
+                        opponentScore[0] = opponentScore[0] +opponentScorePlus;
+                        opponent.setScore(opponentScore[0]);
                         opponent.setIndex(new FightIndex());
                         databaseReferenceOpponent.setValue(opponent);
-                        int myScore = user.getScore();
-                        myScore=myScore-50;
-                        user.setScore(myScore);
+
+                        myScore[0] = myScore[0] - myScoreMinus;
+                        user.setScore(myScore[0]);
                         user.setIndex(new FightIndex());
                         databaseReferenceMy.setValue(user);
                         databaseReferenceFight.removeValue();
@@ -1100,7 +1117,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                             databaseReferenceFight.child("winner").setValue(user.getId());
                             int score = user.getScore();
                             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
-                                score = score+5;
+                                score = score+25;
                             }else{
                                 score = score+50;
                             }
