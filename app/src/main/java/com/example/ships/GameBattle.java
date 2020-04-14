@@ -128,7 +128,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         setContentView(R.layout.activity_random_game_battle);
         mainLayout = findViewById(R.id.randomGameActivityLayout);
         surrender = findViewById(R.id.surrenderSinglePlayer);
-        surrender.setBackgroundResource(R.drawable.leave);
+        surrender.setBackgroundResource(R.drawable.grid_off);
         leave=findViewById(R.id.leaveSinglePlayer);
         leave.setBackgroundResource(R.drawable.back);
         layoutMy=findViewById(R.id.gridLayoutBattleMy);

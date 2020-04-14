@@ -134,7 +134,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         oneMastsThird=findViewById(R.id.linearLayoutMultiplayerShipOneMastsThird);
         oneMastsFourth=findViewById(R.id.linearLayoutMultiplayerShipOneMastsFourth);
         surrenderButton = findViewById(R.id.surrenderMultiplayer);
-        surrenderButton.setBackgroundResource(R.drawable.leave);
+        surrenderButton.setBackgroundResource(R.drawable.grid_off);
         turnTextView=findViewById(R.id.turn);
         leave=findViewById(R.id.leaveMultiPlayer);
         leave.setBackgroundResource(R.drawable.back);
