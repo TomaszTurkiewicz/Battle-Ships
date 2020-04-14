@@ -83,12 +83,12 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private long score;
     private int deelay=1000;
     private LinearLayout linearLayoutLettersMy, linearLayoutNumbersMy, linearLayoutLettersOpponent, linearLayoutNumbersOpponent;
-    int[]locationLayout = new int [2];
+    private int[]locationLayout = new int [2];
     private LinearLayout fourMasts,threeMastsFirst, threeMastsSecond, twoMastsFirst,twoMastsSecond,twoMastsThird,oneMastsFirst,oneMastsSecond,oneMastsThird,oneMastsFourth;
     private User user = new User();
 
 
-    ArrayList<Integer>ShootTable = new ArrayList<>();
+    private ArrayList<Integer>ShootTable = new ArrayList<>();
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -100,6 +100,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private int marginLeft;
     private int marginLeftForShips;
     private int marginDown;
+    private TextView userName, opponentName;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -147,6 +148,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         oneMastsSecond=findViewById(R.id.linearLayoutSingleBattleShipOneMastsSecond);
         oneMastsThird=findViewById(R.id.linearLayoutSingleBattleShipOneMastsThird);
         oneMastsFourth=findViewById(R.id.linearLayoutSingleBattleShipOneMastsFourth);
+        userName=findViewById(R.id.userNameGameBattle);
+        opponentName=findViewById(R.id.opponentNameGameBattle);
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         int square = sp.getInt("square",-1);
         int screenWidth = sp.getInt("width",-1);
@@ -176,6 +179,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params17 = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params18 = new ConstraintLayout.LayoutParams(10*square,2*square);
+        ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(10*square,2*square);
 
         surrender.setLayoutParams(params);
         layoutMy.setLayoutParams(params1);
@@ -195,6 +200,11 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         oneMastsThird.setLayoutParams(params15);
         oneMastsFourth.setLayoutParams(params16);
         leave.setLayoutParams(params17);
+        userName.setLayoutParams(params18);
+        userName.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        opponentName.setLayoutParams(params19);
+        opponentName.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+
         for(int i = 0; i<10; i++){
             TextView tv = (TextView)linearLayoutLettersMy.getChildAt(i);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
@@ -279,6 +289,12 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginDown-2*square);
         set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
+        set.connect(userName.getId(),ConstraintSet.BOTTOM,layoutMy.getId(),ConstraintSet.TOP,square);
+        set.connect(userName.getId(),ConstraintSet.LEFT,layoutMy.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(opponentName.getId(),ConstraintSet.BOTTOM,layoutOpponent.getId(),ConstraintSet.TOP,square);
+        set.connect(opponentName.getId(),ConstraintSet.LEFT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
+
         set.applyTo(mainLayout);
 
         enableTouchListener=false;
@@ -328,6 +344,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
                 boolean savedGame = user.getSinglePlayerMatch().isGame();
+                userName.setText(user.getName());
+                opponentName.setText("PHONE");
                 if(savedGame){
                     for(int i=0;i<10;i++){
                         for(int j=0;j<10;j++){
@@ -392,6 +410,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             hideBattleFiledAvailablePlayerOne();
             hideBattleFiledAvailablePlayerTwo();
             newShoot=true;
+            userName.setText("ME");
+            opponentName.setText("PHONE");
         }
         game.run();
     }
@@ -532,8 +552,12 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
             hideBattleFiledAvailablePlayerOne();
             enableTouchListener=true;
+            userName.setTextColor(getColor(R.color.pen));
+            opponentName.setTextColor(getColor(R.color.pen_red));
         }
         else{
+            userName.setTextColor(getColor(R.color.pen_red));
+            opponentName.setTextColor(getColor(R.color.pen));
             hideBattleFiledAvailablePlayerTwo();
             showBattleFieldAvailablePlayerOne();
             shoot();
