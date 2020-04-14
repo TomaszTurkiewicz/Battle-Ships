@@ -471,7 +471,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 }else {
                     databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
                     databaseReferenceFight = firebaseDatabase.getReference("Battle").child(user.getIndex().getGameIndex());
-                    surrenderButton.setVisibility(View.VISIBLE);
+
                     databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -495,12 +495,14 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                     if(dataSnapshot.child(userID).child("difficulty").child("set").getValue().equals(false)){
                                         chooseDifficulty(dataSnapshot);
                                     }else{
+                                        surrenderButton.setVisibility(View.VISIBLE);
                                         if(dataSnapshot.child(user.getIndex().getOpponent()).exists()){
                                             if(dataSnapshot.child(user.getIndex().getOpponent()).child("difficulty").exists()) {
                                                 battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                                                 battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
                                                 battleFieldForDataBaseOpponent.listToField();
                                                 battleFieldForDataBaseMy.listToField();
+
                                                 if(battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated() &&
                                                         battleFieldForDataBaseMy.getDifficulty().isSet() && battleFieldForDataBaseOpponent.getDifficulty().isSet()) {
                                                         databaseReferenceFight.child("ready").setValue(true);

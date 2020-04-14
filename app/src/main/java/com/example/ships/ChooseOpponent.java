@@ -2,6 +2,7 @@ package com.example.ships;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Shader;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -217,39 +219,46 @@ public class ChooseOpponent extends AppCompatActivity {
                                 if(!dataSnapshot1.getValue().equals("")){
                                     initRanking();
                                 }else{
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(ChooseOpponent.this);
+                                    builder.setCancelable(true);
+                                    builder.setTitle("INVITE");
+                                    builder.setMessage("Do you want to invite "+ranking.getRanking(position).getName()+"?");
+                                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            TOPIC = "/topics/"+ opponentID;
+                                            NOTIFICATION_TITLE = "Invitation from: "+ me.getName();
+                                            //                          NOTIFICATION_MESSAGE = me.getName();
 
+                                            JSONObject notification = new JSONObject();
+                                            JSONObject notificationBody = new JSONObject();
 
-                                                TOPIC = "/topics/"+ opponentID;
+                                            try{
+                                                notificationBody.put("title",NOTIFICATION_TITLE);
+                                                //                              notificationBody.put("message",NOTIFICATION_MESSAGE);
 
-                                                NOTIFICATION_TITLE = "Invitation from: "+ me.getName();
-                      //                          NOTIFICATION_MESSAGE = me.getName();
-
-                                                JSONObject notification = new JSONObject();
-                                                JSONObject notificationBody = new JSONObject();
-
-                                                try{
-                                                    notificationBody.put("title",NOTIFICATION_TITLE);
-                      //                              notificationBody.put("message",NOTIFICATION_MESSAGE);
-
-                                                    notification.put("to",TOPIC);
-                                                    notification.put("notification",notificationBody);
-                                                } catch (JSONException e){
-                                                    Log.e(TAG,"onCreate: "+e.getMessage());
-                                                }
-                                                sendNotification(notification);
-
-
+                                                notification.put("to",TOPIC);
+                                                notification.put("notification",notificationBody);
+                                            } catch (JSONException e){
+                                                Log.e(TAG,"onCreate: "+e.getMessage());
+                                            }
+                                            sendNotification(notification);
                                             accepted=true;
                                             databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
                                             databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
                                             databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
-                                    mHandler.removeCallbacks(checkMyOpponentIndex);
+                                            mHandler.removeCallbacks(checkMyOpponentIndex);
                                             finish();
-
-
-
                                         }
-
+                                    });
+                                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    });
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+                                        }
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -299,5 +308,3 @@ public class ChooseOpponent extends AppCompatActivity {
         finish();
     }
 }
-
-// TODO invitation with dialog builder (confirmation)
