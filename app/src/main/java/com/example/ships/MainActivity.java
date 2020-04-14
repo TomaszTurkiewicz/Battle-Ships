@@ -9,6 +9,7 @@ import android.graphics.Shader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -26,6 +27,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
@@ -37,6 +42,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -60,7 +71,13 @@ public class MainActivity extends AppCompatActivity {
     private boolean logIn;
     private int square;
     private boolean ready=false;
-
+    private static String TAG = "NOTIFICATION TAG";
+    private static String FCM_API="https://fcm.googleapis.com/fcm/send";
+    private static String TOPIC;
+    private static String NOTIFICATION_MESSAGE;
+    private static String NOTIFICATION_TITLE;
+    private String serverKey= "key=" + "AAAAUhITVm0:APA91bGLIOR5L7HQyh64ejoejk-nQFBWP9RxDqtzzjoSXCmROqs7JO_uDDyuW5VuTfJBxtKY_RG8q5_CnpKJsN3qHtVvgiAkuDM2J9T68mk0LzKCcRKgRbj3DQ-A1a8uzZ07wz8OlirQ";
+    private String contentType= "application/json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -324,6 +341,28 @@ public class MainActivity extends AppCompatActivity {
                                                             databaseReferenceMy.setValue(user);
                                                             databaseReferenceOpponent.setValue(opponentUser);
                                                             mHandler.removeCallbacks(checkMyOpponentAndMove);
+
+
+                                                            TOPIC = "/topics/"+ user.getIndex().getOpponent();
+
+                                                            NOTIFICATION_TITLE = user.getName()+ " accepted your invitation";
+                                                            //              NOTIFICATION_MESSAGE = "Your move";
+
+                                                            JSONObject notification = new JSONObject();
+                                                            JSONObject notificationBody = new JSONObject();
+
+                                                            try{
+                                                                notificationBody.put("title",NOTIFICATION_TITLE);
+                                                                //                  notificationBody.put("message",NOTIFICATION_MESSAGE);
+
+                                                                notification.put("to",TOPIC);
+                                                                notification.put("notification",notificationBody);
+                                                                //                  notification.put("data",notificationBody);
+                                                            } catch (JSONException e){
+                                                                Log.e(TAG,"onCreate: "+e.getMessage());
+                                                            }
+                                                            sendNotification(notification);
+
                                                             Intent intent = new Intent(MainActivity.this, MultiplayerActivity.class);
                                                             startActivity(intent);
 
@@ -332,11 +371,36 @@ public class MainActivity extends AppCompatActivity {
                                                     builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
+
+
+
+                                                            TOPIC = "/topics/"+ user.getIndex().getOpponent();
+
+                                                            NOTIFICATION_TITLE = user.getName()+ " rejected your invitation";
+                                                            //              NOTIFICATION_MESSAGE = "Your move";
+
+                                                            JSONObject notification = new JSONObject();
+                                                            JSONObject notificationBody = new JSONObject();
+
+                                                            try{
+                                                                notificationBody.put("title",NOTIFICATION_TITLE);
+                                                                //                  notificationBody.put("message",NOTIFICATION_MESSAGE);
+
+                                                                notification.put("to",TOPIC);
+                                                                notification.put("notification",notificationBody);
+                                                                //                  notification.put("data",notificationBody);
+                                                            } catch (JSONException e){
+                                                                Log.e(TAG,"onCreate: "+e.getMessage());
+                                                            }
+                                                            sendNotification(notification);
+
                                                             user.getIndex().setOpponent("");
                                                             opponentUser.getIndex().setOpponent("");
                                                             opponentUser.getIndex().setAccepted(false);
                                                             databaseReferenceMy.setValue(user);
                                                             databaseReferenceOpponent.setValue(opponentUser);
+
+
                                                         }
                                                     });
                                                     AlertDialog dialog = builder.create();
@@ -381,6 +445,35 @@ public class MainActivity extends AppCompatActivity {
 
             logIn=false;
         }
+    }
+
+    private void sendNotification(JSONObject notification) {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: " + response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, "Request error", Toast.LENGTH_LONG).show();
+                        Log.i(TAG, "onErrorResponse: Didn't work");
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+
     }
 
 
@@ -495,7 +588,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO Add notification when accepting and not accepting invitation
+
 // TODO change notification
 // TODO different points in multiplayer depending on difficulty (50 and 25)
 // TODO change progress dialog in score and choose opponent...
