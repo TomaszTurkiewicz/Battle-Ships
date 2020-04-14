@@ -60,6 +60,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private DatabaseReference databaseReferenceMy, databaseReferenceFight, databaseReferenceOpponent;
     private String userID;
     private User user = new User();
+    private User opponent = new User();
     private BattleFieldForDataBase battleFieldForDataBaseMy = new BattleFieldForDataBase();
     private BattleFieldForDataBase battleFieldForDataBaseOpponent = new BattleFieldForDataBase();
     private Handler mHandler = new Handler();
@@ -93,6 +94,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private LinearLayout fourMasts,threeMastsFirst, threeMastsSecond, twoMastsFirst,twoMastsSecond,twoMastsThird,oneMastsFirst,oneMastsSecond,oneMastsThird,oneMastsFourth;
     private int marginLeftForShips;
     private int marginDown;
+    private TextView userName, opponentName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,8 +138,11 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         surrenderButton = findViewById(R.id.surrenderMultiplayer);
         surrenderButton.setBackgroundResource(R.drawable.grid_off);
         turnTextView=findViewById(R.id.turn);
+        turnTextView.setVisibility(View.GONE);
         leave=findViewById(R.id.leaveMultiPlayer);
         leave.setBackgroundResource(R.drawable.back);
+        userName=findViewById(R.id.userNameMultiplayer);
+        opponentName=findViewById(R.id.opponentNameMultiplayer);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
@@ -178,6 +183,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params17 = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params18 = new ConstraintLayout.LayoutParams(10*square,2*square);
+        ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(10*square,2*square);
 
         surrenderButton.setLayoutParams(params);
         layoutMy.setLayoutParams(params1);
@@ -197,6 +204,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         oneMastsThird.setLayoutParams(params15);
         oneMastsFourth.setLayoutParams(params16);
         leave.setLayoutParams(params17);
+        userName.setLayoutParams(params18);
+        userName.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        opponentName.setLayoutParams(params19);
+        opponentName.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
 
         for(int i = 0; i<10; i++){
             TextView tv = (TextView)linearLayoutLettersMy.getChildAt(i);
@@ -279,6 +290,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
         set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginDown-2*square);
         set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.connect(userName.getId(),ConstraintSet.BOTTOM,layoutMy.getId(),ConstraintSet.TOP,square);
+        set.connect(userName.getId(),ConstraintSet.LEFT,layoutMy.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(opponentName.getId(),ConstraintSet.BOTTOM,layoutOpponent.getId(),ConstraintSet.TOP,square);
+        set.connect(opponentName.getId(),ConstraintSet.LEFT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
 
         set.applyTo(mainLayout);
 
@@ -372,7 +389,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String turn = (String) dataSnapshot.child("turn").getValue();
                 if(user.getId().equals(turn)){
-                    turnTextView.setText("MY MOVE");
+
+                    userName.setTextColor(getColor(R.color.pen));
+                    opponentName.setTextColor(getColor(R.color.pen_red));
+
                     battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                     battleFieldForDataBaseMy.listToField();
                     showOpponentBattleField();
@@ -380,7 +400,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     enableTouchListener=true;
                 }
                 else{
-                    turnTextView.setText("NOT MY MOVE");
+
+                    userName.setTextColor(getColor(R.color.pen_red));
+                    opponentName.setTextColor(getColor(R.color.pen));
+
                     String winner = (String) dataSnapshot.child("winner").getValue();
 
                     if(user.getIndex().getOpponent().equals(winner)){
@@ -459,11 +482,11 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private void createFields() {
         hideBattleFieldOpponent();
         hideBattleFiledAvailableMy();
-        turnTextView.setText("WAITING FOR OPPONENT");
         databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
+                userName.setText(user.getName());
 
                 if(user.getIndex().getOpponent().isEmpty()){
 
@@ -471,6 +494,26 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 }else {
                     databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
                     databaseReferenceFight = firebaseDatabase.getReference("Battle").child(user.getIndex().getGameIndex());
+
+                    databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                opponent = dataSnapshot.getValue(User.class);
+                                opponentName.setText(opponent.getName());
+
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
 
                     databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -496,8 +539,14 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                         chooseDifficulty(dataSnapshot);
                                     }else{
                                         surrenderButton.setVisibility(View.VISIBLE);
+
+                                        turnTextView.setText("WAITING FOR "+opponent.getName());
+                                        turnTextView.setVisibility(View.VISIBLE);
                                         battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
+                                        battleFieldForDataBaseMy.listToField();
+                                        hideBattleFiledAvailableMy();
                                         if(dataSnapshot.child(user.getIndex().getOpponent()).exists()){
+
                                             if(dataSnapshot.child(user.getIndex().getOpponent()).child("difficulty").exists()) {
                                                 battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
                                                 battleFieldForDataBaseOpponent.listToField();
@@ -506,6 +555,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                                 if(battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated() &&
                                                         battleFieldForDataBaseMy.getDifficulty().isSet() && battleFieldForDataBaseOpponent.getDifficulty().isSet()) {
                                                         databaseReferenceFight.child("ready").setValue(true);
+                                                        turnTextView.setVisibility(View.GONE);
                                                         battleFieldsSet = true;
                                                         initializeOpponentArrayBattleField();
                                                         checkShipCounters();
@@ -911,7 +961,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User opponent=dataSnapshot.getValue(User.class);
+                opponent=dataSnapshot.getValue(User.class);
                 final int[] myScore = {user.getScore()};
                 int myScoreMinus;
                 if(battleFieldForDataBaseMy.getDifficulty().isEasy()){

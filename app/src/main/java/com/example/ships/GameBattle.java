@@ -449,7 +449,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         }return counter==noOfMasts;
     }
 
-    //TODO opisać planszę
+
     //TODO wyczyścić kod
 
     private Runnable game = new Runnable() {

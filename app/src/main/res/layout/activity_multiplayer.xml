@@ -7,6 +7,30 @@
     tools:context=".MultiplayerActivity"
     android:id="@+id/multiplayerActivityLayout">
 
+    <TextView
+        android:id="@+id/userNameMultiplayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/loggedIn"
+        app:layout_constraintTop_toTopOf="@id/loggedIn"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:gravity="center"
+        android:includeFontPadding="false"/>
+
+    <TextView
+        android:id="@+id/opponentNameMultiplayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/loggedIn"
+        app:layout_constraintTop_toTopOf="@id/loggedIn"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:gravity="center"
+        android:includeFontPadding="false"/>
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
