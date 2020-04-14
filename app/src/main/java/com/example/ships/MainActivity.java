@@ -494,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO deleting account - delete battle you are involved in
+
 // TODO Add notification when accepting and not accepting invitation
 // TODO change notification
 // TODO different points in multiplayer depending on difficulty (50 and 25)

@@ -13,13 +13,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.TileDrawable;
+import com.example.ships.classes.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,8 +33,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SignInActivity extends AppCompatActivity {
@@ -40,7 +46,7 @@ public class SignInActivity extends AppCompatActivity {
     private Button deleteUser, loginEmail;
     private String userID;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, databaseReferenceFight;
     private boolean loggedIn;
     static final int GOOGLE_SIGN = 123;
     private Button login_google, login_facebook;
@@ -48,6 +54,10 @@ public class SignInActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private ConstraintLayout mainLayout;
     private ImageButton leave;
+    private FirebaseUser firebaseUser;
+    private User me = new User();
+    private FightIndex fightIndex = new FightIndex();
+    private boolean multiplayer = false;
 
 
     @Override
@@ -146,8 +156,8 @@ public class SignInActivity extends AppCompatActivity {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("User");
+        databaseReferenceFight=firebaseDatabase.getReference("Battle");
         firebaseAuth = FirebaseAuth.getInstance();
-        final FirebaseUser firebaseUser;
         firebaseUser = firebaseAuth.getCurrentUser();
         progressDialog = new ProgressDialog(this);
 
@@ -182,16 +192,37 @@ public class SignInActivity extends AppCompatActivity {
         }
 
         deleteUser.setOnClickListener(v -> {
-
+            databaseReference.child(userID).child("index").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        fightIndex = dataSnapshot.getValue(FightIndex.class);
+                        if(!fightIndex.getOpponent().equals("")){
+                            multiplayer=true;
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
             AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
             builder.setTitle("DELETE ACCOUNT");
             builder.setMessage("Do you really want to delete your account?");
             builder.setPositiveButton("YES", (dialog, which) -> {
                 dialog.dismiss();
-                databaseReference.child(userID).removeValue();
+
 
                 firebaseUser.delete().addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
+                        databaseReference.child(userID).removeValue();
+                        if(multiplayer){
+                            FightIndex fightIndex1 = new FightIndex();
+                            databaseReference.child(fightIndex.getOpponent()).child("index").setValue(fightIndex1);
+                            if(!fightIndex.getGameIndex().equals("")){
+                                databaseReferenceFight.child(fightIndex.getGameIndex()).removeValue();
+                            }
+                        }
                         FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
                         Toast.makeText(SignInActivity.this,"Account Deleted",Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
@@ -199,6 +230,8 @@ public class SignInActivity extends AppCompatActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
+                    }else{
+                        Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
                     }
                 });
             });
@@ -297,7 +330,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 }
 
-// TODO deleting account with confirmation (alert dialog)
+
 // TODO change progressDialog na progressBar
 //TODO Rejestracja przez Facebook
 //TODO animacja
