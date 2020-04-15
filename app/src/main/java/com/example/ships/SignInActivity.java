@@ -350,7 +350,9 @@ public class SignInActivity extends AppCompatActivity {
                                                     SignInGoogle();
                                                 }
                                                 else if(task.getResult().getSignInMethods().contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)){
-                                                    Toast.makeText(SignInActivity.this, "SIGN IN USING EMAIL", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(getApplicationContext(),EmailAndPassLogIn.class);
+                                                    startActivity(intent);
+                                                    finish();
                                                 }else;
                                             }
                                         }
