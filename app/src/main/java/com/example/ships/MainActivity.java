@@ -39,6 +39,7 @@ import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private static String NOTIFICATION_TITLE;
     private String serverKey= "key=" + "AAAAUhITVm0:APA91bGLIOR5L7HQyh64ejoejk-nQFBWP9RxDqtzzjoSXCmROqs7JO_uDDyuW5VuTfJBxtKY_RG8q5_CnpKJsN3qHtVvgiAkuDM2J9T68mk0LzKCcRKgRbj3DQ-A1a8uzZ07wz8OlirQ";
     private String contentType= "application/json";
+    private TextView provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         accountBtn.setBackgroundResource(R.drawable.account_box);
         leave=findViewById(R.id.leaveMainActivity);
         leave.setBackgroundResource(R.drawable.back);
+        provider=findViewById(R.id.provider);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -164,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(3*square,3*square);
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(10*square,2*square);
         loggedIn.setLayoutParams(params3);
         loggedIn.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         userName.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
@@ -176,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         accountBtn.setLayoutParams(params4);
         redDotMultiplayerIV.setLayoutParams(params5);
         leave.setLayoutParams(params6);
+        provider.setLayoutParams(params7);
 
         set.clone(constraintLayout);
         set.connect(singlePlayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,7*square);
@@ -199,6 +204,9 @@ public class MainActivity extends AppCompatActivity {
         set.connect(leave.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-3*square);
         set.connect(leave.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,square);
 
+        set.connect(provider.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,4*square);
+        set.connect(provider.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,3*square);
+
         set.applyTo(constraintLayout);
 
     }
@@ -206,8 +214,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(firebaseUser != null && firebaseUser.isEmailVerified()){
-            logIn=true;
+ //       if(firebaseUser != null && firebaseUser.isEmailVerified()){
+
+        if(firebaseUser != null){
+            String providerId="";
+            for(UserInfo profile : firebaseUser.getProviderData()){
+                providerId = providerId+" "+profile.getProviderId();
+            }
+
+            if(providerId.contains("facebook.com")||providerId.contains("google.com")){
+                logIn=true;
+            }else{
+                if(firebaseUser.isEmailVerified()){
+                    logIn=true;
+                }else{
+                    logIn=false;
+                }
+            }
+        }
+
+
+
+        if(logIn){
             loggedIn.setText("Zalogowany jako: ");
             accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
             userID = firebaseUser.getUid();
@@ -451,7 +479,6 @@ public class MainActivity extends AppCompatActivity {
             multiplayerBtn.setClickable(false);
             accountBtn.setBackgroundResource(R.drawable.account_box);
 
-            logIn=false;
         }
     }
 

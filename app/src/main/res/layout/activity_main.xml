@@ -10,6 +10,13 @@
     tools:context=".MainActivity"
     android:id="@+id/mainActivityLayout">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/provider"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
     <ImageView
         android:id="@+id/redDotMultiplayer"
         android:layout_width="wrap_content"

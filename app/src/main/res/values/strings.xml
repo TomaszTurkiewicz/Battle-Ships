@@ -68,4 +68,7 @@
     <string name="easy">EASY</string>
     <string name="games">GAMES</string>
     <string name="login_with_facebook">VIA FACEBOOK</string>
+    <string name="facebook_app_id">1054508894949491</string>
+    <string name="fb_login_protocol_scheme">fb1054508894949491</string>
+
 </resources>

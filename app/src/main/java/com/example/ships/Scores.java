@@ -25,6 +25,7 @@ import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,6 +50,7 @@ public class Scores extends AppCompatActivity {
     private String userId;
     private ImageButton leave;
     private RecyclerView recyclerView;
+    private boolean logIn;
 
 
     @Override
@@ -81,7 +83,25 @@ public class Scores extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
-        if(firebaseUser != null && firebaseUser.isEmailVerified()){
+
+        if(firebaseUser != null){
+            String providerId="";
+            for(UserInfo profile : firebaseUser.getProviderData()){
+                providerId = providerId+" "+profile.getProviderId();
+            }
+
+            if(providerId.contains("facebook.com")||providerId.contains("google.com")){
+                logIn=true;
+            }else{
+                if(firebaseUser.isEmailVerified()){
+                    logIn=true;
+                }else{
+                    logIn=false;
+                }
+            }
+        }
+
+        if(logIn){
             userId = firebaseUser.getUid();
         }else{
             userId="";

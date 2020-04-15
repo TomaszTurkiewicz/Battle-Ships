@@ -38,7 +38,7 @@
         android:textColor="@color/pen"
         />
 
-    <Button
+    <com.facebook.login.widget.LoginButton
         android:id="@+id/loginFacebbok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
