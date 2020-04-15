@@ -29,7 +29,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -66,7 +65,7 @@ public class SignInActivity extends AppCompatActivity {
     private boolean loggedIn;
     static final int GOOGLE_SIGN = 123;
     private Button login_google;
-    private LoginButton login_facebook;
+    private Button login_facebook;
     private GoogleSignInClient mGoogleSignInClient;
     private ProgressDialog progressDialog;
     private ConstraintLayout mainLayout;
@@ -181,8 +180,6 @@ public class SignInActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
         progressDialog = new ProgressDialog(this);
 
-   //     loggedIn = firebaseAuth.getCurrentUser()!= null&&firebaseAuth.getCurrentUser().isEmailVerified();
-
         if(firebaseUser != null){
             String providerId="";
             for(UserInfo profile : firebaseUser.getProviderData()){
@@ -200,11 +197,6 @@ public class SignInActivity extends AppCompatActivity {
             }
         }
 
-
-
-
-
-
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
                 .Builder()
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -214,7 +206,6 @@ public class SignInActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
         login_google.setOnClickListener(v -> SignInGoogle());
-
 
         if(!loggedIn){
             deleteUser.setVisibility(View.GONE);
@@ -282,12 +273,8 @@ public class SignInActivity extends AppCompatActivity {
                 });
 
         userLogout.setOnClickListener(view -> {
-
-
             FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
-
             firebaseAuth.signOut();
-
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -295,13 +282,9 @@ public class SignInActivity extends AppCompatActivity {
             finish();
         });
 
-
-        // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
         updateWithToken(AccessToken.getCurrentAccessToken());
- //       LoginButton loginButton = findViewById(R.id.buttonFacebookLogin);
-        login_facebook.setReadPermissions(Arrays.asList("email","public_profile"));
-        login_facebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
@@ -311,13 +294,17 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
-                // ...
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                // ...
+            }
+        });
+        login_facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this,Arrays.asList("email","public_profile"));
             }
         });
     }
@@ -330,14 +317,9 @@ public class SignInActivity extends AppCompatActivity {
 
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-
-
             firebaseAuth.signInWithCredential(credential)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-
-
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -353,7 +335,6 @@ public class SignInActivity extends AppCompatActivity {
                                 //               updateUI(user);
                             }
                             else if (!task.isSuccessful() && task.getException() instanceof FirebaseAuthUserCollisionException) {
-
                                 FirebaseAuthUserCollisionException exception =
                                         (FirebaseAuthUserCollisionException) task.getException();
                                 String emailException = exception.getEmail();
@@ -383,18 +364,12 @@ public class SignInActivity extends AppCompatActivity {
                     });
     }
 
-
-
-
-
     void SignInGoogle(){
         progressDialog.setMessage("Signing in ...");
         progressDialog.show();
         Intent signIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signIntent,GOOGLE_SIGN);
     }
-
-
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         Log.d("TAG", "firebaseAuthWithGoogle: "+account.getId());
@@ -463,5 +438,4 @@ public class SignInActivity extends AppCompatActivity {
 
 
 // TODO change progressDialog na progressBar
-//TODO Rejestracja przez Facebook
 //TODO animacja
