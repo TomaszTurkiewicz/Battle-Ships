@@ -1,16 +1,27 @@
 package com.example.ships.classes;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class BattleFieldForDataBase {
     private boolean created;
+    private long time;
     private Difficulty difficulty;
     private List<Ship> battleFieldList = Arrays.asList(new Ship[100]);
     private BattleField battleFieldField = new BattleField();
 
     public boolean isCreated() {
         return created;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public void setCreated(boolean created) {
@@ -29,6 +40,8 @@ public class BattleFieldForDataBase {
         this.created=false;
         fieldToList();
         this.difficulty = new Difficulty();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        this.time = calendar.getTimeInMillis();
     }
 
     public Difficulty getDifficulty() {
@@ -47,6 +60,8 @@ public class BattleFieldForDataBase {
         battleFieldField.createFleet();
         fieldToList();
         created=true;
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        this.time = calendar.getTimeInMillis();
     }
 
     public void fieldToList(){

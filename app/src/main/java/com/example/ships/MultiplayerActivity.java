@@ -44,8 +44,10 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class MultiplayerActivity extends AppCompatActivity implements View.OnTouchListener{
 
@@ -410,7 +412,6 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         databaseReferenceFight.removeValue();
                         FightIndex fightIndex = new FightIndex();
                         databaseReferenceMy.child("index").setValue(fightIndex);
-                        databaseReferenceOpponent.child("index").setValue(fightIndex);
                         Intent intent = new Intent(MultiplayerActivity.this,WinPlayerTwo.class);
                         startActivity(intent);
                         finish();
@@ -519,11 +520,16 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (!dataSnapshot.exists()) {
-                                askForCreatingGame();
+
 
                                 databaseReferenceFight.child("turn").setValue(user.getId());
                                 databaseReferenceFight.child("winner").setValue("");
                                 databaseReferenceFight.child("ready").setValue(false);
+                                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                                long timeInMili = calendar.getTimeInMillis();
+                                databaseReferenceFight.child("time").setValue(timeInMili);
+
+                                askForCreatingGame();
                             } else {
                                 if(!dataSnapshot.child(userID).exists()){
                                     askForCreatingGame();
@@ -958,62 +964,124 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
     public void surrenderMultiplayer(View view) {
         mHandler.removeCallbacks(game);
-        databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
+        mHandler2.removeCallbacks(checkGameIndex);
+        final boolean[] outOfTime = {false};
+        final int[] hours = {0};
+        final int[] minutes = {0};
+
+        databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                opponent=dataSnapshot.getValue(User.class);
-                final int[] myScore = {user.getScore()};
-                int myScoreMinus;
-                if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
-                    myScoreMinus=25;
-                }else{
-                    myScoreMinus=50;
-                }
-                final int[] opponentScore = {opponent.getScore()};
-                int opponentScorePlus;
-                if(battleFieldForDataBaseOpponent.getDifficulty().isSet()){
-                    if(battleFieldForDataBaseOpponent.getDifficulty().isEasy()){
-                        opponentScorePlus=25;
+                if(dataSnapshot.exists()){
+                    long timeEnd;
+                    long timeStart;
+                    if(dataSnapshot.child(user.getIndex().getOpponent()).exists()){
+                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                        timeEnd = calendar.getTimeInMillis();
+                        timeStart = (long) dataSnapshot.child(user.getIndex().getOpponent()).child("time").getValue();
+                        outOfTime[0] =timeEnd-timeStart>86400000;
                     }else{
-                        opponentScorePlus=50;
+                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                        timeEnd = calendar.getTimeInMillis();
+                        timeStart = (long) dataSnapshot.child("time").getValue();
+                        outOfTime[0] =timeEnd-timeStart>86400000;
                     }
-                }else{
-                    opponentScorePlus=0;
+                    hours[0] =(((int)timeEnd-(int)timeStart)/3600000);
+                    minutes[0] = (((int)timeEnd-(int)timeStart)-hours[0]*3600000)/60000;
                 }
-                AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
-                builder.setCancelable(true);
-                builder.setTitle("Leaving game");
-                builder.setMessage("Do you want to quit game?"+"\n"+opponent.getName()+" will get "+ opponentScorePlus+" points for nothing"+"\n"+"You will lose "+ myScoreMinus+" points");
-                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        opponent=dataSnapshot.getValue(User.class);
+                        final int[] myScore = {user.getScore()};
+                        int myScoreMinus;
 
-                        opponentScore[0] = opponentScore[0] +opponentScorePlus;
-                        opponent.setScore(opponentScore[0]);
-                        opponent.setIndex(new FightIndex());
-                        databaseReferenceOpponent.setValue(opponent);
+                        if(!outOfTime[0]){
+                        if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                            myScoreMinus=25;
+                        }else{
+                            myScoreMinus=50;
+                        }
+                        }else{
+                            myScoreMinus=0;
+                        }
 
-                        myScore[0] = myScore[0] - myScoreMinus;
-                        user.setScore(myScore[0]);
-                        user.setIndex(new FightIndex());
-                        databaseReferenceMy.setValue(user);
-                        databaseReferenceFight.removeValue();
-                        finish();
+
+
+                        final int[] opponentScore = {opponent.getScore()};
+                        int opponentScorePlus;
+
+                        if(!outOfTime[0]){
+                        if(battleFieldForDataBaseOpponent.getDifficulty().isSet()){
+                            if(battleFieldForDataBaseOpponent.getDifficulty().isEasy()){
+                                opponentScorePlus=25;
+                            }else{
+                                opponentScorePlus=50;
+                            }
+                        }else{
+                            opponentScorePlus=0;
+                        }
+                        }else{
+                            opponentScorePlus=0;
+                        }
+
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
+                        builder.setCancelable(true);
+                        builder.setTitle("Leaving game");
+                        String outOfTimeString ="";
+                        if(outOfTime[0]){
+                            outOfTimeString = "last move was more then 24 hour ago";
+                        }else {
+                            outOfTimeString = "last move was "+hours[0]+"h:"+minutes[0]+"m ago";
+                        }
+
+                        builder.setMessage(outOfTimeString+"\n"+"Do you want to quit game?"+"\n"+opponent.getName()+" will get "+ opponentScorePlus+" points for nothing"+"\n"+"You will lose "+ myScoreMinus+" points");
+                        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mHandler.removeCallbacks(game);
+                                mHandler2.removeCallbacks(checkGameIndex);
+
+                                opponentScore[0] = opponentScore[0] +opponentScorePlus;
+                                opponent.setScore(opponentScore[0]);
+                                opponent.setIndex(new FightIndex());
+                                databaseReferenceOpponent.setValue(opponent);
+
+                                myScore[0] = myScore[0] - myScoreMinus;
+                                user.setScore(myScore[0]);
+                                user.setIndex(new FightIndex());
+                                databaseReferenceMy.setValue(user);
+                                databaseReferenceFight.removeValue();
+                                finish();
+                            }
+                        });
+                        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mHandler.postDelayed(game,deelay);
+                                mHandler2.postDelayed(checkGameIndex,deelay);
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+
+
+
+
+
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
                 });
-                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mHandler.postDelayed(game,deelay);
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-
-
-
-
 
 
 
@@ -1024,6 +1092,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
             }
         });
+
 
 
 
@@ -1157,6 +1226,9 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
                     battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).setHit(true);
                     databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
+                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                    long time = calendar.getTimeInMillis();
+                    databaseReferenceFight.child(user.getId()).child("time").setValue(time);
                     if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).isShip()){
                         battleFieldOpponent[x][y]=SHIP_RED;
                         updateCounters(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getNumberOfMasts(),
@@ -1172,6 +1244,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                 score = score+50;
                             }
                             user.setScore(score);
+                            user.setIndex(new FightIndex());
                             databaseReferenceMy.setValue(user);
 
                             Intent intent = new Intent(MultiplayerActivity.this,WinPlayerOne.class);
@@ -1271,39 +1344,18 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void displayShipCellHidden(TextView TextView){
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
-        } else {
             TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
-        }
     }
     private void displayWaterCellHidden(TextView TextView){
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x_hidden));
-        } else {
             TextView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hidden));
-        }
-
     }
 
     private void displayWidmoShipHidden(TextView TextView){
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
-        } else {
             TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
-        }
     }
 
     private void displayBattleCellHidden(TextView TextView){
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            TextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
-        } else {
             TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
-        }
     }
 
 
@@ -1337,3 +1389,6 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         dialog.show();
     }
 }
+
+// TODO quiting game witch checking time from last opponent move (or creating battle) when opponenet still haven't create battle field
+// TODO sprawdzić rozgrywkę i usuwanie indexów

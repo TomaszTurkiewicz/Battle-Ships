@@ -54,7 +54,7 @@ public class ChooseOpponent extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private int numberOfUsers;
-    private List<User> list= new ArrayList<>();;
+    private List<User> list= new ArrayList<>();
     private ProgressDialog progressDialog;
     private String userID;
     private User me = new User();

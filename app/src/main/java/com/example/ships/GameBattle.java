@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Shader;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.TypedValue;
@@ -616,76 +615,35 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void displayBattleCell(TextView textView) {
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x));
-        } else {
             textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
-        }
     }
 
     private void displayWidmoShip(TextView textView){
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
-        } else {
             textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
-        }
     }
 
     private void displayWaterCell(TextView textView) {
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x));
-        } else {
             textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x));
-        }
     }
 
     private void displayShipCell(TextView textView) {
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
-        } else {
             textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
-        }
     }
 
     private void displayShipCellHidden(TextView textView){
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
-        } else {
             textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
-        }
     }
 
     private void displayWaterCellHidden(TextView textView){
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x_hidden));
-        } else {
             textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hidden));
-        }
-
     }
 
     private void displayWidmoShipHidden(TextView textView){
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
-        } else {
             textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
-        }
     }
 
     private void displayBattleCellHidden(TextView textView){
-        final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
-        } else {
             textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
-        }
     }
 
     private void hideBattleFiledAvailablePlayerOne() {
@@ -785,20 +743,11 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
     private void displayWaterCellHit(TextView textView) {
         final int sdk = android.os.Build.VERSION.SDK_INT;
-        if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.water_cell_x_hit));
-        } else {
             textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hit));
-        }
     }
 
     private void displayShipCellHit(TextView textView) {
-        final int sdk = Build.VERSION.SDK_INT;
-        if(sdk < Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.ship_cell_x_hit));
-        } else {
             textView.setBackground(getResources().getDrawable(R.drawable.ship_cell_x_hit));
-        }
     }
 
     private boolean checkCell(int i, int j) {
@@ -1422,13 +1371,7 @@ else
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).isShip()) {
-
-                    final int sdk = android.os.Build.VERSION.SDK_INT;
-                    if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        gridLayout.getChildAt(10*i+j).setBackgroundDrawable(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
-                    } else {
                         gridLayout.getChildAt(10*i+j).setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
-                    }
                 }
             }
         }

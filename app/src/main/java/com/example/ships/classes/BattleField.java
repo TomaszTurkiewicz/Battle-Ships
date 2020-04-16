@@ -21,10 +21,7 @@ public class BattleField{
                 }
             }
         }
-        if(counter==20) {
-            return true;
-        }else
-            return false;
+        return counter == 20;
     }
 
     public BattleField() {

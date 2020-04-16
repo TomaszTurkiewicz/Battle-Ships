@@ -624,7 +624,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-// TODO change notification
+
 // TODO change progress dialog in score and choose opponent...
+// TODO customize alert dialogs
 
 
