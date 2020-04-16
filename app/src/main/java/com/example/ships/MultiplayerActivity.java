@@ -322,6 +322,14 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
     }
 
+    @Override
+    protected void onPause() {
+        mHandler.removeCallbacks(game);
+        mHandler2.removeCallbacks(checkGameIndex);
+        super.onPause();
+    }
+
+
 
     private Runnable checkGameIndex = new Runnable() {
         @Override
@@ -1389,6 +1397,3 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         dialog.show();
     }
 }
-
-// TODO quiting game witch checking time from last opponent move (or creating battle) when opponenet still haven't create battle field
-// TODO sprawdzić rozgrywkę i usuwanie indexów

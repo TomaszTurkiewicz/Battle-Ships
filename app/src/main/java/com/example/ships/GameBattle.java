@@ -448,6 +448,13 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         }return counter==noOfMasts;
     }
 
+    @Override
+    protected void onPause() {
+        mHandler.removeCallbacks(game);
+        super.onPause();
+    }
+
+
 
     //TODO wyczyścić kod
 
@@ -1803,10 +1810,6 @@ else
         }
     }
 
-    public void leaveMainMenuOnClick(View view) {
-        leaveGame();
-    }
-
     @Override
     public void onBackPressed() {
         leaveGame();
@@ -1851,6 +1854,10 @@ else
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public void leaveSingleGameOnClick(View view) {
+        leaveGame();
     }
 }
 

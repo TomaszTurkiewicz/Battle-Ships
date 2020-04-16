@@ -152,6 +152,14 @@ public class ChooseOpponent extends AppCompatActivity {
         checkMyOpponentIndex.run();
     }
 
+    @Override
+    protected void onPause() {
+        mHandler.removeCallbacks(checkMyOpponentIndex);
+        super.onPause();
+    }
+
+
+
     private Runnable checkMyOpponentIndex = new Runnable() {
         @Override
         public void run() {

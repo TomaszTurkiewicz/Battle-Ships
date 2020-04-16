@@ -44,7 +44,7 @@
         android:id="@+id/leaveSinglePlayer"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:onClick="leaveMainMenuOnClick"
+        android:onClick="leaveSingleGameOnClick"
         android:background="#00000000"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>

@@ -263,6 +263,14 @@ public class CreateBattleField extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        mHandler.removeCallbacks(checkGameIndex);
+        super.onPause();
+    }
+
+
+
     private void disableOneMastsTextView(){
         setGrey((TextView) linearLayoutOneMasts.getChildAt(0));
         linearLayoutOneMasts.setClickable(false);

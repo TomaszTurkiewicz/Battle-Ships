@@ -325,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
 
                                             if (dataSnapshot.exists()) {
                                                 opponentUser = dataSnapshot.getValue(User.class);
-                                                if (user.getIndex().isAccepted() && opponentUser.getIndex().isAccepted()) {
+                                                if (user.getIndex().isAccepted() && opponentUser.getIndex().isAccepted()||!user.getIndex().getGameIndex().equals("")) {
                                                     Toast.makeText(MainActivity.this, "You can fight", Toast.LENGTH_LONG).show();
                                                     mHandler.removeCallbacks(checkMyOpponentAndMove);
                                                     Intent intent = new Intent(MainActivity.this, MultiplayerActivity.class);
@@ -481,6 +481,14 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    @Override
+    protected void onPause() {
+        mHandler.removeCallbacks(checkMyOpponentAndMove);
+        super.onPause();
+    }
+
+
 
     private void sendNotification(JSONObject notification) {
 
