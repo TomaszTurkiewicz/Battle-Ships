@@ -2,23 +2,25 @@ package com.example.ships;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Shader;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -30,7 +32,7 @@ import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -100,6 +102,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private int marginLeftForShips;
     private int marginDown;
     private TextView userName, opponentName;
+    private int flags;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -107,7 +110,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -324,19 +327,26 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        if (firebaseAuth.getCurrentUser() != null) {
-            if(firebaseAuth.getCurrentUser().isEmailVerified()){
-                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                userID = firebaseUser.getUid();
-                loggedIn = true;
-                databaseReference=firebaseDatabase.getReference("User").child(userID);
 
-            }else{
-                loggedIn = false;
+        if(firebaseAuth.getCurrentUser() != null){
+            String providerId="";
+            for(UserInfo profile : firebaseAuth.getCurrentUser().getProviderData()){
+                providerId = providerId+" "+profile.getProviderId();
             }
 
+            if(providerId.contains("facebook.com")||providerId.contains("google.com")){
+                loggedIn=true;
+            }else{
+                if(firebaseAuth.getCurrentUser().isEmailVerified()){
+                    loggedIn=true;
+                }else{
+                    loggedIn=false;
+                }
+            }
         }
         if (loggedIn) {
+            userID=firebaseAuth.getCurrentUser().getUid();
+            databaseReference=firebaseDatabase.getReference("User").child(userID);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
@@ -1757,29 +1767,36 @@ else
                     }else
                         minusPoints=0;
 
-                    // TODO custom layout
-                    AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
-                    builder.setCancelable(true);
-                    builder.setTitle("Leaving game");
-                    builder.setMessage("Do you want to surrender game?"+"\n"+"You will lose "+minusPoints+" points");
-                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            int myScore = user.getScore();
-                            myScore=myScore-minusPoints;
-                            user.setScore(myScore);
-                            user.setSinglePlayerMatch(new SinglePlayerMatch());
-                            databaseReference.setValue(user);
-                            finish();
-                        }
+                    android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(GameBattle.this);
+                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                    mBuilder.setView(mView);
+                    android.app.AlertDialog dialog = mBuilder.create();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                    dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                    dialog.setCancelable(false);
+                    dialog.setCanceledOnTouchOutside(false);
+                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                    title.setText("Leaving game");
+                    message.setText("Do you want to surrender game?"+"\n"+"You will lose "+minusPoints+" points");
+                    negativeButton.setText("NO");
+                    negativeButton.setOnClickListener(v12 -> {
+                        dialog.dismiss();
+                        mHandler.postDelayed(game,deelay);
                     });
-                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mHandler.postDelayed(game,deelay);
-                        }
+                    positiveButton.setText("YES");
+                    positiveButton.setOnClickListener(v1 -> {
+                        dialog.dismiss();
+                        int myScore = user.getScore();
+                        myScore=myScore-minusPoints;
+                        user.setScore(myScore);
+                        user.setSinglePlayerMatch(new SinglePlayerMatch());
+                        databaseReference.setValue(user);
+                        finish();
                     });
-                    AlertDialog dialog = builder.create();
                     dialog.show();
                 }
                 @Override
@@ -1789,24 +1806,31 @@ else
 
         }
         else {
-            // TODO custom layout
-            AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
-            builder.setCancelable(true);
-            builder.setTitle("Leaving game");
-            builder.setMessage("Do you want to quit game?");
-            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
+            android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(GameBattle.this);
+            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+            mBuilder.setView(mView);
+            android.app.AlertDialog dialog = mBuilder.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+            Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+            Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+            title.setText("Leaving game");
+            message.setText("Do you want to surrender game?");
+            negativeButton.setText("NO");
+            negativeButton.setOnClickListener(v12 -> {
+                dialog.dismiss();
+                mHandler.postDelayed(game,deelay);
             });
-            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    mHandler.postDelayed(game,deelay);
-                }
+            positiveButton.setText("YES");
+            positiveButton.setOnClickListener(v1 -> {
+                dialog.dismiss();
+                finish();
             });
-            AlertDialog dialog = builder.create();
             dialog.show();
         }
     }
@@ -1831,31 +1855,36 @@ else
             singlePlayerMatch.setY(y);
         }
 
-        // TODO custom layout
-        AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
-        builder.setCancelable(true);
-        builder.setTitle("Leaving game");
-        builder.setMessage("Do you want to go back to main menu?");
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                if(loggedIn) {
-                    databaseReference.child("singlePlayerMatch").setValue(singlePlayerMatch);
-                }
-
-
-                finish();
-            }
+        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(GameBattle.this);
+        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+        mBuilder.setView(mView);
+        android.app.AlertDialog dialog = mBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+        title.setText("Leaving game");
+        message.setText("Do you want to go back to main menu?");
+        negativeButton.setText("NO");
+        negativeButton.setOnClickListener(v12 -> {
+            dialog.dismiss();
+            mHandler.postDelayed(game,deelay);
         });
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mHandler.postDelayed(game,deelay);
+        positiveButton.setText("YES");
+        positiveButton.setOnClickListener(v1 -> {
+            dialog.dismiss();
+            if(loggedIn) {
+                databaseReference.child("singlePlayerMatch").setValue(singlePlayerMatch);
             }
+            finish();
         });
-        AlertDialog dialog = builder.create();
         dialog.show();
+
     }
 
     public void leaveSingleGameOnClick(View view) {
