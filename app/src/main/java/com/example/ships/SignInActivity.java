@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -82,12 +83,13 @@ public class SignInActivity extends AppCompatActivity {
     private int a;
     private boolean loginWithFacebook = false;
     private AuthCredential credentialFacebook;
+    private int flags;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -243,12 +245,16 @@ public class SignInActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
-            
+
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(SignInActivity.this);
             View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
             mBuilder.setView(mView);
             AlertDialog dialog = mBuilder.create();
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
             TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
             TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
             Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);

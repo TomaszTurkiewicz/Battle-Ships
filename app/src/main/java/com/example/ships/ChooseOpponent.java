@@ -1,22 +1,25 @@
 package com.example.ships;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Shader;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -73,12 +76,14 @@ public class ChooseOpponent extends AppCompatActivity {
     private LinearLayout linearLayout;
     private RecyclerView recyclerView;
     private ImageButton leave;
+    private int flags;
+    private boolean dialogFlag = true;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -211,6 +216,7 @@ public class ChooseOpponent extends AppCompatActivity {
         adapter.setOnItemClickListener(position -> invite(position));
     }
     private void invite(int position) {
+        if(dialogFlag){
         if(!ranking.getRanking(position).getId().equals(userID)){
             String opponentID = ranking.getRanking(position).getId();
             databaseReference.child(userID).child("index").child("opponent").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -227,46 +233,58 @@ public class ChooseOpponent extends AppCompatActivity {
                                 if(!dataSnapshot1.getValue().equals("")){
                                     initRanking();
                                 }else{
-                                    // TODO change to custom layout;
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(ChooseOpponent.this);
-                                    builder.setCancelable(true);
-                                    builder.setTitle("INVITE");
-                                    builder.setMessage("Do you want to invite "+ranking.getRanking(position).getName()+"?");
-                                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            TOPIC = "/topics/"+ opponentID;
-                                            NOTIFICATION_TITLE = "Invitation from: "+ me.getName();
-                                            //                          NOTIFICATION_MESSAGE = me.getName();
-
-                                            JSONObject notification = new JSONObject();
-                                            JSONObject notificationBody = new JSONObject();
-
-                                            try{
-                                                notificationBody.put("title",NOTIFICATION_TITLE);
-                                                //                              notificationBody.put("message",NOTIFICATION_MESSAGE);
-
-                                                notification.put("to",TOPIC);
-                                                notification.put("notification",notificationBody);
-                                            } catch (JSONException e){
-                                                Log.e(TAG,"onCreate: "+e.getMessage());
-                                            }
-                                            sendNotification(notification);
-                                            accepted=true;
-                                            databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
-                                            databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
-                                            databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
-                                            mHandler.removeCallbacks(checkMyOpponentIndex);
-                                            finish();
-                                        }
+                                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(ChooseOpponent.this);
+                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                                    mBuilder.setView(mView);
+                                    AlertDialog dialog = mBuilder.create();
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                                    dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                                    dialog.setCancelable(false);
+                                    dialog.setCanceledOnTouchOutside(false);
+                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                                    title.setText("INVITE");
+                                    message.setText("Do you want to invite "+ranking.getRanking(position).getName()+"?");
+                                    negativeButton.setText("NO");
+                                    negativeButton.setOnClickListener(v ->
+                                    {
+                                        dialogFlag=true;
+                                        dialog.dismiss();
                                     });
-                                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                                    positiveButton.setText("YES");
+                                    positiveButton.setOnClickListener(v1 -> {
+                                        dialog.dismiss();
+
+                                        TOPIC = "/topics/"+ opponentID;
+                                        NOTIFICATION_TITLE = "Invitation from: "+ me.getName();
+                                        //                          NOTIFICATION_MESSAGE = me.getName();
+
+                                        JSONObject notification = new JSONObject();
+                                        JSONObject notificationBody = new JSONObject();
+
+                                        try{
+                                            notificationBody.put("title",NOTIFICATION_TITLE);
+                                            //                              notificationBody.put("message",NOTIFICATION_MESSAGE);
+
+                                            notification.put("to",TOPIC);
+                                            notification.put("notification",notificationBody);
+                                        } catch (JSONException e){
+                                            Log.e(TAG,"onCreate: "+e.getMessage());
                                         }
+                                        sendNotification(notification);
+                                        accepted=true;
+                                        databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(opponentID);
+                                        databaseReference.child(userID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_accepted)).setValue(accepted);
+                                        databaseReference.child(opponentID).child(getString(R.string.firebasepath_index)).child(getString(R.string.firebasepath_opponent)).setValue(userID);
+                                        mHandler.removeCallbacks(checkMyOpponentIndex);
+                                        finish();
                                     });
-                                    AlertDialog dialog = builder.create();
+                                    dialogFlag=false;
                                     dialog.show();
+
                                         }
                             }
                             @Override
@@ -279,6 +297,7 @@ public class ChooseOpponent extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
+        }else;
         }else;
     }
 
