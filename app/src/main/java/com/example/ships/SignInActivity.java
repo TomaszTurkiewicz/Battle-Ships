@@ -59,6 +59,7 @@ public class SignInActivity extends AppCompatActivity {
     private Button userLogout;
     private FirebaseAuth firebaseAuth;
     private Button deleteUser, loginEmail;
+    private FirebaseUser firebaseUser;
     private String userID;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference, databaseReferenceFight;
@@ -70,13 +71,14 @@ public class SignInActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private ConstraintLayout mainLayout;
     private ImageButton leave;
-    private FirebaseUser firebaseUser;
     private User me = new User();
     private FightIndex fightIndex = new FightIndex();
     private boolean multiplayer = false;
     private CallbackManager mCallbackManager;
     private static final String TAG = "FACELOG";
     private int a;
+    private boolean loginWithFacebook = false;
+    private AuthCredential credentialFacebook;
 
 
     @Override
@@ -316,16 +318,17 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
+        loginWithFacebook=true;
         Log.d(TAG, "handleFacebookAccessToken:" + token);
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-            firebaseAuth.signInWithCredential(credential)
+        credentialFacebook = FacebookAuthProvider.getCredential(token.getToken());
+            firebaseAuth.signInWithCredential(credentialFacebook)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCredential:success");
-                                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                                firebaseUser = firebaseAuth.getCurrentUser();
                                 String userID = firebaseUser.getUid();
                                 FirebaseMessaging.getInstance().subscribeToTopic(userID);
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -348,6 +351,7 @@ public class SignInActivity extends AppCompatActivity {
 
                                                 if(task.getResult().getSignInMethods().contains(GoogleAuthProvider.PROVIDER_ID)) {
                                                     SignInGoogle();
+
                                                 }
                                                 else if(task.getResult().getSignInMethods().contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)){
                                                     Intent intent = new Intent(getApplicationContext(),EmailAndPassLogIn.class);
@@ -384,13 +388,34 @@ public class SignInActivity extends AppCompatActivity {
                     if(task.isSuccessful()){
                         progressDialog.dismiss();
 
-                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                        String userID = firebaseUser.getUid();
-                        FirebaseMessaging.getInstance().subscribeToTopic(userID);
+                        if(!loginWithFacebook) {
 
-                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                        startActivity(intent);
-                        finish();
+
+                            firebaseUser = firebaseAuth.getCurrentUser();
+                            String userID = firebaseUser.getUid();
+                            FirebaseMessaging.getInstance().subscribeToTopic(userID);
+
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        }else{
+                            firebaseUser = firebaseAuth.getCurrentUser();
+                            String userID = firebaseUser.getUid();
+                            FirebaseMessaging.getInstance().subscribeToTopic(userID);
+                            firebaseUser.linkWithCredential(credentialFacebook).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(task.isSuccessful()){
+                                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
+                            });
+                        }
+
+
                     }else{
                         Log.d("TAG","signin failure", task.getException());
                         Toast.makeText(this, "Signin Failed", Toast.LENGTH_SHORT).show();
