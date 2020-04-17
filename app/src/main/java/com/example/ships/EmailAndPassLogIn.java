@@ -179,6 +179,10 @@ public class EmailAndPassLogIn extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             if(firebaseAuth.getCurrentUser().isEmailVerified()){
+                                SharedPreferences sp = getSharedPreferences(email_val, Activity.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.putString("password",password_val);
+                                editor.commit();
                                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                                 String userID = firebaseUser.getUid();
                                 FirebaseMessaging.getInstance().subscribeToTopic(userID);

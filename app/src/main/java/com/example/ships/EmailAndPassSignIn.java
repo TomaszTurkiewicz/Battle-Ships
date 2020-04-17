@@ -206,7 +206,12 @@ public class EmailAndPassSignIn extends AppCompatActivity {
                                         createUserInDatabase(username_val, email_val, userID);
                                         Toast.makeText(EmailAndPassSignIn.this, "Registered successfully. Please check your email for verification",
                                                 Toast.LENGTH_LONG).show();
+                                        // TODO save email address and password
 
+                                        SharedPreferences sp = getSharedPreferences(email_val, Activity.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sp.edit();
+                                        editor.putString("password",password_val);
+                                        editor.commit();
 
                                         email.setText("");
                                         password.setText("");

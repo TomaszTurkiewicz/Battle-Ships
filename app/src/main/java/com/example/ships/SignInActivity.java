@@ -354,9 +354,36 @@ public class SignInActivity extends AppCompatActivity {
 
                                                 }
                                                 else if(task.getResult().getSignInMethods().contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)){
-                                                    Intent intent = new Intent(getApplicationContext(),EmailAndPassLogIn.class);
-                                                    startActivity(intent);
-                                                    finish();
+                                                        SharedPreferences sp = getSharedPreferences(emailException,Activity.MODE_PRIVATE);
+                                                        String password = sp.getString("password",null);
+                                                        if(password==null){
+                                                            // TODO go to login
+                                                            Intent intent = new Intent(getApplicationContext(),EmailAndPassLogIn.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }else {
+                                                            firebaseAuth.signInWithEmailAndPassword(emailException, password).addOnCompleteListener(task1 -> {
+                                                                if (task1.isSuccessful()) {
+                                                                    firebaseUser = firebaseAuth.getCurrentUser();
+                                                                    String userID = firebaseUser.getUid();
+                                                                    FirebaseMessaging.getInstance().subscribeToTopic(userID);
+                                                                    firebaseUser.linkWithCredential(credentialFacebook).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                                                            if (task.isSuccessful()) {
+                                                                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                                                startActivity(intent);
+                                                                                finish();
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                } else {
+
+
+                                                                }
+                                                                ;
+                                                            });
+                                                        }
                                                 }else;
                                             }
                                         }
