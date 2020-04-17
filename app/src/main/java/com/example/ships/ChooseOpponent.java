@@ -297,8 +297,8 @@ public class ChooseOpponent extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
-        }else;
-        }else;
+        }
+        }
     }
 
     private void sendNotification(JSONObject notification) {

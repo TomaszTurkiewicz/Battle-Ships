@@ -262,12 +262,7 @@ public class SignInActivity extends AppCompatActivity {
             title.setText("DELETE ACCOUNT");
             message.setText("Do you really want to delete your account?");
             negativeButton.setText("NO");
-            negativeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
+            negativeButton.setOnClickListener(v12 -> dialog.dismiss());
             positiveButton.setText("YES");
             positiveButton.setOnClickListener(v1 -> {
                 dialog.dismiss();

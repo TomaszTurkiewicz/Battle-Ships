@@ -1,14 +1,16 @@
 package com.example.ships;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Shader;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
@@ -16,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -82,13 +83,14 @@ public class CreateBattleField extends AppCompatActivity {
     private GridLayout gridLayout;
     private LinearLayout linearLayoutLetters, linearLayoutNumbers;
     private LinearLayout linearLayoutFourMasts, linearLayoutThreeMasts, linearLayoutTwoMasts, linearLayoutOneMasts;
+    private int flags;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -1694,39 +1696,42 @@ public class CreateBattleField extends AppCompatActivity {
 
     public void onClickReset(View view) {
 
-        // TODO change to custom layout
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateBattleField.this);
-        builder.setCancelable(true);
-        builder.setTitle("RESETING");
-        builder.setMessage("Do you want to reset ships?");
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                for(int i=0;i<10;i++){
-                    for(int j=0;j<10;j++){
-                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(0);
-                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(0);
-                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(false);
-                        gridLayout.getChildAt(10*i+j).setClickable(true);
-                    }
+        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(CreateBattleField.this);
+        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+        mBuilder.setView(mView);
+        android.app.AlertDialog dialog = mBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+        title.setText("RESETTING");
+        message.setText("Do you want to reset ships?");
+        negativeButton.setText("NO");
+        negativeButton.setOnClickListener(v12 -> dialog.dismiss());
+        positiveButton.setText("YES");
+        positiveButton.setOnClickListener(v1 -> {
+            dialog.dismiss();
+            for(int i=0;i<10;i++){
+                for(int j=0;j<10;j++){
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(0);
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(0);
+                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(false);
+                    gridLayout.getChildAt(10*i+j).setClickable(true);
                 }
-                choosenShip=0;
-                updateScreen();
-
-
             }
+            choosenShip=0;
+            updateScreen();
+
         });
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // do nothing
-            }
-        });
-        AlertDialog dialog = builder.create();
         dialog.show();
-
     }
+
+
 
     public void deleteUncomplitedShips(){
         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
