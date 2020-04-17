@@ -6,6 +6,7 @@
 
     <color name="colorAccent">#D81B60</color>
     <color name="background_color">#F5FAC3</color>
+    <color name="background_color_button">#E2EA93</color>
     <color name="background_color_green">#CDF8C1</color>
     <color name="background_color_red">#F8D4C1</color>
     <color name="background_color_hidden">#D2D5C8</color>
@@ -26,6 +27,7 @@
     <color name="pen">#1429A3</color>
     <color name="pen_light">#DEE0F1</color>
     <color name="pen_red">#A80F32</color>
+    <color name="transparent">#00000000</color>
 
 
 </resources>

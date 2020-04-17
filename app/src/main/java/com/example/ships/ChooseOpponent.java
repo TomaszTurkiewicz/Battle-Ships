@@ -227,6 +227,7 @@ public class ChooseOpponent extends AppCompatActivity {
                                 if(!dataSnapshot1.getValue().equals("")){
                                     initRanking();
                                 }else{
+                                    // TODO change to custom layout;
                                     AlertDialog.Builder builder = new AlertDialog.Builder(ChooseOpponent.this);
                                     builder.setCancelable(true);
                                     builder.setTitle("INVITE");

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/alert_dialog_with_two_buttons"
+    android:background="@color/transparent">
+
+
+    <ImageView
+        android:id="@+id/image_top_alert_dialog_with_two_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/triangle_bottom_right"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginHorizontal="15dp"/>
+
+
+    <LinearLayout
+        android:id="@+id/alert_dialog_linear_layout_layout_with_two_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_color"
+        android:layout_marginHorizontal="15dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/image_top_alert_dialog_with_two_buttons"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <TextView
+            android:id="@+id/alert_dialog_title_layout_with_two_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TITLE"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:textColor="@color/pen_red"
+            android:paddingTop="@dimen/FieldSize"
+            android:paddingBottom="@dimen/FieldSize"/>
+        <TextView
+            android:id="@+id/alert_dialog_message_layout_with_two_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="message"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="@color/pen"
+            android:paddingHorizontal="@dimen/FieldSize"
+            android:paddingBottom="@dimen/FieldSize"/>
+
+        <LinearLayout
+            android:id="@+id/alert_dialog_linear_layout_buttons_layout_with_two_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/alert_dialog_left_button_layout_with_two_buttons"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="LEFT"
+                android:textColor="@color/pen"
+                android:textSize="@dimen/FieldSize"
+                android:background="@color/background_color_button"
+                android:layout_margin="@dimen/FieldSize"/>
+
+            <Button
+                android:id="@+id/alert_dialog_right_button_layout_with_two_buttons"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="RIGHT"
+                android:textColor="@color/pen"
+                android:textSize="@dimen/FieldSize"
+                android:layout_margin="@dimen/FieldSize"
+                android:background="@color/background_color_button"/>
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+
+    <ImageView
+        android:id="@+id/image_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/triangle_top_left"
+        app:layout_constraintTop_toBottomOf="@id/alert_dialog_linear_layout_layout_with_two_buttons"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginHorizontal="15dp"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

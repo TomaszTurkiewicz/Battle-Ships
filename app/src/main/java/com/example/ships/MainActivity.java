@@ -277,6 +277,8 @@ public class MainActivity extends AppCompatActivity {
 
             userName.setClickable(true);
             userName.setOnClickListener(v->{
+
+                // TODO custom layout
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("NEW USER NAME");
 
@@ -335,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
                                                 } else if (user.getIndex().isAccepted() && !opponentUser.getIndex().isAccepted()) {
                                                     Toast.makeText(MainActivity.this, "You invited him", Toast.LENGTH_LONG).show();
 
-
+                                                    // TODO custom layout
                                                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                                                     builder.setCancelable(true);
                                                     builder.setTitle("Waiting");
@@ -364,6 +366,7 @@ public class MainActivity extends AppCompatActivity {
                                                 } else if (!user.getIndex().isAccepted() && opponentUser.getIndex().isAccepted()) {
                                                     Toast.makeText(MainActivity.this, "You have to accept", Toast.LENGTH_LONG).show();
 
+                                                    // TODO custom layout
                                                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                                                     builder.setCancelable(true);
                                                     builder.setTitle("Accepting");

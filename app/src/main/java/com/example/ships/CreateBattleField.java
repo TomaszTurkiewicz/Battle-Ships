@@ -1694,6 +1694,7 @@ public class CreateBattleField extends AppCompatActivity {
 
     public void onClickReset(View view) {
 
+        // TODO change to custom layout
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateBattleField.this);
         builder.setCancelable(true);
         builder.setTitle("RESETING");

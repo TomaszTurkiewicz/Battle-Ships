@@ -1,21 +1,24 @@
 package com.example.ships;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Shader;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -240,13 +243,28 @@ public class SignInActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
-            AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
-            builder.setTitle("DELETE ACCOUNT");
-            builder.setMessage("Do you really want to delete your account?");
-            builder.setPositiveButton("YES", (dialog, which) -> {
+            
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(SignInActivity.this);
+            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+            mBuilder.setView(mView);
+            AlertDialog dialog = mBuilder.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+            Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+            Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+            title.setText("DELETE ACCOUNT");
+            message.setText("Do you really want to delete your account?");
+            negativeButton.setText("NO");
+            negativeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            positiveButton.setText("YES");
+            positiveButton.setOnClickListener(v1 -> {
                 dialog.dismiss();
-
-
                 firebaseUser.delete().addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         databaseReference.child(userID).removeValue();
@@ -269,9 +287,7 @@ public class SignInActivity extends AppCompatActivity {
                     }
                 });
             });
-            builder.setNegativeButton("NO", (dialog, which) -> dialog.dismiss());
-            AlertDialog alert = builder.create();
-            alert.show();
+            dialog.show();
                 });
 
         userLogout.setOnClickListener(view -> {
@@ -357,7 +373,7 @@ public class SignInActivity extends AppCompatActivity {
                                                         SharedPreferences sp = getSharedPreferences(emailException,Activity.MODE_PRIVATE);
                                                         String password = sp.getString("password",null);
                                                         if(password==null){
-                                                            // TODO go to login
+
                                                             Intent intent = new Intent(getApplicationContext(),EmailAndPassLogIn.class);
                                                             startActivity(intent);
                                                             finish();

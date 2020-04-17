@@ -1757,6 +1757,7 @@ else
                     }else
                         minusPoints=0;
 
+                    // TODO custom layout
                     AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
                     builder.setCancelable(true);
                     builder.setTitle("Leaving game");
@@ -1788,7 +1789,7 @@ else
 
         }
         else {
-
+            // TODO custom layout
             AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
             builder.setCancelable(true);
             builder.setTitle("Leaving game");
@@ -1830,6 +1831,7 @@ else
             singlePlayerMatch.setY(y);
         }
 
+        // TODO custom layout
         AlertDialog.Builder builder = new AlertDialog.Builder(GameBattle.this);
         builder.setCancelable(true);
         builder.setTitle("Leaving game");

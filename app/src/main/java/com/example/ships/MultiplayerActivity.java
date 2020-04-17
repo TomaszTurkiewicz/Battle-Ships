@@ -607,6 +607,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
     private void askForCreatingGame() {
 
+        // TODO custom layout
         AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
         builder.setCancelable(true);
         builder.setTitle("CREATE BATTLE FIELD");
@@ -784,6 +785,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
     private void chooseDifficulty(DataSnapshot dataSnapshot) {
 
+        // TODO custom layout
         AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
         builder.setCancelable(true);
         builder.setTitle("Difficulty");
@@ -1035,7 +1037,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         }
 
 
-
+                        // TODO custom layout
                         AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
                         builder.setCancelable(true);
                         builder.setTitle("Leaving game");
@@ -1377,6 +1379,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void leaveGame() {
+        // TODO custom layout
         AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
         builder.setCancelable(true);
         builder.setTitle("Leaving game");
