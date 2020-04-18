@@ -1457,4 +1457,3 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 }
 
-//TODO change adding points and changing game index when quiting game

@@ -5,10 +5,13 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -51,6 +54,10 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
     private String contentType= "application/json";
     private TextView provider;
     private int flags;
+    private String providerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         multiplayerBtn=findViewById(R.id.multiplayer);
         ranking=findViewById(R.id.ranking);
         multiplayerBtn.setText("MULTI PLAYER");
-        accountBtn.setBackgroundResource(R.drawable.account_box);
+   //     accountBtn.setBackgroundResource(R.drawable.account_box);
         leave=findViewById(R.id.leaveMainActivity);
         leave.setBackgroundResource(R.drawable.back);
         provider=findViewById(R.id.provider);
@@ -220,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
  //       if(firebaseUser != null && firebaseUser.isEmailVerified()){
 
         if(firebaseUser != null){
-            String providerId="";
+            providerId="";
             for(UserInfo profile : firebaseUser.getProviderData()){
                 providerId = providerId+" "+profile.getProviderId();
             }
@@ -240,7 +248,28 @@ public class MainActivity extends AppCompatActivity {
 
         if(logIn){
             loggedIn.setText("Zalogowany jako: ");
-            accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
+            String facebookUserId="";
+            for(UserInfo profile : firebaseUser.getProviderData()) {
+                if (profile.getProviderId().contains("facebook.com")) {
+                    facebookUserId = profile.getUid();
+                }
+            }
+
+            if(!facebookUserId.equals("")){
+                    String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?type=large";
+                    DownloadFacebookImage downloadFacebookImage = new DownloadFacebookImage();
+                    downloadFacebookImage.execute(photoUrl);
+
+                }else {
+                    accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
+                }
+
+
+
+
+
+
+
             userID = firebaseUser.getUid();
 
             firebaseDatabase = FirebaseDatabase.getInstance();
@@ -618,8 +647,61 @@ public class MainActivity extends AppCompatActivity {
     public void leaveMainMenuOnClick(View view) {
         finish();
     }
+
+
+
+
+    private class DownloadFacebookImage extends AsyncTask<String, Void, Bitmap>{
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if(bitmap!=null){
+       //         accountBtn.setBackgroundResource(R.drawable.account);
+                accountBtn.setImageBitmap(bitmap);
+            }else{
+                accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
+            }
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            String photoPath = params[0];
+            try {
+                URL url = new URL(photoPath);
+                HttpURLConnection c = (HttpURLConnection)url.openConnection();
+                c.setDoInput(true);
+                c.connect();
+                InputStream is = c.getInputStream();
+                Bitmap img;
+                img = BitmapFactory.decodeStream(is);
+                return img;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+        }
+    }
 }
 
+//    URL url;
+//                    try {
+//                            url = new URL(photoUrl);
+//                            HttpURLConnection c = (HttpURLConnection)url.openConnection();
+//                            c.setDoInput(true);
+//                            c.connect();
+//                            InputStream is = c.getInputStream();
+//                            Bitmap img;
+//                            img = BitmapFactory.decodeStream(is);
+//                            } catch (IOException e) {
+//                            e.printStackTrace();
+//                            }
+//
 
 
 
