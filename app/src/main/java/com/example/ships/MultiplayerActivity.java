@@ -1,10 +1,11 @@
 package com.example.ships;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Shader;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -19,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -97,11 +99,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private int marginLeftForShips;
     private int marginDown;
     private TextView userName, opponentName;
+    private int flags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -550,7 +553,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                     }
                                     hideBattleFiledAvailableMy();
                                     if(dataSnapshot.child(userID).child("difficulty").child("set").getValue().equals(false)){
-                                        chooseDifficulty(dataSnapshot);
+                                        chooseDifficulty();
                                     }else{
                                         surrenderButton.setVisibility(View.VISIBLE);
 
@@ -607,36 +610,42 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
     private void askForCreatingGame() {
 
-        // TODO custom layout
-        AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
-        builder.setCancelable(true);
-        builder.setTitle("CREATE BATTLE FIELD");
-        builder.setMessage("How would you like to do it?");
-        builder.setPositiveButton("BY MYSELF", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                GameDifficulty.getInstance().setMultiplayerMode(true);
-                Intent intent = new Intent(MultiplayerActivity.this, CreateBattleField.class);
-                startActivity(intent);
-                finish();
-            }
+        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+        mBuilder.setView(mView);
+        android.app.AlertDialog dialog = mBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+        title.setText("CREATE BATTLE FIELD");
+        message.setText("How would you like to do it?");
+        negativeButton.setText("RANDOM");
+        negativeButton.setOnClickListener(v12 -> {
+            dialog.dismiss();
+            battleFieldForDataBaseMy.create();
+            battleFieldUpToDate=true;
+            databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
+            int noOfGames = user.getNoOfGames();
+            noOfGames = noOfGames+1;
+            user.setNoOfGames(noOfGames);
+            databaseReferenceMy.setValue(user);
+            mHandler.postDelayed(game,deelay);
         });
-        builder.setNegativeButton("RANDOM", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                battleFieldForDataBaseMy.create();
-                battleFieldUpToDate=true;
-                databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);                                int noOfGames = user.getNoOfGames();
-                noOfGames = noOfGames+1;
-                user.setNoOfGames(noOfGames);
-                databaseReferenceMy.setValue(user);
-                mHandler.postDelayed(game,deelay);
-            }
+        positiveButton.setText("BY MYSELF");
+        positiveButton.setOnClickListener(v1 -> {
+            dialog.dismiss();
+            GameDifficulty.getInstance().setMultiplayerMode(true);
+            Intent intent = new Intent(MultiplayerActivity.this, CreateBattleField.class);
+            startActivity(intent);
+            finish();
         });
-        AlertDialog dialog = builder.create();
         dialog.show();
-
-
     }
 
     private void showOpponentBattleField() {
@@ -783,32 +792,39 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }
     }
 
-    private void chooseDifficulty(DataSnapshot dataSnapshot) {
+    private void chooseDifficulty() {
 
-        // TODO custom layout
-        AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
-        builder.setCancelable(true);
-        builder.setTitle("Difficulty");
-        builder.setMessage("choose game difficulty");
-        builder.setPositiveButton("NORMAL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                databaseReferenceFight.child(userID).child("difficulty").child("easy").setValue(false);
-                databaseReferenceFight.child(userID).child("difficulty").child("set").setValue(true);
-                mHandler.postDelayed(game,deelay);
-            }
+
+        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+        mBuilder.setView(mView);
+        android.app.AlertDialog dialog = mBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+        title.setText("Difficulty");
+        message.setText("choose game difficulty");
+        negativeButton.setText("EASY");
+        negativeButton.setOnClickListener(v12 -> {
+            dialog.dismiss();
+            databaseReferenceFight.child(userID).child("difficulty").child("easy").setValue(true);
+            databaseReferenceFight.child(userID).child("difficulty").child("set").setValue(true);
+            mHandler.postDelayed(game,deelay);
         });
-        builder.setNegativeButton("EASY", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                databaseReferenceFight.child(userID).child("difficulty").child("easy").setValue(true);
-                databaseReferenceFight.child(userID).child("difficulty").child("set").setValue(true);
-                mHandler.postDelayed(game,deelay);
-            }
+        positiveButton.setText("NORMAL");
+        positiveButton.setOnClickListener(v1 -> {
+            dialog.dismiss();
+            databaseReferenceFight.child(userID).child("difficulty").child("easy").setValue(false);
+            databaseReferenceFight.child(userID).child("difficulty").child("set").setValue(true);
+            mHandler.postDelayed(game,deelay);
         });
-        AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 
     private void showMyBattleField() {
@@ -1037,66 +1053,56 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         }
 
 
-                        // TODO custom layout
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
-                        builder.setCancelable(true);
-                        builder.setTitle("Leaving game");
+                        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+                        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                        mBuilder.setView(mView);
+                        android.app.AlertDialog dialog = mBuilder.create();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                        dialog.setCancelable(false);
+                        dialog.setCanceledOnTouchOutside(false);
+                        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+                        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+                        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+                        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                        title.setText("Leaving game");
                         String outOfTimeString ="";
                         if(outOfTime[0]){
                             outOfTimeString = "last move was more then 24 hour ago";
                         }else {
                             outOfTimeString = "last move was "+hours[0]+"h:"+minutes[0]+"m ago";
                         }
-
-                        builder.setMessage(outOfTimeString+"\n"+"Do you want to quit game?"+"\n"+opponent.getName()+" will get "+ opponentScorePlus+" points for nothing"+"\n"+"You will lose "+ myScoreMinus+" points");
-                        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mHandler.removeCallbacks(game);
-                                mHandler2.removeCallbacks(checkGameIndex);
-
-                                opponentScore[0] = opponentScore[0] +opponentScorePlus;
-                                opponent.setScore(opponentScore[0]);
-                                opponent.setIndex(new FightIndex());
-                                databaseReferenceOpponent.setValue(opponent);
-
-                                myScore[0] = myScore[0] - myScoreMinus;
-                                user.setScore(myScore[0]);
-                                user.setIndex(new FightIndex());
-                                databaseReferenceMy.setValue(user);
-                                databaseReferenceFight.removeValue();
-                                finish();
-                            }
+                        message.setText(outOfTimeString+"\n"+"Do you want to quit game?"+"\n"+opponent.getName()+" will get "+ opponentScorePlus+" points for nothing"+"\n"+"You will lose "+ myScoreMinus+" points");
+                        negativeButton.setText("NO");
+                        negativeButton.setOnClickListener(v12 -> {
+                            dialog.dismiss();
+                            mHandler.postDelayed(game,deelay);
+                            mHandler2.postDelayed(checkGameIndex,deelay);
                         });
-                        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mHandler.postDelayed(game,deelay);
-                                mHandler2.postDelayed(checkGameIndex,deelay);
-                            }
+                        positiveButton.setText("YES");
+                        positiveButton.setOnClickListener(v1 -> {
+                            dialog.dismiss();
+                            mHandler.removeCallbacks(game);
+                            mHandler2.removeCallbacks(checkGameIndex);
+                            opponentScore[0] = opponentScore[0] +opponentScorePlus;
+                            opponent.setScore(opponentScore[0]);
+                            opponent.setIndex(new FightIndex());
+                            databaseReferenceOpponent.setValue(opponent);
+                            myScore[0] = myScore[0] - myScoreMinus;
+                            user.setScore(myScore[0]);
+                            user.setIndex(new FightIndex());
+                            databaseReferenceMy.setValue(user);
+                            databaseReferenceFight.removeValue();
+                            finish();
                         });
-                        AlertDialog dialog = builder.create();
                         dialog.show();
-
-
-
-
-
-
-
-
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
                     }
                 });
-
-
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -1379,24 +1385,34 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void leaveGame() {
-        // TODO custom layout
-        AlertDialog.Builder builder = new AlertDialog.Builder(MultiplayerActivity.this);
-        builder.setCancelable(true);
-        builder.setTitle("Leaving game");
-        builder.setMessage("Do you want to go back to main menu?");
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
+        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+        mBuilder.setView(mView);
+        android.app.AlertDialog dialog = mBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+        title.setText("Leaving game");
+        message.setText("Do you want to go back to main menu?");
+        negativeButton.setText("NO");
+        negativeButton.setOnClickListener(v12 -> {
+            dialog.dismiss();
+            mHandler.postDelayed(game,deelay);
         });
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mHandler.postDelayed(game,deelay);
-            }
+        positiveButton.setText("YES");
+        positiveButton.setOnClickListener(v1 -> {
+            dialog.dismiss();
+            finish();
         });
-        AlertDialog dialog = builder.create();
         dialog.show();
+
     }
 }
+
+//TODO change adding points and changing game index when quiting game
