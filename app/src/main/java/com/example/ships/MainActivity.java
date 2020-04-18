@@ -3,11 +3,12 @@ package com.example.ships;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Shader;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -16,6 +17,7 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -82,11 +84,12 @@ public class MainActivity extends AppCompatActivity {
     private String serverKey= "key=" + "AAAAUhITVm0:APA91bGLIOR5L7HQyh64ejoejk-nQFBWP9RxDqtzzjoSXCmROqs7JO_uDDyuW5VuTfJBxtKY_RG8q5_CnpKJsN3qHtVvgiAkuDM2J9T68mk0LzKCcRKgRbj3DQ-A1a8uzZ07wz8OlirQ";
     private String contentType= "application/json";
     private TextView provider;
+    private int flags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -278,7 +281,10 @@ public class MainActivity extends AppCompatActivity {
             userName.setClickable(true);
             userName.setOnClickListener(v->{
 
-                // TODO custom layout
+
+
+
+                // TODO custom layout to edit username
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("NEW USER NAME");
 
@@ -337,114 +343,100 @@ public class MainActivity extends AppCompatActivity {
                                                 } else if (user.getIndex().isAccepted() && !opponentUser.getIndex().isAccepted()) {
                                                     Toast.makeText(MainActivity.this, "You invited him", Toast.LENGTH_LONG).show();
 
-                                                    // TODO custom layout
-                                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                                    builder.setCancelable(true);
-                                                    builder.setTitle("Waiting");
-                                                    builder.setMessage("Do you want to wait for accept from: " + "\n" + opponentUser.getName());
-                                                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            // do nothing
-                                                        }
+                                                    android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+                                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                                                    mBuilder.setView(mView);
+                                                    android.app.AlertDialog dialog = mBuilder.create();
+                                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                                    dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                                                    dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                                                    dialog.setCancelable(false);
+                                                    dialog.setCanceledOnTouchOutside(false);
+                                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+                                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+                                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+                                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                                                    title.setText("Waiting");
+                                                    message.setText("Do you want to wait for accept from: " + "\n" + opponentUser.getName()+"?");
+                                                    negativeButton.setText("NO");
+                                                    negativeButton.setOnClickListener(v12 -> {
+                                                        dialog.dismiss();
+                                                        user.getIndex().setOpponent("");
+                                                        user.getIndex().setAccepted(false);
+                                                        opponentUser.getIndex().setOpponent("");
+                                                        opponentUser.getIndex().setAccepted(false);
+                                                        databaseReferenceMy.setValue(user);
+                                                        databaseReferenceOpponent.setValue(opponentUser);
                                                     });
-                                                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            user.getIndex().setOpponent("");
-                                                            user.getIndex().setAccepted(false);
-                                                            opponentUser.getIndex().setOpponent("");
-                                                            opponentUser.getIndex().setAccepted(false);
-                                                            databaseReferenceMy.setValue(user);
-                                                            databaseReferenceOpponent.setValue(opponentUser);
-                                                        }
-                                                    });
-                                                    AlertDialog dialog = builder.create();
+                                                    positiveButton.setText("YES");
+                                                    positiveButton.setOnClickListener(v1 -> dialog.dismiss());
                                                     dialog.show();
-
 
                                                 } else if (!user.getIndex().isAccepted() && opponentUser.getIndex().isAccepted()) {
                                                     Toast.makeText(MainActivity.this, "You have to accept", Toast.LENGTH_LONG).show();
 
-                                                    // TODO custom layout
-                                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                                    builder.setCancelable(true);
-                                                    builder.setTitle("Accepting");
-                                                    builder.setMessage("Do you want to fight with: " + "\n" + opponentUser.getName());
-                                                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            user.getIndex().setAccepted(true);
-                                                            user.getIndex().setGameIndex(opponentUser.getId() + user.getId());
-                                                            opponentUser.getIndex().setGameIndex(opponentUser.getId() + user.getId());
-                                                            databaseReferenceMy.setValue(user);
-                                                            databaseReferenceOpponent.setValue(opponentUser);
-                                                            mHandler.removeCallbacks(checkMyOpponentAndMove);
-
-
-                                                            TOPIC = "/topics/"+ user.getIndex().getOpponent();
-
-                                                            NOTIFICATION_TITLE = user.getName()+ " accepted your invitation";
-                                                            //              NOTIFICATION_MESSAGE = "Your move";
-
-                                                            JSONObject notification = new JSONObject();
-                                                            JSONObject notificationBody = new JSONObject();
-
-                                                            try{
-                                                                notificationBody.put("title",NOTIFICATION_TITLE);
-                                                                //                  notificationBody.put("message",NOTIFICATION_MESSAGE);
-
-                                                                notification.put("to",TOPIC);
-                                                                notification.put("notification",notificationBody);
-                                                                //                  notification.put("data",notificationBody);
-                                                            } catch (JSONException e){
-                                                                Log.e(TAG,"onCreate: "+e.getMessage());
-                                                            }
-                                                            sendNotification(notification);
-
-                                                            Intent intent = new Intent(MainActivity.this, MultiplayerActivity.class);
-                                                            startActivity(intent);
-
+                                                    android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+                                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                                                    mBuilder.setView(mView);
+                                                    android.app.AlertDialog dialog = mBuilder.create();
+                                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                                    dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                                                    dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                                                    dialog.setCancelable(false);
+                                                    dialog.setCanceledOnTouchOutside(false);
+                                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+                                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+                                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+                                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                                                    title.setText("Accepting");
+                                                    message.setText("Do you want to fight with: " + "\n" + opponentUser.getName()+"?");
+                                                    negativeButton.setText("NO");
+                                                    negativeButton.setOnClickListener(v12 -> {
+                                                        dialog.dismiss();
+                                                        TOPIC = "/topics/"+ user.getIndex().getOpponent();
+                                                        NOTIFICATION_TITLE = user.getName()+ " rejected your invitation";
+                                                        JSONObject notification = new JSONObject();
+                                                        JSONObject notificationBody = new JSONObject();
+                                                        try{
+                                                            notificationBody.put("title",NOTIFICATION_TITLE);
+                                                            notification.put("to",TOPIC);
+                                                            notification.put("notification",notificationBody);
+                                                        } catch (JSONException e){
+                                                            Log.e(TAG,"onCreate: "+e.getMessage());
                                                         }
+                                                        sendNotification(notification);
+                                                        user.getIndex().setOpponent("");
+                                                        opponentUser.getIndex().setOpponent("");
+                                                        opponentUser.getIndex().setAccepted(false);
+                                                        databaseReferenceMy.setValue(user);
+                                                        databaseReferenceOpponent.setValue(opponentUser);
                                                     });
-                                                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-
-
-
-                                                            TOPIC = "/topics/"+ user.getIndex().getOpponent();
-
-                                                            NOTIFICATION_TITLE = user.getName()+ " rejected your invitation";
-                                                            //              NOTIFICATION_MESSAGE = "Your move";
-
-                                                            JSONObject notification = new JSONObject();
-                                                            JSONObject notificationBody = new JSONObject();
-
-                                                            try{
-                                                                notificationBody.put("title",NOTIFICATION_TITLE);
-                                                                //                  notificationBody.put("message",NOTIFICATION_MESSAGE);
-
-                                                                notification.put("to",TOPIC);
-                                                                notification.put("notification",notificationBody);
-                                                                //                  notification.put("data",notificationBody);
-                                                            } catch (JSONException e){
-                                                                Log.e(TAG,"onCreate: "+e.getMessage());
-                                                            }
-                                                            sendNotification(notification);
-
-                                                            user.getIndex().setOpponent("");
-                                                            opponentUser.getIndex().setOpponent("");
-                                                            opponentUser.getIndex().setAccepted(false);
-                                                            databaseReferenceMy.setValue(user);
-                                                            databaseReferenceOpponent.setValue(opponentUser);
-
-
+                                                    positiveButton.setText("YES");
+                                                    positiveButton.setOnClickListener(v1 -> {
+                                                        dialog.dismiss();
+                                                        user.getIndex().setAccepted(true);
+                                                        user.getIndex().setGameIndex(opponentUser.getId() + user.getId());
+                                                        opponentUser.getIndex().setGameIndex(opponentUser.getId() + user.getId());
+                                                        databaseReferenceMy.setValue(user);
+                                                        databaseReferenceOpponent.setValue(opponentUser);
+                                                        mHandler.removeCallbacks(checkMyOpponentAndMove);
+                                                        TOPIC = "/topics/"+ user.getIndex().getOpponent();
+                                                        NOTIFICATION_TITLE = user.getName()+ " accepted your invitation";
+                                                        JSONObject notification = new JSONObject();
+                                                        JSONObject notificationBody = new JSONObject();
+                                                        try{
+                                                            notificationBody.put("title",NOTIFICATION_TITLE);
+                                                            notification.put("to",TOPIC);
+                                                            notification.put("notification",notificationBody);
+                                                        } catch (JSONException e){
+                                                            Log.e(TAG,"onCreate: "+e.getMessage());
                                                         }
+                                                        sendNotification(notification);
+                                                        Intent intent = new Intent(MainActivity.this, MultiplayerActivity.class);
+                                                        startActivity(intent);
                                                     });
-                                                    AlertDialog dialog = builder.create();
                                                     dialog.show();
-                                                } else ;
+                                                }
                                             } else {
                                                 user.getIndex().setAccepted(false);
                                                 user.getIndex().setOpponent("");
@@ -452,15 +444,13 @@ public class MainActivity extends AppCompatActivity {
                                                 databaseReferenceMy.setValue(user);
                                             }
                                         }
-
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
                                         }
                                     });
                                 }
-                            } else ;
+                            }
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                         }
