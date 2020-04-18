@@ -8,7 +8,9 @@
     <color name="background_color">#F5FAC3</color>
     <color name="background_color_button">#E2EA93</color>
     <color name="background_color_green">#CDF8C1</color>
+    <color name="background_color_green_button">#9BEA84</color>
     <color name="background_color_red">#F8D4C1</color>
+    <color name="background_color_red_button">#D8A185</color>
     <color name="background_color_hidden">#D2D5C8</color>
     <color name="border_color">#000</color>
     <color name="ship">#410F0D</color>

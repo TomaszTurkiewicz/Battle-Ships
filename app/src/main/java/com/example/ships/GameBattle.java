@@ -2,7 +2,6 @@ package com.example.ships;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Shader;
@@ -488,9 +487,28 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 updateRanking();
 
             }
-            Intent intent = new Intent(getApplicationContext(),WinPlayerOne.class);
-            startActivity(intent);
-            finish();
+
+            android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(GameBattle.this);
+            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green,null);
+            mBuilder.setView(mView);
+            android.app.AlertDialog dialog = mBuilder.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_green);
+            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_green);;
+            Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_green);
+            title.setText("CONGRATULATION");
+            message.setText("YOU WIN");
+            positiveButton.setText("OK");
+            positiveButton.setOnClickListener(v1 -> {
+                dialog.dismiss();
+                finish();
+            });
+            dialog.show();
+
         }
         else if (!myWin()&& battleFieldMeActivityRandomGame.allShipsHit())     // allShipsHit computer
         {
@@ -507,9 +525,26 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 }
             });
 
-            Intent intent = new Intent(getApplicationContext(),WinPlayerTwo.class);
-            startActivity(intent);
-            finish();
+            android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(GameBattle.this);
+            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red,null);
+            mBuilder.setView(mView);
+            android.app.AlertDialog dialog = mBuilder.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_red);
+            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_red);
+            Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_red);
+            title.setText("SORRY");
+            message.setText("Maybe next time");
+            positiveButton.setText("OK");
+            positiveButton.setOnClickListener(v1 -> {
+                dialog.dismiss();
+                finish();
+            });
+            dialog.show();
         }
         else;
     }

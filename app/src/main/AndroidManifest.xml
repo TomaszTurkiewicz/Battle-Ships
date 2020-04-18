@@ -67,15 +67,7 @@
             android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".WinPlayerTwo"
-            android:screenOrientation="landscape"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
             android:name=".GameBattle"
-            android:screenOrientation="landscape"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".WinPlayerOne"
             android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
