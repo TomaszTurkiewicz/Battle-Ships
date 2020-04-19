@@ -14,6 +14,7 @@ public class User {
     public User() {
     }
 
+
     public SinglePlayerMatch getSinglePlayerMatch() {
         return singlePlayerMatch;
     }
@@ -30,7 +31,7 @@ public class User {
         this.index = index;
     }
 
-    public User(String id, String name, String email, int score, int noOfGames, FightIndex index, SinglePlayerMatch singlePlayerMatch) {
+    public User(String id, String name, String email, int score, int noOfGames, FightIndex index, SinglePlayerMatch singlePlayerMatch, String facebookId) {
         this.id=id;
         this.name = name;
         this.email = email;
@@ -80,13 +81,4 @@ public class User {
         this.noOfGames = noOfGames;
     }
 
-    public void makeUser(User user){
-        this.id=user.getId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.score = getScore();
-        this.noOfGames = user.getNoOfGames();
-        this.index = user.getIndex();
-        this.singlePlayerMatch = user.getSinglePlayerMatch();
-    }
 }

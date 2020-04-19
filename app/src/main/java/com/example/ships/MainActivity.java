@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView provider;
     private int flags;
     private String providerId;
+    private boolean loggedInWithFacebook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setContentView(R.layout.activity_main);
-
+        loggedInWithFacebook=false;
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
@@ -249,32 +250,29 @@ public class MainActivity extends AppCompatActivity {
         if(logIn){
             loggedIn.setText("Zalogowany jako: ");
             String facebookUserId="";
+            String facebookName="";
             for(UserInfo profile : firebaseUser.getProviderData()) {
                 if (profile.getProviderId().contains("facebook.com")) {
+                    loggedInWithFacebook=true;
                     facebookUserId = profile.getUid();
+                    facebookName = profile.getDisplayName();
                 }
             }
-
-            if(!facebookUserId.equals("")){
+            if(loggedInWithFacebook){
                     String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?type=large";
                     DownloadFacebookImage downloadFacebookImage = new DownloadFacebookImage();
                     downloadFacebookImage.execute(photoUrl);
-
                 }else {
                     accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
                 }
-
-
-
-
-
-
 
             userID = firebaseUser.getUid();
 
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
 
+            String finalFacebookUserId = facebookUserId;
+            String finalFacebookName = facebookName;
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -282,15 +280,23 @@ public class MainActivity extends AppCompatActivity {
 
                     if (dataSnapshot.exists()) {
                         user=dataSnapshot.getValue(User.class);
+
+                        if(loggedInWithFacebook){
+                            user.setName(finalFacebookName);
+                        }
                         userName.setText(user.getName());
+                        databaseReferenceMy.setValue(user);
                         ready=true;
-
-
                     } else {
 
-                        userName.setText(firebaseUser.getEmail());
+                        if(loggedInWithFacebook){
+                            user.setName(finalFacebookName);
+                        }else{
+                            user.setName(firebaseUser.getEmail());
+                        }
+                        userName.setText(user.getName());
                         user.setId(userID);
-                        user.setName(firebaseUser.getEmail());
+
                         user.setEmail(firebaseUser.getEmail());
                         user.setNoOfGames(0);
                         user.setScore(0);
@@ -679,6 +685,8 @@ public class MainActivity extends AppCompatActivity {
                 InputStream is = c.getInputStream();
                 Bitmap img;
                 img = BitmapFactory.decodeStream(is);
+                is.close();
+                c.disconnect();
                 return img;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -689,19 +697,7 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-//    URL url;
-//                    try {
-//                            url = new URL(photoUrl);
-//                            HttpURLConnection c = (HttpURLConnection)url.openConnection();
-//                            c.setDoInput(true);
-//                            c.connect();
-//                            InputStream is = c.getInputStream();
-//                            Bitmap img;
-//                            img = BitmapFactory.decodeStream(is);
-//                            } catch (IOException e) {
-//                            e.printStackTrace();
-//                            }
-//
+
 
 
 
@@ -709,5 +705,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 // TODO change progress dialog in score and choose opponent...
+// TODO save link to facebook photo and facebook name in User class!!!
 
 
