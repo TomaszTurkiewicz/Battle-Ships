@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +43,8 @@ import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -50,10 +53,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -94,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
     private int flags;
     private String providerId;
     private boolean loggedInWithFacebook;
+    private StorageReference storageReference;
+    private String generatedFilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         leave=findViewById(R.id.leaveMainActivity);
         leave.setBackgroundResource(R.drawable.back);
         provider=findViewById(R.id.provider);
-
+        generatedFilePath="";
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -249,8 +257,15 @@ public class MainActivity extends AppCompatActivity {
 
         if(logIn){
             loggedIn.setText("Zalogowany jako: ");
+            userID = firebaseUser.getUid();
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
+            storageReference= FirebaseStorage.getInstance().getReference("profile_picture").child(userID);
+
             String facebookUserId="";
             String facebookName="";
+
+
             for(UserInfo profile : firebaseUser.getProviderData()) {
                 if (profile.getProviderId().contains("facebook.com")) {
                     loggedInWithFacebook=true;
@@ -258,20 +273,28 @@ public class MainActivity extends AppCompatActivity {
                     facebookName = profile.getDisplayName();
                 }
             }
+
             if(loggedInWithFacebook){
-                    String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?type=large";
-                    DownloadFacebookImage downloadFacebookImage = new DownloadFacebookImage();
-                    downloadFacebookImage.execute(photoUrl);
+                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?type=large";
+                DownloadFacebookImage downloadFacebookImage = new DownloadFacebookImage();
+                downloadFacebookImage.execute(photoUrl);
+                storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful()){
+                            generatedFilePath = task.getResult().toString();
+                        }
+                    }
+                });
                 }else {
+                    generatedFilePath="";
                     accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
                 }
 
-            userID = firebaseUser.getUid();
 
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
 
-            String finalFacebookUserId = facebookUserId;
+
+
             String finalFacebookName = facebookName;
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -283,7 +306,11 @@ public class MainActivity extends AppCompatActivity {
 
                         if(loggedInWithFacebook){
                             user.setName(finalFacebookName);
+                            user.setProfileImage(generatedFilePath);
+                        }else{
+                            user.setProfileImage("");
                         }
+
                         userName.setText(user.getName());
                         databaseReferenceMy.setValue(user);
                         ready=true;
@@ -291,9 +318,12 @@ public class MainActivity extends AppCompatActivity {
 
                         if(loggedInWithFacebook){
                             user.setName(finalFacebookName);
+                            user.setProfileImage(generatedFilePath);
                         }else{
                             user.setName(firebaseUser.getEmail());
+                            user.setProfileImage("");
                         }
+
                         userName.setText(user.getName());
                         user.setId(userID);
 
@@ -661,15 +691,24 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
         }
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             if(bitmap!=null){
-       //         accountBtn.setBackgroundResource(R.drawable.account);
                 accountBtn.setImageBitmap(bitmap);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                byte[] data = baos.toByteArray();
+                storageReference.putBytes(data).addOnSuccessListener(taskSnapshot -> {
+                    // TODO url
+
+                }).addOnFailureListener(e -> {
+
+                });
+
             }else{
+
                 accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
             }
         }

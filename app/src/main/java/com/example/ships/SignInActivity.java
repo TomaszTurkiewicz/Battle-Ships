@@ -222,12 +222,25 @@ public class SignInActivity extends AppCompatActivity {
             login_facebook.setVisibility(View.VISIBLE);
         }else{
             userID = firebaseUser.getUid();
+            databaseReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        me = dataSnapshot.getValue(User.class);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
             deleteUser.setVisibility(View.VISIBLE);
             userLogout.setVisibility(View.VISIBLE);
             loginEmail.setVisibility(View.GONE);
             login_google.setVisibility(View.GONE);
             login_facebook.setVisibility(View.GONE);
-
         }
 
         deleteUser.setOnClickListener(v -> {

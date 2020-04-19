@@ -9,11 +9,19 @@ public class User {
     private int noOfGames;
     private FightIndex index;
     private SinglePlayerMatch singlePlayerMatch;
+    private String profileImage;
 
 
     public User() {
     }
 
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
     public SinglePlayerMatch getSinglePlayerMatch() {
         return singlePlayerMatch;
@@ -31,7 +39,7 @@ public class User {
         this.index = index;
     }
 
-    public User(String id, String name, String email, int score, int noOfGames, FightIndex index, SinglePlayerMatch singlePlayerMatch, String facebookId) {
+    public User(String id, String name, String email, int score, int noOfGames, FightIndex index, SinglePlayerMatch singlePlayerMatch, String profileImage) {
         this.id=id;
         this.name = name;
         this.email = email;
@@ -39,6 +47,7 @@ public class User {
         this.noOfGames = noOfGames;
         this.index = index;
         this.singlePlayerMatch = singlePlayerMatch;
+        this.profileImage = profileImage;
     }
 
     public String getId() {
