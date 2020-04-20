@@ -7,6 +7,25 @@
     tools:context=".MultiplayerActivity"
     android:id="@+id/multiplayerActivityLayout">
 
+    <ImageView
+        android:id="@+id/user_photo_multiplayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+    <ImageView
+        android:id="@+id/opponent_photo_multiplayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
     <TextView
         android:id="@+id/userNameMultiplayer"
         android:layout_width="wrap_content"

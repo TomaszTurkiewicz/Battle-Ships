@@ -3,6 +3,8 @@ package com.example.ships;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
@@ -17,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +38,8 @@ import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +47,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -100,6 +107,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private int marginDown;
     private TextView userName, opponentName;
     private int flags;
+    private ImageView userPhoto, opponentPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +156,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         leave.setBackgroundResource(R.drawable.back);
         userName=findViewById(R.id.userNameMultiplayer);
         opponentName=findViewById(R.id.opponentNameMultiplayer);
+        userPhoto=findViewById(R.id.user_photo_multiplayer);
+        opponentPhoto=findViewById(R.id.opponent_photo_multiplayer);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
@@ -188,8 +198,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params17 = new ConstraintLayout.LayoutParams(2*square,2*square);
-        ConstraintLayout.LayoutParams params18 = new ConstraintLayout.LayoutParams(10*square,2*square);
-        ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(10*square,2*square);
+        ConstraintLayout.LayoutParams params18 = new ConstraintLayout.LayoutParams(8*square,2*square);
+        ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(8*square,2*square);
+        ConstraintLayout.LayoutParams params20 = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params21 = new ConstraintLayout.LayoutParams(2*square,2*square);
 
         surrenderButton.setLayoutParams(params);
         layoutMy.setLayoutParams(params1);
@@ -213,6 +225,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         userName.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
         opponentName.setLayoutParams(params19);
         opponentName.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        userPhoto.setLayoutParams(params20);
+        opponentPhoto.setLayoutParams(params21);
 
         for(int i = 0; i<10; i++){
             TextView tv = (TextView)linearLayoutLettersMy.getChildAt(i);
@@ -296,11 +310,17 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginDown-2*square);
         set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
+        set.connect(userPhoto.getId(),ConstraintSet.BOTTOM,layoutMy.getId(),ConstraintSet.TOP,square);
+        set.connect(userPhoto.getId(),ConstraintSet.LEFT,layoutMy.getId(),ConstraintSet.LEFT,0);
+
         set.connect(userName.getId(),ConstraintSet.BOTTOM,layoutMy.getId(),ConstraintSet.TOP,square);
-        set.connect(userName.getId(),ConstraintSet.LEFT,layoutMy.getId(),ConstraintSet.LEFT,0);
+        set.connect(userName.getId(),ConstraintSet.LEFT,userPhoto.getId(),ConstraintSet.RIGHT,0);
+
+        set.connect(opponentPhoto.getId(),ConstraintSet.BOTTOM,layoutOpponent.getId(),ConstraintSet.TOP,square);
+        set.connect(opponentPhoto.getId(),ConstraintSet.LEFT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
 
         set.connect(opponentName.getId(),ConstraintSet.BOTTOM,layoutOpponent.getId(),ConstraintSet.TOP,square);
-        set.connect(opponentName.getId(),ConstraintSet.LEFT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
+        set.connect(opponentName.getId(),ConstraintSet.LEFT,opponentPhoto.getId(),ConstraintSet.RIGHT,0);
 
         set.applyTo(mainLayout);
 
@@ -521,6 +541,24 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 user = dataSnapshot.getValue(User.class);
                 userName.setText(user.getName());
 
+                StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(user.getId());
+
+                final long SIZE = 1024*1024;
+                sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                        userPhoto.setImageBitmap(bm);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        userPhoto.setBackgroundResource(R.drawable.account_box_grey);
+                    }
+                });
+
+
+
                 if(user.getIndex().getOpponent().isEmpty()){
 
                     finish();
@@ -534,7 +572,21 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                             if(dataSnapshot.exists()){
                                 opponent = dataSnapshot.getValue(User.class);
                                 opponentName.setText(opponent.getName());
+                                StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(opponent.getId());
 
+                                final long SIZE = 1024*1024;
+                                sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                    @Override
+                                    public void onSuccess(byte[] bytes) {
+                                        Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                        opponentPhoto.setImageBitmap(bm);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        opponentPhoto.setBackgroundResource(R.drawable.account_box_grey);
+                                    }
+                                });
 
                             }
                         }
@@ -1457,4 +1509,4 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 }
 
-// TODO zdjęcia nad planszami... opóścić plansze o jedną kratkę
+
