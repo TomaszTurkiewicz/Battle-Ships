@@ -56,6 +56,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Arrays;
 
@@ -279,9 +281,12 @@ public class SignInActivity extends AppCompatActivity {
             positiveButton.setText("YES");
             positiveButton.setOnClickListener(v1 -> {
                 dialog.dismiss();
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference("profile_picture").child(userID);
+                storageReference.delete();
                 firebaseUser.delete().addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         databaseReference.child(userID).removeValue();
+
                         if(multiplayer){
                             FightIndex fightIndex1 = new FightIndex();
                             databaseReference.child(fightIndex.getOpponent()).child("index").setValue(fightIndex1);
