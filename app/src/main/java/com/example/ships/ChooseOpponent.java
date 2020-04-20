@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +38,8 @@ import com.example.ships.adapters.RecyclerViewAdapterChooseOpponent;
 import com.example.ships.classes.Ranking;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +47,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -234,7 +241,7 @@ public class ChooseOpponent extends AppCompatActivity {
                                     initRanking();
                                 }else{
                                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(ChooseOpponent.this);
-                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons_and_picture,null);
                                     mBuilder.setView(mView);
                                     AlertDialog dialog = mBuilder.create();
                                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -242,11 +249,30 @@ public class ChooseOpponent extends AppCompatActivity {
                                     dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
                                     dialog.setCancelable(false);
                                     dialog.setCanceledOnTouchOutside(false);
-                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
-                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
-                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
-                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons_and_picture);
+                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons_and_picture);
+                                    ImageView photo = mView.findViewById(R.id.alert_dialog_photo_layout_with_two_buttons_and_picture);
+                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons_and_picture);
+                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons_and_picture);
                                     title.setText("INVITE");
+                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(2*square,2*square);
+                                    photo.setLayoutParams(params);
+                                    StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(ranking.getRanking(position).getId());
+
+                                    final long SIZE = 1024*1024;
+                                    sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                        @Override
+                                        public void onSuccess(byte[] bytes) {
+                                            Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                            photo.setImageBitmap(bm);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            photo.setBackgroundResource(R.drawable.account_box_grey);
+                                        }
+                                    });
+
                                     message.setText("Do you want to invite "+ranking.getRanking(position).getName()+"?");
                                     negativeButton.setText("NO");
                                     negativeButton.setOnClickListener(v ->
@@ -337,5 +363,5 @@ public class ChooseOpponent extends AppCompatActivity {
     }
 }
 
-// todo zdjęcia koło osób
+
 // TODO zdjęcie w alert dialog przy invitation

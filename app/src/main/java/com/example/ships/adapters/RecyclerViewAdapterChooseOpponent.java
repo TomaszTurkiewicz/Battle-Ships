@@ -1,11 +1,14 @@
 package com.example.ships.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Shader;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,6 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ships.R;
 import com.example.ships.classes.Ranking;
 import com.example.ships.classes.TileDrawable;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<RecyclerViewAdapterChooseOpponent.VH> {
 
@@ -51,6 +58,20 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
     public void onBindViewHolder(@NonNull VH holder, int position) {
 
         holder.positionScore.setText(String.valueOf(position+1));
+        StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(mRanking.getRanking(position).getId());
+        final long SIZE = 1024*1024;
+        sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                holder.photo.setImageBitmap(bm);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                holder.photo.setBackgroundResource(R.drawable.account_box_grey);
+            }
+        });
         holder.usernameScore.setText(mRanking.getRanking(position).getName());
         holder.noOfGamesScore.setText(String.valueOf(mRanking.getRanking(position).getNoOfGames()));
         holder.scoreScore.setText(String.valueOf(mRanking.getRanking(position).getScore()));
@@ -74,12 +95,14 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
         TextView usernameScore;
         TextView noOfGamesScore;
         TextView scoreScore;
+        ImageView photo;
         LinearLayout parentLayout;
 
 
         public VH(@NonNull View itemView) {
             super(itemView);
             positionScore = itemView.findViewById(R.id.positionScoreChooseOpponent);
+            photo = itemView.findViewById(R.id.photoChooseOpponent);
             usernameScore = itemView.findViewById(R.id.usernameScoreChooseOpponent);
             noOfGamesScore = itemView.findViewById(R.id.noOfGamesScoreChooseOpponent);
             scoreScore = itemView.findViewById(R.id.scoreScoreChooseOpponent);

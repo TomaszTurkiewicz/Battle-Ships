@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/alert_dialog_with_two_buttons"
+    android:id="@+id/alert_dialog_with_two_buttons_and_picture"
     android:background="@color/transparent">
 
 
+
     <ImageView
-        android:id="@+id/image_top_alert_dialog_with_two_buttons"
+        android:id="@+id/image_top_alert_dialog_with_two_buttons_and_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/triangle_bottom_right"
@@ -19,17 +20,17 @@
 
 
     <LinearLayout
-        android:id="@+id/alert_dialog_linear_layout_layout_with_two_buttons"
+        android:id="@+id/alert_dialog_linear_layout_layout_with_two_buttons_and_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_color"
         android:layout_marginHorizontal="15dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/image_top_alert_dialog_with_two_buttons"
+        app:layout_constraintTop_toBottomOf="@id/image_top_alert_dialog_with_two_buttons_and_picture"
         app:layout_constraintLeft_toLeftOf="parent">
 
         <TextView
-            android:id="@+id/alert_dialog_title_layout_with_two_buttons"
+            android:id="@+id/alert_dialog_title_layout_with_two_buttons_and_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TITLE"
@@ -38,25 +39,47 @@
             android:textColor="@color/pen_red"
             android:paddingTop="@dimen/FieldSize"
             android:paddingBottom="@dimen/FieldSize"/>
-        <TextView
-            android:id="@+id/alert_dialog_message_layout_with_two_buttons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="message"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:textColor="@color/pen"
-            android:paddingHorizontal="@dimen/FieldSize"
-            android:paddingBottom="@dimen/FieldSize"/>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:layout_marginHorizontal="@dimen/FieldSize">
+
+           <ImageView
+               android:id="@+id/alert_dialog_photo_layout_with_two_buttons_and_picture"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:adjustViewBounds="true"
+               android:scaleType="fitXY"/>
+
+
+           <TextView
+               android:id="@+id/alert_dialog_message_layout_with_two_buttons_and_picture"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="message"
+               android:textSize="20sp"
+               android:gravity="center"
+               android:layout_gravity="center"
+               android:textColor="@color/pen"
+               android:paddingHorizontal="@dimen/FieldSize"
+               android:paddingBottom="@dimen/FieldSize"/>
+
+
+
+
+       </LinearLayout>
+
 
         <LinearLayout
-            android:id="@+id/alert_dialog_linear_layout_buttons_layout_with_two_buttons"
+            android:id="@+id/alert_dialog_linear_layout_buttons_layout_with_two_buttons_and_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/alert_dialog_left_button_layout_with_two_buttons"
+                android:id="@+id/alert_dialog_left_button_layout_with_two_buttons_and_picture"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -67,7 +90,7 @@
                 android:layout_margin="@dimen/FieldSize"/>
 
             <Button
-                android:id="@+id/alert_dialog_right_button_layout_with_two_buttons"
+                android:id="@+id/alert_dialog_right_button_layout_with_two_buttons_and_picture"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -88,13 +111,15 @@
 
 
     <ImageView
-        android:id="@+id/image_bottom"
+        android:id="@+id/image_bottom_alert_dialog_with_two_buttons_and_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/triangle_top_left"
-        app:layout_constraintTop_toBottomOf="@id/alert_dialog_linear_layout_layout_with_two_buttons"
+        app:layout_constraintTop_toBottomOf="@id/alert_dialog_linear_layout_layout_with_two_buttons_and_picture"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginHorizontal="15dp"/>
+
+
 
 
 
