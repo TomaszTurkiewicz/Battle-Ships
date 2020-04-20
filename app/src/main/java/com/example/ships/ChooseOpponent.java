@@ -336,3 +336,6 @@ public class ChooseOpponent extends AppCompatActivity {
         finish();
     }
 }
+
+// todo zdjęcia koło osób
+// TODO zdjęcie w alert dialog przy invitation

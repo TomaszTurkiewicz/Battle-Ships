@@ -9,18 +9,9 @@ public class User {
     private int noOfGames;
     private FightIndex index;
     private SinglePlayerMatch singlePlayerMatch;
-    private String profileImage;
 
 
     public User() {
-    }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
     }
 
     public SinglePlayerMatch getSinglePlayerMatch() {
@@ -47,7 +38,6 @@ public class User {
         this.noOfGames = noOfGames;
         this.index = index;
         this.singlePlayerMatch = singlePlayerMatch;
-        this.profileImage = profileImage;
     }
 
     public String getId() {
@@ -91,3 +81,4 @@ public class User {
     }
 
 }
+// TODO default constructor with fields

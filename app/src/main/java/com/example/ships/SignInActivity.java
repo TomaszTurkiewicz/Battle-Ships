@@ -522,4 +522,7 @@ public class SignInActivity extends AppCompatActivity {
 
 
 // TODO change progressDialog na progressBar
+//TODO setting button going to new activity (only when sign in)
+// TODO when sign in and linking with facebook alert dialog (czy synchronizować zdjęcie i imię)
+// TODO delete profile picture from storageFirebase when deleting account
 

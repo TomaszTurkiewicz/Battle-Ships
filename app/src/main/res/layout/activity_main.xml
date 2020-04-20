@@ -61,7 +61,8 @@
         android:background="#00000000"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_margin="0dp"/>
+        android:layout_margin="0dp"
+        android:scaleType="fitXY"/>
 
     <ImageButton
         android:id="@+id/leaveMainActivity"

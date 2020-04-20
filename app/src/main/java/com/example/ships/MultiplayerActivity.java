@@ -1457,3 +1457,4 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 }
 
+// TODO zdjęcia nad planszami... opóścić plansze o jedną kratkę

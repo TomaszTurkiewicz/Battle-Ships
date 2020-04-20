@@ -11,11 +11,9 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -23,14 +21,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -43,8 +39,8 @@ import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -101,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
     private String providerId;
     private boolean loggedInWithFacebook;
     private StorageReference storageReference;
-    private String generatedFilePath;
+    private String facebookUserId="";
+    private String facebookName="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
         leave=findViewById(R.id.leaveMainActivity);
         leave.setBackgroundResource(R.drawable.back);
         provider=findViewById(R.id.provider);
-        generatedFilePath="";
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -229,19 +225,11 @@ public class MainActivity extends AppCompatActivity {
 
         set.applyTo(constraintLayout);
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
- //       if(firebaseUser != null && firebaseUser.isEmailVerified()){
-
         if(firebaseUser != null){
             providerId="";
             for(UserInfo profile : firebaseUser.getProviderData()){
                 providerId = providerId+" "+profile.getProviderId();
             }
-
             if(providerId.contains("facebook.com")||providerId.contains("google.com")){
                 logIn=true;
             }else{
@@ -252,18 +240,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
-
-
         if(logIn){
-            loggedIn.setText("Zalogowany jako: ");
             userID = firebaseUser.getUid();
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
             storageReference= FirebaseStorage.getInstance().getReference("profile_picture").child(userID);
 
-            String facebookUserId="";
-            String facebookName="";
+
 
 
             for(UserInfo profile : firebaseUser.getProviderData()) {
@@ -275,27 +258,38 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if(loggedInWithFacebook){
-                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?type=large";
+                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?type=small";
                 DownloadFacebookImage downloadFacebookImage = new DownloadFacebookImage();
                 downloadFacebookImage.execute(photoUrl);
-                storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if(task.isSuccessful()){
-                            generatedFilePath = task.getResult().toString();
-                        }
-                    }
-                });
-                }else {
-                    generatedFilePath="";
+            }
+
+
+        }
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        
+        if(logIn){
+            loggedIn.setText("Zalogowany jako: ");
+
+            final long SIZE=1024*1024;
+            storageReference.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                    accountBtn.setImageBitmap(bm);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
                     accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
                 }
+            });
 
-
-
-
-
-            String finalFacebookName = facebookName;
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -305,10 +299,8 @@ public class MainActivity extends AppCompatActivity {
                         user=dataSnapshot.getValue(User.class);
 
                         if(loggedInWithFacebook){
-                            user.setName(finalFacebookName);
-                            user.setProfileImage(generatedFilePath);
+                            user.setName(facebookName);
                         }else{
-                            user.setProfileImage("");
                         }
 
                         userName.setText(user.getName());
@@ -317,11 +309,9 @@ public class MainActivity extends AppCompatActivity {
                     } else {
 
                         if(loggedInWithFacebook){
-                            user.setName(finalFacebookName);
-                            user.setProfileImage(generatedFilePath);
+                            user.setName(facebookName);
                         }else{
                             user.setName(firebaseUser.getEmail());
-                            user.setProfileImage("");
                         }
 
                         userName.setText(user.getName());
@@ -342,32 +332,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-
-            userName.setClickable(true);
-            userName.setOnClickListener(v->{
-
-
-
-
-                // TODO custom layout to edit username
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("NEW USER NAME");
-
-                final EditText input = new EditText(this);
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
-
-                builder.setPositiveButton("OK", (dialog, which) ->
-                {
-                    newUserName=input.getText().toString();
-                    user.setName(newUserName);
-                    databaseReferenceMy.setValue(user);
-                    userName.setText(user.getName());
-
-                });
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                builder.show();
-            });
             checkMyOpponentAndMove.run();
             multiplayerBtn.setVisibility(View.VISIBLE);
             multiplayerBtn.setClickable(true);
@@ -696,20 +660,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             if(bitmap!=null){
-                accountBtn.setImageBitmap(bitmap);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
                 byte[] data = baos.toByteArray();
                 storageReference.putBytes(data).addOnSuccessListener(taskSnapshot -> {
-                    // TODO url
-
+                // do nothing
                 }).addOnFailureListener(e -> {
-
+                    //do nothing
                 });
-
             }else{
-
-                accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
+                // do nothing
             }
         }
 
@@ -744,6 +704,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 // TODO change progress dialog in score and choose opponent...
-// TODO save link to facebook photo and facebook name in User class!!!
+// TODO przenieść odczyt zdjęcia z fb do onCreate
+// TODO shared preferences do czy czytać zdjęcie i imię z fb
+// TODO zdjęcie w alert dialog koło accepting invitation
+
 
 
