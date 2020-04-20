@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -373,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
                                                     Toast.makeText(MainActivity.this, "You invited him", Toast.LENGTH_LONG).show();
 
                                                     android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
-                                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons_and_picture,null);
                                                     mBuilder.setView(mView);
                                                     android.app.AlertDialog dialog = mBuilder.create();
                                                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -381,11 +382,32 @@ public class MainActivity extends AppCompatActivity {
                                                     dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
                                                     dialog.setCancelable(false);
                                                     dialog.setCanceledOnTouchOutside(false);
-                                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
-                                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
-                                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
-                                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons_and_picture);
+                                                    ImageView photo = mView.findViewById(R.id.alert_dialog_photo_layout_with_two_buttons_and_picture);
+                                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons_and_picture);
+                                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons_and_picture);
+                                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons_and_picture);
                                                     title.setText("Waiting");
+                                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(2*square,2*square);
+                                                    photo.setLayoutParams(params);
+                                                    StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(opponentUser.getId());
+
+                                                    final long SIZE = 1024*1024;
+                                                    sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                        @Override
+                                                        public void onSuccess(byte[] bytes) {
+                                                            Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                                            photo.setImageBitmap(bm);
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            photo.setBackgroundResource(R.drawable.account_box_grey);
+                                                        }
+                                                    });
+
+
+
                                                     message.setText("Do you want to wait for accept from: " + "\n" + opponentUser.getName()+"?");
                                                     negativeButton.setText("NO");
                                                     negativeButton.setOnClickListener(v12 -> {
@@ -405,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
                                                     Toast.makeText(MainActivity.this, "You have to accept", Toast.LENGTH_LONG).show();
 
                                                     android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
-                                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons_and_picture,null);
                                                     mBuilder.setView(mView);
                                                     android.app.AlertDialog dialog = mBuilder.create();
                                                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -413,11 +435,32 @@ public class MainActivity extends AppCompatActivity {
                                                     dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
                                                     dialog.setCancelable(false);
                                                     dialog.setCanceledOnTouchOutside(false);
-                                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
-                                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
-                                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
-                                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons_and_picture);
+                                                    ImageView photo = mView.findViewById(R.id.alert_dialog_photo_layout_with_two_buttons_and_picture);
+                                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons_and_picture);
+                                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons_and_picture);
+                                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons_and_picture);
                                                     title.setText("Accepting");
+
+                                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(2*square,2*square);
+                                                    photo.setLayoutParams(params);
+                                                    StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(opponentUser.getId());
+
+                                                    final long SIZE = 1024*1024;
+                                                    sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                        @Override
+                                                        public void onSuccess(byte[] bytes) {
+                                                            Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                                            photo.setImageBitmap(bm);
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            photo.setBackgroundResource(R.drawable.account_box_grey);
+                                                        }
+                                                    });
+
+
                                                     message.setText("Do you want to fight with: " + "\n" + opponentUser.getName()+"?");
                                                     negativeButton.setText("NO");
                                                     negativeButton.setOnClickListener(v12 -> {
@@ -704,9 +747,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 // TODO change progress dialog in score and choose opponent...
-// TODO przenieść odczyt zdjęcia z fb do onCreate
 // TODO shared preferences do czy czytać zdjęcie i imię z fb
-// TODO zdjęcie w alert dialog koło accepting invitation
 
 
 
