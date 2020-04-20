@@ -740,6 +740,7 @@ public class MainActivity extends AppCompatActivity {
 
 // TODO change progress dialog in score and choose opponent...
 // TODO shared preferences do czy czytać zdjęcie i imię z fb
+// TODO photo with rounded corners?
 
 
 

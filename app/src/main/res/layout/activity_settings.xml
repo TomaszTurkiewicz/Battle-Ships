@@ -28,5 +28,43 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_margin="0dp"/>
 
+    <TextView
+        android:id="@+id/userNameSettingsActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/pen"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:gravity="center"
+        android:includeFontPadding="false"/>
+
+    <EditText
+        android:id="@+id/newUserNameSettingsActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="new name..."
+        android:textColor="@color/pen"
+        android:background="@drawable/button_background_pen"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/saveNewNameSettingsActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="SAVE"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="0dp"
+        android:padding="0dp"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,9 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Shader;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +27,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -37,6 +45,9 @@ public class SettingsActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
+    private TextView userNameTextView;
+    private EditText newNameEditText;
+    private Button saveName;
 
 
     @Override
@@ -64,6 +75,9 @@ public class SettingsActivity extends AppCompatActivity {
         leave.setBackgroundResource(R.drawable.back);
         mainLayout=findViewById(R.id.settingsActivityLayout);
         photo=findViewById(R.id.photo_settings_activity);
+        userNameTextView=findViewById(R.id.userNameSettingsActivity);
+        newNameEditText=findViewById(R.id.newUserNameSettingsActivity);
+        saveName=findViewById(R.id.saveNewNameSettingsActivity);
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         int square = sp.getInt("square",-1);
@@ -76,9 +90,18 @@ public class SettingsActivity extends AppCompatActivity {
 
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(2*square,2*square);
         ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(4*square,4*square);
+        ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(11*square,2*square);
+        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(11*square,2*square);
+        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(4*square,2*square);
 
         leave.setLayoutParams(params);
         photo.setLayoutParams(params1);
+        userNameTextView.setLayoutParams(params2);
+        userNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        newNameEditText.setLayoutParams(params3);
+        newNameEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        saveName.setLayoutParams(params4);
+        saveName.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
 
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
@@ -88,6 +111,16 @@ public class SettingsActivity extends AppCompatActivity {
 
         set.connect(photo.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,square);
         set.connect(photo.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,screenWidth-screenWidthOffSet-5*square);
+
+        set.connect(userNameTextView.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,2*square);
+        set.connect(userNameTextView.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.connect(newNameEditText.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,6*square);
+        set.connect(newNameEditText.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.connect(saveName.getId(),ConstraintSet.TOP,photo.getId(),ConstraintSet.BOTTOM,square);
+        set.connect(saveName.getId(),ConstraintSet.LEFT,newNameEditText.getId(),ConstraintSet.RIGHT,square);
+
 
         set.applyTo(mainLayout);
 
@@ -110,7 +143,29 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    user=dataSnapshot.getValue(User.class);
+                    userNameTextView.setText(user.getName());
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        saveName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user.setName(newNameEditText.getText().toString().trim());
+                databaseReference.setValue(user);
+                userNameTextView.setText(user.getName());
+                Toast.makeText(SettingsActivity.this,"NAME SAVED",Toast.LENGTH_LONG).show();
+            }
+        });
 
 
     }
