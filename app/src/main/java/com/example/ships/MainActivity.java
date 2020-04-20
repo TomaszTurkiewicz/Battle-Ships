@@ -37,6 +37,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ships.classes.FightIndex;
+import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
@@ -273,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                    accountBtn.setImageBitmap(bm);
+                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,square/2).getRoundedCornerBitmap());
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override

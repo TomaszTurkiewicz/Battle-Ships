@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+
 public class SettingsActivity extends AppCompatActivity {
 
     private int flags;
@@ -48,6 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView userNameTextView;
     private EditText newNameEditText;
     private Button saveName;
+
 
 
     @Override
@@ -134,7 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                photo.setImageBitmap(bm);
+                photo.setImageBitmap(new RoundedCornerBitmap(bm,square/2).getRoundedCornerBitmap());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -167,7 +170,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 
@@ -185,5 +187,7 @@ public class SettingsActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+
 }
 //TODO finish settings activity
