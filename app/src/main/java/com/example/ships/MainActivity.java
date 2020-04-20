@@ -707,6 +707,7 @@ public class MainActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
                 byte[] data = baos.toByteArray();
                 storageReference.putBytes(data).addOnSuccessListener(taskSnapshot -> {
+                    
                 // do nothing
                 }).addOnFailureListener(e -> {
                     //do nothing

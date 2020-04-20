@@ -83,6 +83,21 @@
         android:textColor="@color/pen"
         />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SETTINGS"
+        android:id="@+id/accountSettings"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:drawableLeft="@drawable/settings"
+        android:paddingLeft="20dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        />
+
     <ImageButton
         android:id="@+id/leaveSignInActivity"
         android:layout_width="60dp"

@@ -73,6 +73,7 @@ public class SignInActivity extends AppCompatActivity {
     static final int GOOGLE_SIGN = 123;
     private Button login_google;
     private Button login_facebook;
+    private Button settings;
     private GoogleSignInClient mGoogleSignInClient;
     private ProgressDialog progressDialog;
     private ConstraintLayout mainLayout;
@@ -117,6 +118,7 @@ public class SignInActivity extends AppCompatActivity {
         mainLayout = findViewById(R.id.constraintLayoutSignInActivity);
         loginEmail = findViewById(R.id.emailAndPassword);
         login_facebook = findViewById(R.id.loginFacebbok);
+        settings = findViewById(R.id.accountSettings);
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         int square = sp.getInt("square",-1);
         int screenHeight = sp.getInt("width",-1);
@@ -136,6 +138,7 @@ public class SignInActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(width,3*square);
+        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(width,3*square);
         ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(2*square,2*square);
 
 
@@ -157,6 +160,9 @@ public class SignInActivity extends AppCompatActivity {
         deleteUser.setLayoutParams(params5);
         deleteUser.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
 
+        settings.setLayoutParams(params7);
+        settings.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+
         leave.setLayoutParams(params6);
 
         ConstraintSet set = new ConstraintSet();
@@ -174,11 +180,15 @@ public class SignInActivity extends AppCompatActivity {
         set.connect(deleteUser.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,3*square);
         set.connect(deleteUser.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
-        set.connect(userLogout.getId(),ConstraintSet.TOP,deleteUser.getId(),ConstraintSet.BOTTOM,12*square);
+        set.connect(userLogout.getId(),ConstraintSet.TOP,deleteUser.getId(),ConstraintSet.BOTTOM,9*square);
         set.connect(userLogout.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
 
         set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,screenHeight-screenHeightOffSet-3*square);
         set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.connect(settings.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,screenHeight-screenHeightOffSet-8*square);
+        set.connect(settings.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+
 
         set.applyTo(mainLayout);
 
@@ -222,6 +232,7 @@ public class SignInActivity extends AppCompatActivity {
             loginEmail.setVisibility(View.VISIBLE);
             login_google.setVisibility(View.VISIBLE);
             login_facebook.setVisibility(View.VISIBLE);
+            settings.setVisibility(View.GONE);
         }else{
             userID = firebaseUser.getUid();
             databaseReference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -240,6 +251,7 @@ public class SignInActivity extends AppCompatActivity {
 
             deleteUser.setVisibility(View.VISIBLE);
             userLogout.setVisibility(View.VISIBLE);
+            settings.setVisibility(View.VISIBLE);
             loginEmail.setVisibility(View.GONE);
             login_google.setVisibility(View.GONE);
             login_facebook.setVisibility(View.GONE);
@@ -317,6 +329,16 @@ public class SignInActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
+        });
+
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
         mCallbackManager = CallbackManager.Factory.create();
