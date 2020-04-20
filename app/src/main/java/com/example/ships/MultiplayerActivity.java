@@ -606,7 +606,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                             if (!dataSnapshot.exists()) {
 
 
-                                databaseReferenceFight.child("turn").setValue(user.getId());
+                                databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
                                 databaseReferenceFight.child("winner").setValue("");
                                 databaseReferenceFight.child("ready").setValue(false);
                                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
@@ -1509,4 +1509,4 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 }
 
-
+// TODO zmienić sposób rozgrywki (naliczać i odejmować tylko sobie punkty) przeciwnik sam musi zrobić to sobie aby widział co się działo) out of date new variable
