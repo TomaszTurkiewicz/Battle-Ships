@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -66,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Bitmap bitmap, resizeBitmap;
     private int square;
     private CheckBox fbPhoto, fbName;
+    private boolean syncFBname, syncFBphoto;
 
 
 
@@ -109,6 +111,10 @@ public class SettingsActivity extends AppCompatActivity {
         int screenWidth = sp.getInt("height",-1);
         int screenHeightOffSet = sp.getInt("widthOffSet",-1);
         int screenWidthOffSet = sp.getInt("heightOffSet",-1);
+
+        SharedPreferences spfb = getSharedPreferences("FACEBOOK", Activity.MODE_PRIVATE);
+        syncFBphoto=spfb.getBoolean("photo",false);
+        syncFBname=spfb.getBoolean("name",false);
 
         mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
 
@@ -179,6 +185,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         set.applyTo(mainLayout);
 
+        setNewName(!syncFBname);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference("User").child(firebaseUser.getUid());
@@ -256,6 +263,65 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+
+        fbPhoto.setChecked(syncFBphoto);
+        fbPhoto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+
+                    syncFBphoto=true;
+                    SharedPreferences.Editor editor = spfb.edit();
+                    editor.putBoolean("photo",syncFBphoto);
+                    editor.commit();
+                }else{
+                    syncFBphoto=false;
+                    SharedPreferences.Editor editor = spfb.edit();
+                    editor.putBoolean("photo",syncFBphoto);
+                    editor.commit();
+                }
+            }
+        });
+        fbName.setChecked(syncFBname);
+        fbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    syncFBname=true;
+                    SharedPreferences.Editor editor = spfb.edit();
+                    editor.putBoolean("name",syncFBname);
+                    editor.commit();
+                    setNewName(!syncFBname);
+                }else{
+                    syncFBname=false;
+                    SharedPreferences.Editor editor = spfb.edit();
+                    editor.putBoolean("name",syncFBname);
+                    editor.commit();
+                    setNewName(!syncFBname);
+                }
+            }
+        });
+
+    }
+
+    private void setNewName(boolean enabled){
+        if(enabled){
+            newNameEditText.setEnabled(true);
+            newNameEditText.setBackground(getDrawable(R.drawable.button_background_pen));
+            saveName.setClickable(true);
+            saveName.setBackground(getDrawable(R.drawable.button_background_pen));
+            saveName.setTextColor(getColor(R.color.pen));
+        }else{
+            newNameEditText.setEnabled(false);
+            newNameEditText.setBackground(getDrawable(R.drawable.button_background_pen_light));
+            newNameEditText.setText("");
+            saveName.setClickable(false);
+            saveName.setBackground(getDrawable(R.drawable.button_background_pen_light));
+            saveName.setTextColor(getColor(R.color.pen_light));
+        }
 
     }
 
