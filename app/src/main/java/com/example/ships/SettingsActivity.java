@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Shader;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -35,6 +39,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 
 public class SettingsActivity extends AppCompatActivity {
@@ -49,7 +59,11 @@ public class SettingsActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private TextView userNameTextView;
     private EditText newNameEditText;
-    private Button saveName;
+    private Button saveName, chooseNewPhoto, uploadNewPhoto;
+    private ImageView newPhoto;
+    private Uri imguri, resultUri;
+    private Bitmap bitmap, resizeBitmap;
+    private int square;
 
 
 
@@ -81,9 +95,13 @@ public class SettingsActivity extends AppCompatActivity {
         userNameTextView=findViewById(R.id.userNameSettingsActivity);
         newNameEditText=findViewById(R.id.newUserNameSettingsActivity);
         saveName=findViewById(R.id.saveNewNameSettingsActivity);
+        newPhoto=findViewById(R.id.new_photo_settings_activity);
+        chooseNewPhoto=findViewById(R.id.chooseNewPhotoSettingsActivity);
+        uploadNewPhoto=findViewById(R.id.uploadNewPhotoSettingsActivity);
+
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
-        int square = sp.getInt("square",-1);
+        square = sp.getInt("square",-1);
         int screenHeight = sp.getInt("width",-1);
         int screenWidth = sp.getInt("height",-1);
         int screenHeightOffSet = sp.getInt("widthOffSet",-1);
@@ -96,6 +114,9 @@ public class SettingsActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(11*square,2*square);
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(11*square,2*square);
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(4*square,2*square);
+        ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(4*square,4*square);
+        ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(8*square,2*square);
+        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(8*square,2*square);
 
         leave.setLayoutParams(params);
         photo.setLayoutParams(params1);
@@ -105,6 +126,14 @@ public class SettingsActivity extends AppCompatActivity {
         newNameEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         saveName.setLayoutParams(params4);
         saveName.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        newPhoto.setLayoutParams(params5);
+        newPhoto.setBackgroundResource(R.drawable.account_box_grey);
+        chooseNewPhoto.setLayoutParams(params6);
+        chooseNewPhoto.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        uploadNewPhoto.setLayoutParams(params7);
+        uploadNewPhoto.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        uploadNewPhoto.setVisibility(View.GONE);
+
 
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
@@ -124,6 +153,14 @@ public class SettingsActivity extends AppCompatActivity {
         set.connect(saveName.getId(),ConstraintSet.TOP,photo.getId(),ConstraintSet.BOTTOM,square);
         set.connect(saveName.getId(),ConstraintSet.LEFT,newNameEditText.getId(),ConstraintSet.RIGHT,square);
 
+        set.connect(newPhoto.getId(),ConstraintSet.TOP,newNameEditText.getId(),ConstraintSet.BOTTOM,3*square);
+        set.connect(newPhoto.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.connect(chooseNewPhoto.getId(),ConstraintSet.TOP,newNameEditText.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(chooseNewPhoto.getId(),ConstraintSet.LEFT,newPhoto.getId(),ConstraintSet.RIGHT,2*square);
+
+        set.connect(uploadNewPhoto.getId(),ConstraintSet.TOP,chooseNewPhoto.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(uploadNewPhoto.getId(),ConstraintSet.LEFT,chooseNewPhoto.getId(),ConstraintSet.LEFT,0);
 
         set.applyTo(mainLayout);
 
@@ -160,18 +197,95 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+
         saveName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user.setName(newNameEditText.getText().toString().trim());
+                String newName = newNameEditText.getText().toString().trim();
+                if(!TextUtils.isEmpty(newName)){
+                user.setName(newName);
                 databaseReference.setValue(user);
                 userNameTextView.setText(user.getName());
                 Toast.makeText(SettingsActivity.this,"NAME SAVED",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        chooseNewPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileChooser();
+            }
+        });
+
+        uploadNewPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(resizeBitmap!=null){
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    resizeBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                    byte[] data = baos.toByteArray();
+                    storageReference.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            photo.setImageBitmap(new RoundedCornerBitmap(resizeBitmap,square/2).getRoundedCornerBitmap());
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(SettingsActivity.this,"TRY ONCE AGAIN",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         });
 
     }
 
+    private void fileChooser(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
+
+            imguri=data.getData();
+
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1,1)
+                    .start(this);
+        }
+        if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if(resultCode==RESULT_OK){
+          //      resultUri = result.getUri();
+                resultUri = result.getUri();
+                bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),resultUri);
+                    resizeBitmap=null;
+                    resizeBitmap = Bitmap.createScaledBitmap(bitmap,200,200,false);
+                    newPhoto.setImageBitmap(new RoundedCornerBitmap(resizeBitmap,square/2).getRoundedCornerBitmap());
+                    uploadNewPhoto.setVisibility(View.VISIBLE);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+                }
+       //         newPhoto.setImageBitmap(bitmap);
+
+
+            }else if(resultCode==CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
+            Exception error = result.getError();
+            Toast.makeText(this,error.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     @Override
     public void onBackPressed() {

@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if(loggedInWithFacebook){
-                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?type=normal";
+                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?width=200&height=200";
                 DownloadFacebookImage downloadFacebookImage = new DownloadFacebookImage();
                 downloadFacebookImage.execute(photoUrl);
             }
