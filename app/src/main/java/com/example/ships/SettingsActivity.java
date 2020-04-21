@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -64,6 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Uri imguri, resultUri;
     private Bitmap bitmap, resizeBitmap;
     private int square;
+    private CheckBox fbPhoto, fbName;
 
 
 
@@ -98,7 +100,8 @@ public class SettingsActivity extends AppCompatActivity {
         newPhoto=findViewById(R.id.new_photo_settings_activity);
         chooseNewPhoto=findViewById(R.id.chooseNewPhotoSettingsActivity);
         uploadNewPhoto=findViewById(R.id.uploadNewPhotoSettingsActivity);
-
+        fbPhoto=findViewById(R.id.checkbox_fb_photo);
+        fbName=findViewById(R.id.checkbox_fb_name);
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         square = sp.getInt("square",-1);
@@ -117,6 +120,8 @@ public class SettingsActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(4*square,4*square);
         ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(8*square,2*square);
         ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(8*square,2*square);
+        ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(16*square,3*square);
+        ConstraintLayout.LayoutParams params9 = new ConstraintLayout.LayoutParams(16*square,3*square);
 
         leave.setLayoutParams(params);
         photo.setLayoutParams(params1);
@@ -133,7 +138,10 @@ public class SettingsActivity extends AppCompatActivity {
         uploadNewPhoto.setLayoutParams(params7);
         uploadNewPhoto.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         uploadNewPhoto.setVisibility(View.GONE);
-
+        fbPhoto.setLayoutParams(params8);
+        fbPhoto.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        fbName.setLayoutParams(params9);
+        fbName.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
 
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
@@ -161,6 +169,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         set.connect(uploadNewPhoto.getId(),ConstraintSet.TOP,chooseNewPhoto.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(uploadNewPhoto.getId(),ConstraintSet.LEFT,chooseNewPhoto.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(fbPhoto.getId(),ConstraintSet.TOP,newPhoto.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(fbPhoto.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.connect(fbName.getId(),ConstraintSet.TOP,fbPhoto.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(fbName.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
 
         set.applyTo(mainLayout);
 
@@ -229,6 +244,8 @@ public class SettingsActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             photo.setImageBitmap(new RoundedCornerBitmap(resizeBitmap,square/2).getRoundedCornerBitmap());
+                            newPhoto.setImageResource(R.drawable.account_box_grey);
+                            uploadNewPhoto.setVisibility(View.GONE);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -305,3 +322,4 @@ public class SettingsActivity extends AppCompatActivity {
 
 }
 //TODO finish settings activity
+// TODO setImageResource everywhere instead of setBackgroundResource...

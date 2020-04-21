@@ -94,12 +94,36 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="UPLOAD"
-        android:background="@drawable/button_background_pen"
-        android:textColor="@color/pen"
+        android:background="@drawable/button_background_pen_red"
+        android:textColor="@color/pen_red"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="0dp"
         android:padding="0dp"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_fb_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SYNC FB PHOTO"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:buttonTint="@color/pen"
+        android:paddingHorizontal="@dimen/FieldSize"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_fb_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SYNC FB NAME"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="@drawable/button_background_pen"
+        android:textColor="@color/pen"
+        android:buttonTint="@color/pen"
+        android:paddingHorizontal="@dimen/FieldSize"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
