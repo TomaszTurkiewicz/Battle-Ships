@@ -7,11 +7,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Shader;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -34,6 +36,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +50,9 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class SettingsActivity extends AppCompatActivity {
@@ -67,8 +73,9 @@ public class SettingsActivity extends AppCompatActivity {
     private Bitmap bitmap, resizeBitmap;
     private int square;
     private CheckBox fbPhoto, fbName;
-    private boolean syncFBname, syncFBphoto;
-
+    private boolean syncFBname, syncFBphoto, loggedInWithFB;
+    private String facebookName,facebookUserId;
+    private TextView braekLine1;
 
 
     @Override
@@ -104,6 +111,7 @@ public class SettingsActivity extends AppCompatActivity {
         uploadNewPhoto=findViewById(R.id.uploadNewPhotoSettingsActivity);
         fbPhoto=findViewById(R.id.checkbox_fb_photo);
         fbName=findViewById(R.id.checkbox_fb_name);
+        braekLine1 = findViewById(R.id.breakLineFirstSettingsActivity);
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         square = sp.getInt("square",-1);
@@ -112,9 +120,6 @@ public class SettingsActivity extends AppCompatActivity {
         int screenHeightOffSet = sp.getInt("widthOffSet",-1);
         int screenWidthOffSet = sp.getInt("heightOffSet",-1);
 
-        SharedPreferences spfb = getSharedPreferences("FACEBOOK", Activity.MODE_PRIVATE);
-        syncFBphoto=spfb.getBoolean("photo",false);
-        syncFBname=spfb.getBoolean("name",false);
 
         mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
 
@@ -128,6 +133,7 @@ public class SettingsActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(8*square,2*square);
         ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(16*square,3*square);
         ConstraintLayout.LayoutParams params9 = new ConstraintLayout.LayoutParams(16*square,3*square);
+        ConstraintLayout.LayoutParams params10 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,square/10);
 
         leave.setLayoutParams(params);
         photo.setLayoutParams(params1);
@@ -148,6 +154,7 @@ public class SettingsActivity extends AppCompatActivity {
         fbPhoto.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         fbName.setLayoutParams(params9);
         fbName.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        braekLine1.setLayoutParams(params10);
 
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
@@ -161,10 +168,13 @@ public class SettingsActivity extends AppCompatActivity {
         set.connect(userNameTextView.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,2*square);
         set.connect(userNameTextView.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
-        set.connect(newNameEditText.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,6*square);
+        set.connect(braekLine1.getId(),ConstraintSet.TOP,photo.getId(),ConstraintSet.BOTTOM,square-square/20);
+        set.connect(braekLine1.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(newNameEditText.getId(),ConstraintSet.TOP,photo.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(newNameEditText.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
-        set.connect(saveName.getId(),ConstraintSet.TOP,photo.getId(),ConstraintSet.BOTTOM,square);
+        set.connect(saveName.getId(),ConstraintSet.TOP,photo.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(saveName.getId(),ConstraintSet.LEFT,newNameEditText.getId(),ConstraintSet.RIGHT,square);
 
         set.connect(newPhoto.getId(),ConstraintSet.TOP,newNameEditText.getId(),ConstraintSet.BOTTOM,3*square);
@@ -176,20 +186,46 @@ public class SettingsActivity extends AppCompatActivity {
         set.connect(uploadNewPhoto.getId(),ConstraintSet.TOP,chooseNewPhoto.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(uploadNewPhoto.getId(),ConstraintSet.LEFT,chooseNewPhoto.getId(),ConstraintSet.LEFT,0);
 
-        set.connect(fbPhoto.getId(),ConstraintSet.TOP,newPhoto.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(fbName.getId(),ConstraintSet.TOP,newPhoto.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(fbName.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.connect(fbPhoto.getId(),ConstraintSet.TOP,fbName.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(fbPhoto.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
-        set.connect(fbName.getId(),ConstraintSet.TOP,fbPhoto.getId(),ConstraintSet.BOTTOM,2*square);
-        set.connect(fbName.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+
 
 
         set.applyTo(mainLayout);
 
-        setNewName(!syncFBname);
+
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference("User").child(firebaseUser.getUid());
         storageReference = FirebaseStorage.getInstance().getReference("profile_picture").child(firebaseUser.getUid());
+        SharedPreferences spfb = getSharedPreferences(firebaseUser.getUid()+"FACEBOOK", Activity.MODE_PRIVATE);
+        loggedInWithFB=false;
+        for(UserInfo profile : firebaseUser.getProviderData()) {
+            if (profile.getProviderId().contains("facebook.com")) {
+                loggedInWithFB=true;
+                facebookUserId = profile.getUid();
+                facebookName = profile.getDisplayName();
+            }
+        }
+        if(loggedInWithFB){
+            syncFBphoto=spfb.getBoolean("photo",false);
+            syncFBname=spfb.getBoolean("name",false);
+            setNewName(!syncFBname);
+            if(syncFBphoto){
+                chooseNewPhoto.setBackground(getDrawable(R.drawable.button_background_pen_light));
+                chooseNewPhoto.setTextColor(getColor(R.color.pen_light));
+                chooseNewPhoto.setClickable(false);
+            }
+        }else{
+            fbName.setVisibility(View.GONE);
+            fbPhoto.setVisibility(View.GONE);
+        }
+
+
 
         final long SIZE=1024*1024;
         storageReference.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -228,6 +264,7 @@ public class SettingsActivity extends AppCompatActivity {
                 user.setName(newName);
                 databaseReference.setValue(user);
                 userNameTextView.setText(user.getName());
+                newNameEditText.setText("");
                 Toast.makeText(SettingsActivity.this,"NAME SAVED",Toast.LENGTH_LONG).show();
                 }
             }
@@ -236,7 +273,11 @@ public class SettingsActivity extends AppCompatActivity {
         chooseNewPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fileChooser();
+                if(!syncFBphoto) {
+                    fileChooser();
+                }else{
+                    //DO NOTHING
+                }
             }
         });
 
@@ -277,11 +318,24 @@ public class SettingsActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = spfb.edit();
                     editor.putBoolean("photo",syncFBphoto);
                     editor.commit();
+                    chooseNewPhoto.setBackground(getDrawable(R.drawable.button_background_pen_light));
+                    chooseNewPhoto.setTextColor(getColor(R.color.pen_light));
+                    newPhoto.setImageResource(R.drawable.account_box_grey);
+                    resizeBitmap=null;
+                    uploadNewPhoto.setVisibility(View.GONE);
+                    String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?width=200&height=200";
+                    DownloadFacebookImage downloadFacebookImage = new DownloadFacebookImage();
+                    downloadFacebookImage.execute(photoUrl);
+
+
+
                 }else{
                     syncFBphoto=false;
                     SharedPreferences.Editor editor = spfb.edit();
                     editor.putBoolean("photo",syncFBphoto);
                     editor.commit();
+                    chooseNewPhoto.setBackground(getDrawable(R.drawable.button_background_pen));
+                    chooseNewPhoto.setTextColor(getColor(R.color.pen));
                 }
             }
         });
@@ -295,6 +349,9 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.putBoolean("name",syncFBname);
                     editor.commit();
                     setNewName(!syncFBname);
+                    user.setName(facebookName);
+                    userNameTextView.setText(user.getName());
+                    databaseReference.setValue(user);
                 }else{
                     syncFBname=false;
                     SharedPreferences.Editor editor = spfb.edit();
@@ -385,6 +442,50 @@ public class SettingsActivity extends AppCompatActivity {
         finish();
     }
 
+    private class DownloadFacebookImage extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if(bitmap!=null){
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                byte[] data = baos.toByteArray();
+                storageReference.putBytes(data).addOnSuccessListener(taskSnapshot -> {
+                    photo.setImageBitmap(new RoundedCornerBitmap(bitmap,square/2).getRoundedCornerBitmap());
+                    // do nothing
+                }).addOnFailureListener(e -> {
+                    //do nothing
+                });
+            }else{
+                // do nothing
+            }
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            String photoPath = params[0];
+            try {
+                URL url = new URL(photoPath);
+                HttpURLConnection c = (HttpURLConnection)url.openConnection();
+                c.setDoInput(true);
+                c.connect();
+                InputStream is = c.getInputStream();
+                Bitmap img;
+                img = BitmapFactory.decodeStream(is);
+                is.close();
+                c.disconnect();
+                return img;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+        }
+    }
 
 }
 //TODO finish settings activity
