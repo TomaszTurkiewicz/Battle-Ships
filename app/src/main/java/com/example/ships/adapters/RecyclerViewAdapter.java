@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ships.R;
 import com.example.ships.classes.Ranking;
+import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.TileDrawable;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,12 +57,12 @@ private String userId;
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                holder.photo.setImageBitmap(bm);
+                holder.photo.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                holder.photo.setBackgroundResource(R.drawable.account_box_grey);
+                holder.photo.setImageResource(R.drawable.account_box_grey);
             }
         });
 
@@ -105,9 +106,11 @@ private String userId;
             parentLayout = itemView.findViewById(R.id.parent_layout);
 
             ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,2*square);
+            LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(2*square,2*square);
             parentLayout.setLayoutParams(params);
             parentLayout.setBackground(new TileDrawable(mContext.getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
             positionScore.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+            photo.setLayoutParams(params1);
             usernameScore.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
             noOfGamesScore.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
             scoreScore.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);

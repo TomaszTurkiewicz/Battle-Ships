@@ -36,6 +36,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ships.classes.BattleFieldForDataBase;
 import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.GameDifficulty;
+import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -108,6 +109,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private TextView userName, opponentName;
     private int flags;
     private ImageView userPhoto, opponentPhoto;
+    private int square;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +171,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         battleFieldUpToDate=false;
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
-        int square = sp.getInt("square",-1);
+        square = sp.getInt("square",-1);
         int screenWidth = sp.getInt("width",-1);
         int screenHeight = sp.getInt("height",-1);
         int screenWidthOffSet = sp.getInt("widthOffSet",-1);
@@ -548,12 +550,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     @Override
                     public void onSuccess(byte[] bytes) {
                         Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                        userPhoto.setImageBitmap(bm);
+                        userPhoto.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        userPhoto.setBackgroundResource(R.drawable.account_box_grey);
+                        userPhoto.setImageResource(R.drawable.account_box_grey);
                     }
                 });
 
@@ -579,12 +581,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                     @Override
                                     public void onSuccess(byte[] bytes) {
                                         Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                        opponentPhoto.setImageBitmap(bm);
+                                        opponentPhoto.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        opponentPhoto.setBackgroundResource(R.drawable.account_box_grey);
+                                        opponentPhoto.setImageResource(R.drawable.account_box_grey);
                                     }
                                 });
 

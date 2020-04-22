@@ -16,9 +16,9 @@ public class RoundedCornerBitmap {
     public RoundedCornerBitmap() {
     }
 
-    public RoundedCornerBitmap(Bitmap bitmap, int roundPx) {
+    public RoundedCornerBitmap(Bitmap bitmap, int size) {
         this.bitmap = bitmap;
-        this.roundPx = roundPx;
+        this.roundPx = size/4;
     }
 
     public Bitmap getBitmap() {

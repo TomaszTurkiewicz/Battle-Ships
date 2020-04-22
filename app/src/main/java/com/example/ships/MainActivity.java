@@ -270,12 +270,12 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(byte[] bytes) {
                                         Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                        accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,square/2).getRoundedCornerBitmap());
+                                        accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,3*square).getRoundedCornerBitmap());
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
+                                        accountBtn.setImageResource(R.drawable.account_box_red_pen);
                                     }
                                 });
                             }
@@ -297,12 +297,12 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(byte[] bytes) {
                                     Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,square/2).getRoundedCornerBitmap());
+                                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,3*square).getRoundedCornerBitmap());
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
+                                    accountBtn.setImageResource(R.drawable.account_box_red_pen);
                                 }
                             });
                             userName.setText(user.getName());
@@ -352,12 +352,12 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(byte[] bytes) {
                                     Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,square/2).getRoundedCornerBitmap());
+                                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,3*square).getRoundedCornerBitmap());
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
+                                    accountBtn.setImageResource(R.drawable.account_box_red_pen);
                                 }
                             });
                             userName.setText(user.getName());
@@ -448,12 +448,12 @@ public class MainActivity extends AppCompatActivity {
                                                         @Override
                                                         public void onSuccess(byte[] bytes) {
                                                             Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                                            photo.setImageBitmap(bm);
+                                                            photo.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
                                                         }
                                                     }).addOnFailureListener(new OnFailureListener() {
                                                         @Override
                                                         public void onFailure(@NonNull Exception e) {
-                                                            photo.setBackgroundResource(R.drawable.account_box_grey);
+                                                            photo.setImageResource(R.drawable.account_box_grey);
                                                         }
                                                     });
 
@@ -502,12 +502,12 @@ public class MainActivity extends AppCompatActivity {
                                                         @Override
                                                         public void onSuccess(byte[] bytes) {
                                                             Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                                            photo.setImageBitmap(bm);
+                                                            photo.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
                                                         }
                                                     }).addOnFailureListener(new OnFailureListener() {
                                                         @Override
                                                         public void onFailure(@NonNull Exception e) {
-                                                            photo.setBackgroundResource(R.drawable.account_box_grey);
+                                                            photo.setImageResource(R.drawable.account_box_grey);
                                                         }
                                                     });
 
@@ -757,7 +757,7 @@ public class MainActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
                 byte[] data = baos.toByteArray();
                 storageReference.putBytes(data).addOnSuccessListener(taskSnapshot -> {
-                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bitmap,square/2).getRoundedCornerBitmap());
+                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bitmap,3*square).getRoundedCornerBitmap());
                 }).addOnFailureListener(e -> {
                     accountBtn.setImageResource(R.drawable.account_box_red_pen);
                 });
@@ -797,8 +797,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 // TODO change progress dialog in score and choose opponent...
-// TODO shared preferences do czy czytać zdjęcie i imię z fb
-// TODO photo with rounded corners?
 
 
 

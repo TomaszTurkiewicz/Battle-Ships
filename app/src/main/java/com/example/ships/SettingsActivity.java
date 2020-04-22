@@ -241,7 +241,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                photo.setImageBitmap(new RoundedCornerBitmap(bm,square/2).getRoundedCornerBitmap());
+                photo.setImageBitmap(new RoundedCornerBitmap(bm,4*square).getRoundedCornerBitmap());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -300,7 +300,7 @@ public class SettingsActivity extends AppCompatActivity {
                     storageReference.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            photo.setImageBitmap(new RoundedCornerBitmap(resizeBitmap,square/2).getRoundedCornerBitmap());
+                            photo.setImageBitmap(new RoundedCornerBitmap(resizeBitmap,4*square).getRoundedCornerBitmap());
                             newPhoto.setImageResource(R.drawable.account_box_grey);
                             uploadNewPhoto.setVisibility(View.GONE);
                         }
@@ -420,7 +420,7 @@ public class SettingsActivity extends AppCompatActivity {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),resultUri);
                     resizeBitmap=null;
                     resizeBitmap = Bitmap.createScaledBitmap(bitmap,200,200,false);
-                    newPhoto.setImageBitmap(new RoundedCornerBitmap(resizeBitmap,square/2).getRoundedCornerBitmap());
+                    newPhoto.setImageBitmap(new RoundedCornerBitmap(resizeBitmap,4*square).getRoundedCornerBitmap());
                     uploadNewPhoto.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -464,7 +464,7 @@ public class SettingsActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
                 byte[] data = baos.toByteArray();
                 storageReference.putBytes(data).addOnSuccessListener(taskSnapshot -> {
-                    photo.setImageBitmap(new RoundedCornerBitmap(bitmap,square/2).getRoundedCornerBitmap());
+                    photo.setImageBitmap(new RoundedCornerBitmap(bitmap,4*square).getRoundedCornerBitmap());
                     // do nothing
                 }).addOnFailureListener(e -> {
                     //do nothing
@@ -497,5 +497,3 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 }
-//TODO finish settings activity
-// TODO setImageResource everywhere instead of setBackgroundResource...

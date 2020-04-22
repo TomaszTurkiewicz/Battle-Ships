@@ -36,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ships.adapters.RecyclerViewAdapterChooseOpponent;
 import com.example.ships.classes.Ranking;
+import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -264,12 +265,12 @@ public class ChooseOpponent extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(byte[] bytes) {
                                             Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                            photo.setImageBitmap(bm);
+                                            photo.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            photo.setBackgroundResource(R.drawable.account_box_grey);
+                                            photo.setImageResource(R.drawable.account_box_grey);
                                         }
                                     });
 
