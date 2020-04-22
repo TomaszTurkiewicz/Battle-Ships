@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private String facebookUserId="";
     private String facebookName="";
+    private boolean syncFBName=false;
+    private boolean syncFBPhoto = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,14 +236,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         if(logIn){
+            loggedIn.setText("Logged in: ");
             userID = firebaseUser.getUid();
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
             storageReference= FirebaseStorage.getInstance().getReference("profile_picture").child(userID);
-
-
-
-
             for(UserInfo profile : firebaseUser.getProviderData()) {
                 if (profile.getProviderId().contains("facebook.com")) {
                     loggedInWithFacebook=true;
@@ -249,74 +248,121 @@ public class MainActivity extends AppCompatActivity {
                     facebookName = profile.getDisplayName();
                 }
             }
-
-            if(loggedInWithFacebook){
-                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?width=200&height=200";
-                DownloadFacebookImage downloadFacebookImage = new DownloadFacebookImage();
-                downloadFacebookImage.execute(photoUrl);
-            }
-
-
-        }
-
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if(logIn){
-            loggedIn.setText("Zalogowany jako: ");
-
-            final long SIZE=1024*1024;
-            storageReference.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,square/2).getRoundedCornerBitmap());
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
-                }
-            });
-
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
-
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     if (dataSnapshot.exists()) {
                         user=dataSnapshot.getValue(User.class);
-
                         if(loggedInWithFacebook){
-                            user.setName(facebookName);
+
+                            SharedPreferences spfb = getSharedPreferences(user.getId()+"FACEBOOK", Activity.MODE_PRIVATE);
+                            syncFBPhoto=spfb.getBoolean("photo",false);
+                            syncFBName=spfb.getBoolean("name",false);
+
+                            if(syncFBPhoto){
+                                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?width=200&height=200";
+                                DownloadFacebookImage downloadFacebookImage = new DownloadFacebookImage();
+                                downloadFacebookImage.execute(photoUrl);
+                            }else{
+                                final long SIZE=1024*1024;
+                                storageReference.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                    @Override
+                                    public void onSuccess(byte[] bytes) {
+                                        Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                        accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,square/2).getRoundedCornerBitmap());
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
+                                    }
+                                });
+                            }
+
+                            if(syncFBName) {
+                                user.setName(facebookName);
+                                userName.setText(user.getName());
+                                databaseReferenceMy.setValue(user);
+                                ready=true;
+                            }
+                            else{
+                                userName.setText(user.getName());
+                                ready=true;
+                            }
+
                         }else{
+                            final long SIZE=1024*1024;
+                            storageReference.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                @Override
+                                public void onSuccess(byte[] bytes) {
+                                    Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,square/2).getRoundedCornerBitmap());
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
+                                }
+                            });
+                            userName.setText(user.getName());
+                            ready=true;
                         }
 
-                        userName.setText(user.getName());
-                        databaseReferenceMy.setValue(user);
-                        ready=true;
+
                     } else {
-
-                        if(loggedInWithFacebook){
-                            user.setName(facebookName);
-                        }else{
-                            user.setName(firebaseUser.getEmail());
-                        }
-
-                        userName.setText(user.getName());
                         user.setId(userID);
-
+                        user.setName(firebaseUser.getEmail());
                         user.setEmail(firebaseUser.getEmail());
                         user.setNoOfGames(0);
                         user.setScore(0);
                         user.setIndex(new FightIndex());
                         user.setSinglePlayerMatch(new SinglePlayerMatch());
                         databaseReferenceMy.setValue(user);
-                        ready=true;
+                        if(loggedInWithFacebook){
+
+                            SharedPreferences spfb = getSharedPreferences(user.getId()+"FACEBOOK", Activity.MODE_PRIVATE);
+                            syncFBPhoto=spfb.getBoolean("photo",false);
+                            syncFBName=spfb.getBoolean("name",false);
+
+                            if(syncFBPhoto){
+                                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?width=200&height=200";
+                                DownloadFacebookImage downloadFacebookImage = new DownloadFacebookImage();
+                                downloadFacebookImage.execute(photoUrl);
+                            }else{
+                                accountBtn.setImageResource(R.drawable.account_box_red_pen);
+                            }
+
+
+                            if(syncFBName){
+                                user.setName(facebookName);
+                                userName.setText(user.getName());
+                                databaseReferenceMy.setValue(user);
+                                ready=true;
+                            }
+
+                            else{
+                                userName.setText(user.getName());
+                                ready=true;
+                            }
+
+                        }else{
+                            final long SIZE=1024*1024;
+                            storageReference.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                @Override
+                                public void onSuccess(byte[] bytes) {
+                                    Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bm,square/2).getRoundedCornerBitmap());
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    accountBtn.setBackgroundResource(R.drawable.account_box_red_pen);
+                                }
+                            });
+                            userName.setText(user.getName());
+                            ready=true;
+                        }
 
                     }
                 }
@@ -325,6 +371,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+
+
+
+
+
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(logIn){
             checkMyOpponentAndMove.run();
             multiplayerBtn.setVisibility(View.VISIBLE);
             multiplayerBtn.setClickable(true);
@@ -530,7 +589,6 @@ public class MainActivity extends AppCompatActivity {
 
         }else{
             loggedIn.setText("niezalogowany");
-            userName.setClickable(false);
             multiplayerBtn.setVisibility(View.GONE);
             redDotMultiplayerIV.setVisibility(View.GONE);
             multiplayerBtn.setClickable(false);
@@ -699,13 +757,12 @@ public class MainActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
                 byte[] data = baos.toByteArray();
                 storageReference.putBytes(data).addOnSuccessListener(taskSnapshot -> {
-                    
-                // do nothing
+                    accountBtn.setImageBitmap(new RoundedCornerBitmap(bitmap,square/2).getRoundedCornerBitmap());
                 }).addOnFailureListener(e -> {
-                    //do nothing
+                    accountBtn.setImageResource(R.drawable.account_box_red_pen);
                 });
             }else{
-                // do nothing
+                accountBtn.setImageResource(R.drawable.account_box_red_pen);
             }
         }
 

@@ -203,7 +203,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         set.connect(fbPhoto.getId(),ConstraintSet.TOP,fbName.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(fbPhoto.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
-        
+
         set.applyTo(mainLayout);
 
 
