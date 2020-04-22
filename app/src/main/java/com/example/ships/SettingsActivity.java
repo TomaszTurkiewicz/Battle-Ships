@@ -75,7 +75,7 @@ public class SettingsActivity extends AppCompatActivity {
     private CheckBox fbPhoto, fbName;
     private boolean syncFBname, syncFBphoto, loggedInWithFB;
     private String facebookName,facebookUserId;
-    private TextView braekLine1;
+    private TextView breakLine1, breakLine2, breakLine3;
 
 
     @Override
@@ -111,7 +111,9 @@ public class SettingsActivity extends AppCompatActivity {
         uploadNewPhoto=findViewById(R.id.uploadNewPhotoSettingsActivity);
         fbPhoto=findViewById(R.id.checkbox_fb_photo);
         fbName=findViewById(R.id.checkbox_fb_name);
-        braekLine1 = findViewById(R.id.breakLineFirstSettingsActivity);
+        breakLine1 = findViewById(R.id.breakLineFirstSettingsActivity);
+        breakLine2 = findViewById(R.id.breakLineSecondSettingsActivity);
+        breakLine3 = findViewById(R.id.breakLineThirdSettingsActivity);
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         square = sp.getInt("square",-1);
@@ -134,6 +136,8 @@ public class SettingsActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(16*square,3*square);
         ConstraintLayout.LayoutParams params9 = new ConstraintLayout.LayoutParams(16*square,3*square);
         ConstraintLayout.LayoutParams params10 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,square/10);
+        ConstraintLayout.LayoutParams params11 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,square/10);
+        ConstraintLayout.LayoutParams params12 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,square/10);
 
         leave.setLayoutParams(params);
         photo.setLayoutParams(params1);
@@ -154,7 +158,9 @@ public class SettingsActivity extends AppCompatActivity {
         fbPhoto.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         fbName.setLayoutParams(params9);
         fbName.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
-        braekLine1.setLayoutParams(params10);
+        breakLine1.setLayoutParams(params10);
+        breakLine2.setLayoutParams(params11);
+        breakLine3.setLayoutParams(params12);
 
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
@@ -168,14 +174,17 @@ public class SettingsActivity extends AppCompatActivity {
         set.connect(userNameTextView.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,2*square);
         set.connect(userNameTextView.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
-        set.connect(braekLine1.getId(),ConstraintSet.TOP,photo.getId(),ConstraintSet.BOTTOM,square-square/20);
-        set.connect(braekLine1.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,0);
+        set.connect(breakLine1.getId(),ConstraintSet.TOP,photo.getId(),ConstraintSet.BOTTOM,square-square/20);
+        set.connect(breakLine1.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,0);
 
         set.connect(newNameEditText.getId(),ConstraintSet.TOP,photo.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(newNameEditText.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
         set.connect(saveName.getId(),ConstraintSet.TOP,photo.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(saveName.getId(),ConstraintSet.LEFT,newNameEditText.getId(),ConstraintSet.RIGHT,square);
+
+        set.connect(breakLine2.getId(),ConstraintSet.TOP,newNameEditText.getId(),ConstraintSet.BOTTOM,square-square/20);
+        set.connect(breakLine2.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,0);
 
         set.connect(newPhoto.getId(),ConstraintSet.TOP,newNameEditText.getId(),ConstraintSet.BOTTOM,3*square);
         set.connect(newPhoto.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
@@ -186,15 +195,15 @@ public class SettingsActivity extends AppCompatActivity {
         set.connect(uploadNewPhoto.getId(),ConstraintSet.TOP,chooseNewPhoto.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(uploadNewPhoto.getId(),ConstraintSet.LEFT,chooseNewPhoto.getId(),ConstraintSet.LEFT,0);
 
-        set.connect(fbName.getId(),ConstraintSet.TOP,newPhoto.getId(),ConstraintSet.BOTTOM,2*square);
+        set.connect(breakLine3.getId(),ConstraintSet.TOP,newPhoto.getId(),ConstraintSet.BOTTOM,2*square-square/20);
+        set.connect(breakLine3.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(fbName.getId(),ConstraintSet.TOP,newPhoto.getId(),ConstraintSet.BOTTOM,3*square);
         set.connect(fbName.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
 
         set.connect(fbPhoto.getId(),ConstraintSet.TOP,fbName.getId(),ConstraintSet.BOTTOM,2*square);
         set.connect(fbPhoto.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
-
-
-
-
+        
         set.applyTo(mainLayout);
 
 
