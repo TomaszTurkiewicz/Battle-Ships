@@ -89,6 +89,7 @@ public class CreateBattleField extends AppCompatActivity {
     private LinearLayout linearLayoutFourMasts, linearLayoutThreeMasts, linearLayoutTwoMasts, linearLayoutOneMasts;
     private int flags;
     private boolean refFightSet;
+    private boolean alertDialogFlag=false;
 
 
 
@@ -279,8 +280,6 @@ public class CreateBattleField extends AppCompatActivity {
         super.onPause();
     }
 
-
-
     private void disableOneMastsTextView(){
         setGrey((TextView) linearLayoutOneMasts.getChildAt(0));
         linearLayoutOneMasts.setClickable(false);
@@ -346,8 +345,6 @@ public class CreateBattleField extends AppCompatActivity {
 
         }
     }
-
-
 
     private void setNoShipColor(TextView textView) {
             textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
@@ -521,18 +518,18 @@ public class CreateBattleField extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
-
-
     public void onClickBack(View view) {
-        finish();
+        if(alertDialogFlag){
+            // do nothing
+        }else {
+            finish();
+        }
     }
 
     public void onClickStartGame(View view) {
+        if(alertDialogFlag){
+            // do nothing
+        }else{
         if(multiplayerMode){
             databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -563,53 +560,62 @@ public class CreateBattleField extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), GameBattle.class);
             startActivity(intent);
             finish();
+            }
         }
     }
 
     public void onClickputOneMastsShip(View view) {
-        deleteUncomplitedShips();
-        choosenShip=1;
-        checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-        if(!oneMastsShip1Boolean()){
-            shipNumberFlag=1;
-        }
-        else{
-            if(!oneMastsShip2Boolean()){
-                shipNumberFlag=2;
-            }
-            else{
-                if(!oneMastsShip3Boolean()){
-                    shipNumberFlag=3;
-                }else{
-                    if(!oneMastsShip4Boolean()){
-                        shipNumberFlag=4;
+        if (alertDialogFlag) {
+            // do nothing
+        } else {
+            deleteUncomplitedShips();
+            choosenShip = 1;
+            checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
+            if (!oneMastsShip1Boolean()) {
+                shipNumberFlag = 1;
+            } else {
+                if (!oneMastsShip2Boolean()) {
+                    shipNumberFlag = 2;
+                } else {
+                    if (!oneMastsShip3Boolean()) {
+                        shipNumberFlag = 3;
+                    } else {
+                        if (!oneMastsShip4Boolean()) {
+                            shipNumberFlag = 4;
+                        }
                     }
                 }
             }
+            updateActiveTextViewFourMastsShipCounter(choosenShip);
         }
-        updateActiveTextViewFourMastsShipCounter(choosenShip);
     }
 
     public void onClickputTwoMastsShip(View view) {
-        deleteUncomplitedShips();
-        choosenShip=2;
-        checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
-        if(!twoMastsShip1Boolean()){
-            shipNumberFlag=1;
-        }
-        else{
-            if(!twoMastsShip2Boolean()){
-                shipNumberFlag=2;
-            }else{
-                if(!twoMastsShip3Boolean()){
-                    shipNumberFlag=3;
+        if (alertDialogFlag) {
+            // do nothing
+        } else {
+            deleteUncomplitedShips();
+            choosenShip = 2;
+            checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
+            if (!twoMastsShip1Boolean()) {
+                shipNumberFlag = 1;
+            } else {
+                if (!twoMastsShip2Boolean()) {
+                    shipNumberFlag = 2;
+                } else {
+                    if (!twoMastsShip3Boolean()) {
+                        shipNumberFlag = 3;
+                    }
                 }
             }
+            updateActiveTextViewFourMastsShipCounter(choosenShip);
         }
-        updateActiveTextViewFourMastsShipCounter(choosenShip);
     }
 
     public void onClickputThreeMastsShip(View view) {
+        if (alertDialogFlag) {
+            // do nothing
+        } else {
         deleteUncomplitedShips();
         choosenShip=3;
         checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
@@ -623,13 +629,18 @@ public class CreateBattleField extends AppCompatActivity {
             else;
         }
         updateActiveTextViewFourMastsShipCounter(choosenShip);
+        }
     }
 
     public void onClickputFourMastsShip(View view) {
+        if (alertDialogFlag) {
+            // do nothing
+        } else {
         deleteUncomplitedShips();
         choosenShip=4;
         shipNumberFlag=1;
         updateActiveTextViewFourMastsShipCounter(choosenShip);
+        }
     }
 
     private void updateActiveTextViewFourMastsShipCounter(int choosen) {
@@ -758,6 +769,9 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     public void putShip(int i, int j, int numberOfMasts){
+        if(alertDialogFlag){
+            // do nothing
+        }else{
         if(numberOfMasts==1||numberOfMasts==2||numberOfMasts==3||numberOfMasts==4){
             if(numberOfMasts==4){
                 checkShipsOnBattleField(battleFieldPlayerCreateBattleFieldActivity);
@@ -1015,9 +1029,10 @@ public class CreateBattleField extends AppCompatActivity {
  //               updateClicableBattleField();
             }
             else;
-        }else if(numberOfMasts==5){
-            makeFieldZero(i,j);
+        }else if(numberOfMasts==5) {
+            makeFieldZero(i, j);
             deleteUncomplitedShips();
+            }
         }
     }
 
@@ -1703,40 +1718,48 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     public void onClickReset(View view) {
-
-        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(CreateBattleField.this);
-        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
-        mBuilder.setView(mView);
-        android.app.AlertDialog dialog = mBuilder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
-        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
-        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
-        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
-        title.setText("RESETTING");
-        message.setText("Do you want to reset ships?");
-        negativeButton.setText("NO");
-        negativeButton.setOnClickListener(v12 -> dialog.dismiss());
-        positiveButton.setText("YES");
-        positiveButton.setOnClickListener(v1 -> {
-            dialog.dismiss();
-            for(int i=0;i<10;i++){
-                for(int j=0;j<10;j++){
-                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(0);
-                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(0);
-                    battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(false);
-                    gridLayout.getChildAt(10*i+j).setClickable(true);
+        if(alertDialogFlag){
+            // do nothing
+        }else {
+            alertDialogFlag=true;
+            android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(CreateBattleField.this);
+            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons, null);
+            mBuilder.setView(mView);
+            android.app.AlertDialog dialog = mBuilder.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+            Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+            Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+            title.setText("RESETTING");
+            message.setText("Do you want to reset ships?");
+            negativeButton.setText("NO");
+            negativeButton.setOnClickListener(v12 -> {
+                dialog.dismiss();
+                alertDialogFlag=false;
+            });
+            positiveButton.setText("YES");
+            positiveButton.setOnClickListener(v1 -> {
+                alertDialogFlag=false;
+                dialog.dismiss();
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 0; j < 10; j++) {
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setNumberOfMasts(0);
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShipNumber(0);
+                        battleFieldPlayerCreateBattleFieldActivity.battleField[i][j].setShip(false);
+                        gridLayout.getChildAt(10 * i + j).setClickable(true);
+                    }
                 }
-            }
-            choosenShip=0;
-            updateScreen();
+                choosenShip = 0;
+                updateScreen();
 
-        });
-        dialog.show();
+            });
+            dialog.show();
+        }
     }
 
 
@@ -1818,13 +1841,19 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     public void onClickDelete(View view) {
-        choosenShip=5;
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                gridLayout.getChildAt(10*i+j).setClickable(true);
+        if(alertDialogFlag){
+            // do nothing
+        }else
+            {
+            choosenShip=5;
+            for(int i=0;i<10;i++){
+                for(int j=0;j<10;j++){
+                    gridLayout.getChildAt(10*i+j).setClickable(true);
+                }
             }
         }
     }
+
     private Runnable checkWinner = new Runnable() {
         @Override
         public void run() {
@@ -1866,6 +1895,7 @@ public class CreateBattleField extends AppCompatActivity {
                 user.setIndex(new FightIndex());
                 databaseReferenceMy.setValue(user);
                 databaseReferenceFight.removeValue();
+                alertDialogFlag=true;
                 android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(CreateBattleField.this);
                 View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red, null);
                 mBuilder.setView(mView);
@@ -1890,6 +1920,7 @@ public class CreateBattleField extends AppCompatActivity {
 
             } else if (w.isSurrendered() && !w.isOutOfDate()) {
                 // poddał się ale doliczam sobie punkty
+                alertDialogFlag=true;
                 int score = user.getScore();
                 score = score + 50;
                 user.setScore(score);
