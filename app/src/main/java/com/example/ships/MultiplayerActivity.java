@@ -39,8 +39,7 @@ import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.ships.classes.Winner;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -59,6 +58,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import static android.view.View.GONE;
+
 public class MultiplayerActivity extends AppCompatActivity implements View.OnTouchListener{
 
     private static String TAG = "NOTIFICATION TAG";
@@ -72,7 +73,6 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private DatabaseReference databaseReferenceMy, databaseReferenceFight, databaseReferenceOpponent;
     private String userID;
     private User user = new User();
-    private User opponent = new User();
     private BattleFieldForDataBase battleFieldForDataBaseMy = new BattleFieldForDataBase();
     private BattleFieldForDataBase battleFieldForDataBaseOpponent = new BattleFieldForDataBase();
     private Handler mHandler = new Handler();
@@ -83,6 +83,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             shipTwoMastsCounterFirst, shipTwoMastsCounterSecond, shipTwoMastsCounterThird,
             shipOneMastsCounterFirst, shipOneMastsCounterSecond, shipOneMastsCounterThird, shipOneMastsCounterFourth;
     private boolean battleFieldsSet;
+    private boolean playersShown;
     private TextView turnTextView;
     private ImageButton surrenderButton, leave;
     private boolean enableTouchListener;
@@ -110,6 +111,9 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private int flags;
     private ImageView userPhoto, opponentPhoto;
     private int square;
+    private boolean runChecking;
+    private String opponentNameString;
+    private boolean fight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,88 +126,91 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
         getWindow().getDecorView().setSystemUiVisibility(flags);
         final View decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener(){
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
 
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
-                if((visibility&View.SYSTEM_UI_FLAG_FULLSCREEN)==0){
+                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
                     decorView.setSystemUiVisibility(flags);
                 }
             }
         });
 
         setContentView(R.layout.activity_multiplayer);
-        mainLayout=findViewById(R.id.multiplayerActivityLayout);
-        layoutMy=findViewById(R.id.gridLayoutMultiplayerBattleMy);
-        layoutOpponent=findViewById(R.id.gridLayoutMultiplayerBattleOpponent);
-        linearLayoutLettersMy=findViewById(R.id.linearLayoutMultiplayerActivityLettersMy);
-        linearLayoutLettersOpponent=findViewById(R.id.linearLayoutMultiplayerActivityLettersOpponent);
-        linearLayoutNumbersMy=findViewById(R.id.linearLayoutMultiplayerActivityNumbersMy);
-        linearLayoutNumbersOpponent=findViewById(R.id.linearLayoutMultiplayerActivityNumbersOpponent);
-        fourMasts=findViewById(R.id.linearLayoutMultiplayerShipFourMasts);
-        threeMastsFirst=findViewById(R.id.linearLayoutMultiplayerShipThreeMastsFirst);
-        threeMastsSecond=findViewById(R.id.linearLayoutMultiplayerShipThreeMastsSecond);
-        twoMastsFirst=findViewById(R.id.linearLayoutMultiplayerShipTwoMastsFirst);
-        twoMastsSecond=findViewById(R.id.linearLayoutMultiplayerShipTwoMastsSecond);
-        twoMastsThird=findViewById(R.id.linearLayoutMultiplayerShipTwoMastsThird);
-        oneMastsFirst=findViewById(R.id.linearLayoutMultiplayerShipOneMastsFirst);
-        oneMastsSecond=findViewById(R.id.linearLayoutMultiplayerShipOneMastsSecond);
-        oneMastsThird=findViewById(R.id.linearLayoutMultiplayerShipOneMastsThird);
-        oneMastsFourth=findViewById(R.id.linearLayoutMultiplayerShipOneMastsFourth);
+        mainLayout = findViewById(R.id.multiplayerActivityLayout);
+        layoutMy = findViewById(R.id.gridLayoutMultiplayerBattleMy);
+        layoutOpponent = findViewById(R.id.gridLayoutMultiplayerBattleOpponent);
+        linearLayoutLettersMy = findViewById(R.id.linearLayoutMultiplayerActivityLettersMy);
+        linearLayoutLettersOpponent = findViewById(R.id.linearLayoutMultiplayerActivityLettersOpponent);
+        linearLayoutNumbersMy = findViewById(R.id.linearLayoutMultiplayerActivityNumbersMy);
+        linearLayoutNumbersOpponent = findViewById(R.id.linearLayoutMultiplayerActivityNumbersOpponent);
+        fourMasts = findViewById(R.id.linearLayoutMultiplayerShipFourMasts);
+        threeMastsFirst = findViewById(R.id.linearLayoutMultiplayerShipThreeMastsFirst);
+        threeMastsSecond = findViewById(R.id.linearLayoutMultiplayerShipThreeMastsSecond);
+        twoMastsFirst = findViewById(R.id.linearLayoutMultiplayerShipTwoMastsFirst);
+        twoMastsSecond = findViewById(R.id.linearLayoutMultiplayerShipTwoMastsSecond);
+        twoMastsThird = findViewById(R.id.linearLayoutMultiplayerShipTwoMastsThird);
+        oneMastsFirst = findViewById(R.id.linearLayoutMultiplayerShipOneMastsFirst);
+        oneMastsSecond = findViewById(R.id.linearLayoutMultiplayerShipOneMastsSecond);
+        oneMastsThird = findViewById(R.id.linearLayoutMultiplayerShipOneMastsThird);
+        oneMastsFourth = findViewById(R.id.linearLayoutMultiplayerShipOneMastsFourth);
         surrenderButton = findViewById(R.id.surrenderMultiplayer);
         surrenderButton.setBackgroundResource(R.drawable.grid_off);
-        turnTextView=findViewById(R.id.turn);
-        turnTextView.setVisibility(View.GONE);
-        leave=findViewById(R.id.leaveMultiPlayer);
+        turnTextView = findViewById(R.id.turn);
+        turnTextView.setVisibility(GONE);
+        leave = findViewById(R.id.leaveMultiPlayer);
         leave.setBackgroundResource(R.drawable.back);
-        userName=findViewById(R.id.userNameMultiplayer);
-        opponentName=findViewById(R.id.opponentNameMultiplayer);
-        userPhoto=findViewById(R.id.user_photo_multiplayer);
-        opponentPhoto=findViewById(R.id.opponent_photo_multiplayer);
+        userName = findViewById(R.id.userNameMultiplayer);
+        opponentName = findViewById(R.id.opponentNameMultiplayer);
+        userPhoto = findViewById(R.id.user_photo_multiplayer);
+        opponentPhoto = findViewById(R.id.opponent_photo_multiplayer);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReferenceMy=firebaseDatabase.getReference("User").child(userID);
-        surrenderButton.setVisibility(View.GONE);
-        enableTouchListener=false;
-        battleFieldsSet=false;
-        battleFieldUpToDate=false;
+        databaseReferenceMy = firebaseDatabase.getReference("User").child(userID);
+        surrenderButton.setVisibility(GONE);
+        enableTouchListener = false;
+        battleFieldsSet = false;
+        battleFieldUpToDate = false;
+        playersShown = false;
+        runChecking=false;
+        fight=true;
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
-        square = sp.getInt("square",-1);
-        int screenWidth = sp.getInt("width",-1);
-        int screenHeight = sp.getInt("height",-1);
-        int screenWidthOffSet = sp.getInt("widthOffSet",-1);
-        int screenHeightOffSet = sp.getInt("heightOffSet",-1);
-        float textSize = (square*9)/10;
-        marginTop = 4*square;
-        marginLeft = screenWidth-screenWidthOffSet-13*square;
-        mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
+        square = sp.getInt("square", -1);
+        int screenWidth = sp.getInt("width", -1);
+        int screenHeight = sp.getInt("height", -1);
+        int screenWidthOffSet = sp.getInt("widthOffSet", -1);
+        int screenHeightOffSet = sp.getInt("heightOffSet", -1);
+        float textSize = (square * 9) / 10;
+        marginTop = 4 * square;
+        marginLeft = screenWidth - screenWidthOffSet - 13 * square;
+        mainLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT, square));
 
 
-        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(2*square,2*square);
-        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(10*square,10*square);
-        ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(10*square,square);
-        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(square,10*square);
-        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(10*square,10*square);
-        ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(10*square,square);
-        ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(square,10*square);
-        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(4*square,square);
-        ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(3*square,square);
-        ConstraintLayout.LayoutParams params9 = new ConstraintLayout.LayoutParams(3*square,square);
-        ConstraintLayout.LayoutParams params10 = new ConstraintLayout.LayoutParams(2*square,square);
-        ConstraintLayout.LayoutParams params11 = new ConstraintLayout.LayoutParams(2*square,square);
-        ConstraintLayout.LayoutParams params12 = new ConstraintLayout.LayoutParams(2*square,square);
-        ConstraintLayout.LayoutParams params13 = new ConstraintLayout.LayoutParams(square,square);
-        ConstraintLayout.LayoutParams params14 = new ConstraintLayout.LayoutParams(square,square);
-        ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square,square);
-        ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square,square);
-        ConstraintLayout.LayoutParams params17 = new ConstraintLayout.LayoutParams(2*square,2*square);
-        ConstraintLayout.LayoutParams params18 = new ConstraintLayout.LayoutParams(8*square,2*square);
-        ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(8*square,2*square);
-        ConstraintLayout.LayoutParams params20 = new ConstraintLayout.LayoutParams(2*square,2*square);
-        ConstraintLayout.LayoutParams params21 = new ConstraintLayout.LayoutParams(2*square,2*square);
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
+        ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(10 * square, 10 * square);
+        ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(10 * square, square);
+        ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(square, 10 * square);
+        ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(10 * square, 10 * square);
+        ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(10 * square, square);
+        ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(square, 10 * square);
+        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(4 * square, square);
+        ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(3 * square, square);
+        ConstraintLayout.LayoutParams params9 = new ConstraintLayout.LayoutParams(3 * square, square);
+        ConstraintLayout.LayoutParams params10 = new ConstraintLayout.LayoutParams(2 * square, square);
+        ConstraintLayout.LayoutParams params11 = new ConstraintLayout.LayoutParams(2 * square, square);
+        ConstraintLayout.LayoutParams params12 = new ConstraintLayout.LayoutParams(2 * square, square);
+        ConstraintLayout.LayoutParams params13 = new ConstraintLayout.LayoutParams(square, square);
+        ConstraintLayout.LayoutParams params14 = new ConstraintLayout.LayoutParams(square, square);
+        ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(square, square);
+        ConstraintLayout.LayoutParams params16 = new ConstraintLayout.LayoutParams(square, square);
+        ConstraintLayout.LayoutParams params17 = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
+        ConstraintLayout.LayoutParams params18 = new ConstraintLayout.LayoutParams(8 * square, 2 * square);
+        ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(8 * square, 2 * square);
+        ConstraintLayout.LayoutParams params20 = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
+        ConstraintLayout.LayoutParams params21 = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
 
         surrenderButton.setLayoutParams(params);
         layoutMy.setLayoutParams(params1);
@@ -224,258 +231,478 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         oneMastsFourth.setLayoutParams(params16);
         leave.setLayoutParams(params17);
         userName.setLayoutParams(params18);
-        userName.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        userName.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         opponentName.setLayoutParams(params19);
-        opponentName.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        opponentName.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         userPhoto.setLayoutParams(params20);
         opponentPhoto.setLayoutParams(params21);
 
-        for(int i = 0; i<10; i++){
-            TextView tv = (TextView)linearLayoutLettersMy.getChildAt(i);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        for (int i = 0; i < 10; i++) {
+            TextView tv = (TextView) linearLayoutLettersMy.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         }
-        for(int i = 0; i<10; i++){
-            TextView tv = (TextView)linearLayoutNumbersMy.getChildAt(i);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        for (int i = 0; i < 10; i++) {
+            TextView tv = (TextView) linearLayoutNumbersMy.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         }
-        for(int i = 0; i<10; i++){
-            TextView tv = (TextView)linearLayoutLettersOpponent.getChildAt(i);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        for (int i = 0; i < 10; i++) {
+            TextView tv = (TextView) linearLayoutLettersOpponent.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         }
-        for(int i = 0; i<10; i++){
-            TextView tv = (TextView)linearLayoutNumbersOpponent.getChildAt(i);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
+        for (int i = 0; i < 10; i++) {
+            TextView tv = (TextView) linearLayoutNumbersOpponent.getChildAt(i);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         }
 
-        marginDown = screenHeight-screenHeightOffSet-2*square;
+        marginDown = screenHeight - screenHeightOffSet - 2 * square;
 
-        if(((screenWidth-screenWidthOffSet)/square)%2==0){
-            marginLeftForShips=(screenWidth-screenWidthOffSet)/2-15*square;
-        }else{
-            marginLeftForShips=(screenWidth-screenWidthOffSet-square)/2-15*square;
+        if (((screenWidth - screenWidthOffSet) / square) % 2 == 0) {
+            marginLeftForShips = (screenWidth - screenWidthOffSet) / 2 - 15 * square;
+        } else {
+            marginLeftForShips = (screenWidth - screenWidthOffSet - square) / 2 - 15 * square;
         }
 
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
 
-        set.connect(surrenderButton.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,square);
-        set.connect(surrenderButton.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+        set.connect(surrenderButton.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, square);
+        set.connect(surrenderButton.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, square);
 
-        set.connect(layoutMy.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,4*square);
-        set.connect(layoutMy.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,5*square);
+        set.connect(layoutMy.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, 4 * square);
+        set.connect(layoutMy.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, 5 * square);
 
-        set.connect(linearLayoutLettersMy.getId(),ConstraintSet.BOTTOM,layoutMy.getId(),ConstraintSet.TOP,0);
-        set.connect(linearLayoutLettersMy.getId(),ConstraintSet.LEFT,layoutMy.getId(),ConstraintSet.LEFT,0);
+        set.connect(linearLayoutLettersMy.getId(), ConstraintSet.BOTTOM, layoutMy.getId(), ConstraintSet.TOP, 0);
+        set.connect(linearLayoutLettersMy.getId(), ConstraintSet.LEFT, layoutMy.getId(), ConstraintSet.LEFT, 0);
 
-        set.connect(linearLayoutNumbersMy.getId(),ConstraintSet.TOP,layoutMy.getId(),ConstraintSet.TOP,0);
-        set.connect(linearLayoutNumbersMy.getId(),ConstraintSet.RIGHT,layoutMy.getId(),ConstraintSet.LEFT,0);
+        set.connect(linearLayoutNumbersMy.getId(), ConstraintSet.TOP, layoutMy.getId(), ConstraintSet.TOP, 0);
+        set.connect(linearLayoutNumbersMy.getId(), ConstraintSet.RIGHT, layoutMy.getId(), ConstraintSet.LEFT, 0);
 
-        set.connect(layoutOpponent.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginTop);
-        set.connect(layoutOpponent.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeft);
+        set.connect(layoutOpponent.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, marginTop);
+        set.connect(layoutOpponent.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, marginLeft);
 
-        set.connect(linearLayoutLettersOpponent.getId(),ConstraintSet.BOTTOM,layoutOpponent.getId(),ConstraintSet.TOP,0);
-        set.connect(linearLayoutLettersOpponent.getId(),ConstraintSet.LEFT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
+        set.connect(linearLayoutLettersOpponent.getId(), ConstraintSet.BOTTOM, layoutOpponent.getId(), ConstraintSet.TOP, 0);
+        set.connect(linearLayoutLettersOpponent.getId(), ConstraintSet.LEFT, layoutOpponent.getId(), ConstraintSet.LEFT, 0);
 
-        set.connect(linearLayoutNumbersOpponent.getId(),ConstraintSet.TOP,layoutOpponent.getId(),ConstraintSet.TOP,0);
-        set.connect(linearLayoutNumbersOpponent.getId(),ConstraintSet.RIGHT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
+        set.connect(linearLayoutNumbersOpponent.getId(), ConstraintSet.TOP, layoutOpponent.getId(), ConstraintSet.TOP, 0);
+        set.connect(linearLayoutNumbersOpponent.getId(), ConstraintSet.RIGHT, layoutOpponent.getId(), ConstraintSet.LEFT, 0);
 
-        set.connect(fourMasts.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginDown);
-        set.connect(fourMasts.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,marginLeftForShips);
+        set.connect(fourMasts.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, marginDown);
+        set.connect(fourMasts.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, marginLeftForShips);
 
-        set.connect(threeMastsFirst.getId(),ConstraintSet.TOP,fourMasts.getId(),ConstraintSet.TOP,0);
-        set.connect(threeMastsFirst.getId(),ConstraintSet.LEFT,fourMasts.getId(),ConstraintSet.RIGHT,square);
+        set.connect(threeMastsFirst.getId(), ConstraintSet.TOP, fourMasts.getId(), ConstraintSet.TOP, 0);
+        set.connect(threeMastsFirst.getId(), ConstraintSet.LEFT, fourMasts.getId(), ConstraintSet.RIGHT, square);
 
-        set.connect(threeMastsSecond.getId(),ConstraintSet.TOP,threeMastsFirst.getId(),ConstraintSet.TOP,0);
-        set.connect(threeMastsSecond.getId(),ConstraintSet.LEFT,threeMastsFirst.getId(),ConstraintSet.RIGHT,square);
+        set.connect(threeMastsSecond.getId(), ConstraintSet.TOP, threeMastsFirst.getId(), ConstraintSet.TOP, 0);
+        set.connect(threeMastsSecond.getId(), ConstraintSet.LEFT, threeMastsFirst.getId(), ConstraintSet.RIGHT, square);
 
-        set.connect(twoMastsFirst.getId(),ConstraintSet.TOP,threeMastsSecond.getId(),ConstraintSet.TOP,0);
-        set.connect(twoMastsFirst.getId(),ConstraintSet.LEFT,threeMastsSecond.getId(),ConstraintSet.RIGHT,square);
+        set.connect(twoMastsFirst.getId(), ConstraintSet.TOP, threeMastsSecond.getId(), ConstraintSet.TOP, 0);
+        set.connect(twoMastsFirst.getId(), ConstraintSet.LEFT, threeMastsSecond.getId(), ConstraintSet.RIGHT, square);
 
-        set.connect(twoMastsSecond.getId(),ConstraintSet.TOP,twoMastsFirst.getId(),ConstraintSet.TOP,0);
-        set.connect(twoMastsSecond.getId(),ConstraintSet.LEFT,twoMastsFirst.getId(),ConstraintSet.RIGHT,square);
+        set.connect(twoMastsSecond.getId(), ConstraintSet.TOP, twoMastsFirst.getId(), ConstraintSet.TOP, 0);
+        set.connect(twoMastsSecond.getId(), ConstraintSet.LEFT, twoMastsFirst.getId(), ConstraintSet.RIGHT, square);
 
-        set.connect(twoMastsThird.getId(),ConstraintSet.TOP,twoMastsSecond.getId(),ConstraintSet.TOP,0);
-        set.connect(twoMastsThird.getId(),ConstraintSet.LEFT,twoMastsSecond.getId(),ConstraintSet.RIGHT,square);
+        set.connect(twoMastsThird.getId(), ConstraintSet.TOP, twoMastsSecond.getId(), ConstraintSet.TOP, 0);
+        set.connect(twoMastsThird.getId(), ConstraintSet.LEFT, twoMastsSecond.getId(), ConstraintSet.RIGHT, square);
 
-        set.connect(oneMastsFirst.getId(),ConstraintSet.TOP,twoMastsThird.getId(),ConstraintSet.TOP,0);
-        set.connect(oneMastsFirst.getId(),ConstraintSet.LEFT,twoMastsThird.getId(),ConstraintSet.RIGHT,square);
+        set.connect(oneMastsFirst.getId(), ConstraintSet.TOP, twoMastsThird.getId(), ConstraintSet.TOP, 0);
+        set.connect(oneMastsFirst.getId(), ConstraintSet.LEFT, twoMastsThird.getId(), ConstraintSet.RIGHT, square);
 
-        set.connect(oneMastsSecond.getId(),ConstraintSet.TOP,oneMastsFirst.getId(),ConstraintSet.TOP,0);
-        set.connect(oneMastsSecond.getId(),ConstraintSet.LEFT,oneMastsFirst.getId(),ConstraintSet.RIGHT,square);
+        set.connect(oneMastsSecond.getId(), ConstraintSet.TOP, oneMastsFirst.getId(), ConstraintSet.TOP, 0);
+        set.connect(oneMastsSecond.getId(), ConstraintSet.LEFT, oneMastsFirst.getId(), ConstraintSet.RIGHT, square);
 
-        set.connect(oneMastsThird.getId(),ConstraintSet.TOP,oneMastsSecond.getId(),ConstraintSet.TOP,0);
-        set.connect(oneMastsThird.getId(),ConstraintSet.LEFT,oneMastsSecond.getId(),ConstraintSet.RIGHT,square);
+        set.connect(oneMastsThird.getId(), ConstraintSet.TOP, oneMastsSecond.getId(), ConstraintSet.TOP, 0);
+        set.connect(oneMastsThird.getId(), ConstraintSet.LEFT, oneMastsSecond.getId(), ConstraintSet.RIGHT, square);
 
-        set.connect(oneMastsFourth.getId(),ConstraintSet.TOP,oneMastsThird.getId(),ConstraintSet.TOP,0);
-        set.connect(oneMastsFourth.getId(),ConstraintSet.LEFT,oneMastsThird.getId(),ConstraintSet.RIGHT,square);
+        set.connect(oneMastsFourth.getId(), ConstraintSet.TOP, oneMastsThird.getId(), ConstraintSet.TOP, 0);
+        set.connect(oneMastsFourth.getId(), ConstraintSet.LEFT, oneMastsThird.getId(), ConstraintSet.RIGHT, square);
 
-        set.connect(leave.getId(),ConstraintSet.TOP,mainLayout.getId(),ConstraintSet.TOP,marginDown-2*square);
-        set.connect(leave.getId(),ConstraintSet.LEFT,mainLayout.getId(),ConstraintSet.LEFT,square);
+        set.connect(leave.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, marginDown - 2 * square);
+        set.connect(leave.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, square);
 
-        set.connect(userPhoto.getId(),ConstraintSet.BOTTOM,layoutMy.getId(),ConstraintSet.TOP,square);
-        set.connect(userPhoto.getId(),ConstraintSet.LEFT,layoutMy.getId(),ConstraintSet.LEFT,0);
+        set.connect(userPhoto.getId(), ConstraintSet.BOTTOM, layoutMy.getId(), ConstraintSet.TOP, square);
+        set.connect(userPhoto.getId(), ConstraintSet.LEFT, layoutMy.getId(), ConstraintSet.LEFT, 0);
 
-        set.connect(userName.getId(),ConstraintSet.BOTTOM,layoutMy.getId(),ConstraintSet.TOP,square);
-        set.connect(userName.getId(),ConstraintSet.LEFT,userPhoto.getId(),ConstraintSet.RIGHT,0);
+        set.connect(userName.getId(), ConstraintSet.BOTTOM, layoutMy.getId(), ConstraintSet.TOP, square);
+        set.connect(userName.getId(), ConstraintSet.LEFT, userPhoto.getId(), ConstraintSet.RIGHT, 0);
 
-        set.connect(opponentPhoto.getId(),ConstraintSet.BOTTOM,layoutOpponent.getId(),ConstraintSet.TOP,square);
-        set.connect(opponentPhoto.getId(),ConstraintSet.LEFT,layoutOpponent.getId(),ConstraintSet.LEFT,0);
+        set.connect(opponentPhoto.getId(), ConstraintSet.BOTTOM, layoutOpponent.getId(), ConstraintSet.TOP, square);
+        set.connect(opponentPhoto.getId(), ConstraintSet.LEFT, layoutOpponent.getId(), ConstraintSet.LEFT, 0);
 
-        set.connect(opponentName.getId(),ConstraintSet.BOTTOM,layoutOpponent.getId(),ConstraintSet.TOP,square);
-        set.connect(opponentName.getId(),ConstraintSet.LEFT,opponentPhoto.getId(),ConstraintSet.RIGHT,0);
+        set.connect(opponentName.getId(), ConstraintSet.BOTTOM, layoutOpponent.getId(), ConstraintSet.TOP, square);
+        set.connect(opponentName.getId(), ConstraintSet.LEFT, opponentPhoto.getId(), ConstraintSet.RIGHT, 0);
 
         set.applyTo(mainLayout);
 
-        height=square;
-        width=square;
-
-
-
+        height = square;
+        width = square;
 
         layoutOpponent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 layoutOpponent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 layoutOpponent.getLocationOnScreen(locationLayout);
-
             }
         });
         layoutOpponent.setOnTouchListener(this);
 
         game.run();
-        checkGameIndex.run();
+        checkWinner.run();
 
     }
-
-    @Override
-    protected void onPause() {
-        mHandler.removeCallbacks(game);
-        mHandler2.removeCallbacks(checkGameIndex);
-        super.onPause();
-    }
-
-
-
-    private Runnable checkGameIndex = new Runnable() {
-        @Override
-        public void run() {
-            databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    user = dataSnapshot.getValue(User.class);
-
-                    if(user.getIndex().getGameIndex().isEmpty()){
-                        mHandler2.removeCallbacks(checkGameIndex);
-
-                        finish();
-                    }else{
-                        mHandler2.postDelayed(checkGameIndex,deelay);
-                    }
-
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-    };
-
 
     private Runnable game = new Runnable() {
         @Override
         public void run() {
-            if(!battleFieldsSet) {
-                createFields();
+            if(!playersShown){
+                showPlayers();
             }else{
-                fight();
+                createFieldsandPlay();
             }
         }
     };
 
-    private void fight() {
+    private void createFieldsandPlay() {
+        if(!battleFieldsSet){
+            createFields();
 
+        }else{
+            if(fight) {
+                fight();
+            }else;
+        }
+    }
+
+    private void fight(){
+        databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String turn = (String)dataSnapshot.child("turn").getValue();
+                if(user.getId().equals(turn)){
+                    // my move
+                    userName.setTextColor(getColor(R.color.pen));
+                    opponentName.setTextColor(getColor(R.color.pen_red));
+
+                    showOpponentBattleField();
+                    hideBattleFiledAvailableMy();
+                    enableTouchListener=true;
+
+                }else{
+                    // not my move
+                    userName.setTextColor(getColor(R.color.pen_red));
+                    opponentName.setTextColor(getColor(R.color.pen));
+
+                    battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
+                    battleFieldForDataBaseMy.listToField();
+                    hideBattleFieldOpponent();
+                    showMyBattleField();
+                    mHandler.postDelayed(game, deelay);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void showMyBattleField() {
+        for(int i =0;i<10;i++){
+            for(int j = 0; j<10;j++){
+                //jest statek i został trafiony
+                if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
+                        &&battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
+                    displayShipCell((TextView) layoutMy.getChildAt(10*i+j));
+                }
+
+                // woda i została trafiony
+                else if(!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
+                        &&battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
+                    displayWaterCell((TextView) layoutMy.getChildAt(10*i+j));
+                }
+
+                // jest statek i nie został trafiony
+                else if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
+                        &&!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
+                    displayWidmoShip((TextView) layoutMy.getChildAt(10*i+j));
+                }
+                // nie ma statku i nie został trafiony
+                else if(!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
+                        &&!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
+                    displayBattleCell((TextView) layoutMy.getChildAt(10*i+j));
+                }
+                else;
+            }
+        }
+    }
+
+    private void displayWidmoShip(TextView textView) {
+        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+    }
+
+    private void displayWaterCell(TextView textView) {
+        textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x));
+    }
+
+    private void displayBattleCell(TextView textView) {
+        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
+    }
+
+    private void displayShipCell(TextView textView) {
+        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
+    }
+
+    private void createFields() {
+        databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    // create database
+                    databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
+                    databaseReferenceFight.child("winner").setValue(new Winner());
+                    databaseReferenceFight.child("ready").setValue(false);
+                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                    long timeInMili = calendar.getTimeInMillis();
+                    databaseReferenceFight.child("time").setValue(timeInMili);
+                    askForCreatingGame();
+                }else{
+                    // read if it is set
+                    runChecking=true;
+                    boolean ready = (boolean) dataSnapshot.child("ready").getValue();
+                    if(!ready){
+
+                        if(!dataSnapshot.child(user.getId()).exists()){
+                            // stwórz moją planszę
+                            askForCreatingGame();
+
+                        }else{
+                            // plansza jest stworzona teraz difficulty
+                            if(!battleFieldUpToDate){
+                                battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
+                                battleFieldForDataBaseMy.listToField();
+                                battleFieldUpToDate=true;
+                            }
+                            hideBattleFiledAvailableMy();
+                            if(dataSnapshot.child(user.getId()).child("difficulty").child("set").getValue().equals(false)){
+                                chooseDifficulty();
+                            }else{
+                                // ustaw surrender, textview i sprawdzaj przeciwnika planszę
+                                surrenderButton.setVisibility(View.VISIBLE);
+                                turnTextView.setText("WAITING FOR "+opponentNameString);
+                                turnTextView.setVisibility(View.VISIBLE);
+
+                                if(dataSnapshot.child(user.getIndex().getOpponent()).exists()){
+                                    // plansza przeciwnika istnieje to spradz
+                                    boolean opponentReady = (boolean) dataSnapshot.child(user.getIndex().getOpponent()).child("difficulty").child("set").getValue();
+                                    if(opponentReady){
+                                        // przeciwnik gotowy
+                                        battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
+                                        battleFieldForDataBaseOpponent.listToField();
+                                        battleFieldForDataBaseMy.listToField();
+                                        turnTextView.setVisibility(GONE);
+                                        battleFieldsSet=true;
+                                        initializeOpponentArrayBattleField();
+                                        checkShipCounters();
+                                        hideBattleFieldOpponent();
+                                        updateShipsHit();
+                                        databaseReferenceFight.child("ready").setValue(true);
+                                        mHandler.postDelayed(game, deelay);
+
+                                    }else{
+                                        // przeciwnik jeszcze nie gotowy
+                                        mHandler.postDelayed(game,deelay);
+                                    }
+                                }else{
+                                    // nie istnieje jeszcze to wykonaj pętlę
+
+                                    mHandler.postDelayed(game,deelay);
+                                }
+
+                            }
+                        }
+                    }else{
+                        // zczytaj z bazy danych i rozpocznij grę
+                        battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
+                        battleFieldForDataBaseOpponent.listToField();
+                        battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
+                        battleFieldForDataBaseMy.listToField();
+                        surrenderButton.setVisibility(View.VISIBLE);
+                        battleFieldsSet=true;
+                        hideBattleFiledAvailableMy();
+                        initializeOpponentArrayBattleField();
+                        checkShipCounters();
+                        hideBattleFieldOpponent();
+                        updateShipsHit();
+                        mHandler.postDelayed(game,deelay);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void checkShipCounters() {
+        shipFourMastsCounter=0;
+        shipThreeMastsCounterFirst=0;
+        shipThreeMastsCounterSecond=0;
+        shipTwoMastsCounterFirst=0;
+        shipTwoMastsCounterSecond=0;
+        shipTwoMastsCounterThird=0;
+        shipOneMastsCounterFirst=0;
+        shipOneMastsCounterSecond=0;
+        shipOneMastsCounterThird=0;
+        shipOneMastsCounterFourth=0;
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()&&
+                        battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
+                    int numberOfMasts = battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts();
+                    int shipNumber = battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber();
+                    updateCounters(numberOfMasts,shipNumber);
+                }
+            }
+        }
+    }
+
+    private void initializeOpponentArrayBattleField() {
+        for(int i = 0; i<10;i++){
+            for(int j=0; j<10;j++){
+                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()&&
+                        battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
+                    battleFieldOpponent[i][j]=SHIP_RED;
+                } else if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()&&
+                        !battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
+                    battleFieldOpponent[i][j]=WATER;
+                }else{
+                    battleFieldOpponent[i][j]=BATTLE_CELL;
+                }
+            }
+        }
+    }
+
+    private void chooseDifficulty() {
+        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+        mBuilder.setView(mView);
+        android.app.AlertDialog dialog = mBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+        title.setText("Difficulty");
+        message.setText("choose game difficulty");
+        negativeButton.setText("EASY");
+        negativeButton.setOnClickListener(v12 -> {
+            dialog.dismiss();
+            battleFieldForDataBaseMy.getDifficulty().setEasy(true);
+            battleFieldForDataBaseMy.getDifficulty().setSet(true);
+            databaseReferenceFight.child(user.getId()).child("difficulty").setValue(battleFieldForDataBaseMy.getDifficulty());
+            mHandler.postDelayed(game,deelay);
+        });
+        positiveButton.setText("NORMAL");
+        positiveButton.setOnClickListener(v1 -> {
+            dialog.dismiss();
+            battleFieldForDataBaseMy.getDifficulty().setEasy(false);
+            battleFieldForDataBaseMy.getDifficulty().setSet(true);
+            databaseReferenceFight.child(user.getId()).child("difficulty").setValue(battleFieldForDataBaseMy.getDifficulty());
+            mHandler.postDelayed(game,deelay);
+        });
+        dialog.show();
+    }
+
+    private void askForCreatingGame() {
+        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+        mBuilder.setView(mView);
+        android.app.AlertDialog dialog = mBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+        title.setText("CREATE BATTLE FIELD");
+        message.setText("How would you like to do it?");
+        negativeButton.setText("RANDOM");
+        negativeButton.setOnClickListener(v12 -> {
+            dialog.dismiss();
+            battleFieldForDataBaseMy.create();
+            battleFieldUpToDate=true;
+            databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
+            int noOfGames = user.getNoOfGames();
+            noOfGames = noOfGames+1;
+            user.setNoOfGames(noOfGames);
+            databaseReferenceMy.setValue(user);
+            mHandler.postDelayed(game,deelay);
+        });
+        positiveButton.setText("BY MYSELF");
+        positiveButton.setOnClickListener(v1 -> {
+            dialog.dismiss();
+            GameDifficulty.getInstance().setMultiplayerMode(true);
+            Intent intent = new Intent(MultiplayerActivity.this, CreateBattleField.class);
+            startActivity(intent);
+            finish();
+        });
+        dialog.show();
+    }
+
+    private void showPlayers() {
+        hideBattleFieldOpponent();
+        hideBattleFiledAvailableMy();
         databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
+                userName.setText(user.getName());
+                StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(user.getId());
+                final long SIZE = 1024*1024;
+                sr.getBytes(SIZE).addOnSuccessListener(bytes -> {
+                    Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                    userPhoto.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
+                }).addOnFailureListener(e -> userPhoto.setImageResource(R.drawable.account_box_grey));
                 if(user.getIndex().getOpponent().isEmpty()){
-
                     finish();
                 }else{
-                    makeMove();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    private void makeMove() {
-
-        databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String turn = (String) dataSnapshot.child("turn").getValue();
-                if(user.getId().equals(turn)){
-
-                    userName.setTextColor(getColor(R.color.pen));
-                    opponentName.setTextColor(getColor(R.color.pen_red));
-
-                    battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
-                    battleFieldForDataBaseMy.listToField();
-                    showOpponentBattleField();
-                    hideBattleFiledAvailableMy();
-                    enableTouchListener=true;
-                }
-                else{
-
-                    userName.setTextColor(getColor(R.color.pen_red));
-                    opponentName.setTextColor(getColor(R.color.pen));
-
-                    String winner = (String) dataSnapshot.child("winner").getValue();
-
-                    if(user.getIndex().getOpponent().equals(winner)){
-                        databaseReferenceFight.removeValue();
-                        FightIndex fightIndex = new FightIndex();
-                        databaseReferenceMy.child("index").setValue(fightIndex);
-                        mHandler.removeCallbacks(game);
-                        mHandler2.removeCallbacks(checkGameIndex);
-
-                        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
-                        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red,null);
-                        mBuilder.setView(mView);
-                        android.app.AlertDialog dialog = mBuilder.create();
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-                        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-                        dialog.setCancelable(false);
-                        dialog.setCanceledOnTouchOutside(false);
-                        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_red);
-                        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_red);
-                        Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_red);
-                        title.setText("SORRY");
-                        message.setText("Maybe next time");
-                        positiveButton.setText("OK");
-                        positiveButton.setOnClickListener(v1 -> {
-                            dialog.dismiss();
-                            finish();
-                        });
-                        dialog.show();
-
-                    }else{
-                        battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
-                        battleFieldForDataBaseMy.listToField();
-                        hideBattleFieldOpponent();
-                        showMyBattleField();
-                        mHandler.postDelayed(game, deelay);
-                    }
+                    databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
+                    databaseReferenceFight = firebaseDatabase.getReference("Battle").child(user.getIndex().getGameIndex());
+                    databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                User opponent = dataSnapshot.getValue(User.class);
+                                opponentName.setText(opponent.getName());
+                                opponentNameString=opponent.getName();
+                                StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(opponent.getId());
+                                final long SIZE = 1024*1024;
+                                sr.getBytes(SIZE).addOnSuccessListener(bytes -> {
+                                    Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                                    opponentPhoto.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
+                                    playersShown=true;
+                                    mHandler.postDelayed(game,deelay);
+                                }).addOnFailureListener(e -> {
+                                    opponentPhoto.setImageResource(R.drawable.account_box_grey);
+                                    playersShown=true;
+                                    mHandler.postDelayed(game,deelay);
+                                });
+                            }else{
+                                FightIndex fightIndex = new FightIndex();
+                                user.setIndex(fightIndex);
+                                databaseReferenceMy.setValue(user);
+                                finish();
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
                 }
             }
             @Override
@@ -533,422 +760,444 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }
     }
 
+    private void displayShipCellHidden(TextView TextView){
+        TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+    }
 
-    private void createFields() {
-        hideBattleFieldOpponent();
-        hideBattleFiledAvailableMy();
-        databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                userName.setText(user.getName());
+    private void displayWaterCellHidden(TextView TextView){
+        TextView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hidden));
+    }
 
-                StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(user.getId());
+    private void displayWidmoShipHidden(TextView TextView){
+        TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
+    }
 
-                final long SIZE = 1024*1024;
-                sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+    private void displayBattleCellHidden(TextView TextView){
+        TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
+    }
+
+    private Runnable checkWinner = new Runnable() {
+        @Override
+        public void run() {
+            if(runChecking){
+                databaseReferenceFight.child("winner").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                        userPhoto.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            Winner w = dataSnapshot.getValue(Winner.class);
+                            if(w.getWinner().equals("")){
+                                 mHandler2.postDelayed(checkWinner,deelay);
+                            }else{
+                                fight=false;
+                                mHandler.removeCallbacks(game);
+                                mHandler2.removeCallbacks(checkWinner);
+                                enableTouchListener=false;
+                                leave.setVisibility(GONE);
+                                surrenderButton.setVisibility(GONE);
+                                showWinnerDialod(w);
+                            }
+                        }else{
+                            mHandler2.postDelayed(checkWinner,deelay);
+                        }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        userPhoto.setImageResource(R.drawable.account_box_grey);
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
                     }
                 });
+            }else{
+                mHandler2.postDelayed(checkWinner,deelay);
+            }
+        }
+    };
 
+    private void showWinnerDialod(Winner w) {
 
+        if(w.getWinner().equals(user.getIndex().getOpponent())){
+            // przegrałem
 
-                if(user.getIndex().getOpponent().isEmpty()){
+            android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red,null);
+            mBuilder.setView(mView);
+            android.app.AlertDialog dialog = mBuilder.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_red);
+            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_red);
+            Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_red);
+            title.setText("SORRY");
+            message.setText("Maybe next time");
+            positiveButton.setText("OK");
+            positiveButton.setOnClickListener(v1 -> {
 
+                user.setIndex(new FightIndex());
+                databaseReferenceMy.setValue(user);
+                databaseReferenceFight.removeValue();
+                dialog.dismiss();
+                finish();
+            });
+            dialog.show();
+        }else if(w.getWinner().equals(user.getId())){
+            // wygrałem (bo się poddał - sprawdź czy out off date)
+            if(w.isSurrendered()&&w.isOutOfDate()){
+                //poddał się ale za długo czekał
+                user.setIndex(new FightIndex());
+                databaseReferenceMy.setValue(user);
+                databaseReferenceFight.removeValue();
+                android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+                View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red,null);
+                mBuilder.setView(mView);
+                android.app.AlertDialog dialog = mBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
+                TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_red);
+                TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_red);
+                Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_red);
+                title.setText("SORRY");
+                message.setText("YOUR OPPONENT HAS LEFT");
+                positiveButton.setText("OK");
+                positiveButton.setOnClickListener(v1 -> {
+                    dialog.dismiss();
                     finish();
-                }else {
-                    databaseReferenceOpponent=firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
-                    databaseReferenceFight = firebaseDatabase.getReference("Battle").child(user.getIndex().getGameIndex());
-
-                    databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
-                                opponent = dataSnapshot.getValue(User.class);
-                                opponentName.setText(opponent.getName());
-                                StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(opponent.getId());
-
-                                final long SIZE = 1024*1024;
-                                sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                                    @Override
-                                    public void onSuccess(byte[] bytes) {
-                                        Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                        opponentPhoto.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        opponentPhoto.setImageResource(R.drawable.account_box_grey);
-                                    }
-                                });
-
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                });
+                dialog.show();
 
 
+            }else if (w.isSurrendered()&&!w.isOutOfDate()){
+                // poddał się ale doliczam sobie punkty
+                int score = user.getScore();
+                if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                    score = score+25;
+                }else{
+                    score = score+50;
+                }
+                user.setScore(score);
+                user.setIndex(new FightIndex());
+                databaseReferenceMy.setValue(user);
+                databaseReferenceFight.removeValue();
+                android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+                View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green,null);
+                mBuilder.setView(mView);
+                android.app.AlertDialog dialog = mBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
+                TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_green);
+                TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_green);;
+                Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_green);
+                title.setText("CONGRATULATION");
+                message.setText("YOUR OPPONENT HAS SURRENDERED GAME");
+                positiveButton.setText("OK");
+                positiveButton.setOnClickListener(v1 -> {
+                    dialog.dismiss();
+                    finish();
+                });
+                dialog.show();
+                
+
+            }else{
+                // jakiś błąd
+                user.setIndex(new FightIndex());
+                databaseReferenceMy.setValue(user);
+                databaseReferenceFight.removeValue();
+                finish();
+            }
+        }else{
+            // błąd dziwny winner
+            user.setIndex(new FightIndex());
+            databaseReferenceMy.setValue(user);
+            databaseReferenceFight.removeValue();
+            finish();
+        }
 
 
-                    databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (!dataSnapshot.exists()) {
+    }
 
-
-                                databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
-                                databaseReferenceFight.child("winner").setValue("");
-                                databaseReferenceFight.child("ready").setValue(false);
-                                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-                                long timeInMili = calendar.getTimeInMillis();
-                                databaseReferenceFight.child("time").setValue(timeInMili);
-
-                                askForCreatingGame();
-                            } else {
-                                if(!dataSnapshot.child(userID).exists()){
-                                    askForCreatingGame();
-
-                                }else{
-                                    if(!battleFieldUpToDate){
-                                        battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
-                                        battleFieldForDataBaseMy.listToField();
-                                        battleFieldUpToDate=true;
-                                    }
-                                    hideBattleFiledAvailableMy();
-                                    if(dataSnapshot.child(userID).child("difficulty").child("set").getValue().equals(false)){
-                                        chooseDifficulty();
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if(enableTouchListener) {
+            final int X = (int) event.getRawX();
+            final int Y = (int) event.getRawY();
+            int x = (X - locationLayout[0]) / width;
+            int y = (Y - locationLayout[1]) / height;
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_DOWN:
+                    if(battleFieldOpponent[y][x]==BATTLE_CELL){
+                        for (int i = 0; i < 10; i++) {
+                            for (int j = 0; j < 10; j++) {
+                                if (x == j || y == i) {
+                                    if(battleFieldOpponent[i][j]==BATTLE_CELL){
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
+                                    }else if(battleFieldOpponent[i][j]==WATER){
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
                                     }else{
-                                        surrenderButton.setVisibility(View.VISIBLE);
-
-                                        turnTextView.setText("WAITING FOR "+opponent.getName());
-                                        turnTextView.setVisibility(View.VISIBLE);
-                                        battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
-                                        battleFieldForDataBaseMy.listToField();
-                                        hideBattleFiledAvailableMy();
-                                        if(dataSnapshot.child(user.getIndex().getOpponent()).exists()){
-
-                                            if(dataSnapshot.child(user.getIndex().getOpponent()).child("difficulty").exists()) {
-                                                battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
-                                                battleFieldForDataBaseOpponent.listToField();
-                                                battleFieldForDataBaseMy.listToField();
-
-                                                if(battleFieldForDataBaseMy.isCreated() && battleFieldForDataBaseOpponent.isCreated() &&
-                                                        battleFieldForDataBaseMy.getDifficulty().isSet() && battleFieldForDataBaseOpponent.getDifficulty().isSet()) {
-                                                        databaseReferenceFight.child("ready").setValue(true);
-                                                        turnTextView.setVisibility(View.GONE);
-                                                        battleFieldsSet = true;
-                                                        initializeOpponentArrayBattleField();
-                                                        checkShipCounters();
-                                                        hideBattleFieldOpponent();
-                                                        updateShipsHit();
-                                                        mHandler.postDelayed(game, deelay);
-                                                    }else{
-                                                    mHandler.postDelayed(game, deelay);
-                                                    }
-                                                }else{
-                                                mHandler.postDelayed(game,deelay);
-                                            }
-                                        }else{
-                                            mHandler.postDelayed(game,deelay);
-                                        }
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
                                     }
                                 }
                             }
                         }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    }else {
+                        for (int i = 0; i < 10; i++) {
+                            for (int j = 0; j < 10; j++) {
+                                if (x == j || y == i) {
+                                    if(battleFieldOpponent[i][j]==BATTLE_CELL){
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
+                                    }else if(battleFieldOpponent[i][j]==WATER){
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
+                                    }else{
+                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                        tv.setBackground(getDrawable(R.drawable.ship_cell_x_red_field));
+                                    }
+                                }
+                            }
                         }
-                    });
-                }
+                    }
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if(x>=0&&x<=9&&y>=0&&y<=9){
+                        showOpponentBattleField();
+                        if(battleFieldOpponent[y][x]==BATTLE_CELL){
+                            for (int i = 0; i < 10; i++) {
+                                for (int j = 0; j < 10; j++) {
+                                    if (x == j || y == i) {
+                                        if(battleFieldOpponent[i][j]==BATTLE_CELL){
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
+                                        }else if(battleFieldOpponent[i][j]==WATER){
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
+                                        }else{
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
+                                        }
+                                    }
+                                }
+                            }
+                        }else {
+                            for (int i = 0; i < 10; i++) {
+                                for (int j = 0; j < 10; j++) {
+                                    if (x == j || y == i) {
+                                        if(battleFieldOpponent[i][j]==BATTLE_CELL){
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
+                                        }else if(battleFieldOpponent[i][j]==WATER){
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
+                                        }else{
+                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
+                                            tv.setBackground(getDrawable(R.drawable.ship_cell_x_red_field));
+                                        }
 
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        showOpponentBattleField();
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if(x>=0&&x<=9&&y>=0&&y<=9){
+                        if(battleFieldOpponent[y][x]==BATTLE_CELL) {
+                            hitCell(y, x);
+                        }else
+                            showOpponentBattleField();
+                    }else;
+                    break;
             }
+        }else;
+        layoutOpponent.invalidate();
+        return true;
 
+    }
+
+    private void hitCell(int x, int y) {
+        databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                if(user.getIndex().getGameIndex().isEmpty()){
+                    finish();
+                }else{
+                    battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).setHit(true);
+                    databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
+                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                    long time = calendar.getTimeInMillis();
+                    databaseReferenceFight.child(user.getId()).child("time").setValue(time);
+                    if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).isShip()){
+                        battleFieldOpponent[x][y]=SHIP_RED;
+                        updateCounters(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getNumberOfMasts(),
+                                battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getShipNumber());
+                        updateShipsHit();
+                        showOpponentBattleField();
+                        if(myWin()){
+                            mHandler.removeCallbacks(game);
+                            mHandler2.removeCallbacks(checkWinner);
+                            Winner winner=new Winner();
+                            winner.setWinner(user.getId());
+                            databaseReferenceFight.child("winner").setValue(winner);
+                            int score = user.getScore();
+                            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                                score = score+25;
+                            }else{
+                                score = score+50;
+                            }
+                            user.setScore(score);
+                            user.setIndex(new FightIndex());
+                            databaseReferenceMy.setValue(user);
+                            android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+                            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green,null);
+                            mBuilder.setView(mView);
+                            android.app.AlertDialog dialog = mBuilder.create();
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                            dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                            dialog.setCancelable(false);
+                            dialog.setCanceledOnTouchOutside(false);
+                            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_green);
+                            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_green);;
+                            Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_green);
+                            title.setText("CONGRATULATION");
+                            message.setText("YOU WIN");
+                            positiveButton.setText("OK");
+                            positiveButton.setOnClickListener(v1 -> {
+                                dialog.dismiss();
+                                finish();
+                            });
+                            dialog.show();
+                        }
+                    }else{
+                        battleFieldOpponent[x][y]=WATER;
+                        showOpponentBattleField();
+                        enableTouchListener=false;
+                        databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
+                        TOPIC = "/topics/"+ user.getIndex().getOpponent();
+                        NOTIFICATION_TITLE = "Your move";
+                        //              NOTIFICATION_MESSAGE = "Your move";
+                        JSONObject notification = new JSONObject();
+                        JSONObject notificationBody = new JSONObject();
+                        try{
+                            notificationBody.put("title",NOTIFICATION_TITLE);
+                            //                  notificationBody.put("message",NOTIFICATION_MESSAGE);
+                            notification.put("to",TOPIC);
+                            notification.put("notification",notificationBody);
+                            //                  notification.put("data",notificationBody);
+                        } catch (JSONException e){
+                            Log.e(TAG,"onCreate: "+e.getMessage());
+                        }
+                        sendNotification(notification);
+                        mHandler.postDelayed(game,deelay);
+                    }
+                }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
 
-    private void askForCreatingGame() {
+    public void surrenderMultiplayer(View view) {
+        mHandler.removeCallbacks(game);
+        mHandler2.removeCallbacks(checkWinner);
+        final boolean[] outOfTime = {false};
+        final int[] hours = {0};
+        final int[] minutes = {0};
+        Winner w = new Winner();
+        w.setWinner(user.getIndex().getOpponent());
+        w.setSurrendered(true);
 
-        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
-        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
-        mBuilder.setView(mView);
-        android.app.AlertDialog dialog = mBuilder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
-        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
-        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
-        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
-        title.setText("CREATE BATTLE FIELD");
-        message.setText("How would you like to do it?");
-        negativeButton.setText("RANDOM");
-        negativeButton.setOnClickListener(v12 -> {
-            dialog.dismiss();
-            battleFieldForDataBaseMy.create();
-            battleFieldUpToDate=true;
-            databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
-            int noOfGames = user.getNoOfGames();
-            noOfGames = noOfGames+1;
-            user.setNoOfGames(noOfGames);
-            databaseReferenceMy.setValue(user);
-            mHandler.postDelayed(game,deelay);
+        databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    long timeEnd;
+                    long timeStart;
+                    if(dataSnapshot.child(user.getIndex().getOpponent()).exists()){
+                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                        timeEnd = calendar.getTimeInMillis();
+                        timeStart = (long) dataSnapshot.child(user.getIndex().getOpponent()).child("time").getValue();
+                        outOfTime[0] =timeEnd-timeStart>86400000;
+                    }else{
+                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                        timeEnd = calendar.getTimeInMillis();
+                        timeStart = (long) dataSnapshot.child("time").getValue();
+                        outOfTime[0] =timeEnd-timeStart>86400000;
+                    }
+                    hours[0] =(((int)timeEnd-(int)timeStart)/3600000);
+                    minutes[0] = (((int)timeEnd-(int)timeStart)-hours[0]*3600000)/60000;
+                }
+                        final int[] myScore = {user.getScore()};
+                        int myScoreMinus;
+
+                        if(!outOfTime[0]){
+                            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                                myScoreMinus=25;
+                            }else{
+                                myScoreMinus=50;
+                            }
+                        }else{
+                            myScoreMinus=0;
+                            w.setOutOfDate(true);
+                        }
+
+                        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+                        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                        mBuilder.setView(mView);
+                        android.app.AlertDialog dialog = mBuilder.create();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                        dialog.setCancelable(false);
+                        dialog.setCanceledOnTouchOutside(false);
+                        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+                        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+                        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+                        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                        title.setText("Leaving game");
+                        String outOfTimeString ="";
+                        if(outOfTime[0]){
+                            outOfTimeString = "last move was more then 24 hour ago";
+                        }else {
+                            outOfTimeString = "last move was "+hours[0]+"h:"+minutes[0]+"m ago";
+                        }
+                        message.setText(outOfTimeString+"\n"+"Do you want to quit game?"+"\n"+"You will lose "+ myScoreMinus+" points");
+                        negativeButton.setText("NO");
+                        negativeButton.setOnClickListener(v12 -> {
+                            dialog.dismiss();
+                            mHandler.postDelayed(game,deelay);
+                            mHandler2.postDelayed(checkWinner,deelay);
+                        });
+                        positiveButton.setText("YES");
+                        positiveButton.setOnClickListener(v1 -> {
+                            dialog.dismiss();
+                            mHandler.removeCallbacks(game);
+                            mHandler2.removeCallbacks(checkWinner);
+                            myScore[0] = myScore[0] - myScoreMinus;
+                            user.setScore(myScore[0]);
+                            user.setIndex(new FightIndex());
+                            databaseReferenceMy.setValue(user);
+                            databaseReferenceFight.child("winner").setValue(w);
+                            finish();
+                        });
+                        dialog.show();
+                    }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
-        positiveButton.setText("BY MYSELF");
-        positiveButton.setOnClickListener(v1 -> {
-            dialog.dismiss();
-            GameDifficulty.getInstance().setMultiplayerMode(true);
-            Intent intent = new Intent(MultiplayerActivity.this, CreateBattleField.class);
-            startActivity(intent);
-            finish();
-        });
-        dialog.show();
     }
-
-    private void showOpponentBattleField() {
-        for(int i =0;i<10;i++){
-            for(int j = 0; j<10;j++){
-                if(battleFieldOpponent[i][j]==SHIP_BROWN){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
-                }
-                else if(battleFieldOpponent[i][j]==SHIP_RED){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_normal_x));
-                }else if(battleFieldOpponent[i][j]==WATER){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x));
-                }else if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x));
-                }else;
-
-            }
-        }
-    }
-
-    private void initializeOpponentArrayBattleField() {
-        for(int i = 0; i<10;i++){
-            for(int j=0; j<10;j++){
-                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()&&
-                battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
-                    battleFieldOpponent[i][j]=SHIP_RED;
-                } else if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()&&
-                        !battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
-                    battleFieldOpponent[i][j]=WATER;
-                }else{
-                    battleFieldOpponent[i][j]=BATTLE_CELL;
-                }
-
-
-
-            }
-        }
-    }
-
-    private void checkShipCounters() {
-        shipFourMastsCounter=0;
-        shipThreeMastsCounterFirst=0;
-        shipThreeMastsCounterSecond=0;
-        shipTwoMastsCounterFirst=0;
-        shipTwoMastsCounterSecond=0;
-        shipTwoMastsCounterThird=0;
-        shipOneMastsCounterFirst=0;
-        shipOneMastsCounterSecond=0;
-        shipOneMastsCounterThird=0;
-        shipOneMastsCounterFourth=0;
-
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()&&
-                battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
-                    int numberOfMasts = battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts();
-                    int shipNumber = battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber();
-                    updateCounters(numberOfMasts,shipNumber);
-                }
-            }
-        }
-
-    }
-
-    private void updateCounters(int numberOfMasts, int shipNumber) {
-        int number = 10*numberOfMasts+shipNumber;
-
-        switch (number){
-            case 41:
-                shipFourMastsCounter++;
-                if(shipFourMastsCounter==4){
-                    updateBattleField(numberOfMasts,shipNumber);
-                }
-                break;
-            case 31:
-                shipThreeMastsCounterFirst++;
-                if(shipThreeMastsCounterFirst==3){
-                    updateBattleField(numberOfMasts,shipNumber);
-                }
-                break;
-            case 32:
-                shipThreeMastsCounterSecond++;
-                if(shipThreeMastsCounterSecond==3){
-                    updateBattleField(numberOfMasts,shipNumber);
-                }
-                break;
-            case 21:
-                shipTwoMastsCounterFirst++;
-                if(shipTwoMastsCounterFirst==2){
-                    updateBattleField(numberOfMasts,shipNumber);
-                }
-                break;
-            case 22:
-                shipTwoMastsCounterSecond++;
-                if(shipTwoMastsCounterSecond==2){
-                    updateBattleField(numberOfMasts,shipNumber);
-                }
-                break;
-            case 23:
-                shipTwoMastsCounterThird++;
-                if(shipTwoMastsCounterThird==2){
-                    updateBattleField(numberOfMasts,shipNumber);
-                }
-                break;
-            case 11:
-                shipOneMastsCounterFirst++;
-                if(shipOneMastsCounterFirst==1){
-                    updateBattleField(numberOfMasts,shipNumber);
-                }
-                break;
-            case 12:
-                shipOneMastsCounterSecond++;
-                if(shipOneMastsCounterSecond==1){
-                    updateBattleField(numberOfMasts,shipNumber);
-                }
-                break;
-            case 13:
-                shipOneMastsCounterThird++;
-                if(shipOneMastsCounterThird==1){
-                    updateBattleField(numberOfMasts,shipNumber);
-                }
-                break;
-            case 14:
-                shipOneMastsCounterFourth++;
-                if(shipOneMastsCounterFourth==1){
-                    updateBattleField(numberOfMasts,shipNumber);
-                }
-                break;
-            default:
-        }
-
-
-
-    }
-
-    private void updateBattleField(int numberOfMasts, int shipNumber) {
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber()==shipNumber&&
-                        battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts()==numberOfMasts){
-                    battleFieldOpponent[i][j]=SHIP_BROWN;
-                }
-            }
-        }
-    }
-
-    private void chooseDifficulty() {
-
-
-        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
-        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
-        mBuilder.setView(mView);
-        android.app.AlertDialog dialog = mBuilder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
-        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
-        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
-        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
-        title.setText("Difficulty");
-        message.setText("choose game difficulty");
-        negativeButton.setText("EASY");
-        negativeButton.setOnClickListener(v12 -> {
-            dialog.dismiss();
-            databaseReferenceFight.child(userID).child("difficulty").child("easy").setValue(true);
-            databaseReferenceFight.child(userID).child("difficulty").child("set").setValue(true);
-            mHandler.postDelayed(game,deelay);
-        });
-        positiveButton.setText("NORMAL");
-        positiveButton.setOnClickListener(v1 -> {
-            dialog.dismiss();
-            databaseReferenceFight.child(userID).child("difficulty").child("easy").setValue(false);
-            databaseReferenceFight.child(userID).child("difficulty").child("set").setValue(true);
-            mHandler.postDelayed(game,deelay);
-        });
-        dialog.show();
-    }
-
-    private void showMyBattleField() {
-        for(int i =0;i<10;i++){
-            for(int j = 0; j<10;j++){
-                //jest statek i został trafiony
-                if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
-                        &&battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayShipCell((TextView) layoutMy.getChildAt(10*i+j));
-                }
-
-                // woda i została trafiony
-                else if(!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
-                        &&battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayWaterCell((TextView) layoutMy.getChildAt(10*i+j));
-                }
-
-                // jest statek i nie został trafiony
-                else if(battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
-                        &&!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayWidmoShip((TextView) layoutMy.getChildAt(10*i+j));
-                }
-                // nie ma statku i nie został trafiony
-                else if(!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isShip()
-                        &&!battleFieldForDataBaseMy.showBattleField().getBattleField(i,j).isHit()){
-                    displayBattleCell((TextView) layoutMy.getChildAt(10*i+j));
-                }
-                else;
-            }
-        }
-    }
-
-    private void displayWidmoShip(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
-    }
-
-    private void displayWaterCell(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x));
-    }
-
-
-    private void displayBattleCell(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
-    }
-
-    private void displayShipCell(TextView textView) {
-            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
-    }
-
 
     private void updateShipsHit() {
 
@@ -1063,358 +1312,126 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }
     }
 
-    public void surrenderMultiplayer(View view) {
-        mHandler.removeCallbacks(game);
-        mHandler2.removeCallbacks(checkGameIndex);
-        final boolean[] outOfTime = {false};
-        final int[] hours = {0};
-        final int[] minutes = {0};
-
-        databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    long timeEnd;
-                    long timeStart;
-                    if(dataSnapshot.child(user.getIndex().getOpponent()).exists()){
-                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-                        timeEnd = calendar.getTimeInMillis();
-                        timeStart = (long) dataSnapshot.child(user.getIndex().getOpponent()).child("time").getValue();
-                        outOfTime[0] =timeEnd-timeStart>86400000;
-                    }else{
-                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-                        timeEnd = calendar.getTimeInMillis();
-                        timeStart = (long) dataSnapshot.child("time").getValue();
-                        outOfTime[0] =timeEnd-timeStart>86400000;
-                    }
-                    hours[0] =(((int)timeEnd-(int)timeStart)/3600000);
-                    minutes[0] = (((int)timeEnd-(int)timeStart)-hours[0]*3600000)/60000;
-                }
-
-                databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        opponent=dataSnapshot.getValue(User.class);
-                        final int[] myScore = {user.getScore()};
-                        int myScoreMinus;
-
-                        if(!outOfTime[0]){
-                        if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
-                            myScoreMinus=25;
-                        }else{
-                            myScoreMinus=50;
-                        }
-                        }else{
-                            myScoreMinus=0;
-                        }
-
-
-
-                        final int[] opponentScore = {opponent.getScore()};
-                        int opponentScorePlus;
-
-                        if(!outOfTime[0]){
-                        if(battleFieldForDataBaseOpponent.getDifficulty().isSet()){
-                            if(battleFieldForDataBaseOpponent.getDifficulty().isEasy()){
-                                opponentScorePlus=25;
-                            }else{
-                                opponentScorePlus=50;
-                            }
-                        }else{
-                            opponentScorePlus=0;
-                        }
-                        }else{
-                            opponentScorePlus=0;
-                        }
-
-
-                        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
-                        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
-                        mBuilder.setView(mView);
-                        android.app.AlertDialog dialog = mBuilder.create();
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-                        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-                        dialog.setCancelable(false);
-                        dialog.setCanceledOnTouchOutside(false);
-                        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
-                        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
-                        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
-                        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
-                        title.setText("Leaving game");
-                        String outOfTimeString ="";
-                        if(outOfTime[0]){
-                            outOfTimeString = "last move was more then 24 hour ago";
-                        }else {
-                            outOfTimeString = "last move was "+hours[0]+"h:"+minutes[0]+"m ago";
-                        }
-                        message.setText(outOfTimeString+"\n"+"Do you want to quit game?"+"\n"+opponent.getName()+" will get "+ opponentScorePlus+" points for nothing"+"\n"+"You will lose "+ myScoreMinus+" points");
-                        negativeButton.setText("NO");
-                        negativeButton.setOnClickListener(v12 -> {
-                            dialog.dismiss();
-                            mHandler.postDelayed(game,deelay);
-                            mHandler2.postDelayed(checkGameIndex,deelay);
-                        });
-                        positiveButton.setText("YES");
-                        positiveButton.setOnClickListener(v1 -> {
-                            dialog.dismiss();
-                            mHandler.removeCallbacks(game);
-                            mHandler2.removeCallbacks(checkGameIndex);
-                            opponentScore[0] = opponentScore[0] +opponentScorePlus;
-                            opponent.setScore(opponentScore[0]);
-                            opponent.setIndex(new FightIndex());
-                            databaseReferenceOpponent.setValue(opponent);
-                            myScore[0] = myScore[0] - myScoreMinus;
-                            user.setScore(myScore[0]);
-                            user.setIndex(new FightIndex());
-                            databaseReferenceMy.setValue(user);
-                            databaseReferenceFight.removeValue();
-                            finish();
-                        });
-                        dialog.show();
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-
-
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-        if(enableTouchListener) {
-            final int X = (int) event.getRawX();
-            final int Y = (int) event.getRawY();
-            int x = (X - locationLayout[0]) / width;
-            int y = (Y - locationLayout[1]) / height;
-            switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                case MotionEvent.ACTION_DOWN:
-
-                    if(battleFieldOpponent[y][x]==BATTLE_CELL){
-                        for (int i = 0; i < 10; i++) {
-                            for (int j = 0; j < 10; j++) {
-                                if (x == j || y == i) {
-                                    if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
-                                    }else if(battleFieldOpponent[i][j]==WATER){
-                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
-                                    }else{
-                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
-                                    }
-                                }
-                            }
-                        }
-                    }else {
-                        for (int i = 0; i < 10; i++) {
-                            for (int j = 0; j < 10; j++) {
-                                if (x == j || y == i) {
-                                    if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
-                                    }else if(battleFieldOpponent[i][j]==WATER){
-                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
-                                    }else{
-                                        tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.ship_cell_x_red_field));
-                                    }
-
-
-                                }
-                            }
-                        }
-                    }
-                    break;
-
-                case MotionEvent.ACTION_MOVE:
-
-                    if(x>=0&&x<=9&&y>=0&&y<=9){
-                        showOpponentBattleField();
-                        if(battleFieldOpponent[y][x]==BATTLE_CELL){
-                            for (int i = 0; i < 10; i++) {
-                                for (int j = 0; j < 10; j++) {
-                                    if (x == j || y == i) {
-                                        if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.battle_cell_x_green_field));
-                                        }else if(battleFieldOpponent[i][j]==WATER){
-                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
-                                        }else{
-                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
-                                        }
-                                    }
-                                }
-                            }
-                        }else {
-                            for (int i = 0; i < 10; i++) {
-                                for (int j = 0; j < 10; j++) {
-                                    if (x == j || y == i) {
-                                        if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
-                                        }else if(battleFieldOpponent[i][j]==WATER){
-                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
-                                        }else{
-                                            tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.ship_cell_x_red_field));
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
-                    }else{
-                       showOpponentBattleField();
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-
-                    if(x>=0&&x<=9&&y>=0&&y<=9){
-                        if(battleFieldOpponent[y][x]==BATTLE_CELL) {
-                            hitCell(y, x);
-
-                        }else
-                            showOpponentBattleField();
-                    }else;
-
-                    break;
-            }
-        }else;
-        layoutOpponent.invalidate();
-        return true;
-
-
-
-
-    }
-
-    private void hitCell(int x, int y) {
-
-        databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                if(user.getIndex().getGameIndex().isEmpty()){
-
-                    finish();
-                }else{
-
-                    battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).setHit(true);
-                    databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
-                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-                    long time = calendar.getTimeInMillis();
-                    databaseReferenceFight.child(user.getId()).child("time").setValue(time);
-                    if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).isShip()){
-                        battleFieldOpponent[x][y]=SHIP_RED;
-                        updateCounters(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getNumberOfMasts(),
-                                battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getShipNumber());
-                        updateShipsHit();
-                        showOpponentBattleField();
-                        if(myWin()){
-                            mHandler.removeCallbacks(game);
-                            mHandler2.removeCallbacks(checkGameIndex);
-
-                            databaseReferenceFight.child("winner").setValue(user.getId());
-                            int score = user.getScore();
-                            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
-                                score = score+25;
-                            }else{
-                                score = score+50;
-                            }
-                            user.setScore(score);
-                            user.setIndex(new FightIndex());
-                            databaseReferenceMy.setValue(user);
-
-                            android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
-                            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green,null);
-                            mBuilder.setView(mView);
-                            android.app.AlertDialog dialog = mBuilder.create();
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-                            dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-                            dialog.setCancelable(false);
-                            dialog.setCanceledOnTouchOutside(false);
-                            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_green);
-                            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_green);;
-                            Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_green);
-                            title.setText("CONGRATULATION");
-                            message.setText("YOU WIN");
-                            positiveButton.setText("OK");
-                            positiveButton.setOnClickListener(v1 -> {
-                                dialog.dismiss();
-                                finish();
-                            });
-                            dialog.show();
-
-                        }
-
-                    }else{
-                        battleFieldOpponent[x][y]=WATER;
-                        showOpponentBattleField();
-                        enableTouchListener=false;
-                        databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
-
-                        TOPIC = "/topics/"+ user.getIndex().getOpponent();
-
-                        NOTIFICATION_TITLE = "Your move";
-          //              NOTIFICATION_MESSAGE = "Your move";
-
-                        JSONObject notification = new JSONObject();
-                        JSONObject notificationBody = new JSONObject();
-
-                        try{
-                            notificationBody.put("title",NOTIFICATION_TITLE);
-          //                  notificationBody.put("message",NOTIFICATION_MESSAGE);
-
-                            notification.put("to",TOPIC);
-                            notification.put("notification",notificationBody);
-          //                  notification.put("data",notificationBody);
-                        } catch (JSONException e){
-                            Log.e(TAG,"onCreate: "+e.getMessage());
-                        }
-                        sendNotification(notification);
-
-                        mHandler.postDelayed(game,deelay);
-
-                    }
-
-
-
+    private void updateBattleField(int numberOfMasts, int shipNumber) {
+        for(int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber()==shipNumber&&
+                        battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts()==numberOfMasts){
+                    battleFieldOpponent[i][j]=SHIP_BROWN;
                 }
             }
+        }
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+    private void updateCounters(int numberOfMasts, int shipNumber) {
+        int number = 10*numberOfMasts+shipNumber;
+
+        switch (number){
+            case 41:
+                shipFourMastsCounter++;
+                if(shipFourMastsCounter==4){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 31:
+                shipThreeMastsCounterFirst++;
+                if(shipThreeMastsCounterFirst==3){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 32:
+                shipThreeMastsCounterSecond++;
+                if(shipThreeMastsCounterSecond==3){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 21:
+                shipTwoMastsCounterFirst++;
+                if(shipTwoMastsCounterFirst==2){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 22:
+                shipTwoMastsCounterSecond++;
+                if(shipTwoMastsCounterSecond==2){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 23:
+                shipTwoMastsCounterThird++;
+                if(shipTwoMastsCounterThird==2){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 11:
+                shipOneMastsCounterFirst++;
+                if(shipOneMastsCounterFirst==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 12:
+                shipOneMastsCounterSecond++;
+                if(shipOneMastsCounterSecond==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 13:
+                shipOneMastsCounterThird++;
+                if(shipOneMastsCounterThird==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            case 14:
+                shipOneMastsCounterFourth++;
+                if(shipOneMastsCounterFourth==1){
+                    updateBattleField(numberOfMasts,shipNumber);
+                }
+                break;
+            default:
+        }
+    }
+
+    private int counterSum() {
+        return shipFourMastsCounter+
+                shipThreeMastsCounterFirst+
+                shipThreeMastsCounterSecond+
+                shipTwoMastsCounterFirst+
+                shipTwoMastsCounterSecond+
+                shipTwoMastsCounterThird+
+                shipOneMastsCounterFirst+
+                shipOneMastsCounterSecond+
+                shipOneMastsCounterThird+
+                shipOneMastsCounterFourth;
+    }
+
+    private boolean myWin(){
+        return counterSum()==20;
+    }
+
+    private void showOpponentBattleField() {
+        for(int i =0;i<10;i++){
+            for(int j = 0; j<10;j++){
+                if(battleFieldOpponent[i][j]==SHIP_BROWN){
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                }
+                else if(battleFieldOpponent[i][j]==SHIP_RED){
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_normal_x));
+                }else if(battleFieldOpponent[i][j]==WATER){
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x));
+                }else if(battleFieldOpponent[i][j]==BATTLE_CELL){
+                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x));
+                }else;
 
             }
-        });
-
+        }
     }
 
     private void sendNotification(JSONObject notification) {
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.i(TAG, "onResponse: " + response.toString());
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -1433,43 +1450,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             }
         };
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
-
-
-
     }
-
-    private boolean myWin(){
-        return counterSum()==20;
-    }
-
-    private int counterSum() {
-        return shipFourMastsCounter+
-                shipThreeMastsCounterFirst+
-                shipThreeMastsCounterSecond+
-                shipTwoMastsCounterFirst+
-                shipTwoMastsCounterSecond+
-                shipTwoMastsCounterThird+
-                shipOneMastsCounterFirst+
-                shipOneMastsCounterSecond+
-                shipOneMastsCounterThird+
-                shipOneMastsCounterFourth;
-    }
-
-    private void displayShipCellHidden(TextView TextView){
-            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
-    }
-    private void displayWaterCellHidden(TextView TextView){
-            TextView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hidden));
-    }
-
-    private void displayWidmoShipHidden(TextView TextView){
-            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
-    }
-
-    private void displayBattleCellHidden(TextView TextView){
-            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
-    }
-
 
     public void leaveMultiplayerOnClick(View view) {
         leaveGame();
@@ -1504,11 +1485,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         positiveButton.setText("YES");
         positiveButton.setOnClickListener(v1 -> {
             dialog.dismiss();
+            mHandler.removeCallbacks(game);
+            mHandler2.removeCallbacks(checkWinner);
             finish();
         });
         dialog.show();
-
     }
 }
-
-// TODO zmienić sposób rozgrywki (naliczać i odejmować tylko sobie punkty) przeciwnik sam musi zrobić to sobie aby widział co się działo) out of date new variable
