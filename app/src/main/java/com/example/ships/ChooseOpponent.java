@@ -241,6 +241,7 @@ public class ChooseOpponent extends AppCompatActivity {
                                 if(!dataSnapshot1.getValue().equals("")){
                                     initRanking();
                                 }else{
+                                    dialogFlag=false;
                                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(ChooseOpponent.this);
                                     View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons_and_picture,null);
                                     mBuilder.setView(mView);
@@ -309,7 +310,6 @@ public class ChooseOpponent extends AppCompatActivity {
                                         mHandler.removeCallbacks(checkMyOpponentIndex);
                                         finish();
                                     });
-                                    dialogFlag=false;
                                     dialog.show();
 
                                         }
@@ -360,7 +360,9 @@ public class ChooseOpponent extends AppCompatActivity {
 
 
     public void leaveChoseOpponentOnClick(View view) {
-        finish();
+        if(dialogFlag) {
+            finish();
+        }else;
     }
 }
 
