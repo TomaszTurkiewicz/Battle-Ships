@@ -114,6 +114,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private boolean runChecking;
     private String opponentNameString;
     private boolean fight;
+    private boolean alertDialogFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -581,6 +582,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void chooseDifficulty() {
+        alertDialogFlag=true;
         android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
         mBuilder.setView(mView);
@@ -599,6 +601,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         negativeButton.setText("EASY");
         negativeButton.setOnClickListener(v12 -> {
             dialog.dismiss();
+            alertDialogFlag=false;
             battleFieldForDataBaseMy.getDifficulty().setEasy(true);
             battleFieldForDataBaseMy.getDifficulty().setSet(true);
             databaseReferenceFight.child(user.getId()).child("difficulty").setValue(battleFieldForDataBaseMy.getDifficulty());
@@ -607,6 +610,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         positiveButton.setText("NORMAL");
         positiveButton.setOnClickListener(v1 -> {
             dialog.dismiss();
+            alertDialogFlag=false;
             battleFieldForDataBaseMy.getDifficulty().setEasy(false);
             battleFieldForDataBaseMy.getDifficulty().setSet(true);
             databaseReferenceFight.child(user.getId()).child("difficulty").setValue(battleFieldForDataBaseMy.getDifficulty());
@@ -616,6 +620,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void askForCreatingGame() {
+        alertDialogFlag=true;
         android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
         mBuilder.setView(mView);
@@ -634,6 +639,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         negativeButton.setText("RANDOM");
         negativeButton.setOnClickListener(v12 -> {
             dialog.dismiss();
+            alertDialogFlag=false;
             battleFieldForDataBaseMy.create();
             battleFieldUpToDate=true;
             databaseReferenceFight.child(user.getId()).setValue(battleFieldForDataBaseMy);
@@ -816,7 +822,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
         if(w.getWinner().equals(user.getIndex().getOpponent())){
             // przegrałem
-
+            alertDialogFlag=true;
             android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
             View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red,null);
             mBuilder.setView(mView);
@@ -848,6 +854,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 user.setIndex(new FightIndex());
                 databaseReferenceMy.setValue(user);
                 databaseReferenceFight.removeValue();
+                alertDialogFlag=true;
                 android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
                 View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red, null);
                 mBuilder.setView(mView);
@@ -882,6 +889,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 user.setIndex(new FightIndex());
                 databaseReferenceMy.setValue(user);
                 databaseReferenceFight.removeValue();
+                alertDialogFlag=true;
                 android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
                 View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green, null);
                 mBuilder.setView(mView);
@@ -909,7 +917,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if(enableTouchListener) {
+        if(enableTouchListener&&!alertDialogFlag) {
             final int X = (int) event.getRawX();
             final int Y = (int) event.getRawY();
             int x = (X - locationLayout[0]) / width;
@@ -1044,6 +1052,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                             user.setScore(score);
                             user.setIndex(new FightIndex());
                             databaseReferenceMy.setValue(user);
+                            alertDialogFlag=true;
                             android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
                             View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green,null);
                             mBuilder.setView(mView);
@@ -1096,94 +1105,100 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     public void surrenderMultiplayer(View view) {
-        mHandler.removeCallbacks(game);
-        mHandler2.removeCallbacks(checkWinner);
-        final boolean[] outOfTime = {false};
-        final int[] hours = {0};
-        final int[] minutes = {0};
-        Winner w = new Winner();
-        w.setWinner(user.getIndex().getOpponent());
-        w.setSurrendered(true);
+        if (alertDialogFlag) {
+            // do nothing
+        } else {
+            mHandler.removeCallbacks(game);
+            mHandler2.removeCallbacks(checkWinner);
+            final boolean[] outOfTime = {false};
+            final int[] hours = {0};
+            final int[] minutes = {0};
+            Winner w = new Winner();
+            w.setWinner(user.getIndex().getOpponent());
+            w.setSurrendered(true);
 
-        databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    long timeEnd;
-                    long timeStart;
-                    if(dataSnapshot.child(user.getIndex().getOpponent()).exists()){
-                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-                        timeEnd = calendar.getTimeInMillis();
-                        timeStart = (long) dataSnapshot.child(user.getIndex().getOpponent()).child("time").getValue();
-                        outOfTime[0] =timeEnd-timeStart>86400000;
-                    }else{
-                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-                        timeEnd = calendar.getTimeInMillis();
-                        timeStart = (long) dataSnapshot.child("time").getValue();
-                        outOfTime[0] =timeEnd-timeStart>86400000;
+            databaseReferenceFight.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        long timeEnd;
+                        long timeStart;
+                        if (dataSnapshot.child(user.getIndex().getOpponent()).exists()) {
+                            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                            timeEnd = calendar.getTimeInMillis();
+                            timeStart = (long) dataSnapshot.child(user.getIndex().getOpponent()).child("time").getValue();
+                            outOfTime[0] = timeEnd - timeStart > 86400000;
+                        } else {
+                            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                            timeEnd = calendar.getTimeInMillis();
+                            timeStart = (long) dataSnapshot.child("time").getValue();
+                            outOfTime[0] = timeEnd - timeStart > 86400000;
+                        }
+                        hours[0] = (((int) timeEnd - (int) timeStart) / 3600000);
+                        minutes[0] = (((int) timeEnd - (int) timeStart) - hours[0] * 3600000) / 60000;
                     }
-                    hours[0] =(((int)timeEnd-(int)timeStart)/3600000);
-                    minutes[0] = (((int)timeEnd-(int)timeStart)-hours[0]*3600000)/60000;
+                    final int[] myScore = {user.getScore()};
+                    int myScoreMinus;
+
+                    if (!outOfTime[0]) {
+                        if (battleFieldForDataBaseMy.getDifficulty().isEasy()) {
+                            myScoreMinus = 25;
+                        } else {
+                            myScoreMinus = 50;
+                        }
+                    } else {
+                        myScoreMinus = 0;
+                        w.setOutOfDate(true);
+                    }
+                    alertDialogFlag = true;
+                    android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons, null);
+                    mBuilder.setView(mView);
+                    android.app.AlertDialog dialog = mBuilder.create();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                    dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                    dialog.setCancelable(false);
+                    dialog.setCanceledOnTouchOutside(false);
+                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                    title.setText("Leaving game");
+                    String outOfTimeString = "";
+                    if (outOfTime[0]) {
+                        outOfTimeString = "last move was more then 24 hour ago";
+                    } else {
+                        outOfTimeString = "last move was " + hours[0] + "h:" + minutes[0] + "m ago";
+                    }
+                    message.setText(outOfTimeString + "\n" + "Do you want to quit game?" + "\n" + "You will lose " + myScoreMinus + " points");
+                    negativeButton.setText("NO");
+                    negativeButton.setOnClickListener(v12 -> {
+                        alertDialogFlag = false;
+                        dialog.dismiss();
+                        mHandler.postDelayed(game, deelay);
+                        mHandler2.postDelayed(checkWinner, deelay);
+                    });
+                    positiveButton.setText("YES");
+                    positiveButton.setOnClickListener(v1 -> {
+                        dialog.dismiss();
+                        mHandler.removeCallbacks(game);
+                        mHandler2.removeCallbacks(checkWinner);
+                        myScore[0] = myScore[0] - myScoreMinus;
+                        user.setScore(myScore[0]);
+                        user.setIndex(new FightIndex());
+                        databaseReferenceMy.setValue(user);
+                        databaseReferenceFight.child("winner").setValue(w);
+                        finish();
+                    });
+                    dialog.show();
                 }
-                        final int[] myScore = {user.getScore()};
-                        int myScoreMinus;
 
-                        if(!outOfTime[0]){
-                            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
-                                myScoreMinus=25;
-                            }else{
-                                myScoreMinus=50;
-                            }
-                        }else{
-                            myScoreMinus=0;
-                            w.setOutOfDate(true);
-                        }
-
-                        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
-                        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
-                        mBuilder.setView(mView);
-                        android.app.AlertDialog dialog = mBuilder.create();
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-                        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-                        dialog.setCancelable(false);
-                        dialog.setCanceledOnTouchOutside(false);
-                        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
-                        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
-                        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
-                        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
-                        title.setText("Leaving game");
-                        String outOfTimeString ="";
-                        if(outOfTime[0]){
-                            outOfTimeString = "last move was more then 24 hour ago";
-                        }else {
-                            outOfTimeString = "last move was "+hours[0]+"h:"+minutes[0]+"m ago";
-                        }
-                        message.setText(outOfTimeString+"\n"+"Do you want to quit game?"+"\n"+"You will lose "+ myScoreMinus+" points");
-                        negativeButton.setText("NO");
-                        negativeButton.setOnClickListener(v12 -> {
-                            dialog.dismiss();
-                            mHandler.postDelayed(game,deelay);
-                            mHandler2.postDelayed(checkWinner,deelay);
-                        });
-                        positiveButton.setText("YES");
-                        positiveButton.setOnClickListener(v1 -> {
-                            dialog.dismiss();
-                            mHandler.removeCallbacks(game);
-                            mHandler2.removeCallbacks(checkWinner);
-                            myScore[0] = myScore[0] - myScoreMinus;
-                            user.setScore(myScore[0]);
-                            user.setIndex(new FightIndex());
-                            databaseReferenceMy.setValue(user);
-                            databaseReferenceFight.child("winner").setValue(w);
-                            finish();
-                        });
-                        dialog.show();
-                    }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
     }
 
     private void updateShipsHit() {
@@ -1449,6 +1464,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void leaveGame() {
+        if(alertDialogFlag){
+            // do nothing
+        }else{
+        alertDialogFlag=true;
         android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
         mBuilder.setView(mView);
@@ -1466,6 +1485,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         message.setText("Do you want to go back to main menu?");
         negativeButton.setText("NO");
         negativeButton.setOnClickListener(v12 -> {
+            alertDialogFlag=false;
             dialog.dismiss();
             mHandler.postDelayed(game,deelay);
         });
@@ -1477,6 +1497,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             finish();
         });
         dialog.show();
+        }
     }
 }
 // TODO na później alert dialog w globalnej zmiennej tak żeby tylko jeden dialog zawsze był na ekranie
