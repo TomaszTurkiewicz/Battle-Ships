@@ -645,6 +645,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         });
         positiveButton.setText("BY MYSELF");
         positiveButton.setOnClickListener(v1 -> {
+            mHandler2.removeCallbacks(checkWinner);
+            mHandler.removeCallbacks(game);
             dialog.dismiss();
             GameDifficulty.getInstance().setMultiplayerMode(true);
             Intent intent = new Intent(MultiplayerActivity.this, CreateBattleField.class);

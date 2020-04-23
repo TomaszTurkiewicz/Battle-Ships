@@ -24,10 +24,12 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.ships.classes.BattleField;
 import com.example.ships.classes.BattleFieldForDataBase;
+import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.PointIJ;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
+import com.example.ships.classes.Winner;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +38,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import static android.view.View.GONE;
 
 
 public class CreateBattleField extends AppCompatActivity {
@@ -84,6 +88,7 @@ public class CreateBattleField extends AppCompatActivity {
     private LinearLayout linearLayoutLetters, linearLayoutNumbers;
     private LinearLayout linearLayoutFourMasts, linearLayoutThreeMasts, linearLayoutTwoMasts, linearLayoutOneMasts;
     private int flags;
+    private boolean refFightSet;
 
 
 
@@ -240,6 +245,7 @@ public class CreateBattleField extends AppCompatActivity {
         set.applyTo(constraintLayout);
 
         if(multiplayerMode){
+            refFightSet=false;
             firebaseAuth = FirebaseAuth.getInstance();
             firebaseUser = firebaseAuth.getCurrentUser();
             userID = firebaseUser.getUid();
@@ -248,15 +254,17 @@ public class CreateBattleField extends AppCompatActivity {
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    user=dataSnapshot.getValue(User.class);
                     gameIndex = dataSnapshot.child("index").child("gameIndex").getValue().toString();
                     databaseReferenceFight = firebaseDatabase.getReference("Battle").child(gameIndex);
+                    refFightSet=true;
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
-            checkGameIndex.run();
+            checkWinner.run();
 
 
         }
@@ -267,7 +275,7 @@ public class CreateBattleField extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        mHandler.removeCallbacks(checkGameIndex);
+        mHandler.removeCallbacks(checkWinner);
         super.onPause();
     }
 
@@ -530,7 +538,7 @@ public class CreateBattleField extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
-                        mHandler.removeCallbacks(checkGameIndex);
+                        mHandler.removeCallbacks(checkWinner);
                         databaseReferenceFight.child(userID).setValue(battleFieldForDataBase);
                         user.setNoOfGames(noOfGames);
                         databaseReferenceMy.setValue(user);
@@ -538,7 +546,7 @@ public class CreateBattleField extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }else{
-                        mHandler.removeCallbacks(checkGameIndex);
+                        mHandler.removeCallbacks(checkWinner);
                         finish();
                     }
                 }
@@ -1817,26 +1825,100 @@ public class CreateBattleField extends AppCompatActivity {
             }
         }
     }
-    private Runnable checkGameIndex = new Runnable() {
+    private Runnable checkWinner = new Runnable() {
         @Override
         public void run() {
-            databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    user = dataSnapshot.getValue(User.class);
-                    if(user.getIndex().getGameIndex().isEmpty()){
-                        mHandler.removeCallbacks(checkGameIndex);
-                        finish();
-                    }else{
-                        mHandler.postDelayed(checkGameIndex,deelay);
+            if(refFightSet){
+                databaseReferenceFight.child("winner").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            Winner w = dataSnapshot.getValue(Winner.class);
+                            if(w.getWinner().equals("")){
+                                mHandler.postDelayed(checkWinner,deelay);
+                            }else{
+
+                                mHandler.removeCallbacks(checkWinner);
+
+                                backButton.setVisibility(GONE);
+
+                                showWinnerDialog(w);
+                            }
+                        }else{
+                            mHandler.postDelayed(checkWinner,deelay);
+                        }
                     }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                }
-            });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+            }else{
+                mHandler.postDelayed(checkWinner,deelay);
+            }
         }
     };
+
+    private void showWinnerDialog(Winner w) {
+
+            // wygrałem (bo się poddał - sprawdź czy out off date)
+            if (w.isSurrendered() && w.isOutOfDate()) {
+                //poddał się ale za długo czekał
+                user.setIndex(new FightIndex());
+                databaseReferenceMy.setValue(user);
+                databaseReferenceFight.removeValue();
+                android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(CreateBattleField.this);
+                View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red, null);
+                mBuilder.setView(mView);
+                android.app.AlertDialog dialog = mBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
+                TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_red);
+                TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_red);
+                Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_red);
+                title.setText("SORRY");
+                message.setText("YOUR OPPONENT HAS LEFT");
+                positiveButton.setText("OK");
+                positiveButton.setOnClickListener(v1 -> {
+                    dialog.dismiss();
+                    finish();
+                });
+                dialog.show();
+
+
+            } else if (w.isSurrendered() && !w.isOutOfDate()) {
+                // poddał się ale doliczam sobie punkty
+                int score = user.getScore();
+                score = score + 50;
+                user.setScore(score);
+                user.setIndex(new FightIndex());
+                databaseReferenceMy.setValue(user);
+                databaseReferenceFight.removeValue();
+                android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(CreateBattleField.this);
+                View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green, null);
+                mBuilder.setView(mView);
+                android.app.AlertDialog dialog = mBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
+                TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_green);
+                TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_green);
+                Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_green);
+                title.setText("CONGRATULATION");
+                message.setText("YOUR OPPONENT HAS SURRENDERED GAME");
+                positiveButton.setText("OK");
+                positiveButton.setOnClickListener(v1 -> {
+                    dialog.dismiss();
+                    finish();
+                });
+                dialog.show();
+            }else;
+        }
+
+
 }
 
-// TODO checkgameindex different one
