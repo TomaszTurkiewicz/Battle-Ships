@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private String facebookName="";
     private boolean syncFBName=false;
     private boolean syncFBPhoto = false;
+    private boolean alertDialogInUse = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -363,19 +364,12 @@ public class MainActivity extends AppCompatActivity {
                             userName.setText(user.getName());
                             ready=true;
                         }
-
                     }
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
-
-
-
-
-
-
         }
     }
 
@@ -388,205 +382,199 @@ public class MainActivity extends AppCompatActivity {
             multiplayerBtn.setVisibility(View.VISIBLE);
             multiplayerBtn.setClickable(true);
             multiplayerBtn.setOnClickListener(v->{
+                if(alertDialogInUse){
+                 // do nothing
+                }else {
+                    if (ready) {
+                        databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    user = dataSnapshot.getValue(User.class);
+                                    if (user.getIndex().getOpponent().isEmpty()) {
+                                        mHandler.removeCallbacks(checkMyOpponentAndMove);
+                                        Intent intent = new Intent(getApplicationContext(), ChooseOpponent.class);
+                                        startActivity(intent);
+                                    } else {
+                                        databaseReferenceOpponent = firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
+                                        databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if(ready) {
-
-
-                    databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            if (dataSnapshot.exists()) {
-                                user = dataSnapshot.getValue(User.class);
-
-                                if (user.getIndex().getOpponent().isEmpty()) {
-                                    mHandler.removeCallbacks(checkMyOpponentAndMove);
-                                    Intent intent = new Intent(getApplicationContext(), ChooseOpponent.class);
-                                    startActivity(intent);
-
-
-                                } else {
-                                    databaseReferenceOpponent = firebaseDatabase.getReference("User").child(user.getIndex().getOpponent());
-                                    databaseReferenceOpponent.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                            if (dataSnapshot.exists()) {
-                                                opponentUser = dataSnapshot.getValue(User.class);
-                                                if (user.getIndex().isAccepted() && opponentUser.getIndex().isAccepted()||!user.getIndex().getGameIndex().equals("")) {
-                                                    Toast.makeText(MainActivity.this, "You can fight", Toast.LENGTH_LONG).show();
-                                                    mHandler.removeCallbacks(checkMyOpponentAndMove);
-                                                    Intent intent = new Intent(MainActivity.this, MultiplayerActivity.class);
-                                                    startActivity(intent);
-
-
-                                                } else if (user.getIndex().isAccepted() && !opponentUser.getIndex().isAccepted()) {
-                                                    Toast.makeText(MainActivity.this, "You invited him", Toast.LENGTH_LONG).show();
-
-                                                    android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
-                                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons_and_picture,null);
-                                                    mBuilder.setView(mView);
-                                                    android.app.AlertDialog dialog = mBuilder.create();
-                                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                                    dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-                                                    dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-                                                    dialog.setCancelable(false);
-                                                    dialog.setCanceledOnTouchOutside(false);
-                                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons_and_picture);
-                                                    ImageView photo = mView.findViewById(R.id.alert_dialog_photo_layout_with_two_buttons_and_picture);
-                                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons_and_picture);
-                                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons_and_picture);
-                                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons_and_picture);
-                                                    title.setText("Waiting");
-                                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(2*square,2*square);
-                                                    photo.setLayoutParams(params);
-                                                    StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(opponentUser.getId());
-
-                                                    final long SIZE = 1024*1024;
-                                                    sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                                                        @Override
-                                                        public void onSuccess(byte[] bytes) {
-                                                            Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                                            photo.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            photo.setImageResource(R.drawable.account_box_grey);
-                                                        }
-                                                    });
-
-
-
-                                                    message.setText("Do you want to wait for accept from: " + "\n" + opponentUser.getName()+"?");
-                                                    negativeButton.setText("NO");
-                                                    negativeButton.setOnClickListener(v12 -> {
-                                                        dialog.dismiss();
-                                                        user.getIndex().setOpponent("");
-                                                        user.getIndex().setAccepted(false);
-                                                        opponentUser.getIndex().setOpponent("");
-                                                        opponentUser.getIndex().setAccepted(false);
-                                                        databaseReferenceMy.setValue(user);
-                                                        databaseReferenceOpponent.setValue(opponentUser);
-                                                    });
-                                                    positiveButton.setText("YES");
-                                                    positiveButton.setOnClickListener(v1 -> dialog.dismiss());
-                                                    dialog.show();
-
-                                                } else if (!user.getIndex().isAccepted() && opponentUser.getIndex().isAccepted()) {
-                                                    Toast.makeText(MainActivity.this, "You have to accept", Toast.LENGTH_LONG).show();
-
-                                                    android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
-                                                    View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons_and_picture,null);
-                                                    mBuilder.setView(mView);
-                                                    android.app.AlertDialog dialog = mBuilder.create();
-                                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                                    dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-                                                    dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-                                                    dialog.setCancelable(false);
-                                                    dialog.setCanceledOnTouchOutside(false);
-                                                    TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons_and_picture);
-                                                    ImageView photo = mView.findViewById(R.id.alert_dialog_photo_layout_with_two_buttons_and_picture);
-                                                    TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons_and_picture);
-                                                    Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons_and_picture);
-                                                    Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons_and_picture);
-                                                    title.setText("Accepting");
-
-                                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(2*square,2*square);
-                                                    photo.setLayoutParams(params);
-                                                    StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(opponentUser.getId());
-
-                                                    final long SIZE = 1024*1024;
-                                                    sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                                                        @Override
-                                                        public void onSuccess(byte[] bytes) {
-                                                            Bitmap bm = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                                            photo.setImageBitmap(new RoundedCornerBitmap(bm,2*square).getRoundedCornerBitmap());
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            photo.setImageResource(R.drawable.account_box_grey);
-                                                        }
-                                                    });
-
-
-                                                    message.setText("Do you want to fight with: " + "\n" + opponentUser.getName()+"?");
-                                                    negativeButton.setText("NO");
-                                                    negativeButton.setOnClickListener(v12 -> {
-                                                        dialog.dismiss();
-                                                        TOPIC = "/topics/"+ user.getIndex().getOpponent();
-                                                        NOTIFICATION_TITLE = user.getName()+ " rejected your invitation";
-                                                        JSONObject notification = new JSONObject();
-                                                        JSONObject notificationBody = new JSONObject();
-                                                        try{
-                                                            notificationBody.put("title",NOTIFICATION_TITLE);
-                                                            notification.put("to",TOPIC);
-                                                            notification.put("notification",notificationBody);
-                                                        } catch (JSONException e){
-                                                            Log.e(TAG,"onCreate: "+e.getMessage());
-                                                        }
-                                                        sendNotification(notification);
-                                                        user.getIndex().setOpponent("");
-                                                        opponentUser.getIndex().setOpponent("");
-                                                        opponentUser.getIndex().setAccepted(false);
-                                                        databaseReferenceMy.setValue(user);
-                                                        databaseReferenceOpponent.setValue(opponentUser);
-                                                    });
-                                                    positiveButton.setText("YES");
-                                                    positiveButton.setOnClickListener(v1 -> {
-                                                        dialog.dismiss();
-                                                        user.getIndex().setAccepted(true);
-                                                        user.getIndex().setGameIndex(opponentUser.getId() + user.getId());
-                                                        opponentUser.getIndex().setGameIndex(opponentUser.getId() + user.getId());
-                                                        databaseReferenceMy.setValue(user);
-                                                        databaseReferenceOpponent.setValue(opponentUser);
+                                                if (dataSnapshot.exists()) {
+                                                    opponentUser = dataSnapshot.getValue(User.class);
+                                                    if (user.getIndex().isAccepted() && opponentUser.getIndex().isAccepted() || !user.getIndex().getGameIndex().equals("")) {
+                                                        Toast.makeText(MainActivity.this, "You can fight", Toast.LENGTH_LONG).show();
                                                         mHandler.removeCallbacks(checkMyOpponentAndMove);
-                                                        TOPIC = "/topics/"+ user.getIndex().getOpponent();
-                                                        NOTIFICATION_TITLE = user.getName()+ " accepted your invitation";
-                                                        JSONObject notification = new JSONObject();
-                                                        JSONObject notificationBody = new JSONObject();
-                                                        try{
-                                                            notificationBody.put("title",NOTIFICATION_TITLE);
-                                                            notification.put("to",TOPIC);
-                                                            notification.put("notification",notificationBody);
-                                                        } catch (JSONException e){
-                                                            Log.e(TAG,"onCreate: "+e.getMessage());
-                                                        }
-                                                        sendNotification(notification);
                                                         Intent intent = new Intent(MainActivity.this, MultiplayerActivity.class);
                                                         startActivity(intent);
-                                                    });
-                                                    dialog.show();
+                                                    } else if (user.getIndex().isAccepted() && !opponentUser.getIndex().isAccepted()) {
+                                                        Toast.makeText(MainActivity.this, "You invited him", Toast.LENGTH_LONG).show();
+                                                        alertDialogInUse=true;
+                                                        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+                                                        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons_and_picture, null);
+                                                        mBuilder.setView(mView);
+                                                        android.app.AlertDialog dialog = mBuilder.create();
+                                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                                                        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                                                        dialog.setCancelable(false);
+                                                        dialog.setCanceledOnTouchOutside(false);
+                                                        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons_and_picture);
+                                                        ImageView photo = mView.findViewById(R.id.alert_dialog_photo_layout_with_two_buttons_and_picture);
+                                                        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons_and_picture);
+                                                        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons_and_picture);
+                                                        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons_and_picture);
+                                                        title.setText("Waiting");
+                                                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(2 * square, 2 * square);
+                                                        photo.setLayoutParams(params);
+                                                        StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(opponentUser.getId());
+
+                                                        final long SIZE = 1024 * 1024;
+                                                        sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                            @Override
+                                                            public void onSuccess(byte[] bytes) {
+                                                                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                                                photo.setImageBitmap(new RoundedCornerBitmap(bm, 2 * square).getRoundedCornerBitmap());
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                photo.setImageResource(R.drawable.account_box_grey);
+                                                            }
+                                                        });
+                                                        message.setText("Do you want to wait for accept from: " + "\n" + opponentUser.getName() + "?");
+                                                        negativeButton.setText("NO");
+                                                        negativeButton.setOnClickListener(v12 -> {
+                                                            dialog.dismiss();
+                                                            user.getIndex().setOpponent("");
+                                                            user.getIndex().setAccepted(false);
+                                                            opponentUser.getIndex().setOpponent("");
+                                                            opponentUser.getIndex().setAccepted(false);
+                                                            databaseReferenceMy.setValue(user);
+                                                            databaseReferenceOpponent.setValue(opponentUser);
+                                                            alertDialogInUse=false;
+                                                        });
+                                                        positiveButton.setText("YES");
+                                                        positiveButton.setOnClickListener(v1 -> {
+                                                            dialog.dismiss();
+                                                            alertDialogInUse=false;
+                                                        });
+                                                        dialog.show();
+
+                                                    } else if (!user.getIndex().isAccepted() && opponentUser.getIndex().isAccepted()) {
+                                                        Toast.makeText(MainActivity.this, "You have to accept", Toast.LENGTH_LONG).show();
+                                                        alertDialogInUse=true;
+                                                        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+                                                        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons_and_picture, null);
+                                                        mBuilder.setView(mView);
+                                                        android.app.AlertDialog dialog = mBuilder.create();
+                                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                                                        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                                                        dialog.setCancelable(false);
+                                                        dialog.setCanceledOnTouchOutside(false);
+                                                        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons_and_picture);
+                                                        ImageView photo = mView.findViewById(R.id.alert_dialog_photo_layout_with_two_buttons_and_picture);
+                                                        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons_and_picture);
+                                                        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons_and_picture);
+                                                        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons_and_picture);
+                                                        title.setText("Accepting");
+
+                                                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(2 * square, 2 * square);
+                                                        photo.setLayoutParams(params);
+                                                        StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(opponentUser.getId());
+
+                                                        final long SIZE = 1024 * 1024;
+                                                        sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                            @Override
+                                                            public void onSuccess(byte[] bytes) {
+                                                                Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                                                photo.setImageBitmap(new RoundedCornerBitmap(bm, 2 * square).getRoundedCornerBitmap());
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                photo.setImageResource(R.drawable.account_box_grey);
+                                                            }
+                                                        });
+
+
+                                                        message.setText("Do you want to fight with: " + "\n" + opponentUser.getName() + "?");
+                                                        negativeButton.setText("NO");
+                                                        negativeButton.setOnClickListener(v12 -> {
+                                                            dialog.dismiss();
+                                                            TOPIC = "/topics/" + user.getIndex().getOpponent();
+                                                            NOTIFICATION_TITLE = user.getName() + " rejected your invitation";
+                                                            JSONObject notification = new JSONObject();
+                                                            JSONObject notificationBody = new JSONObject();
+                                                            try {
+                                                                notificationBody.put("title", NOTIFICATION_TITLE);
+                                                                notification.put("to", TOPIC);
+                                                                notification.put("notification", notificationBody);
+                                                            } catch (JSONException e) {
+                                                                Log.e(TAG, "onCreate: " + e.getMessage());
+                                                            }
+                                                            sendNotification(notification);
+                                                            user.getIndex().setOpponent("");
+                                                            opponentUser.getIndex().setOpponent("");
+                                                            opponentUser.getIndex().setAccepted(false);
+                                                            databaseReferenceMy.setValue(user);
+                                                            databaseReferenceOpponent.setValue(opponentUser);
+                                                            alertDialogInUse=false;
+                                                        });
+                                                        positiveButton.setText("YES");
+                                                        positiveButton.setOnClickListener(v1 -> {
+                                                            dialog.dismiss();
+                                                            alertDialogInUse=false;
+                                                            user.getIndex().setAccepted(true);
+                                                            user.getIndex().setGameIndex(opponentUser.getId() + user.getId());
+                                                            opponentUser.getIndex().setGameIndex(opponentUser.getId() + user.getId());
+                                                            databaseReferenceMy.setValue(user);
+                                                            databaseReferenceOpponent.setValue(opponentUser);
+                                                            mHandler.removeCallbacks(checkMyOpponentAndMove);
+                                                            TOPIC = "/topics/" + user.getIndex().getOpponent();
+                                                            NOTIFICATION_TITLE = user.getName() + " accepted your invitation";
+                                                            JSONObject notification = new JSONObject();
+                                                            JSONObject notificationBody = new JSONObject();
+                                                            try {
+                                                                notificationBody.put("title", NOTIFICATION_TITLE);
+                                                                notification.put("to", TOPIC);
+                                                                notification.put("notification", notificationBody);
+                                                            } catch (JSONException e) {
+                                                                Log.e(TAG, "onCreate: " + e.getMessage());
+                                                            }
+                                                            sendNotification(notification);
+                                                            Intent intent = new Intent(MainActivity.this, MultiplayerActivity.class);
+                                                            startActivity(intent);
+                                                        });
+                                                        dialog.show();
+                                                    }
+                                                } else {
+                                                    user.getIndex().setAccepted(false);
+                                                    user.getIndex().setOpponent("");
+                                                    user.getIndex().setGameIndex("");
+                                                    databaseReferenceMy.setValue(user);
                                                 }
-                                            } else {
-                                                user.getIndex().setAccepted(false);
-                                                user.getIndex().setOpponent("");
-                                                user.getIndex().setGameIndex("");
-                                                databaseReferenceMy.setValue(user);
                                             }
-                                        }
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                        }
-                                    });
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            }
+                                        });
+                                    }
                                 }
                             }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                        }
-                    });
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
 
 
+                    }
                 }
-
-
             });
-
-
-
         }else{
             loggedIn.setText("niezalogowany");
             multiplayerBtn.setVisibility(View.GONE);
@@ -637,18 +625,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void singleGame(View view) {
         if(logIn) {
-            if(ready) {
-                mHandler.removeCallbacks(checkMyOpponentAndMove);
-                boolean savedGame = user.getSinglePlayerMatch().isGame();
+            if(alertDialogInUse){
+                //do nothing
+            }else {
+                if (ready) {
+                    mHandler.removeCallbacks(checkMyOpponentAndMove);
+                    boolean savedGame = user.getSinglePlayerMatch().isGame();
 
-                if (savedGame) {
-                    Intent intent = new Intent(getApplicationContext(), GameBattle.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
-                    startActivity(intent);
+                    if (savedGame) {
+                        Intent intent = new Intent(getApplicationContext(), GameBattle.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
+                        startActivity(intent);
+                    }
                 }
-
             }
         }else{
         Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
@@ -659,18 +650,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickSignIn(View view) {
-        mHandler.removeCallbacks(checkMyOpponentAndMove);
-        Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
-        startActivity(intent);
-        finish();
+        if(alertDialogInUse){
+            // do nothing
+        }else {
+            mHandler.removeCallbacks(checkMyOpponentAndMove);
+            Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
 
     public void ranking(View view) {
-        mHandler.removeCallbacks(checkMyOpponentAndMove);
-        Intent intent = new Intent(getApplicationContext(),Scores.class);
-        startActivity(intent);
-
+        if(alertDialogInUse){
+            // do nothing
+        }else {
+            mHandler.removeCallbacks(checkMyOpponentAndMove);
+            Intent intent = new Intent(getApplicationContext(), Scores.class);
+            startActivity(intent);
+        }
     }
 
     private Runnable checkMyOpponentAndMove = new Runnable() {
@@ -738,7 +736,11 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void leaveMainMenuOnClick(View view) {
-        finish();
+        if(alertDialogInUse){
+            // do nothing
+        }else {
+            finish();
+        }
     }
 
 
