@@ -839,19 +839,19 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 finish();
             });
             dialog.show();
-        }else if(w.getWinner().equals(user.getId())){
+        }else {
             // wygrałem (bo się poddał - sprawdź czy out off date)
-            if(w.isSurrendered()&&w.isOutOfDate()){
+            if (w.isSurrendered() && w.isOutOfDate()) {
                 //poddał się ale za długo czekał
                 user.setIndex(new FightIndex());
                 databaseReferenceMy.setValue(user);
                 databaseReferenceFight.removeValue();
                 android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
-                View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red,null);
+                View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red, null);
                 mBuilder.setView(mView);
                 android.app.AlertDialog dialog = mBuilder.create();
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
                 dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
                 dialog.setCancelable(false);
                 dialog.setCanceledOnTouchOutside(false);
@@ -868,29 +868,29 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 dialog.show();
 
 
-            }else if (w.isSurrendered()&&!w.isOutOfDate()){
+            } else if (w.isSurrendered() && !w.isOutOfDate()) {
                 // poddał się ale doliczam sobie punkty
                 int score = user.getScore();
-                if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
-                    score = score+25;
-                }else{
-                    score = score+50;
+                if (battleFieldForDataBaseMy.getDifficulty().isEasy()) {
+                    score = score + 25;
+                } else {
+                    score = score + 50;
                 }
                 user.setScore(score);
                 user.setIndex(new FightIndex());
                 databaseReferenceMy.setValue(user);
                 databaseReferenceFight.removeValue();
                 android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
-                View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green,null);
+                View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green, null);
                 mBuilder.setView(mView);
                 android.app.AlertDialog dialog = mBuilder.create();
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
                 dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
                 dialog.setCancelable(false);
                 dialog.setCanceledOnTouchOutside(false);
                 TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_green);
-                TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_green);;
+                TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_green);
                 Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_green);
                 title.setText("CONGRATULATION");
                 message.setText("YOUR OPPONENT HAS SURRENDERED GAME");
@@ -900,23 +900,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     finish();
                 });
                 dialog.show();
-                
-
-            }else{
-                // jakiś błąd
-                user.setIndex(new FightIndex());
-                databaseReferenceMy.setValue(user);
-                databaseReferenceFight.removeValue();
-                finish();
-            }
-        }else{
-            // błąd dziwny winner
-            user.setIndex(new FightIndex());
-            databaseReferenceMy.setValue(user);
-            databaseReferenceFight.removeValue();
-            finish();
+            }else;
         }
-
 
     }
 
@@ -1492,3 +1477,5 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         dialog.show();
     }
 }
+// TODO na później alert dialog w globalnej zmiennej tak żeby tylko jeden dialog zawsze był na ekranie
+// TODO na później notification kiedy serrender game

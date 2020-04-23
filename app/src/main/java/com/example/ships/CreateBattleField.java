@@ -1838,3 +1838,5 @@ public class CreateBattleField extends AppCompatActivity {
         }
     };
 }
+
+// TODO checkgameindex different one
