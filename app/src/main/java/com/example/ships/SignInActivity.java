@@ -87,6 +87,7 @@ public class SignInActivity extends AppCompatActivity {
     private boolean loginWithFacebook = false;
     private AuthCredential credentialFacebook;
     private int flags;
+    private boolean alertDialogFlag = false;
 
 
     @Override
@@ -258,86 +259,103 @@ public class SignInActivity extends AppCompatActivity {
         }
 
         deleteUser.setOnClickListener(v -> {
-            databaseReference.child(userID).child("index").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){
-                        fightIndex = dataSnapshot.getValue(FightIndex.class);
-                        if(!fightIndex.getOpponent().equals("")){
-                            multiplayer=true;
-                        }
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                }
-            });
-
-            AlertDialog.Builder mBuilder = new AlertDialog.Builder(SignInActivity.this);
-            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
-            mBuilder.setView(mView);
-            AlertDialog dialog = mBuilder.create();
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-            dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-            dialog.setCancelable(false);
-            dialog.setCanceledOnTouchOutside(false);
-            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
-            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
-            Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
-            Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
-            title.setText("DELETE ACCOUNT");
-            message.setText("Do you really want to delete your account?");
-            negativeButton.setText("NO");
-            negativeButton.setOnClickListener(v12 -> dialog.dismiss());
-            positiveButton.setText("YES");
-            positiveButton.setOnClickListener(v1 -> {
-                dialog.dismiss();
-                StorageReference storageReference = FirebaseStorage.getInstance().getReference("profile_picture").child(userID);
-                storageReference.delete();
-                firebaseUser.delete().addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        databaseReference.child(userID).removeValue();
-
-                        if(multiplayer){
-                            FightIndex fightIndex1 = new FightIndex();
-                            databaseReference.child(fightIndex.getOpponent()).child("index").setValue(fightIndex1);
-                            if(!fightIndex.getGameIndex().equals("")){
-                                databaseReferenceFight.child(fightIndex.getGameIndex()).removeValue();
+            if(alertDialogFlag){
+                //do nothing
+            }else {
+                databaseReference.child(userID).child("index").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            fightIndex = dataSnapshot.getValue(FightIndex.class);
+                            if (!fightIndex.getOpponent().equals("")) {
+                                multiplayer = true;
                             }
                         }
-                        FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
-                        Toast.makeText(SignInActivity.this,"Account Deleted",Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
-                    }else{
-                        Toast.makeText(SignInActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
                     }
                 });
-            });
-            dialog.show();
+                alertDialogFlag = true;
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(SignInActivity.this);
+                View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons, null);
+                mBuilder.setView(mView);
+                AlertDialog dialog = mBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
+                TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+                TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+                Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+                Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                title.setText("DELETE ACCOUNT");
+                message.setText("Do you really want to delete your account?");
+                negativeButton.setText("NO");
+                negativeButton.setOnClickListener(v12 -> {
+                    alertDialogFlag = false;
+                    dialog.dismiss();
                 });
+                positiveButton.setText("YES");
+                positiveButton.setOnClickListener(v1 -> {
+                    dialog.dismiss();
+                    alertDialogFlag = true;
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference("profile_picture").child(userID);
+                    storageReference.delete();
+                    firebaseUser.delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            databaseReference.child(userID).removeValue();
+
+                            if (multiplayer) {
+                                FightIndex fightIndex1 = new FightIndex();
+                                databaseReference.child(fightIndex.getOpponent()).child("index").setValue(fightIndex1);
+                                if (!fightIndex.getGameIndex().equals("")) {
+                                    databaseReferenceFight.child(fightIndex.getGameIndex()).removeValue();
+                                }
+                            }
+                            FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
+                            Toast.makeText(SignInActivity.this, "Account Deleted", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(SignInActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                });
+                dialog.show();
+            }
+        });
 
         userLogout.setOnClickListener(view -> {
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
-            firebaseAuth.signOut();
-            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+            if(alertDialogFlag){
+                // do nothing
+            }else {
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
+                firebaseAuth.signOut();
+                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
         });
 
 
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
-                startActivity(intent);
-                finish();
+                if (alertDialogFlag) {
+                    //do nothing
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
@@ -541,9 +559,13 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void goBackToMainMenu() {
-        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-        startActivity(intent);
-        finish();
+        if (alertDialogFlag) {
+            // do nothing
+        } else {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
 
