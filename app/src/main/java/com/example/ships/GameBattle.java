@@ -513,6 +513,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             message.setText("YOU WIN");
             positiveButton.setText("OK");
             positiveButton.setOnClickListener(v1 -> {
+                stopAllSounds();
                 dialog.dismiss();
                 finish();
             });
@@ -564,6 +565,51 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
 
         } else ;
+    }
+
+    private void stopAllSounds() {
+
+        try{
+            if(explosionSound!=null){
+                if(explosionSound.isPlaying()){
+                    explosionSound.stop();
+                }
+                explosionSound.release();
+                explosionSound=null;
+            }
+            if(waterSplashSound!=null){
+                if(waterSplashSound.isPlaying()){
+                    waterSplashSound.stop();
+                }
+                waterSplashSound.release();
+                waterSplashSound=null;
+            }
+            if(hornSound!=null){
+                if(hornSound.isPlaying()){
+                    hornSound.stop();
+                }
+                hornSound.release();
+                hornSound=null;
+            }
+            if(bubblesSound!=null){
+                if(bubblesSound.isPlaying()){
+                    bubblesSound.stop();
+                }
+                bubblesSound.release();
+                bubblesSound=null;
+            }
+            if(shoutYaySound!=null){
+                if(shoutYaySound.isPlaying()){
+                    shoutYaySound.stop();
+                }
+                shoutYaySound.release();
+                shoutYaySound=null;
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private void updateRanking() {
