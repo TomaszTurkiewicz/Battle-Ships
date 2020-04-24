@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
 
                     } else {
                         user.setId(userID);
-                        user.setName(firebaseUser.getEmail());
+                        user.setName("ANONYMOUS");
                         user.setEmail(firebaseUser.getEmail());
                         user.setNoOfGames(0);
                         user.setScore(0);
@@ -799,6 +799,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 // TODO change progress dialog in score and choose opponent...
+// TODO creating user username not email...
+// TODO add info about points when singleplayer
+// TODO notification when surrendering
+// TODO sounds in multi player...
+// TODO admin panel only for me (cleaning database from empty users)...
 
 
 

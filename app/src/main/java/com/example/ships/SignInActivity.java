@@ -262,6 +262,7 @@ public class SignInActivity extends AppCompatActivity {
             if(alertDialogFlag){
                 //do nothing
             }else {
+                userID=FirebaseAuth.getInstance().getCurrentUser().getUid();
                 databaseReference.child(userID).child("index").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -302,20 +303,19 @@ public class SignInActivity extends AppCompatActivity {
                 positiveButton.setOnClickListener(v1 -> {
                     dialog.dismiss();
                     alertDialogFlag = true;
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
                     StorageReference storageReference = FirebaseStorage.getInstance().getReference("profile_picture").child(userID);
                     storageReference.delete();
+                    databaseReference.child(userID).removeValue();
+                    if (multiplayer) {
+                        FightIndex fightIndex1 = new FightIndex();
+                        databaseReference.child(fightIndex.getOpponent()).child("index").setValue(fightIndex1);
+                        if (!fightIndex.getGameIndex().equals("")) {
+                            databaseReferenceFight.child(fightIndex.getGameIndex()).removeValue();
+                        }
+                    }
                     firebaseUser.delete().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            databaseReference.child(userID).removeValue();
-
-                            if (multiplayer) {
-                                FightIndex fightIndex1 = new FightIndex();
-                                databaseReference.child(fightIndex.getOpponent()).child("index").setValue(fightIndex1);
-                                if (!fightIndex.getGameIndex().equals("")) {
-                                    databaseReferenceFight.child(fightIndex.getGameIndex()).removeValue();
-                                }
-                            }
-                            FirebaseMessaging.getInstance().unsubscribeFromTopic(userID);
                             Toast.makeText(SignInActivity.this, "Account Deleted", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
