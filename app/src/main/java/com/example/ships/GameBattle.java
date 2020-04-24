@@ -558,6 +558,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             message.setText("Maybe next time");
             positiveButton.setText("OK");
             positiveButton.setOnClickListener(v1 -> {
+                stopAllSounds();
                 dialog.dismiss();
                 finish();
             });
@@ -568,7 +569,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void stopAllSounds() {
-
         try{
             if(explosionSound!=null){
                 if(explosionSound.isPlaying()){
@@ -605,15 +605,12 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 shoutYaySound.release();
                 shoutYaySound=null;
             }
-            
         }catch(Exception e){
             e.printStackTrace();
         }
-
     }
 
     private void updateRanking() {
-
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -1893,6 +1890,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                         });
                         positiveButton.setText("YES");
                         positiveButton.setOnClickListener(v1 -> {
+                            stopAllSounds();
                             dialog.dismiss();
                             int myScore = user.getScore();
                             myScore = myScore - minusPoints;
@@ -1934,6 +1932,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 });
                 positiveButton.setText("YES");
                 positiveButton.setOnClickListener(v1 -> {
+                    stopAllSounds();
                     dialog.dismiss();
                     finish();
                 });
@@ -1988,6 +1987,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         });
         positiveButton.setText("YES");
         positiveButton.setOnClickListener(v1 -> {
+            stopAllSounds();
             dialog.dismiss();
             if (loggedIn) {
                 databaseReference.child("singlePlayerMatch").setValue(singlePlayerMatch);
