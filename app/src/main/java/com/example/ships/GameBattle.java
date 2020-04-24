@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.TypedValue;
@@ -103,6 +104,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private int marginDown;
     private TextView userName, opponentName;
     private int flags;
+    private MediaPlayer explosionSound, waterSplashSound, hornSound, bubblesSound, shoutYaySound;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -407,6 +409,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             } else {
                 battleFieldMeActivityRandomGame = BattleFieldPlayerOneSingleton.getInstance().readBattleField();
             }
+            level=GameDifficulty.getInstance().getLevel();
 
             battleFieldOpponentActivityRandomGame.createFleet();
             hideBattleFiledAvailablePlayerOne();
@@ -474,13 +477,15 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         {
             battle();
         } else if (myWin() && !battleFieldMeActivityRandomGame.allShipsHit())      // allShipsHit player
-        {
+        {hornSound=MediaPlayer.create(GameBattle.this,R.raw.big_horn);
+        hornSound.start();
 
             if (loggedIn) {
                 updateRanking();
 
             }
             alertDialogFlag = true;
+
             android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(GameBattle.this);
             View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green, null);
             mBuilder.setView(mView);
@@ -492,7 +497,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             dialog.setCanceledOnTouchOutside(false);
             TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_green);
             TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_green);
-            ;
             Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_green);
             title.setText("CONGRATULATION");
             message.setText("YOU WIN");
@@ -505,19 +509,25 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
         } else if (!myWin() && battleFieldMeActivityRandomGame.allShipsHit())     // allShipsHit computer
         {
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            bubblesSound=MediaPlayer.create(GameBattle.this, R.raw.bubbles);
+            bubblesSound.start();
 
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    user = dataSnapshot.getValue(User.class);
-                    user.setSinglePlayerMatch(new SinglePlayerMatch());
-                    databaseReference.setValue(user);
-                }
+            if (loggedIn) {
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                }
-            });
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        user = dataSnapshot.getValue(User.class);
+                        user.setSinglePlayerMatch(new SinglePlayerMatch());
+                        databaseReference.setValue(user);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+            }
             alertDialogFlag = true;
             android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(GameBattle.this);
             View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red, null);
@@ -539,6 +549,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 finish();
             });
             dialog.show();
+
+
         } else ;
     }
 
@@ -1505,9 +1517,12 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void hitCell(int x1, int y1) {
+        explosionSound = MediaPlayer.create(this,R.raw.explosion);
+        waterSplashSound = MediaPlayer.create(this,R.raw.water_splash);
         battleFieldOpponentActivityRandomGame.getBattleField(x1, y1).setHit(true);
         if (battleFieldOpponentActivityRandomGame.getBattleField(x1, y1).isShip()) {
             battleFieldOpponent[x1][y1] = SHIP_RED;
+            explosionSound.start();
             updateCounters(battleFieldOpponentActivityRandomGame.getBattleField(x1, y1).getNumberOfMasts(),
                     battleFieldOpponentActivityRandomGame.getBattleField(x1, y1).getShipNumber());
             showCounters();
@@ -1532,6 +1547,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             pokazStatki();
         } else {
             battleFieldOpponent[x1][y1] = WATER;
+            waterSplashSound.start();
             pokazStatki();
             myTurn = false;
             enableTouchListener = false;
@@ -1647,66 +1663,76 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
     private void updateCounters(int numberOfMasts, int shipNumber) {
         int number = 10 * numberOfMasts + shipNumber;
-
+        shoutYaySound=MediaPlayer.create(GameBattle.this,R.raw.shout_yay);
         switch (number) {
             case 41:
                 shipFourMastsCounter++;
                 if (shipFourMastsCounter == 4) {
                     updateBattleField(numberOfMasts, shipNumber);
+                    shoutYaySound.start();
                 }
                 break;
             case 31:
                 shipThreeMastsCounterFirst++;
                 if (shipThreeMastsCounterFirst == 3) {
                     updateBattleField(numberOfMasts, shipNumber);
+                    shoutYaySound.start();
                 }
                 break;
             case 32:
                 shipThreeMastsCounterSecond++;
                 if (shipThreeMastsCounterSecond == 3) {
                     updateBattleField(numberOfMasts, shipNumber);
+                    shoutYaySound.start();
                 }
                 break;
             case 21:
                 shipTwoMastsCounterFirst++;
                 if (shipTwoMastsCounterFirst == 2) {
                     updateBattleField(numberOfMasts, shipNumber);
+                    shoutYaySound.start();
                 }
                 break;
             case 22:
                 shipTwoMastsCounterSecond++;
                 if (shipTwoMastsCounterSecond == 2) {
                     updateBattleField(numberOfMasts, shipNumber);
+                    shoutYaySound.start();
                 }
                 break;
             case 23:
                 shipTwoMastsCounterThird++;
                 if (shipTwoMastsCounterThird == 2) {
                     updateBattleField(numberOfMasts, shipNumber);
+                    shoutYaySound.start();
                 }
                 break;
             case 11:
                 shipOneMastsCounterFirst++;
                 if (shipOneMastsCounterFirst == 1) {
                     updateBattleField(numberOfMasts, shipNumber);
+                    shoutYaySound.start();
                 }
                 break;
             case 12:
                 shipOneMastsCounterSecond++;
                 if (shipOneMastsCounterSecond == 1) {
                     updateBattleField(numberOfMasts, shipNumber);
+                    shoutYaySound.start();
                 }
                 break;
             case 13:
                 shipOneMastsCounterThird++;
                 if (shipOneMastsCounterThird == 1) {
                     updateBattleField(numberOfMasts, shipNumber);
+                    shoutYaySound.start();
                 }
                 break;
             case 14:
                 shipOneMastsCounterFourth++;
                 if (shipOneMastsCounterFourth == 1) {
                     updateBattleField(numberOfMasts, shipNumber);
+                    shoutYaySound.start();
                 }
                 break;
             default:
