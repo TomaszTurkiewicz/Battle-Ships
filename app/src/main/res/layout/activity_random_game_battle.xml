@@ -41,6 +41,15 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageButton
+        android:id="@+id/soundSinglePlayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:onClick="soundSinglePlayer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
         android:id="@+id/leaveSinglePlayer"
         android:layout_width="60dp"
         android:layout_height="60dp"
