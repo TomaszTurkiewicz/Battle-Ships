@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +41,7 @@ import com.example.ships.classes.FightIndex;
 import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
+import com.example.ships.classes.UpdateHelper;
 import com.example.ships.classes.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -66,7 +68,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUpdateNeededListener{
 
     private TextView userName;
     private TextView loggedIn;
@@ -371,6 +373,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+
+        UpdateHelper.with(this).onUpdateNeeded(this).check();
     }
 
     @Override
@@ -635,27 +640,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void singleGame(View view) {
-        if(logIn) {
-            if(alertDialogInUse){
-                //do nothing
-            }else {
-                    if (ready) {
-                        mHandler.removeCallbacks(checkMyOpponentAndMove);
-                        boolean savedGame = user.getSinglePlayerMatch().isGame();
+        if(alertDialogInUse){
+            //do nothon
+        }else {
 
-                        if (savedGame) {
-                            Intent intent = new Intent(getApplicationContext(), GameBattle.class);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
-                            startActivity(intent);
-                        }
+            if (logIn) {
+
+                if (ready) {
+                    mHandler.removeCallbacks(checkMyOpponentAndMove);
+                    boolean savedGame = user.getSinglePlayerMatch().isGame();
+
+                    if (savedGame) {
+                        Intent intent = new Intent(getApplicationContext(), GameBattle.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
+                        startActivity(intent);
                     }
+                }
+            } else {
+                Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
+                startActivity(intent);
             }
-        }else{
-        Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
-        startActivity(intent);
         }
+
     }
 
 
@@ -754,7 +762,46 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onUpdateNeeded(String updateUrl) {
 
+        alertDialogInUse=true;
+        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+        mBuilder.setView(mView);
+        android.app.AlertDialog dialog = mBuilder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+        title.setText("NEW VERSION AVAILABLE");
+        message.setText("Please update");
+        negativeButton.setText("NO, THANKS");
+        negativeButton.setOnClickListener(v12 -> {
+            alertDialogInUse=false;
+            dialog.dismiss();
+            mHandler.postDelayed(checkMyOpponentAndMove,deelay);
+        });
+        positiveButton.setText("UPDATE");
+        positiveButton.setOnClickListener(v1 -> {
+            alertDialogInUse=false;
+            dialog.dismiss();
+            mHandler.removeCallbacks(checkMyOpponentAndMove);
+            redirectStore(updateUrl);
+        });
+        dialog.show();
+    }
+
+    private void redirectStore(String updateUrl){
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
 
     private class DownloadFacebookImage extends AsyncTask<String, Void, Bitmap>{
