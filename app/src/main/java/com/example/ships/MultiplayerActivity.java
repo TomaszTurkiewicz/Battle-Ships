@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -85,7 +86,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private boolean battleFieldsSet;
     private boolean playersShown;
     private TextView turnTextView;
-    private ImageButton surrenderButton, leave;
+    private ImageButton surrenderButton, leave, soundButton;
     private boolean enableTouchListener;
     private GridLayout layoutOpponent, layoutMy;
 
@@ -115,6 +116,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private String opponentNameString;
     private boolean fight;
     private boolean alertDialogFlag = false;
+    private boolean soundOn;
+    private MediaPlayer explosionSound, waterSplashSound, hornSound, bubblesSound, shoutYaySound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +164,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         turnTextView.setVisibility(GONE);
         leave = findViewById(R.id.leaveMultiPlayer);
         leave.setBackgroundResource(R.drawable.back);
+        soundButton=findViewById(R.id.soundMultiplayerPlayer);
+        soundButton.setBackgroundResource(R.drawable.sound);
         userName = findViewById(R.id.userNameMultiplayer);
         opponentName = findViewById(R.id.opponentNameMultiplayer);
         userPhoto = findViewById(R.id.user_photo_multiplayer);
@@ -212,6 +217,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(8 * square, 2 * square);
         ConstraintLayout.LayoutParams params20 = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
         ConstraintLayout.LayoutParams params21 = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
+        ConstraintLayout.LayoutParams params22 = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
 
         surrenderButton.setLayoutParams(params);
         layoutMy.setLayoutParams(params1);
@@ -237,6 +243,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         opponentName.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         userPhoto.setLayoutParams(params20);
         opponentPhoto.setLayoutParams(params21);
+        soundButton.setLayoutParams(params22);
 
         for (int i = 0; i < 10; i++) {
             TextView tv = (TextView) linearLayoutLettersMy.getChildAt(i);
@@ -268,6 +275,9 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
         set.connect(surrenderButton.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, square);
         set.connect(surrenderButton.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, square);
+
+        set.connect(soundButton.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, 7*square);
+        set.connect(soundButton.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, square);
 
         set.connect(layoutMy.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, 4 * square);
         set.connect(layoutMy.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, 5 * square);
@@ -336,6 +346,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
         height = square;
         width = square;
+
+        SharedPreferences spsound = getSharedPreferences("Sound", Activity.MODE_PRIVATE);
+        soundOn=spsound.getBoolean("sound",false);
+        updateSoundButton();
 
         layoutOpponent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -559,7 +573,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
                     int numberOfMasts = battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getNumberOfMasts();
                     int shipNumber = battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).getShipNumber();
-                    updateCounters(numberOfMasts,shipNumber);
+                    updateCounters(numberOfMasts,shipNumber,false);
                 }
             }
         }
@@ -823,6 +837,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         if(w.getWinner().equals(user.getIndex().getOpponent())){
             // przegrałem
             alertDialogFlag=true;
+            if(soundOn){
+                bubblesSound=MediaPlayer.create(MultiplayerActivity.this,R.raw.bubbles);
+                bubblesSound.start();
+            }
             android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
             View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red,null);
             mBuilder.setView(mView);
@@ -843,6 +861,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 user.setIndex(new FightIndex());
                 databaseReferenceMy.setValue(user);
                 databaseReferenceFight.removeValue();
+                stopAllSounds();
                 dialog.dismiss();
                 finish();
             });
@@ -890,6 +909,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 databaseReferenceMy.setValue(user);
                 databaseReferenceFight.removeValue();
                 alertDialogFlag=true;
+                if(soundOn){
+                    hornSound=MediaPlayer.create(MultiplayerActivity.this,R.raw.big_horn);
+                    hornSound.start();
+                }
                 android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
                 View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green, null);
                 mBuilder.setView(mView);
@@ -906,6 +929,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 message.setText("YOUR OPPONENT HAS SURRENDERED GAME");
                 positiveButton.setText("OK");
                 positiveButton.setOnClickListener(v1 -> {
+                    stopAllSounds();
                     dialog.dismiss();
                     finish();
                 });
@@ -1032,12 +1056,20 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     long time = calendar.getTimeInMillis();
                     databaseReferenceFight.child(user.getId()).child("time").setValue(time);
                     if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).isShip()){
+                        if(soundOn){
+                            explosionSound=MediaPlayer.create(MultiplayerActivity.this, R.raw.explosion);
+                            explosionSound.start();
+                        }
                         battleFieldOpponent[x][y]=SHIP_RED;
                         updateCounters(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getNumberOfMasts(),
-                                battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getShipNumber());
+                                battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getShipNumber(),true);
                         updateShipsHit();
                         showOpponentBattleField();
                         if(myWin()){
+                            if(soundOn){
+                                hornSound=MediaPlayer.create(MultiplayerActivity.this,R.raw.big_horn);
+                                hornSound.start();
+                            }
                             mHandler.removeCallbacks(game);
                             mHandler2.removeCallbacks(checkWinner);
                             Winner winner=new Winner();
@@ -1069,6 +1101,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                             message.setText("YOU WIN");
                             positiveButton.setText("OK");
                             positiveButton.setOnClickListener(v1 -> {
+                                stopAllSounds();
                                 dialog.dismiss();
                                 finish();
                             });
@@ -1076,6 +1109,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         }
                     }else{
                         battleFieldOpponent[x][y]=WATER;
+                        if(soundOn){
+                            waterSplashSound=MediaPlayer.create(MultiplayerActivity.this, R.raw.water_splash);
+                            waterSplashSound.start();
+                        }
                         showOpponentBattleField();
                         enableTouchListener=false;
                         databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
@@ -1325,68 +1362,99 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }
     }
 
-    private void updateCounters(int numberOfMasts, int shipNumber) {
+    private void updateCounters(int numberOfMasts, int shipNumber, boolean sound) {
         int number = 10*numberOfMasts+shipNumber;
+        shoutYaySound=MediaPlayer.create(MultiplayerActivity.this,R.raw.shout_yay);
 
         switch (number){
             case 41:
                 shipFourMastsCounter++;
                 if(shipFourMastsCounter==4){
                     updateBattleField(numberOfMasts,shipNumber);
+                    if(soundOn&&sound){
+                        shoutYaySound.start();
+                    }
                 }
                 break;
             case 31:
                 shipThreeMastsCounterFirst++;
                 if(shipThreeMastsCounterFirst==3){
                     updateBattleField(numberOfMasts,shipNumber);
+                    if(soundOn&&sound){
+                        shoutYaySound.start();
+                    }
                 }
                 break;
             case 32:
                 shipThreeMastsCounterSecond++;
                 if(shipThreeMastsCounterSecond==3){
                     updateBattleField(numberOfMasts,shipNumber);
+                    if(soundOn&&sound){
+                        shoutYaySound.start();
+                    }
                 }
                 break;
             case 21:
                 shipTwoMastsCounterFirst++;
                 if(shipTwoMastsCounterFirst==2){
                     updateBattleField(numberOfMasts,shipNumber);
+                    if(soundOn&&sound){
+                        shoutYaySound.start();
+                    }
                 }
                 break;
             case 22:
                 shipTwoMastsCounterSecond++;
                 if(shipTwoMastsCounterSecond==2){
                     updateBattleField(numberOfMasts,shipNumber);
+                    if(soundOn&&sound){
+                        shoutYaySound.start();
+                    }
                 }
                 break;
             case 23:
                 shipTwoMastsCounterThird++;
                 if(shipTwoMastsCounterThird==2){
                     updateBattleField(numberOfMasts,shipNumber);
+                    if(soundOn&&sound){
+                        shoutYaySound.start();
+                    }
                 }
                 break;
             case 11:
                 shipOneMastsCounterFirst++;
                 if(shipOneMastsCounterFirst==1){
                     updateBattleField(numberOfMasts,shipNumber);
+                    if(soundOn&&sound){
+                        shoutYaySound.start();
+                    }
                 }
                 break;
             case 12:
                 shipOneMastsCounterSecond++;
                 if(shipOneMastsCounterSecond==1){
                     updateBattleField(numberOfMasts,shipNumber);
+                    if(soundOn&&sound){
+                        shoutYaySound.start();
+                    }
                 }
                 break;
             case 13:
                 shipOneMastsCounterThird++;
                 if(shipOneMastsCounterThird==1){
                     updateBattleField(numberOfMasts,shipNumber);
+                    if(soundOn&&sound){
+                        shoutYaySound.start();
+                    }
                 }
                 break;
             case 14:
                 shipOneMastsCounterFourth++;
                 if(shipOneMastsCounterFourth==1){
                     updateBattleField(numberOfMasts,shipNumber);
+                    if(soundOn&&sound){
+                        shoutYaySound.start();
+                    }
                 }
                 break;
             default:
@@ -1499,6 +1567,68 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         dialog.show();
         }
     }
+    private void updateSoundButton(){
+        if(soundOn){
+            soundButton.setImageResource(R.color.transparent);
+        }else{
+            soundButton.setImageResource(R.drawable.disable);
+        }
+    }
+
+    public void soundMultiplayerPlayer(View view) {
+        if (alertDialogFlag) {
+            // do nothing
+        } else {
+            soundOn = !soundOn;
+            SharedPreferences sp = getSharedPreferences("Sound", Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean("sound", soundOn);
+            editor.commit();
+            updateSoundButton();
+        }
+    }
+
+    private void stopAllSounds() {
+        try{
+            if(explosionSound!=null){
+                if(explosionSound.isPlaying()){
+                    explosionSound.stop();
+                }
+                explosionSound.release();
+                explosionSound=null;
+            }
+            if(waterSplashSound!=null){
+                if(waterSplashSound.isPlaying()){
+                    waterSplashSound.stop();
+                }
+                waterSplashSound.release();
+                waterSplashSound=null;
+            }
+            if(hornSound!=null){
+                if(hornSound.isPlaying()){
+                    hornSound.stop();
+                }
+                hornSound.release();
+                hornSound=null;
+            }
+            if(bubblesSound!=null){
+                if(bubblesSound.isPlaying()){
+                    bubblesSound.stop();
+                }
+                bubblesSound.release();
+                bubblesSound=null;
+            }
+            if(shoutYaySound!=null){
+                if(shoutYaySound.isPlaying()){
+                    shoutYaySound.stop();
+                }
+                shoutYaySound.release();
+                shoutYaySound=null;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
-// TODO na później alert dialog w globalnej zmiennej tak żeby tylko jeden dialog zawsze był na ekranie
+
 // TODO na później notification kiedy serrender game

@@ -2009,13 +2009,16 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     public void soundSinglePlayer(View view) {
-        soundOn=!soundOn;
-        SharedPreferences sp = getSharedPreferences("Sound", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean("sound",soundOn);
-        editor.commit();
-        updateSoundButton();
-
+        if(alertDialogFlag){
+            // do nothong
+        }else {
+            soundOn = !soundOn;
+            SharedPreferences sp = getSharedPreferences("Sound", Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean("sound", soundOn);
+            editor.commit();
+            updateSoundButton();
+        }
     }
 
     private void updateSoundButton(){
