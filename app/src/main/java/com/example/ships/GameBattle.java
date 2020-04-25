@@ -360,36 +360,43 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                     userName.setText(user.getName());
                     opponentName.setText("PHONE");
                     if (savedGame) {
-                        for (int i = 0; i < 10; i++) {
-                            for (int j = 0; j < 10; j++) {
-                                battleFieldMeActivityRandomGame.makeShip(i, j, user.getSinglePlayerMatch().getBattleFieldListMy().get(10 * i + j));
-                            }
-                        }
-                        for (int i = 0; i < 10; i++) {
-                            for (int j = 0; j < 10; j++) {
-                                battleFieldOpponentActivityRandomGame.makeShip(i, j, user.getSinglePlayerMatch().getBattleFieldListOpponent().get(10 * i + j));
-                            }
-                        }
-                        myTurn = user.getSinglePlayerMatch().isMyTurn();
-                        level = user.getSinglePlayerMatch().getDifficulty();
-                        positionI = user.getSinglePlayerMatch().getPositionI();
-                        positionJ = user.getSinglePlayerMatch().getPositionJ();
-                        newShoot = user.getSinglePlayerMatch().isNewShoot();
-                        direction = user.getSinglePlayerMatch().getDirection();
-                        x = user.getSinglePlayerMatch().getX();
-                        y = user.getSinglePlayerMatch().getY();
-                        updateBattleFieldFromSaved();
-                        for (int i = 0; i < 10; i++) {
-                            for (int j = 0; j < 10; j++) {
-                                if (battleFieldOpponentActivityRandomGame.getBattleField(i, j).isShip() && battleFieldOpponentActivityRandomGame.getBattleField(i, j).isHit()) {
-
-                                    updateCounters(battleFieldOpponentActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldOpponentActivityRandomGame.getBattleField(i, j).getShipNumber(),false);
+                        try {
+                            for (int i = 0; i < 10; i++) {
+                                for (int j = 0; j < 10; j++) {
+                                    battleFieldMeActivityRandomGame.makeShip(i, j, user.getSinglePlayerMatch().getBattleFieldListMy().get(10 * i + j));
                                 }
                             }
+                            for (int i = 0; i < 10; i++) {
+                                for (int j = 0; j < 10; j++) {
+                                    battleFieldOpponentActivityRandomGame.makeShip(i, j, user.getSinglePlayerMatch().getBattleFieldListOpponent().get(10 * i + j));
+                                }
+                            }
+                            myTurn = user.getSinglePlayerMatch().isMyTurn();
+                            level = user.getSinglePlayerMatch().getDifficulty();
+                            positionI = user.getSinglePlayerMatch().getPositionI();
+                            positionJ = user.getSinglePlayerMatch().getPositionJ();
+                            newShoot = user.getSinglePlayerMatch().isNewShoot();
+                            direction = user.getSinglePlayerMatch().getDirection();
+                            x = user.getSinglePlayerMatch().getX();
+                            y = user.getSinglePlayerMatch().getY();
+                            updateBattleFieldFromSaved();
+                            for (int i = 0; i < 10; i++) {
+                                for (int j = 0; j < 10; j++) {
+                                    if (battleFieldOpponentActivityRandomGame.getBattleField(i, j).isShip() && battleFieldOpponentActivityRandomGame.getBattleField(i, j).isHit()) {
+
+                                        updateCounters(battleFieldOpponentActivityRandomGame.getBattleField(i, j).getNumberOfMasts(), battleFieldOpponentActivityRandomGame.getBattleField(i, j).getShipNumber(), false);
+                                    }
+                                }
+                            }
+                            showCounters();
+                            hideBattleFiledAvailablePlayerOne();
+                            hideBattleFiledAvailablePlayerTwo();
                         }
-                        showCounters();
-                        hideBattleFiledAvailablePlayerOne();
-                        hideBattleFiledAvailablePlayerTwo();
+                        catch (Exception e){
+                            user.setSinglePlayerMatch(new SinglePlayerMatch());
+                            databaseReference.setValue(user);
+                            finish();
+                        }
                     } else {
                         if (GameDifficulty.getInstance().getRandom()) {
                             battleFieldMeActivityRandomGame.createFleet();

@@ -378,6 +378,17 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         if(logIn){
+            databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    user=dataSnapshot.getValue(User.class);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
             checkMyOpponentAndMove.run();
             multiplayerBtn.setVisibility(View.VISIBLE);
             multiplayerBtn.setClickable(true);
@@ -628,18 +639,18 @@ public class MainActivity extends AppCompatActivity {
             if(alertDialogInUse){
                 //do nothing
             }else {
-                if (ready) {
-                    mHandler.removeCallbacks(checkMyOpponentAndMove);
-                    boolean savedGame = user.getSinglePlayerMatch().isGame();
+                    if (ready) {
+                        mHandler.removeCallbacks(checkMyOpponentAndMove);
+                        boolean savedGame = user.getSinglePlayerMatch().isGame();
 
-                    if (savedGame) {
-                        Intent intent = new Intent(getApplicationContext(), GameBattle.class);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
-                        startActivity(intent);
+                        if (savedGame) {
+                            Intent intent = new Intent(getApplicationContext(), GameBattle.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
+                            startActivity(intent);
+                        }
                     }
-                }
             }
         }else{
         Intent intent = new Intent(getApplicationContext(),ChooseGameLevel.class);
@@ -799,6 +810,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 // TODO change progress dialog in score and choose opponent...
+// TODO Przy przegranej pokaż planszę przeciwnika
 // TODO add info about points when singleplayer
 // TODO notification when surrendering
 // TODO sounds in multi player...
