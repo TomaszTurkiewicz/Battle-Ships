@@ -849,21 +849,10 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
     }
 }
 
-
-
-
-
-
-
-
 // TODO change progress dialog in score and choose opponent...
 // TODO Przy przegranej pokaż planszę przeciwnika
 // TODO add info about points when singleplayer
 // TODO notification when surrendering
-// TODO sounds in multi player...
 // TODO admin panel only for me (cleaning database from empty users)...
 // TODO last activity time for all users.
 // TODO maybe some training... or info...
-
-
-

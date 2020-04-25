@@ -54,8 +54,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-
-
             <Button
                 android:id="@+id/alert_dialog_button_layout_one_button_red"
                 android:layout_width="0dp"

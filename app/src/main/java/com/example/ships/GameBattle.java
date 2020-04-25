@@ -106,6 +106,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private int flags;
     private MediaPlayer explosionSound, waterSplashSound, hornSound, bubblesSound, shoutYaySound;
     private boolean soundOn;
+    private int square;
+    private TextView leftShoots;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -156,9 +158,10 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         userName = findViewById(R.id.userNameGameBattle);
         opponentName = findViewById(R.id.opponentNameGameBattle);
         soundBtn = findViewById(R.id.soundSinglePlayer);
+        leftShoots=findViewById(R.id.leftShoots);
         soundBtn.setBackgroundResource(R.drawable.sound);
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
-        int square = sp.getInt("square", -1);
+        square = sp.getInt("square", -1);
         int screenWidth = sp.getInt("width", -1);
         int screenHeight = sp.getInt("height", -1);
         int screenWidthOffSet = sp.getInt("widthOffSet", -1);
@@ -306,6 +309,9 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
         set.connect(opponentName.getId(), ConstraintSet.BOTTOM, layoutOpponent.getId(), ConstraintSet.TOP, square);
         set.connect(opponentName.getId(), ConstraintSet.LEFT, layoutOpponent.getId(), ConstraintSet.LEFT, 0);
+
+        set.connect(leftShoots.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, square);
+        set.connect(leftShoots.getId(), ConstraintSet.RIGHT, mainLayout.getId(), ConstraintSet.RIGHT, square);
 
         set.applyTo(mainLayout);
 
@@ -550,7 +556,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             }
             alertDialogFlag = true;
             android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(GameBattle.this);
-            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red, null);
+            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_and_field_red, null);
             mBuilder.setView(mView);
             android.app.AlertDialog dialog = mBuilder.create();
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -558,9 +564,10 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
-            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_red);
-            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_red);
-            Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_red);
+            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_and_field_red);
+            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_and_field_red);
+            GridLayout field = mView.findViewById(R.id.alert_dialog_linear_gridlayout_layout_one_button_and_field_red);
+            Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_and_field_red);
             title.setText("SORRY");
             message.setText("Maybe next time");
             positiveButton.setText("OK");
@@ -569,6 +576,12 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 dialog.dismiss();
                 finish();
             });
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8*square,8*square);
+            params.setMargins(25,25,25,25);
+            field.setLayoutParams(params);
+            for(int i=0;i<100;i++){
+                field.getChildAt(i).setBackgroundResource(R.drawable.background_x);
+            }
             dialog.show();
 
 
@@ -813,9 +826,11 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void shoot() {
+        leftShoots.setText(String.valueOf(ShootTable.size()));
+
         if (newShoot) {
             Random random = new Random();
-            int shoot = random.nextInt(ShootTable.size() - 1);
+            int shoot = random.nextInt(ShootTable.size());
             int i = ShootTable.get(shoot) / 10;
             int j = ShootTable.get(shoot) % 10;
             if (battleFieldMeActivityRandomGame.getBattleField(i, j).isHit()) {
@@ -850,10 +865,10 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         } else {
             dobijShip(positionI, positionJ);
         }
+
     }
 
     private void displayWaterCellHit(TextView textView) {
-        final int sdk = android.os.Build.VERSION.SDK_INT;
         textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hit));
     }
 
@@ -956,10 +971,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
         } else if ((i == 9) && (j == 9)) {
             if (battleFieldMeActivityRandomGame.battleField[i][j - 1].getIsShipHit() ||
-                    battleFieldMeActivityRandomGame.battleField[i][j + 1].getIsShipHit() ||
                     battleFieldMeActivityRandomGame.battleField[i - 1][j - 1].getIsShipHit() ||
-                    battleFieldMeActivityRandomGame.battleField[i - 1][j].getIsShipHit() ||
-                    battleFieldMeActivityRandomGame.battleField[i - 1][j + 1].getIsShipHit()) {
+                    battleFieldMeActivityRandomGame.battleField[i - 1][j].getIsShipHit()) {
                 return true;
             } else {
                 return false;
@@ -2030,3 +2043,4 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 }
 
+// TODO finsh alert dialog when losing first

@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/alert_dialog_with_one_button_and_field_red"
+    android:background="@color/transparent">
+
+    <ImageView
+        android:id="@+id/image_top_alert_dialog_with_one_button_and_field_red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/triangle_bottom_right_red"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginHorizontal="15dp"/>
+
+    <LinearLayout
+        android:id="@+id/alert_dialog_linear_layout_layout_one_button_and_field_red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_color_red"
+        android:layout_marginHorizontal="15dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/image_top_alert_dialog_with_one_button_and_field_red"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <LinearLayout
+            android:id="@+id/alert_dialog_linear_layout_1_layout_one_button_and_field_red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <GridLayout
+                android:id="@+id/alert_dialog_linear_gridlayout_layout_one_button_and_field_red"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_width="@dimen/Distance80dp"
+                android:layout_height="@dimen/Distance80dp"
+                android:columnCount="10"
+                android:rowCount="10">
+
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+                <TextView
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:width="0dp"
+                    android:height="0dp" />
+
+
+
+
+            </GridLayout>
+
+            <LinearLayout
+                android:id="@+id/alert_dialog_linear_layout_text_layout_one_button_and_field_red"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/FieldSize"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/alert_dialog_title_layout_one_button_and_field_red"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TITLE"
+                    android:textSize="30sp"
+                    android:gravity="left"
+                    android:textColor="@color/pen_red"
+                    android:paddingTop="@dimen/FieldSize"
+                    android:paddingBottom="@dimen/FieldSize"/>
+                <TextView
+                    android:id="@+id/alert_dialog_message_layout_one_button_and_field_red"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="message"
+                    android:textSize="20sp"
+                    android:gravity="left"
+                    android:textColor="@color/pen"
+                    android:paddingHorizontal="@dimen/FieldSize"
+                    android:paddingBottom="@dimen/FieldSize"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/alert_dialog_button_layout_one_button_and_field_red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BUTTON"
+            android:textColor="@color/pen"
+            android:textSize="@dimen/FieldSize"
+            android:layout_margin="@dimen/FieldSize"
+            android:background="@color/background_color_red_button"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/image_bottom_alert_dialog_with_one_button_and_field_red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/triangle_top_left_red"
+        app:layout_constraintTop_toBottomOf="@id/alert_dialog_linear_layout_layout_one_button_and_field_red"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginHorizontal="15dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
