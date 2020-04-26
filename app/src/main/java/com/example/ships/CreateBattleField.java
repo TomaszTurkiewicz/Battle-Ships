@@ -90,6 +90,8 @@ public class CreateBattleField extends AppCompatActivity {
     private int flags;
     private boolean refFightSet;
     private boolean alertDialogFlag=false;
+    private TextView borderLine1, borderLine2, borderLine3, borderLine4;
+
 
 
 
@@ -135,6 +137,10 @@ public class CreateBattleField extends AppCompatActivity {
         linearLayoutThreeMasts=findViewById(R.id.linearLayoutThreeMastsShip);
         linearLayoutTwoMasts=findViewById(R.id.linearLayoutTwoMastsShip);
         linearLayoutOneMasts=findViewById(R.id.linearLayoutOneMastsShip);
+        borderLine1=findViewById(R.id.borderLine1create);
+        borderLine2=findViewById(R.id.borderLine2create);
+        borderLine3=findViewById(R.id.borderLine3create);
+        borderLine4=findViewById(R.id.borderLine4create);
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         int square = sp.getInt("square",-1);
@@ -164,6 +170,10 @@ public class CreateBattleField extends AppCompatActivity {
         ConstraintLayout.LayoutParams params17 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(square,square);
         ConstraintLayout.LayoutParams params20 = new ConstraintLayout.LayoutParams(14 * square,2 * square);
+        ConstraintLayout.LayoutParams params31 = new ConstraintLayout.LayoutParams(10 * square+square/20, square/20);
+        ConstraintLayout.LayoutParams params33 = new ConstraintLayout.LayoutParams(10 * square+square/20, square/20);
+        ConstraintLayout.LayoutParams params32 = new ConstraintLayout.LayoutParams(square/20, 10*square+square/20);
+        ConstraintLayout.LayoutParams params34 = new ConstraintLayout.LayoutParams(square/20, 10*square+square/20);
 
         gridLayout.setLayoutParams(params);
         linearLayoutLetters.setLayoutParams(params1);
@@ -195,11 +205,28 @@ public class CreateBattleField extends AppCompatActivity {
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
         }
 
+        borderLine1.setLayoutParams(params31);
+        borderLine2.setLayoutParams(params32);
+        borderLine3.setLayoutParams(params33);
+        borderLine4.setLayoutParams(params34);
+
 
         set.clone(constraintLayout);
 
         set.connect(gridLayout.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,4*square);
         set.connect(gridLayout.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,5*square);
+
+        set.connect(borderLine1.getId(),ConstraintSet.BOTTOM, gridLayout.getId(),ConstraintSet.TOP,0);
+        set.connect(borderLine1.getId(),ConstraintSet.LEFT, gridLayout.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine2.getId(),ConstraintSet.TOP, borderLine1.getId(),ConstraintSet.TOP,0);
+        set.connect(borderLine2.getId(),ConstraintSet.RIGHT, borderLine1.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine3.getId(),ConstraintSet.TOP, borderLine2.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(borderLine3.getId(),ConstraintSet.LEFT, borderLine2.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine4.getId(),ConstraintSet.BOTTOM, borderLine3.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(borderLine4.getId(),ConstraintSet.LEFT, borderLine3.getId(),ConstraintSet.RIGHT,0);
 
         set.connect(linearLayoutLetters.getId(),ConstraintSet.BOTTOM,gridLayout.getId(),ConstraintSet.TOP,0);
         set.connect(linearLayoutLetters.getId(),ConstraintSet.LEFT,gridLayout.getId(),ConstraintSet.LEFT,0);

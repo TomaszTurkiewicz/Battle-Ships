@@ -1131,6 +1131,39 @@
             android:layout_margin="0dp"/>
 
 
+        <TextView
+            android:id="@+id/borderLine1create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/pen"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/borderLine2create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/pen"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/borderLine3create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/pen"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/borderLine4create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/pen"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
 
 
 
