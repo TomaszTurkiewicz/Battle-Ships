@@ -2051,5 +2051,3 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         }
     }
 }
-
-// TODO finsh alert dialog when losing first

@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
     private boolean syncFBName=false;
     private boolean syncFBPhoto = false;
     private boolean alertDialogInUse = false;
+    private Button admin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         multiplayerBtn.setText("MULTI PLAYER");
         leave=findViewById(R.id.leaveMainActivity);
         leave.setBackgroundResource(R.drawable.back);
+        admin = findViewById(R.id.adminPanelButton);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -182,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(12*square,3*square);
         ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(12*square,3*square);
         ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(8*square,2*square);
+        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(8*square,2*square);
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(3*square,3*square);
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(square,square);
@@ -198,6 +201,9 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         accountBtn.setLayoutParams(params4);
         redDotMultiplayerIV.setLayoutParams(params5);
         leave.setLayoutParams(params6);
+        admin.setLayoutParams(params7);
+        admin.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        admin.setVisibility(View.GONE);
 
         set.clone(constraintLayout);
         set.connect(singlePlayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,7*square);
@@ -220,6 +226,9 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
 
         set.connect(leave.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-3*square);
         set.connect(leave.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,square);
+
+        set.connect(admin.getId(),ConstraintSet.LEFT,leave.getId(),ConstraintSet.RIGHT,2*square);
+        set.connect(admin.getId(),ConstraintSet.TOP,leave.getId(),ConstraintSet.TOP,0);
 
         set.applyTo(constraintLayout);
 
@@ -381,6 +390,20 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
     @Override
     protected void onStart() {
         super.onStart();
+
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null&&FirebaseAuth.getInstance().getCurrentUser().getEmail().equals("tturkiewicz83@gmail.com")){
+            admin.setVisibility(View.VISIBLE);
+            admin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this,AdminActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }else{
+            admin.setVisibility(View.GONE);
+        }
 
         if(logIn){
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -850,7 +873,6 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
 }
 
 // TODO change progress dialog in score and choose opponent...
-// TODO Przy przegranej pokaż planszę przeciwnika
 // TODO add info about points when singleplayer
 // TODO notification when surrendering
 // TODO admin panel only for me (cleaning database from empty users)...
