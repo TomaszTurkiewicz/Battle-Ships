@@ -1963,6 +1963,70 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/borderLine1multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine2multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine3multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine4multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine5multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine6multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine7multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine8multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

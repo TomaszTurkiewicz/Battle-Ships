@@ -118,6 +118,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private boolean alertDialogFlag = false;
     private boolean soundOn;
     private MediaPlayer explosionSound, waterSplashSound, hornSound, bubblesSound, shoutYaySound;
+    private TextView borderLine1, borderLine2, borderLine3, borderLine4, borderLine5, borderLine6, borderLine7, borderLine8;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +171,14 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         opponentName = findViewById(R.id.opponentNameMultiplayer);
         userPhoto = findViewById(R.id.user_photo_multiplayer);
         opponentPhoto = findViewById(R.id.opponent_photo_multiplayer);
+        borderLine1=findViewById(R.id.borderLine1multi);
+        borderLine2=findViewById(R.id.borderLine2multi);
+        borderLine3=findViewById(R.id.borderLine3multi);
+        borderLine4=findViewById(R.id.borderLine4multi);
+        borderLine5=findViewById(R.id.borderLine5multi);
+        borderLine6=findViewById(R.id.borderLine6multi);
+        borderLine7=findViewById(R.id.borderLine7multi);
+        borderLine8=findViewById(R.id.borderLine8multi);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
@@ -218,7 +227,23 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         ConstraintLayout.LayoutParams params20 = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
         ConstraintLayout.LayoutParams params21 = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
         ConstraintLayout.LayoutParams params22 = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
+        ConstraintLayout.LayoutParams params31 = new ConstraintLayout.LayoutParams(10 * square+square/20, square/20);
+        ConstraintLayout.LayoutParams params33 = new ConstraintLayout.LayoutParams(10 * square+square/20, square/20);
+        ConstraintLayout.LayoutParams params32 = new ConstraintLayout.LayoutParams(square/20, 10*square+square/20);
+        ConstraintLayout.LayoutParams params34 = new ConstraintLayout.LayoutParams(square/20, 10*square+square/20);
+        ConstraintLayout.LayoutParams params35 = new ConstraintLayout.LayoutParams(10 * square+square/20, square/20);
+        ConstraintLayout.LayoutParams params37 = new ConstraintLayout.LayoutParams(10 * square+square/20, square/20);
+        ConstraintLayout.LayoutParams params36 = new ConstraintLayout.LayoutParams(square/20, 10*square+square/20);
+        ConstraintLayout.LayoutParams params38 = new ConstraintLayout.LayoutParams(square/20, 10*square+square/20);
 
+        borderLine1.setLayoutParams(params31);
+        borderLine2.setLayoutParams(params32);
+        borderLine3.setLayoutParams(params33);
+        borderLine4.setLayoutParams(params34);
+        borderLine5.setLayoutParams(params35);
+        borderLine6.setLayoutParams(params36);
+        borderLine7.setLayoutParams(params37);
+        borderLine8.setLayoutParams(params38);
         surrenderButton.setLayoutParams(params);
         layoutMy.setLayoutParams(params1);
         linearLayoutLettersMy.setLayoutParams(params2);
@@ -282,6 +307,18 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         set.connect(layoutMy.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, 4 * square);
         set.connect(layoutMy.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, 5 * square);
 
+        set.connect(borderLine1.getId(),ConstraintSet.BOTTOM, layoutMy.getId(),ConstraintSet.TOP,0);
+        set.connect(borderLine1.getId(),ConstraintSet.LEFT, layoutMy.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine2.getId(),ConstraintSet.TOP, borderLine1.getId(),ConstraintSet.TOP,0);
+        set.connect(borderLine2.getId(),ConstraintSet.RIGHT, borderLine1.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine3.getId(),ConstraintSet.TOP, borderLine2.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(borderLine3.getId(),ConstraintSet.LEFT, borderLine2.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine4.getId(),ConstraintSet.BOTTOM, borderLine3.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(borderLine4.getId(),ConstraintSet.LEFT, borderLine3.getId(),ConstraintSet.RIGHT,0);
+
         set.connect(linearLayoutLettersMy.getId(), ConstraintSet.BOTTOM, layoutMy.getId(), ConstraintSet.TOP, 0);
         set.connect(linearLayoutLettersMy.getId(), ConstraintSet.LEFT, layoutMy.getId(), ConstraintSet.LEFT, 0);
 
@@ -290,6 +327,18 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
         set.connect(layoutOpponent.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, marginTop);
         set.connect(layoutOpponent.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, marginLeft);
+
+        set.connect(borderLine5.getId(),ConstraintSet.BOTTOM, layoutOpponent.getId(),ConstraintSet.TOP,0);
+        set.connect(borderLine5.getId(),ConstraintSet.LEFT, layoutOpponent.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine6.getId(),ConstraintSet.TOP, borderLine5.getId(),ConstraintSet.TOP,0);
+        set.connect(borderLine6.getId(),ConstraintSet.RIGHT, borderLine5.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine7.getId(),ConstraintSet.TOP, borderLine6.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(borderLine7.getId(),ConstraintSet.LEFT, borderLine6.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine8.getId(),ConstraintSet.BOTTOM, borderLine7.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(borderLine8.getId(),ConstraintSet.LEFT, borderLine7.getId(),ConstraintSet.RIGHT,0);
 
         set.connect(linearLayoutLettersOpponent.getId(), ConstraintSet.BOTTOM, layoutOpponent.getId(), ConstraintSet.TOP, 0);
         set.connect(linearLayoutLettersOpponent.getId(), ConstraintSet.LEFT, layoutOpponent.getId(), ConstraintSet.LEFT, 0);
