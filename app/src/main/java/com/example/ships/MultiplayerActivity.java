@@ -396,7 +396,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     // my move
                     userName.setTextColor(getColor(R.color.pen));
                     opponentName.setTextColor(getColor(R.color.pen_red));
-
+                    battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
+                    battleFieldForDataBaseMy.listToField();
                     showOpponentBattleField();
                     hideBattleFiledAvailableMy();
                     enableTouchListener=true;
