@@ -586,7 +586,8 @@
             android:text="BUTTON"
             android:textColor="@color/pen"
             android:textSize="@dimen/FieldSize"
-            android:layout_margin="@dimen/FieldSize"
+            android:layout_marginHorizontal="25dp"
+            android:layout_marginBottom="@dimen/FieldSize"
             android:background="@color/background_color_red_button"/>
 
     </LinearLayout>

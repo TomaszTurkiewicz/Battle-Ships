@@ -842,7 +842,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 bubblesSound.start();
             }
             android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
-            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_red,null);
+            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_and_field_red,null);
             mBuilder.setView(mView);
             android.app.AlertDialog dialog = mBuilder.create();
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -850,9 +850,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
-            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_red);
-            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_red);
-            Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_red);
+            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_and_field_red);
+            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_and_field_red);
+            Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_and_field_red);
+            GridLayout field = mView.findViewById(R.id.alert_dialog_linear_gridlayout_layout_one_button_and_field_red);
             title.setText("SORRY");
             message.setText("Maybe next time");
             positiveButton.setText("OK");
@@ -865,6 +866,27 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 dialog.dismiss();
                 finish();
             });
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8*square,8*square);
+            params.setMargins(square,square,square,square);
+            field.setLayoutParams(params);
+
+            for(int i =0;i<10;i++){
+                for(int j=0;j<10;j++){
+                    if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isShip()){
+                        if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
+                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.ship_x_hit);
+                        }else{
+                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.ship_x_not_hit);
+                        }
+                    }else {
+                        if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
+                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.water_cell_x_grey);
+                        }else{
+                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.background_x);
+                        }
+                    }
+                }
+            }
             dialog.show();
         }else {
             // wygrałem (bo się poddał - sprawdź czy out off date)
@@ -1572,6 +1594,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             soundButton.setImageResource(R.color.transparent);
         }else{
             soundButton.setImageResource(R.drawable.disable);
+            stopAllSounds();
         }
     }
 

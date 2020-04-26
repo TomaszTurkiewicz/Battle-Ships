@@ -107,7 +107,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private MediaPlayer explosionSound, waterSplashSound, hornSound, bubblesSound, shoutYaySound;
     private boolean soundOn;
     private int square;
-    private TextView leftShoots;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -158,7 +157,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         userName = findViewById(R.id.userNameGameBattle);
         opponentName = findViewById(R.id.opponentNameGameBattle);
         soundBtn = findViewById(R.id.soundSinglePlayer);
-        leftShoots=findViewById(R.id.leftShoots);
         soundBtn.setBackgroundResource(R.drawable.sound);
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         square = sp.getInt("square", -1);
@@ -309,9 +307,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
         set.connect(opponentName.getId(), ConstraintSet.BOTTOM, layoutOpponent.getId(), ConstraintSet.TOP, square);
         set.connect(opponentName.getId(), ConstraintSet.LEFT, layoutOpponent.getId(), ConstraintSet.LEFT, 0);
-
-        set.connect(leftShoots.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, square);
-        set.connect(leftShoots.getId(), ConstraintSet.RIGHT, mainLayout.getId(), ConstraintSet.RIGHT, square);
 
         set.applyTo(mainLayout);
 
@@ -841,8 +836,6 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void shoot() {
-        leftShoots.setText(String.valueOf(ShootTable.size()));
-
         if (newShoot) {
             Random random = new Random();
             int shoot = random.nextInt(ShootTable.size());
@@ -2054,6 +2047,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             soundBtn.setImageResource(R.color.transparent);
         }else{
             soundBtn.setImageResource(R.drawable.disable);
+            stopAllSounds();
         }
     }
 }
