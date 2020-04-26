@@ -8,6 +8,76 @@
     android:id="@+id/chooseGameLevelActivityLayout">
 
     <TextView
+        android:id="@+id/random_one_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+1 POINT"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center"
+        android:textColor="@color/pen"/>
+
+    <TextView
+        android:id="@+id/random_ten_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+10 POINTS"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center"
+        android:textColor="@color/pen"/>
+
+    <TextView
+        android:id="@+id/random_hundred_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+100 POINTS"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center"
+        android:textColor="@color/pen"/>
+
+    <TextView
+        android:id="@+id/not_random_one_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+1 POINT"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center"
+        android:textColor="@color/pen"/>
+
+    <TextView
+        android:id="@+id/not_random_ten_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+10 POINTS"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center"
+        android:textColor="@color/pen"/>
+
+    <TextView
+        android:id="@+id/not_random_hundred_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+100 POINTS"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center"
+        android:textColor="@color/pen"/>
+
+
+
+
+
+    <TextView
         android:id="@+id/randomGameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

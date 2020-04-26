@@ -18,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.TileDrawable;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class ChooseGameLevel extends AppCompatActivity {
@@ -25,6 +26,7 @@ public class ChooseGameLevel extends AppCompatActivity {
     private Button easyRandom,normalRandom, expertRandom, easyNotRandom, normalNotRandom, expertNotRandom;
     private TextView breakLine, randomGame, notRandomGame;
     private ImageButton leave;
+    private TextView randomOnePoint, randomTenPoints, randomHundredPoints,notRandomOnePoint, notRandomTenPoints, notRandomHundredPoints;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,12 @@ public class ChooseGameLevel extends AppCompatActivity {
         notRandomGame=findViewById(R.id.notRandomGameTextView);
         leave = findViewById(R.id.leaveChoseGameLevelActivity);
         leave.setBackgroundResource(R.drawable.back);
+        randomOnePoint=findViewById(R.id.random_one_point);
+        randomTenPoints=findViewById(R.id.random_ten_points);
+        randomHundredPoints=findViewById(R.id.random_hundred_points);
+        notRandomOnePoint=findViewById(R.id.not_random_one_point);
+        notRandomTenPoints=findViewById(R.id.not_random_ten_point);
+        notRandomHundredPoints=findViewById(R.id.not_random_hundred_point);
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         int square = sp.getInt("square",-1);
@@ -91,6 +99,8 @@ public class ChooseGameLevel extends AppCompatActivity {
         marginTopUpper=5*square;
         marginTopLower=middleHeight+marginTopUpper;
 
+        float smallText = square*8/10;
+
 
         constraintLayout.setBackground(new TileDrawable(getDrawable(R.drawable.background_x), Shader.TileMode.REPEAT,square));
 
@@ -101,6 +111,12 @@ public class ChooseGameLevel extends AppCompatActivity {
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(6*square,2*square);
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(6*square,2*square);
         ConstraintLayout.LayoutParams params6 = new ConstraintLayout.LayoutParams(6*square,2*square);
+        ConstraintLayout.LayoutParams params10 = new ConstraintLayout.LayoutParams(6*square,square);
+        ConstraintLayout.LayoutParams params11 = new ConstraintLayout.LayoutParams(6*square,square);
+        ConstraintLayout.LayoutParams params12 = new ConstraintLayout.LayoutParams(6*square,square);
+        ConstraintLayout.LayoutParams params13 = new ConstraintLayout.LayoutParams(6*square,square);
+        ConstraintLayout.LayoutParams params14 = new ConstraintLayout.LayoutParams(6*square,square);
+        ConstraintLayout.LayoutParams params15 = new ConstraintLayout.LayoutParams(6*square,square);
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,lineWidth);
         ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ConstraintLayout.LayoutParams params8 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -124,17 +140,37 @@ public class ChooseGameLevel extends AppCompatActivity {
         expertNotRandom.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         notRandomGame.setTextSize(TypedValue.COMPLEX_UNIT_PX,2*square);
         randomGame.setTextSize(TypedValue.COMPLEX_UNIT_PX,2*square);
-
+        randomOnePoint.setLayoutParams(params10);
+        randomOnePoint.setTextSize(TypedValue.COMPLEX_UNIT_PX,smallText);
+        randomTenPoints.setLayoutParams(params11);
+        randomTenPoints.setTextSize(TypedValue.COMPLEX_UNIT_PX,smallText);
+        randomHundredPoints.setLayoutParams(params12);
+        randomHundredPoints.setTextSize(TypedValue.COMPLEX_UNIT_PX,smallText);
+        notRandomOnePoint.setLayoutParams(params13);
+        notRandomOnePoint.setTextSize(TypedValue.COMPLEX_UNIT_PX,smallText);
+        notRandomTenPoints.setLayoutParams(params14);
+        notRandomTenPoints.setTextSize(TypedValue.COMPLEX_UNIT_PX,smallText);
+        notRandomHundredPoints.setLayoutParams(params15);
+        notRandomHundredPoints.setTextSize(TypedValue.COMPLEX_UNIT_PX,smallText);
         set.clone(constraintLayout);
 
         set.connect(easyRandom.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,marginTopUpper);
         set.connect(easyRandom.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,marginStart);
 
+        set.connect(randomOnePoint.getId(),ConstraintSet.TOP,easyRandom.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(randomOnePoint.getId(),ConstraintSet.LEFT,easyRandom.getId(),ConstraintSet.LEFT,0);
+
         set.connect(expertRandom.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,marginTopUpper);
         set.connect(expertRandom.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,marginEnd);
 
+        set.connect(randomHundredPoints.getId(),ConstraintSet.TOP,expertRandom.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(randomHundredPoints.getId(),ConstraintSet.LEFT,expertRandom.getId(),ConstraintSet.LEFT,0);
+
         set.connect(normalRandom.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,marginTopUpper);
         set.connect(normalRandom.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,marginMiddle);
+
+        set.connect(randomTenPoints.getId(),ConstraintSet.TOP,normalRandom.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(randomTenPoints.getId(),ConstraintSet.LEFT,normalRandom.getId(),ConstraintSet.LEFT,0);
 
         set.connect(breakLine.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,middleHeight-lineWidth/2);
         set.connect(breakLine.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,0);
@@ -142,11 +178,20 @@ public class ChooseGameLevel extends AppCompatActivity {
         set.connect(easyNotRandom.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,marginTopLower);
         set.connect(easyNotRandom.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,marginStart);
 
+        set.connect(notRandomOnePoint.getId(),ConstraintSet.TOP,easyNotRandom.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(notRandomOnePoint.getId(),ConstraintSet.LEFT,easyNotRandom.getId(),ConstraintSet.LEFT,0);
+
         set.connect(normalNotRandom.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,marginTopLower);
         set.connect(normalNotRandom.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,marginMiddle);
 
+        set.connect(notRandomTenPoints.getId(),ConstraintSet.TOP,normalNotRandom.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(notRandomTenPoints.getId(),ConstraintSet.LEFT,normalNotRandom.getId(),ConstraintSet.LEFT,0);
+
         set.connect(expertNotRandom.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,marginTopLower);
         set.connect(expertNotRandom.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,marginEnd);
+
+        set.connect(notRandomHundredPoints.getId(),ConstraintSet.TOP,expertNotRandom.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(notRandomHundredPoints.getId(),ConstraintSet.LEFT,expertNotRandom.getId(),ConstraintSet.LEFT,0);
 
         set.connect(randomGame.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,2*square);
         set.connect(randomGame.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,horizontalMiddle-15*square);
@@ -158,6 +203,25 @@ public class ChooseGameLevel extends AppCompatActivity {
         set.connect(leave.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,square);
 
         set.applyTo(constraintLayout);
+
+    if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+        randomOnePoint.setVisibility(View.VISIBLE);
+        randomTenPoints.setVisibility(View.VISIBLE);
+        randomHundredPoints.setVisibility(View.VISIBLE);
+        notRandomOnePoint.setVisibility(View.VISIBLE);
+        notRandomTenPoints.setVisibility(View.VISIBLE);
+        notRandomHundredPoints.setVisibility(View.VISIBLE);
+    }else{
+        randomOnePoint.setVisibility(View.GONE);
+        randomTenPoints.setVisibility(View.GONE);
+        randomHundredPoints.setVisibility(View.GONE);
+        notRandomOnePoint.setVisibility(View.GONE);
+        notRandomTenPoints.setVisibility(View.GONE);
+        notRandomHundredPoints.setVisibility(View.GONE);
+    }
+
+
+
     }
 
     private boolean checkEven(int full, int offSet, int square) {
