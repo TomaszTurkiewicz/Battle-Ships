@@ -577,10 +577,25 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 finish();
             });
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8*square,8*square);
-            params.setMargins(25,25,25,25);
+            params.setMargins(square,square,square,square);
             field.setLayoutParams(params);
-            for(int i=0;i<100;i++){
-                field.getChildAt(i).setBackgroundResource(R.drawable.background_x);
+
+            for(int i =0;i<10;i++){
+                for(int j=0;j<10;j++){
+                    if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isShip()){
+                        if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isHit()){
+                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.ship_x_hit);
+                        }else{
+                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.ship_x_not_hit);
+                        }
+                    }else {
+                        if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isHit()){
+                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.water_cell_x_grey);
+                        }else{
+                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.background_x);
+                        }
+                    }
+                }
             }
             dialog.show();
 

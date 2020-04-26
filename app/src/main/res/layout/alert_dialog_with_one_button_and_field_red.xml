@@ -34,8 +34,6 @@
 
             <GridLayout
                 android:id="@+id/alert_dialog_linear_gridlayout_layout_one_button_and_field_red"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
                 android:layout_width="@dimen/Distance80dp"
                 android:layout_height="@dimen/Distance80dp"
                 android:columnCount="10"
@@ -561,7 +559,8 @@
                     android:layout_height="wrap_content"
                     android:text="TITLE"
                     android:textSize="30sp"
-                    android:gravity="left"
+                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:textColor="@color/pen_red"
                     android:paddingTop="@dimen/FieldSize"
                     android:paddingBottom="@dimen/FieldSize"/>
@@ -571,9 +570,9 @@
                     android:layout_height="wrap_content"
                     android:text="message"
                     android:textSize="20sp"
-                    android:gravity="left"
+                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:textColor="@color/pen"
-                    android:paddingHorizontal="@dimen/FieldSize"
                     android:paddingBottom="@dimen/FieldSize"/>
 
             </LinearLayout>
