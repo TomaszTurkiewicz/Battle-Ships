@@ -107,6 +107,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private MediaPlayer explosionSound, waterSplashSound, hornSound, bubblesSound, shoutYaySound;
     private boolean soundOn;
     private int square;
+    private TextView borderLine1, borderLine2, borderLine3, borderLine4, borderLine5, borderLine6, borderLine7, borderLine8;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -158,6 +159,14 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         opponentName = findViewById(R.id.opponentNameGameBattle);
         soundBtn = findViewById(R.id.soundSinglePlayer);
         soundBtn.setBackgroundResource(R.drawable.sound);
+        borderLine1=findViewById(R.id.borderLine1);
+        borderLine2=findViewById(R.id.borderLine2);
+        borderLine3=findViewById(R.id.borderLine3);
+        borderLine4=findViewById(R.id.borderLine4);
+        borderLine5=findViewById(R.id.borderLine5);
+        borderLine6=findViewById(R.id.borderLine6);
+        borderLine7=findViewById(R.id.borderLine7);
+        borderLine8=findViewById(R.id.borderLine8);
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         square = sp.getInt("square", -1);
         int screenWidth = sp.getInt("width", -1);
@@ -190,6 +199,14 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         ConstraintLayout.LayoutParams params18 = new ConstraintLayout.LayoutParams(10 * square, 2 * square);
         ConstraintLayout.LayoutParams params19 = new ConstraintLayout.LayoutParams(10 * square, 2 * square);
         ConstraintLayout.LayoutParams params20 = new ConstraintLayout.LayoutParams(2 * square, 2 * square);
+        ConstraintLayout.LayoutParams params21 = new ConstraintLayout.LayoutParams(10 * square+square/20, square/20);
+        ConstraintLayout.LayoutParams params23 = new ConstraintLayout.LayoutParams(10 * square+square/20, square/20);
+        ConstraintLayout.LayoutParams params22 = new ConstraintLayout.LayoutParams(square/20, 10*square+square/20);
+        ConstraintLayout.LayoutParams params24 = new ConstraintLayout.LayoutParams(square/20, 10*square+square/20);
+        ConstraintLayout.LayoutParams params25 = new ConstraintLayout.LayoutParams(10 * square+square/20, square/20);
+        ConstraintLayout.LayoutParams params27 = new ConstraintLayout.LayoutParams(10 * square+square/20, square/20);
+        ConstraintLayout.LayoutParams params26 = new ConstraintLayout.LayoutParams(square/20, 10*square+square/20);
+        ConstraintLayout.LayoutParams params28 = new ConstraintLayout.LayoutParams(square/20, 10*square+square/20);
 
         surrender.setLayoutParams(params);
         layoutMy.setLayoutParams(params1);
@@ -214,6 +231,14 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         opponentName.setLayoutParams(params19);
         opponentName.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         soundBtn.setLayoutParams(params20);
+        borderLine1.setLayoutParams(params21);
+        borderLine2.setLayoutParams(params22);
+        borderLine3.setLayoutParams(params23);
+        borderLine4.setLayoutParams(params24);
+        borderLine5.setLayoutParams(params25);
+        borderLine6.setLayoutParams(params26);
+        borderLine7.setLayoutParams(params27);
+        borderLine8.setLayoutParams(params28);
 
         for (int i = 0; i < 10; i++) {
             TextView tv = (TextView) linearLayoutLettersMy.getChildAt(i);
@@ -254,6 +279,18 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         set.connect(layoutMy.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, 4 * square);
         set.connect(layoutMy.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, 5 * square);
 
+        set.connect(borderLine1.getId(),ConstraintSet.BOTTOM, layoutMy.getId(),ConstraintSet.TOP,0);
+        set.connect(borderLine1.getId(),ConstraintSet.LEFT, layoutMy.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine2.getId(),ConstraintSet.TOP, borderLine1.getId(),ConstraintSet.TOP,0);
+        set.connect(borderLine2.getId(),ConstraintSet.RIGHT, borderLine1.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine3.getId(),ConstraintSet.TOP, borderLine2.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(borderLine3.getId(),ConstraintSet.LEFT, borderLine2.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine4.getId(),ConstraintSet.BOTTOM, borderLine3.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(borderLine4.getId(),ConstraintSet.LEFT, borderLine3.getId(),ConstraintSet.RIGHT,0);
+
         set.connect(linearLayoutLettersMy.getId(), ConstraintSet.BOTTOM, layoutMy.getId(), ConstraintSet.TOP, 0);
         set.connect(linearLayoutLettersMy.getId(), ConstraintSet.LEFT, layoutMy.getId(), ConstraintSet.LEFT, 0);
 
@@ -262,6 +299,18 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
         set.connect(layoutOpponent.getId(), ConstraintSet.TOP, mainLayout.getId(), ConstraintSet.TOP, marginTop);
         set.connect(layoutOpponent.getId(), ConstraintSet.LEFT, mainLayout.getId(), ConstraintSet.LEFT, marginLeft);
+
+        set.connect(borderLine5.getId(),ConstraintSet.BOTTOM, layoutOpponent.getId(),ConstraintSet.TOP,0);
+        set.connect(borderLine5.getId(),ConstraintSet.LEFT, layoutOpponent.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine6.getId(),ConstraintSet.TOP, borderLine5.getId(),ConstraintSet.TOP,0);
+        set.connect(borderLine6.getId(),ConstraintSet.RIGHT, borderLine5.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine7.getId(),ConstraintSet.TOP, borderLine6.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(borderLine7.getId(),ConstraintSet.LEFT, borderLine6.getId(),ConstraintSet.LEFT,0);
+
+        set.connect(borderLine8.getId(),ConstraintSet.BOTTOM, borderLine7.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(borderLine8.getId(),ConstraintSet.LEFT, borderLine7.getId(),ConstraintSet.RIGHT,0);
 
         set.connect(linearLayoutLettersOpponent.getId(), ConstraintSet.BOTTOM, layoutOpponent.getId(), ConstraintSet.TOP, 0);
         set.connect(linearLayoutLettersOpponent.getId(), ConstraintSet.LEFT, layoutOpponent.getId(), ConstraintSet.LEFT, 0);

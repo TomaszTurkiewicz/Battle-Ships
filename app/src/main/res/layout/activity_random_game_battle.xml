@@ -1934,5 +1934,69 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/borderLine1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/borderLine8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pen"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
