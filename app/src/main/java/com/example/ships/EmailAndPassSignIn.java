@@ -203,7 +203,7 @@ public class EmailAndPassSignIn extends AppCompatActivity {
 
                                 firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task1 -> {
                                     if (task1.isSuccessful()) {
-                                        createUserInDatabase(username_val, email_val, userID);
+                                        createUserInDatabase(username_val, userID);
                                         Toast.makeText(EmailAndPassSignIn.this, "Registered successfully. Please check your email for verification",
                                                 Toast.LENGTH_LONG).show();
 
@@ -250,12 +250,12 @@ public class EmailAndPassSignIn extends AppCompatActivity {
         }
     }
 
-    private void createUserInDatabase(final String username_val, final String email_address, final String userId) {
+    private void createUserInDatabase(final String username_val, final String userId) {
 
         databaseReferenceUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setValue(username_val, email_address,userId);
+                setValue(username_val,userId);
                 databaseReferenceUser.child(userId).setValue(user);
             }
 
@@ -268,10 +268,9 @@ public class EmailAndPassSignIn extends AppCompatActivity {
 
     }
 
-    private void setValue(String username_val, String email, String userID){
+    private void setValue(String username_val, String userID){
         user.setId(userID);
         user.setName(username_val);
-        user.setEmail(email);
         user.setNoOfGames(0);
         user.setScore(0);
         user.setIndex(new FightIndex());

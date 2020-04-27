@@ -4,7 +4,6 @@ public class User {
 
     private String id;
     private String name;
-    private String email;
     private int score;
     private int noOfGames;
     private FightIndex index;
@@ -30,10 +29,9 @@ public class User {
         this.index = index;
     }
 
-    public User(String id, String name, String email, int score, int noOfGames, FightIndex index, SinglePlayerMatch singlePlayerMatch, String profileImage) {
+    public User(String id, String name, int score, int noOfGames, FightIndex index, SinglePlayerMatch singlePlayerMatch, String profileImage) {
         this.id=id;
         this.name = name;
-        this.email = email;
         this.score = score;
         this.noOfGames = noOfGames;
         this.index = index;
@@ -56,14 +54,6 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public int getScore() {
         return score;
     }
@@ -81,5 +71,3 @@ public class User {
     }
 
 }
-// TODO default constructor with fields
-// TODO get rid off email from database

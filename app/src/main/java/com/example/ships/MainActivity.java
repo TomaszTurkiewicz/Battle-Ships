@@ -317,7 +317,6 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
                     } else {
                         user.setId(userID);
                         user.setName("ANONYMOUS");
-                        user.setEmail(firebaseUser.getEmail());
                         user.setNoOfGames(0);
                         user.setScore(0);
                         user.setIndex(new FightIndex());
