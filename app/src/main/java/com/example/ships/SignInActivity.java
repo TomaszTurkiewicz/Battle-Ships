@@ -570,5 +570,4 @@ public class SignInActivity extends AppCompatActivity {
 }
 
 
-// TODO change progressDialog na progressBar
 

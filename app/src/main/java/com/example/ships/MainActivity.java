@@ -850,7 +850,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
     }
 }
 
-// TODO change progress dialog in score and choose opponent...
+
 // TODO notification when surrendering
 // TODO last activity time for all users.
 // TODO maybe some training... or info...

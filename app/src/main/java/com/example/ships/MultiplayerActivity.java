@@ -971,11 +971,18 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             } else if (w.isSurrendered() && !w.isOutOfDate()) {
                 // poddał się ale doliczam sobie punkty
                 int score = user.getScore();
+
+
+                if(battleFieldForDataBaseMy.getDifficulty().isSet()){
+
                 if (battleFieldForDataBaseMy.getDifficulty().isEasy()) {
                     score = score + 25;
-                } else {
+                    } else {
                     score = score + 50;
+                    }
                 }
+
+
                 user.setScore(score);
                 user.setIndex(new FightIndex());
                 databaseReferenceMy.setValue(user);
