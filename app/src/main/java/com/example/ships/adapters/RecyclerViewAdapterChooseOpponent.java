@@ -17,17 +17,19 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ships.R;
-import com.example.ships.classes.Ranking;
 import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.TileDrawable;
+import com.example.ships.classes.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
+
 public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<RecyclerViewAdapterChooseOpponent.VH> {
 
-    private Ranking mRanking;
+    private List<User> list;
     private Context mContext;
     private String userId;
     private OnItemClickListener mListener;
@@ -40,8 +42,8 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
         mListener=listener;
     }
 
-    public RecyclerViewAdapterChooseOpponent(Context mContext, Ranking mRanking,int square, String userID) {
-        this.mRanking = mRanking;
+    public RecyclerViewAdapterChooseOpponent(Context mContext, List<User> list,int square, String userID) {
+        this.list=list;
         this.mContext = mContext;
         this.userId = userID;
         this.square = square;
@@ -59,7 +61,7 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
     public void onBindViewHolder(@NonNull VH holder, int position) {
 
         holder.positionScore.setText(String.valueOf(position+1));
-        StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(mRanking.getRanking(position).getId());
+        StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(list.get(position).getId());
         final long SIZE = 1024*1024;
         sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
@@ -73,11 +75,11 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
                 holder.photo.setImageResource(R.drawable.account_box_grey);
             }
         });
-        holder.usernameScore.setText(mRanking.getRanking(position).getName());
-        holder.noOfGamesScore.setText(String.valueOf(mRanking.getRanking(position).getNoOfGames()));
-        holder.scoreScore.setText(String.valueOf(mRanking.getRanking(position).getScore()));
-        if(mRanking.getRanking(position).getId().equals(userId)||
-        !mRanking.getRanking(position).getIndex().getOpponent().isEmpty()){
+        holder.usernameScore.setText(list.get(position).getName());
+        holder.noOfGamesScore.setText(String.valueOf(list.get(position).getNoOfGames()));
+        holder.scoreScore.setText(String.valueOf(list.get(position).getScore()));
+        if(list.get(position).getId().equals(userId)||
+        !list.get(position).getIndex().getOpponent().isEmpty()){
             ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,0);
             holder.parentLayout.setLayoutParams(params);
 
@@ -88,7 +90,7 @@ public class RecyclerViewAdapterChooseOpponent extends RecyclerView.Adapter<Recy
 
     @Override
     public int getItemCount() {
-        return mRanking.getRanking().length;
+        return list.size();
     }
 
     public class VH extends RecyclerView.ViewHolder{

@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ships.adapters.RecyclerViewAdapter;
-import com.example.ships.classes.Ranking;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +40,7 @@ import java.util.List;
 
 public class Scores extends AppCompatActivity {
 
-    private Ranking ranking;
+
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private int numberOfUsers;
@@ -168,7 +167,6 @@ public class Scores extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 numberOfUsers = (int) dataSnapshot.getChildrenCount();
-                ranking = new Ranking(numberOfUsers);
                 progressBarMax=2*numberOfUsers+1;
                 progressBar.setMax(progressBarMax);
 

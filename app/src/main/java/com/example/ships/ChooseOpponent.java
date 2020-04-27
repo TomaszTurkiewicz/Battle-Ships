@@ -2,13 +2,14 @@ package com.example.ships;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +37,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ships.adapters.RecyclerViewAdapterChooseOpponent;
-import com.example.ships.classes.Ranking;
 import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
@@ -61,12 +62,10 @@ import java.util.Map;
 
 public class ChooseOpponent extends AppCompatActivity {
 
-    private Ranking ranking;
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDatabase;
     private int numberOfUsers;
     private List<User> list= new ArrayList<>();
-    private ProgressDialog progressDialog;
     private String userID;
     private User me = new User();
     private boolean accepted;
@@ -86,6 +85,9 @@ public class ChooseOpponent extends AppCompatActivity {
     private ImageButton leave;
     private int flags;
     private boolean dialogFlag = true;
+    private ProgressBar progressBar;
+    private int progressBarMax, progressBarProgress;
+    private Handler handler = new Handler();
 
 
     @Override
@@ -114,6 +116,7 @@ public class ChooseOpponent extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewChooseOpponent);
         leave=findViewById(R.id.leaveChoseOpponent);
         leave.setBackgroundResource(R.drawable.back);
+        progressBar=findViewById(R.id.chooseOpponentProgressBar);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
@@ -157,12 +160,16 @@ public class ChooseOpponent extends AppCompatActivity {
 
         set.applyTo(mainLayout);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Updating ranking...");
-        progressDialog.show();
+        progressBarProgress=0;
+        Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
+        progressDrawable.setColorFilter(getColor(R.color.pen_red), PorterDuff.Mode.SRC_IN);
+        progressBar.setProgressDrawable(progressDrawable);
+        recyclerView.setVisibility(View.GONE);
+
         initRanking();
         accepted=false;
         checkMyOpponentIndex.run();
+
     }
 
     @Override
@@ -198,16 +205,51 @@ public class ChooseOpponent extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 numberOfUsers = (int) dataSnapshot.getChildrenCount();
-                ranking = new Ranking(numberOfUsers);
+                progressBarMax=2*numberOfUsers+1;
+                progressBar.setMax(progressBarMax);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        while (progressBarProgress<progressBarMax){
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setProgress(progressBarProgress);
+                                }
+                            });
+                            try{
+                                Thread.sleep(300);
+                            }catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }).start();
+
+
                 list.clear();
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     User user = postSnapshot.getValue(User.class);
                     list.add(user);
+                    progressBarProgress++;
                 }
-                for(int i=0;i<list.size();i++){
-                    ranking.addUsers(list.get(i),i);
-                }
-                ranking.sortRanking();
+
+                User tmp;
+                boolean sort;
+                do{
+                    sort=false;
+                    for(int i=list.size()-1;i>0;i--){
+                        if(list.get(i).getScore()>list.get(i-1).getScore()){
+                            tmp=list.get(i);
+                            list.set(i,list.get(i-1));
+                            list.set(i-1,tmp);
+                            sort=true;
+                        }
+                    }
+                    progressBarProgress++;
+                }while (sort);
+
                 initRecyclerView();
             }
             @Override
@@ -216,8 +258,12 @@ public class ChooseOpponent extends AppCompatActivity {
         });
     }
     private void initRecyclerView() {
-        progressDialog.dismiss();
-        RecyclerViewAdapterChooseOpponent adapter = new RecyclerViewAdapterChooseOpponent(this,ranking,square,userID);
+
+        progressBarProgress=progressBarMax;
+        recyclerView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+
+        RecyclerViewAdapterChooseOpponent adapter = new RecyclerViewAdapterChooseOpponent(this,list,square,userID);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -225,8 +271,8 @@ public class ChooseOpponent extends AppCompatActivity {
     }
     private void invite(int position) {
         if(dialogFlag){
-        if(!ranking.getRanking(position).getId().equals(userID)){
-            String opponentID = ranking.getRanking(position).getId();
+        if(!list.get(position).getId().equals(userID)){
+            String opponentID = list.get(position).getId();
             databaseReference.child(userID).child("index").child("opponent").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -259,7 +305,7 @@ public class ChooseOpponent extends AppCompatActivity {
                                     title.setText("INVITE");
                                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(2*square,2*square);
                                     photo.setLayoutParams(params);
-                                    StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(ranking.getRanking(position).getId());
+                                    StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(list.get(position).getId());
 
                                     final long SIZE = 1024*1024;
                                     sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -275,7 +321,7 @@ public class ChooseOpponent extends AppCompatActivity {
                                         }
                                     });
 
-                                    message.setText("Do you want to invite "+ranking.getRanking(position).getName()+"?");
+                                    message.setText("Do you want to invite "+list.get(position).getName()+"?");
                                     negativeButton.setText("NO");
                                     negativeButton.setOnClickListener(v ->
                                     {
