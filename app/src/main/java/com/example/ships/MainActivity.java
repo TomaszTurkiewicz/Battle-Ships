@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
     private boolean syncFBName=false;
     private boolean syncFBPhoto = false;
     private boolean alertDialogInUse = false;
-    private final String APP_ID = "ca-app-pub-6785166837488087~8005002708";
     private AdView mAdView;
 
     @Override

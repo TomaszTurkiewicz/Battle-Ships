@@ -363,7 +363,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         set.applyTo(mainLayout);
 
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdUnitId(getString(R.string.admob_big));
         interstitialAd.loadAd(new AdRequest.Builder().build());
 
         enableTouchListener = false;

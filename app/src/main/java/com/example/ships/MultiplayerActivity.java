@@ -41,6 +41,8 @@ import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.example.ships.classes.Winner;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -119,6 +121,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private boolean soundOn;
     private MediaPlayer explosionSound, waterSplashSound, hornSound, bubblesSound, shoutYaySound;
     private TextView borderLine1, borderLine2, borderLine3, borderLine4, borderLine5, borderLine6, borderLine7, borderLine8;
+    private InterstitialAd interstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -392,6 +395,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         set.connect(opponentName.getId(), ConstraintSet.LEFT, opponentPhoto.getId(), ConstraintSet.RIGHT, 0);
 
         set.applyTo(mainLayout);
+
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.admob_big));
+        interstitialAd.loadAd(new AdRequest.Builder().build());
 
         height = square;
         width = square;
@@ -909,6 +916,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             positiveButton.setText("OK");
             positiveButton.setOnClickListener(v1 -> {
 
+                if(interstitialAd.isLoaded()){
+                    interstitialAd.show();
+                }else{
+                    Log.d("TAG", "Admob wasn't loaded yet");
+                }
+
                 user.setIndex(new FightIndex());
                 databaseReferenceMy.setValue(user);
                 databaseReferenceFight.removeValue();
@@ -962,6 +975,13 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 message.setText("YOUR OPPONENT HAS LEFT");
                 positiveButton.setText("OK");
                 positiveButton.setOnClickListener(v1 -> {
+
+                    if(interstitialAd.isLoaded()){
+                        interstitialAd.show();
+                    }else{
+                        Log.d("TAG", "Admob wasn't loaded yet");
+                    }
+
                     dialog.dismiss();
                     finish();
                 });
@@ -1009,6 +1029,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 positiveButton.setText("OK");
                 positiveButton.setOnClickListener(v1 -> {
                     stopAllSounds();
+                    if(interstitialAd.isLoaded()){
+                        interstitialAd.show();
+                    }else{
+                        Log.d("TAG", "Admob wasn't loaded yet");
+                    }
+
                     dialog.dismiss();
                     finish();
                 });
@@ -1181,6 +1207,13 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                             positiveButton.setText("OK");
                             positiveButton.setOnClickListener(v1 -> {
                                 stopAllSounds();
+
+                                if(interstitialAd.isLoaded()){
+                                    interstitialAd.show();
+                                }else{
+                                    Log.d("TAG", "Admob wasn't loaded yet");
+                                }
+
                                 dialog.dismiss();
                                 finish();
                             });

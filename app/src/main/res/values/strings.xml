@@ -2,6 +2,8 @@
     <string name="app_name">Ships</string>
     <string name="randomGame">RANDOM GAME</string>
     <string name="random_game">RANDOM GAME</string>
+    <string name="admob_big">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="admob_baner">ca-app-pub-3940256099942544/6300978111</string>
     <string name="a">A</string>
     <string name="b">B</string>
     <string name="c">C</string>
