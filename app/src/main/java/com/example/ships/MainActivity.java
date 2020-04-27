@@ -43,6 +43,11 @@ import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.UpdateHelper;
 import com.example.ships.classes.User;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -104,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
     private boolean syncFBName=false;
     private boolean syncFBPhoto = false;
     private boolean alertDialogInUse = false;
+    private final String APP_ID = "ca-app-pub-6785166837488087~8005002708";
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +134,10 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         });
 
         setContentView(R.layout.activity_main);
+
+
+
+
         loggedInWithFacebook=false;
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
@@ -146,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         ranking=findViewById(R.id.ranking);
         multiplayerBtn.setText("MULTI PLAYER");
         leave=findViewById(R.id.leaveMainActivity);
+        mAdView = findViewById(R.id.adViewMainActivityBaner);
         leave.setBackgroundResource(R.drawable.back);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -207,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         set.connect(multiplayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,7*square);
         set.connect(multiplayerBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-15*square);
 
-        set.connect(ranking.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-4*square);
+        set.connect(ranking.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-5*square);
         set.connect(ranking.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-9*square);
 
         set.connect(loggedIn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,square);
@@ -219,10 +231,23 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         set.connect(redDotMultiplayerIV.getId(),ConstraintSet.BOTTOM,multiplayerBtn.getId(),ConstraintSet.BOTTOM,3*square-square/2);
         set.connect(redDotMultiplayerIV.getId(),ConstraintSet.LEFT,multiplayerBtn.getId(),ConstraintSet.LEFT,12*square-square/2);
 
-        set.connect(leave.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-3*square);
+        set.connect(leave.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-5*square);
         set.connect(leave.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,square);
 
+        set.connect(mAdView.getId(),ConstraintSet.BOTTOM,constraintLayout.getId(),ConstraintSet.BOTTOM,0);
+        set.connect(mAdView.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,0);
+
         set.applyTo(constraintLayout);
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         if(firebaseUser != null){
             providerId="";
@@ -853,5 +878,6 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
 
 // TODO last activity time for all users.
 // TODO maybe some training... or info...
+// TODO test on every virtual devices
 // TODO admobs
 // TODO upload to GooglePlay
