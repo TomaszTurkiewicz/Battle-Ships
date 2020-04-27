@@ -82,3 +82,4 @@ public class User {
 
 }
 // TODO default constructor with fields
+// TODO get rid off email from database

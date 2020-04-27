@@ -54,6 +54,16 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/scoreProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        app:layout_constraintTop_toBottomOf="@id/LinearLayoutActivityScores"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewScores"
         android:layout_width="0dp"
@@ -61,7 +71,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/LinearLayoutActivityScores"/>
+        app:layout_constraintTop_toBottomOf="@id/scoreProgressBar"/>
 
     <ImageButton
         android:id="@+id/leaveScore"

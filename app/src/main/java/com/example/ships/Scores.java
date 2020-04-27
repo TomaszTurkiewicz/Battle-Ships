@@ -1,14 +1,17 @@
 package com.example.ships;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,7 +46,6 @@ public class Scores extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private int numberOfUsers;
     List<User> list = new ArrayList<>();
-    private ProgressDialog progressDialog;
     private ConstraintLayout mainLayout;
     private LinearLayout linearLayout;
     private int square;
@@ -51,6 +53,10 @@ public class Scores extends AppCompatActivity {
     private ImageButton leave;
     private RecyclerView recyclerView;
     private boolean logIn;
+    private ProgressBar progressBar;
+    private int progressBarMax, progressBarProgress;
+    private Handler handler = new Handler();
+
 
 
     @Override
@@ -79,6 +85,8 @@ public class Scores extends AppCompatActivity {
         recyclerView=findViewById(R.id.recyclerViewScores);
         leave=findViewById(R.id.leaveScore);
         leave.setBackgroundResource(R.drawable.back);
+        progressBar=findViewById(R.id.scoreProgressBar);
+
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
@@ -122,6 +130,7 @@ public class Scores extends AppCompatActivity {
         linearLayout.setLayoutParams(params);
         leave.setLayoutParams(params1);
 
+
         for(int i = 0; i<linearLayout.getChildCount(); i++){
             TextView tv = (TextView)linearLayout.getChildAt(i);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
@@ -135,14 +144,18 @@ public class Scores extends AppCompatActivity {
 
         set.applyTo(mainLayout);
 
+        progressBarProgress=0;
+        Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
+        progressDrawable.setColorFilter(getColor(R.color.pen_red), PorterDuff.Mode.SRC_IN);
+        progressBar.setProgressDrawable(progressDrawable);
+
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference(getString(R.string.firebasepath_user));
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Updating ranking...");
-        progressDialog.show();
+        recyclerView.setVisibility(View.GONE);
         initRanking();
+
 
     }
 
@@ -156,19 +169,49 @@ public class Scores extends AppCompatActivity {
 
                 numberOfUsers = (int) dataSnapshot.getChildrenCount();
                 ranking = new Ranking(numberOfUsers);
+                progressBarMax=2*numberOfUsers+1;
+                progressBar.setMax(progressBarMax);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        while (progressBarProgress<progressBarMax){
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setProgress(progressBarProgress);
+                                }
+                            });
+                            try{
+                                Thread.sleep(300);
+                            }catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }).start();
+
 
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     User user = postSnapshot.getValue(User.class);
                     list.add(user);
+                    progressBarProgress++;
                 }
 
-
-
-
-                for(int i=0;i<list.size();i++){
-                    ranking.addUsers(list.get(i),i);
-                }
-                ranking.sortRanking();
+                User tmp;
+                boolean sort;
+                do{
+                    sort=false;
+                    for(int i=list.size()-1;i>0;i--){
+                        if(list.get(i).getScore()>list.get(i-1).getScore()){
+                            tmp=list.get(i);
+                            list.set(i,list.get(i-1));
+                            list.set(i-1,tmp);
+                            sort=true;
+                        }
+                    }
+                    progressBarProgress++;
+                }while (sort);
 
                 initRecyclerView();
             }
@@ -179,8 +222,10 @@ public class Scores extends AppCompatActivity {
     }
 
     private void initRecyclerView(){
-        progressDialog.dismiss();
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,ranking,square,userId);
+        progressBarProgress=progressBarMax;
+        recyclerView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this,list,square,userId);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -189,4 +234,5 @@ public class Scores extends AppCompatActivity {
     public void leaveScoreOnClick(View view) {
         finish();
     }
+
 }

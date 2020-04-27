@@ -17,23 +17,25 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ships.R;
-import com.example.ships.classes.Ranking;
 import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.TileDrawable;
+import com.example.ships.classes.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
-private Ranking mRanking;
+private List<User> list;
 private Context mContext;
 private int square;
 private String userId;
 
-    public RecyclerViewAdapter(Context mContext, Ranking mRanking, int square, String userId) {
-        this.mRanking = mRanking;
+    public RecyclerViewAdapter(Context mContext, List<User> list, int square, String userId) {
+        this.list=list;
         this.mContext = mContext;
         this.square = square;
         this.userId = userId;
@@ -51,7 +53,7 @@ private String userId;
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         holder.positionScore.setText(String.valueOf(position+1));
-        StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(mRanking.getRanking(position).getId());
+        StorageReference sr = FirebaseStorage.getInstance().getReference("profile_picture").child(list.get(position).getId());
         final long SIZE = 1024*1024;
         sr.getBytes(SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
@@ -69,11 +71,11 @@ private String userId;
 
 
 
-        holder.usernameScore.setText(mRanking.getRanking(position).getName());
-        holder.noOfGamesScore.setText(String.valueOf(mRanking.getRanking(position).getNoOfGames()));
-        holder.scoreScore.setText(String.valueOf(mRanking.getRanking(position).getScore()));
+        holder.usernameScore.setText(list.get(position).getName());
+        holder.noOfGamesScore.setText(String.valueOf(list.get(position).getNoOfGames()));
+        holder.scoreScore.setText(String.valueOf(list.get(position).getScore()));
 
-        if(mRanking.getRanking(position).getId().equals(userId)){
+        if(list.get(position).getId().equals(userId)){
             holder.positionScore.setTextColor(mContext.getColor(R.color.pen_red));
             holder.usernameScore.setTextColor(mContext.getColor(R.color.pen_red));
             holder.noOfGamesScore.setTextColor(mContext.getColor(R.color.pen_red));
@@ -84,7 +86,7 @@ private String userId;
 
     @Override
     public int getItemCount() {
-        return mRanking.getRanking().length;
+        return list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
