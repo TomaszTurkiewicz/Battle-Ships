@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,6 +32,8 @@ import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
@@ -108,7 +111,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     private boolean soundOn;
     private int square;
     private TextView borderLine1, borderLine2, borderLine3, borderLine4, borderLine5, borderLine6, borderLine7, borderLine8;
-
+    private InterstitialAd interstitialAd;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -359,6 +362,10 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
         set.applyTo(mainLayout);
 
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.loadAd(new AdRequest.Builder().build());
+
         enableTouchListener = false;
         initializeTable(ShootTable);
 
@@ -572,6 +579,11 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             positiveButton.setOnClickListener(v1 -> {
                 stopAllSounds();
                 dialog.dismiss();
+                if(interstitialAd.isLoaded()){
+                    interstitialAd.show();
+                }else{
+                    Log.d("TAG", "Admob wasn't loaded yet");
+                }
                 finish();
             });
             dialog.show();
@@ -617,6 +629,11 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             positiveButton.setText("OK");
             positiveButton.setOnClickListener(v1 -> {
                 stopAllSounds();
+                if(interstitialAd.isLoaded()){
+                    interstitialAd.show();
+                }else{
+                    Log.d("TAG", "Admob wasn't loaded yet");
+                }
                 dialog.dismiss();
                 finish();
             });
