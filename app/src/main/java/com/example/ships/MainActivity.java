@@ -851,7 +851,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
 }
 
 
-// TODO notification when surrendering
+
 // TODO last activity time for all users.
 // TODO maybe some training... or info...
 // TODO admobs

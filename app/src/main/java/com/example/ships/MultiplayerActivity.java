@@ -1300,11 +1300,31 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         dialog.dismiss();
                         mHandler.removeCallbacks(game);
                         mHandler2.removeCallbacks(checkWinner);
+
+                        TOPIC = "/topics/"+ user.getIndex().getOpponent();
+                        NOTIFICATION_TITLE = user.getName()+" surrender game";
+                        //              NOTIFICATION_MESSAGE = "Your move";
+                        JSONObject notification = new JSONObject();
+                        JSONObject notificationBody = new JSONObject();
+                        try{
+                            notificationBody.put("title",NOTIFICATION_TITLE);
+                            //                  notificationBody.put("message",NOTIFICATION_MESSAGE);
+                            notification.put("to",TOPIC);
+                            notification.put("notification",notificationBody);
+                            //                  notification.put("data",notificationBody);
+                        } catch (JSONException e){
+                            Log.e(TAG,"onCreate: "+e.getMessage());
+                        }
+                        sendNotification(notification);
+
                         myScore[0] = myScore[0] - myScoreMinus;
                         user.setScore(myScore[0]);
                         user.setIndex(new FightIndex());
                         databaseReferenceMy.setValue(user);
                         databaseReferenceFight.child("winner").setValue(w);
+
+
+
                         finish();
                     });
                     dialog.show();
@@ -1711,4 +1731,3 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 }
 
-// TODO na później notification kiedy serrender game
