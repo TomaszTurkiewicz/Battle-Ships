@@ -34,6 +34,7 @@ import com.example.ships.classes.User;
 import com.example.ships.drawings.BattleCell;
 import com.example.ships.drawings.BattleCellGreenBackground;
 import com.example.ships.drawings.BattleCellHiddenBackground;
+import com.example.ships.drawings.BattleCellRedBackground;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -1627,7 +1628,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                 if (xOnTouch == j || yOnTouch == i) {
                                     if (battleFieldOpponent[i][j] == BATTLE_CELL) {
                                         tv = (TextView) layoutOpponent.getChildAt(10 * i + j);
-                                        tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
+                                        tv.setBackground(new BattleCellRedBackground(GameBattle.this,square));
                                     } else if (battleFieldOpponent[i][j] == WATER) {
                                         tv = (TextView) layoutOpponent.getChildAt(10 * i + j);
                                         tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
@@ -1670,7 +1671,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                     if (xOnTouch == j || yOnTouch == i) {
                                         if (battleFieldOpponent[i][j] == BATTLE_CELL) {
                                             tv = (TextView) layoutOpponent.getChildAt(10 * i + j);
-                                            tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
+                                            tv.setBackground(new BattleCellRedBackground(GameBattle.this,square));
                                         } else if (battleFieldOpponent[i][j] == WATER) {
                                             tv = (TextView) layoutOpponent.getChildAt(10 * i + j);
                                             tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));

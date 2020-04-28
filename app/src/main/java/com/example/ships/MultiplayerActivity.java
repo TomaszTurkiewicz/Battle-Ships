@@ -44,6 +44,7 @@ import com.example.ships.classes.Winner;
 import com.example.ships.drawings.BattleCell;
 import com.example.ships.drawings.BattleCellGreenBackground;
 import com.example.ships.drawings.BattleCellHiddenBackground;
+import com.example.ships.drawings.BattleCellRedBackground;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
@@ -1158,7 +1159,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                 if (x == j || y == i) {
                                     if(battleFieldOpponent[i][j]==BATTLE_CELL){
                                         tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
+                                        tv.setBackground(new BattleCellRedBackground(MultiplayerActivity.this,square));
                                     }else if(battleFieldOpponent[i][j]==WATER){
                                         tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
@@ -1197,7 +1198,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                     if (x == j || y == i) {
                                         if(battleFieldOpponent[i][j]==BATTLE_CELL){
                                             tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.battle_cell_x_red_field));
+                                            tv.setBackground(new BattleCellRedBackground(MultiplayerActivity.this,square));
                                         }else if(battleFieldOpponent[i][j]==WATER){
                                             tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
