@@ -36,6 +36,7 @@ import com.example.ships.drawings.BattleCellGreenBackground;
 import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.drawings.BattleCellRedBackground;
 import com.example.ships.drawings.ShipBlueWhiteBackground;
+import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.android.gms.ads.AdRequest;
@@ -870,7 +871,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void displayWidmoShip(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+        textView.setBackground(new ShipGreyWhiteBackground(GameBattle.this,square));
     }
 
     private void displayWaterCell(TextView textView) {
@@ -1590,7 +1591,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (battleFieldPlayerOneActivityRandomGame.getBattleField(i, j).isShip()) {
-                    gridLayout.getChildAt(10 * i + j).setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+                    gridLayout.getChildAt(10 * i + j).setBackground(new ShipGreyWhiteBackground(GameBattle.this,square));
                 }
             }
         }

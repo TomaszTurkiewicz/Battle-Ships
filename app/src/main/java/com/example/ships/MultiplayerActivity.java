@@ -46,6 +46,7 @@ import com.example.ships.drawings.BattleCellGreenBackground;
 import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.drawings.BattleCellRedBackground;
 import com.example.ships.drawings.ShipBlueWhiteBackground;
+import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -580,7 +581,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void displayWidmoShip(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+        textView.setBackground(new ShipGreyWhiteBackground(MultiplayerActivity.this,square));
     }
 
     private void displayWaterCell(TextView textView) {

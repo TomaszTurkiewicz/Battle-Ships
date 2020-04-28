@@ -33,6 +33,7 @@ import com.example.ships.classes.Winner;
 import com.example.ships.drawings.BattleCell;
 import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.drawings.ShipBlueWhiteBackground;
+import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -473,7 +474,7 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void setGrey (TextView TextView){
-            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x));
+            TextView.setBackground(new ShipGreyWhiteBackground(CreateBattleField.this,square));
     }
 
     private void checkLeftShips() {
