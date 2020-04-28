@@ -41,6 +41,7 @@ import com.example.ships.drawings.ShipBlueWhiteBackground;
 import com.example.ships.drawings.ShipGreyHiddenBackground;
 import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
+import com.example.ships.drawings.ShipRedRedBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.android.gms.ads.AdRequest;
@@ -997,7 +998,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void displayShipCellHit(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.ship_cell_x_hit));
+        textView.setBackground(new ShipRedRedBackground(GameBattle.this,square));
     }
 
     private boolean checkCell(int i, int j) {
