@@ -931,3 +931,4 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
 // TODO test on every virtual devices
 // TODO admobs (change admobs id before uploading to google)
 // TODO upload to GooglePlay
+// TODO home screen button zamraża grę

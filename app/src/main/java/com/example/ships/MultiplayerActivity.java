@@ -45,6 +45,7 @@ import com.example.ships.drawings.BattleCell;
 import com.example.ships.drawings.BattleCellGreenBackground;
 import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.drawings.BattleCellRedBackground;
+import com.example.ships.drawings.ShipBlueWhiteBackground;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
@@ -1696,7 +1697,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
                 }
                 else if(battleFieldOpponent[i][j]==SHIP_RED){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_normal_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(new ShipBlueWhiteBackground(MultiplayerActivity.this,square));
                 }else if(battleFieldOpponent[i][j]==WATER){
                     layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x));
                 }else if(battleFieldOpponent[i][j]==BATTLE_CELL){

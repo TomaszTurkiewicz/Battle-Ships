@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/scoretextview"
     android:id="@+id/parent_layout_choose_opponent"
     android:orientation="horizontal">
     <TextView
