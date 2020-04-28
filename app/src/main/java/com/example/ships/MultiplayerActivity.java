@@ -52,6 +52,7 @@ import com.example.ships.drawings.ShipGreyHiddenBackground;
 import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
+import com.example.ships.drawings.WaterBlueWhiteBackground;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
@@ -589,7 +590,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void displayWaterCell(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x));
+        textView.setBackground(new WaterBlueWhiteBackground(MultiplayerActivity.this,square));
     }
 
     private void displayBattleCell(TextView textView) {
@@ -1705,7 +1706,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 else if(battleFieldOpponent[i][j]==SHIP_RED){
                     layoutOpponent.getChildAt(i*10+j).setBackground(new ShipBlueWhiteBackground(MultiplayerActivity.this,square));
                 }else if(battleFieldOpponent[i][j]==WATER){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(new WaterBlueWhiteBackground(MultiplayerActivity.this,square));
                 }else if(battleFieldOpponent[i][j]==BATTLE_CELL){
                     layoutOpponent.getChildAt(i*10+j).setBackground(new BattleCell(MultiplayerActivity.this,square));
                 }else;

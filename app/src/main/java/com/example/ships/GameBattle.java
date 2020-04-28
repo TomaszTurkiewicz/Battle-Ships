@@ -43,6 +43,7 @@ import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedRedBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
+import com.example.ships.drawings.WaterBlueWhiteBackground;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -830,7 +831,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 } else if (battleFieldOpponent[i][j] == SHIP_RED) {
                     layoutOpponent.getChildAt(i * 10 + j).setBackground(new ShipBlueWhiteBackground(GameBattle.this,square));
                 } else if (battleFieldOpponent[i][j] == WATER) {
-                    layoutOpponent.getChildAt(i * 10 + j).setBackground(getDrawable(R.drawable.water_cell_x));
+                    layoutOpponent.getChildAt(i * 10 + j).setBackground(new WaterBlueWhiteBackground(GameBattle.this,square));
                 } else if (battleFieldOpponent[i][j] == BATTLE_CELL) {
                     layoutOpponent.getChildAt(i * 10 + j).setBackground(new BattleCell(GameBattle.this,square));
                    // layoutOpponent.getChildAt(i * 10 + j).setBackground(getDrawable(R.drawable.battle_cell_x));
@@ -880,7 +881,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void displayWaterCell(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x));
+        textView.setBackground(new WaterBlueWhiteBackground(GameBattle.this,square));
     }
 
     private void displayShipCell(TextView textView) {
