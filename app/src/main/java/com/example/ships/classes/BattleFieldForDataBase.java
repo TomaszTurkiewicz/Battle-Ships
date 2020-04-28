@@ -1,5 +1,6 @@
 package com.example.ships.classes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -11,6 +12,15 @@ public class BattleFieldForDataBase {
     private Difficulty difficulty;
     private List<Ship> battleFieldList = Arrays.asList(new Ship[100]);
     private BattleField battleFieldField = new BattleField();
+    private List<Integer> lastMove;
+
+    public List<Integer> getLastMove() {
+        return lastMove;
+    }
+
+    public void setLastMove(List<Integer> lastMove) {
+        this.lastMove = lastMove;
+    }
 
     public boolean isCreated() {
         return created;
@@ -42,6 +52,7 @@ public class BattleFieldForDataBase {
         this.difficulty = new Difficulty();
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         this.time = calendar.getTimeInMillis();
+        this.lastMove = new ArrayList<>();
     }
 
     public Difficulty getDifficulty() {

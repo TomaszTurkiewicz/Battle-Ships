@@ -878,5 +878,5 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
 // TODO last activity time for all users.
 // TODO maybe some training... or info...
 // TODO test on every virtual devices
-// TODO admobs
+// TODO admobs (change admobs id before uploading to google)
 // TODO upload to GooglePlay

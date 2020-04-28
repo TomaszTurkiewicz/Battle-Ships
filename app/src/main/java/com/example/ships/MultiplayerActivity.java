@@ -56,8 +56,10 @@ import com.google.firebase.storage.StorageReference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -122,6 +124,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     private MediaPlayer explosionSound, waterSplashSound, hornSound, bubblesSound, shoutYaySound;
     private TextView borderLine1, borderLine2, borderLine3, borderLine4, borderLine5, borderLine6, borderLine7, borderLine8;
     private InterstitialAd interstitialAd;
+    private List<Integer> lastMove = new ArrayList<>();
+    private List<Integer> opponentLastMove = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +198,8 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         playersShown = false;
         runChecking=false;
         fight=true;
+        lastMove.clear();
+        opponentLastMove.clear();
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
         square = sp.getInt("square", -1);
@@ -452,11 +458,16 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                     // my move
                     userName.setTextColor(getColor(R.color.pen));
                     opponentName.setTextColor(getColor(R.color.pen_red));
+                    lastMove.clear();
                     battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                     battleFieldForDataBaseMy.listToField();
+
+                    opponentLastMove=battleFieldForDataBaseMy.getLastMove();
+
                     showOpponentBattleField();
                     hideBattleFiledAvailableMy();
                     enableTouchListener=true;
+
 
                 }else{
                     // not my move
@@ -465,6 +476,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
                     battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                     battleFieldForDataBaseMy.listToField();
+                    opponentLastMove=battleFieldForDataBaseMy.getLastMove();
                     hideBattleFieldOpponent();
                     showMyBattleField();
                     mHandler.postDelayed(game, deelay);
@@ -504,6 +516,25 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 else;
             }
         }
+        if(opponentLastMove!=null){
+            for(int i=0; i<opponentLastMove.size();i++){
+                int move = opponentLastMove.get(i);
+                if(battleFieldForDataBaseMy.getBattleFieldList().get(move).isShip()){
+                    displayShipHit((TextView)layoutMy.getChildAt(move));
+                }else{
+                    displayWaterHit((TextView)layoutMy.getChildAt(move));
+                }
+            }
+        }
+    }
+
+    private void displayWaterHit(TextView childAt) {
+        childAt.setBackground(getResources().getDrawable(R.drawable.water_cell_x_red_field));
+    }
+
+    private void displayShipHit(TextView childAt) {
+
+        childAt.setBackground(getResources().getDrawable(R.drawable.ship_cell_x_red_field));
     }
 
     private void displayWidmoShip(TextView textView) {
@@ -594,6 +625,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         // zczytaj z bazy danych i rozpocznij grę
                         battleFieldForDataBaseOpponent = dataSnapshot.child(user.getIndex().getOpponent()).getValue(BattleFieldForDataBase.class);
                         battleFieldForDataBaseOpponent.listToField();
+                        lastMove=battleFieldForDataBaseOpponent.getLastMove();
                         battleFieldForDataBaseMy = dataSnapshot.child(user.getId()).getValue(BattleFieldForDataBase.class);
                         battleFieldForDataBaseMy.listToField();
                         surrenderButton.setVisibility(View.VISIBLE);
@@ -835,6 +867,17 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 }
 
                 else;
+            }
+        }
+
+        if(opponentLastMove!=null){
+            for(int i=0; i<opponentLastMove.size();i++){
+                int move = opponentLastMove.get(i);
+                if(battleFieldForDataBaseMy.getBattleFieldList().get(move).isShip()){
+                    displayShipHit((TextView)layoutMy.getChildAt(move));
+                }else{
+                    displayWaterHit((TextView)layoutMy.getChildAt(move));
+                }
             }
         }
     }
@@ -1148,109 +1191,105 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void hitCell(int x, int y) {
-        databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                if(user.getIndex().getGameIndex().isEmpty()){
-                    finish();
-                }else{
-                    battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).setHit(true);
-                    databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
-                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-                    long time = calendar.getTimeInMillis();
-                    databaseReferenceFight.child(user.getId()).child("time").setValue(time);
-                    if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).isShip()){
-                        if(soundOn){
-                            explosionSound=MediaPlayer.create(MultiplayerActivity.this, R.raw.explosion);
-                            explosionSound.start();
-                        }
-                        battleFieldOpponent[x][y]=SHIP_RED;
-                        updateCounters(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getNumberOfMasts(),
-                                battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getShipNumber(),true);
-                        updateShipsHit();
-                        showOpponentBattleField();
-                        if(myWin()){
-                            if(soundOn){
-                                hornSound=MediaPlayer.create(MultiplayerActivity.this,R.raw.big_horn);
-                                hornSound.start();
-                            }
-                            mHandler.removeCallbacks(game);
-                            mHandler2.removeCallbacks(checkWinner);
-                            Winner winner=new Winner();
-                            winner.setWinner(user.getId());
-                            databaseReferenceFight.child("winner").setValue(winner);
-                            int score = user.getScore();
-                            if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
-                                score = score+25;
-                            }else{
-                                score = score+50;
-                            }
-                            user.setScore(score);
-                            user.setIndex(new FightIndex());
-                            databaseReferenceMy.setValue(user);
-                            alertDialogFlag=true;
-                            android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
-                            View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green,null);
-                            mBuilder.setView(mView);
-                            android.app.AlertDialog dialog = mBuilder.create();
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-                            dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
-                            dialog.setCancelable(false);
-                            dialog.setCanceledOnTouchOutside(false);
-                            TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_green);
-                            TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_green);;
-                            Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_green);
-                            title.setText("CONGRATULATION");
-                            message.setText("YOU WIN");
-                            positiveButton.setText("OK");
-                            positiveButton.setOnClickListener(v1 -> {
-                                stopAllSounds();
+        battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).setHit(true);
+        lastMove.add(10*x+y);
+        battleFieldForDataBaseOpponent.setLastMove(lastMove);
+        databaseReferenceFight.child(user.getIndex().getOpponent()).setValue(battleFieldForDataBaseOpponent);
 
-                                if(interstitialAd.isLoaded()){
-                                    interstitialAd.show();
-                                }else{
-                                    Log.d("TAG", "Admob wasn't loaded yet");
-                                }
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        long time = calendar.getTimeInMillis();
+        databaseReferenceFight.child(user.getId()).child("time").setValue(time);
 
-                                dialog.dismiss();
-                                finish();
-                            });
-                            dialog.show();
-                        }
-                    }else{
-                        battleFieldOpponent[x][y]=WATER;
-                        if(soundOn){
-                            waterSplashSound=MediaPlayer.create(MultiplayerActivity.this, R.raw.water_splash);
-                            waterSplashSound.start();
-                        }
-                        showOpponentBattleField();
-                        enableTouchListener=false;
-                        databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
-                        TOPIC = "/topics/"+ user.getIndex().getOpponent();
-                        NOTIFICATION_TITLE = "Your move";
-                        //              NOTIFICATION_MESSAGE = "Your move";
-                        JSONObject notification = new JSONObject();
-                        JSONObject notificationBody = new JSONObject();
-                        try{
-                            notificationBody.put("title",NOTIFICATION_TITLE);
-                            //                  notificationBody.put("message",NOTIFICATION_MESSAGE);
-                            notification.put("to",TOPIC);
-                            notification.put("notification",notificationBody);
-                            //                  notification.put("data",notificationBody);
-                        } catch (JSONException e){
-                            Log.e(TAG,"onCreate: "+e.getMessage());
-                        }
-                        sendNotification(notification);
-                        mHandler.postDelayed(game,deelay);
-                    }
+
+        if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).isShip()){
+            if(soundOn){
+                explosionSound=MediaPlayer.create(MultiplayerActivity.this, R.raw.explosion);
+                explosionSound.start();
+            }
+            battleFieldOpponent[x][y]=SHIP_RED;
+            updateCounters(battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getNumberOfMasts(),
+                    battleFieldForDataBaseOpponent.showBattleField().getBattleField(x,y).getShipNumber(),true);
+            updateShipsHit();
+            showOpponentBattleField();
+            if(myWin()){
+                if(soundOn){
+                    hornSound=MediaPlayer.create(MultiplayerActivity.this,R.raw.big_horn);
+                    hornSound.start();
                 }
+                mHandler.removeCallbacks(game);
+                mHandler2.removeCallbacks(checkWinner);
+                Winner winner=new Winner();
+                winner.setWinner(user.getId());
+                databaseReferenceFight.child("winner").setValue(winner);
+                int score = user.getScore();
+                if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
+                    score = score+25;
+                }else{
+                    score = score+50;
+                }
+                user.setScore(score);
+                user.setIndex(new FightIndex());
+                databaseReferenceMy.setValue(user);
+                alertDialogFlag=true;
+                android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MultiplayerActivity.this);
+                View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_one_button_green,null);
+                mBuilder.setView(mView);
+                android.app.AlertDialog dialog = mBuilder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
+                TextView title = mView.findViewById(R.id.alert_dialog_title_layout_one_button_green);
+                TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_green);;
+                Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_green);
+                title.setText("CONGRATULATION");
+                message.setText("YOU WIN");
+                positiveButton.setText("OK");
+                positiveButton.setOnClickListener(v1 -> {
+                    stopAllSounds();
+
+                    if(interstitialAd.isLoaded()){
+                        interstitialAd.show();
+                    }else{
+                        Log.d("TAG", "Admob wasn't loaded yet");
+                    }
+
+                    dialog.dismiss();
+                    finish();
+                });
+                dialog.show();
             }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        }else{
+            battleFieldOpponent[x][y]=WATER;
+            if(soundOn){
+                waterSplashSound=MediaPlayer.create(MultiplayerActivity.this, R.raw.water_splash);
+                waterSplashSound.start();
             }
-        });
+            showOpponentBattleField();
+            enableTouchListener=false;
+            databaseReferenceFight.child("turn").setValue(user.getIndex().getOpponent());
+
+            opponentLastMove.clear();
+            databaseReferenceFight.child(user.getId()).child("lastMove").setValue(opponentLastMove);
+
+            TOPIC = "/topics/"+ user.getIndex().getOpponent();
+            NOTIFICATION_TITLE = "Your move";
+            //              NOTIFICATION_MESSAGE = "Your move";
+            JSONObject notification = new JSONObject();
+            JSONObject notificationBody = new JSONObject();
+            try{
+                notificationBody.put("title",NOTIFICATION_TITLE);
+                //                  notificationBody.put("message",NOTIFICATION_MESSAGE);
+                notification.put("to",TOPIC);
+                notification.put("notification",notificationBody);
+                //                  notification.put("data",notificationBody);
+            } catch (JSONException e){
+                Log.e(TAG,"onCreate: "+e.getMessage());
+            }
+            sendNotification(notification);
+            mHandler.postDelayed(game,deelay);
+        }
     }
 
     public void surrenderMultiplayer(View view) {
@@ -1699,6 +1738,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         dialog.show();
         }
     }
+
     private void updateSoundButton(){
         if(soundOn){
             soundButton.setImageResource(R.color.transparent);
