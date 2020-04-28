@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceMy, databaseReferenceOpponent,databaseReferenceBattle;
-    private Button multiplayerBtn, singlePlayerBtn, ranking;
+    private Button multiplayerBtn, singlePlayerBtn, ranking, multiplayerGrey;
     private ConstraintLayout constraintLayout;
     private String userID;
     private User user = new User();
@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         redDotMultiplayerIV.setVisibility(View.GONE);
         singlePlayerBtn = findViewById(R.id.singlePlayer);
         multiplayerBtn=findViewById(R.id.multiplayer);
+        multiplayerGrey=findViewById(R.id.multiplayer_grey);
         ranking=findViewById(R.id.ranking);
         multiplayerBtn.setText("MULTI PLAYER");
         leave=findViewById(R.id.leaveMainActivity);
@@ -193,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(12*square,3*square);
         ConstraintLayout.LayoutParams params1 = new ConstraintLayout.LayoutParams(12*square,3*square);
         ConstraintLayout.LayoutParams params2 = new ConstraintLayout.LayoutParams(8*square,2*square);
-        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(8*square,2*square);
+        ConstraintLayout.LayoutParams params7 = new ConstraintLayout.LayoutParams(12*square,3*square);
         ConstraintLayout.LayoutParams params3 = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ConstraintLayout.LayoutParams params4 = new ConstraintLayout.LayoutParams(3*square,3*square);
         ConstraintLayout.LayoutParams params5 = new ConstraintLayout.LayoutParams(square,square);
@@ -205,6 +206,8 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         singlePlayerBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         multiplayerBtn.setLayoutParams(params1);
         multiplayerBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+        multiplayerGrey.setLayoutParams(params7);
+        multiplayerGrey.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         ranking.setLayoutParams(params2);
         ranking.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
         accountBtn.setLayoutParams(params4);
@@ -217,6 +220,9 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
 
         set.connect(multiplayerBtn.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,7*square);
         set.connect(multiplayerBtn.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-15*square);
+
+        set.connect(multiplayerGrey.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,7*square);
+        set.connect(multiplayerGrey.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-15*square);
 
         set.connect(ranking.getId(),ConstraintSet.TOP,constraintLayout.getId(),ConstraintSet.TOP,height-heightOffSet-5*square);
         set.connect(ranking.getId(),ConstraintSet.LEFT,constraintLayout.getId(),ConstraintSet.LEFT,width-widthOffSet-9*square);
@@ -420,6 +426,8 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
             });
             checkMyOpponentAndMove.run();
             multiplayerBtn.setVisibility(View.VISIBLE);
+            multiplayerGrey.setVisibility(View.GONE);
+            multiplayerGrey.setClickable(false);
             multiplayerBtn.setClickable(true);
             multiplayerBtn.setOnClickListener(v->{
                 if(alertDialogInUse){
@@ -616,10 +624,53 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
                 }
             });
         }else{
-            loggedIn.setText("niezalogowany");
+            loggedIn.setText("not logged in");
             multiplayerBtn.setVisibility(View.GONE);
             redDotMultiplayerIV.setVisibility(View.GONE);
             multiplayerBtn.setClickable(false);
+            multiplayerGrey.setVisibility(View.VISIBLE);
+            multiplayerGrey.setClickable(true);
+            multiplayerGrey.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(alertDialogInUse){
+                        // do nothing
+                    }else{
+
+                        alertDialogInUse=true;
+                        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+                        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                        mBuilder.setView(mView);
+                        android.app.AlertDialog dialog = mBuilder.create();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                        dialog.setCancelable(false);
+                        dialog.setCanceledOnTouchOutside(false);
+                        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+                        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+                        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+                        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                        title.setText("MULTI PLAYER");
+                        message.setText("to play with someone else You have to be logged in \n would You like go to login page?");
+                        negativeButton.setText("NO");
+                        negativeButton.setOnClickListener(v12 -> {
+                            dialog.dismiss();
+                            alertDialogInUse=false;
+                        });
+                        positiveButton.setText("YES");
+                        positiveButton.setOnClickListener(v1 -> {
+                            dialog.dismiss();
+                            alertDialogInUse=false;
+                            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+                        dialog.show();
+
+                    }
+                }
+            });
             accountBtn.setBackgroundResource(R.drawable.account_box);
 
         }

@@ -48,6 +48,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <Button
+        android:id="@+id/multiplayer_grey"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:text="@string/multi_player"
+        android:background="@drawable/button_background_pen_light"
+        android:textColor="@color/pen_light"
+        android:drawableLeft="@drawable/multi_grey"
+        android:paddingLeft="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <ImageButton
         android:id="@+id/accountButton"
         android:layout_width="60dp"
