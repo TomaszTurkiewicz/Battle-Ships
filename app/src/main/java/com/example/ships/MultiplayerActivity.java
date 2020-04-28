@@ -46,6 +46,7 @@ import com.example.ships.drawings.BattleCellGreenBackground;
 import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.drawings.BattleCellRedBackground;
 import com.example.ships.drawings.ShipBlueWhiteBackground;
+import com.example.ships.drawings.ShipGreyHiddenBackground;
 import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
@@ -935,7 +936,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void displayWidmoShipHidden(TextView TextView){
-        TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
+        TextView.setBackground(new ShipGreyHiddenBackground(MultiplayerActivity.this,square));
     }
 
     private void displayBattleCellHidden(TextView TextView){

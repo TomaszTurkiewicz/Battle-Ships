@@ -36,6 +36,7 @@ import com.example.ships.drawings.BattleCellGreenBackground;
 import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.drawings.BattleCellRedBackground;
 import com.example.ships.drawings.ShipBlueWhiteBackground;
+import com.example.ships.drawings.ShipGreyHiddenBackground;
 import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
@@ -892,7 +893,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void displayWidmoShipHidden(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_widmo_ship_x_hidden));
+        textView.setBackground(new ShipGreyHiddenBackground(GameBattle.this,square));
     }
 
     private void displayBattleCellHidden(TextView textView) {
