@@ -30,6 +30,7 @@ import com.example.ships.classes.PointIJ;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.example.ships.classes.Winner;
+import com.example.ships.drawings.BattleCell;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -91,7 +92,7 @@ public class CreateBattleField extends AppCompatActivity {
     private boolean refFightSet;
     private boolean alertDialogFlag=false;
     private TextView borderLine1, borderLine2, borderLine3, borderLine4;
-
+    private int square;
 
 
 
@@ -143,7 +144,7 @@ public class CreateBattleField extends AppCompatActivity {
         borderLine4=findViewById(R.id.borderLine4create);
 
         SharedPreferences sp = getSharedPreferences("VALUES", Activity.MODE_PRIVATE);
-        int square = sp.getInt("square",-1);
+        square = sp.getInt("square",-1);
         int width = sp.getInt("width",-1);
         int height = sp.getInt("height",-1);
         int widthOffSet = sp.getInt("widthOffSet",-1);
@@ -374,7 +375,7 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void setNoShipColor(TextView textView) {
-            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
+            textView.setBackground(new BattleCell(CreateBattleField.this,square));
     }
 
     private void setShipColor(TextView textView) {
@@ -461,7 +462,7 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void setBlank (TextView TextView){
-            TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
+            TextView.setBackground(new BattleCell(CreateBattleField.this,square));
     }
 
     private void setRed (TextView TextView){

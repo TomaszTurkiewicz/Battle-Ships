@@ -986,26 +986,22 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/battle_cell_x"/>
+                android:layout_weight="1"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/battle_cell_x"/>
+                android:layout_weight="1"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/battle_cell_x"/>
+                android:layout_weight="1"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/battle_cell_x"/>
+                android:layout_weight="1"/>
             </LinearLayout>
 
             <TextView
@@ -1031,20 +1027,17 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/battle_cell_x" />
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/battle_cell_x"/>
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/battle_cell_x"/>
+                    android:layout_weight="1"/>
         </LinearLayout>
 
             <TextView
@@ -1069,14 +1062,12 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/battle_cell_x"/>
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/battle_cell_x"/>
+                    android:layout_weight="1"/>
 
         </LinearLayout>
 
@@ -1102,8 +1093,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/battle_cell_x"/>
+                    android:layout_weight="1"/>
         </LinearLayout>
 
             <Button

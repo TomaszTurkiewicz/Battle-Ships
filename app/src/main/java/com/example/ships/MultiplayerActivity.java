@@ -41,6 +41,7 @@ import com.example.ships.classes.RoundedCornerBitmap;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.example.ships.classes.Winner;
+import com.example.ships.drawings.BattleCell;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
@@ -304,6 +305,42 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
             marginLeftForShips = (screenWidth - screenWidthOffSet - square) / 2 - 15 * square;
         }
 
+        for(int i=0;i<4;i++){
+            TextView tv = (TextView) fourMasts.getChildAt(i);
+            tv.setBackground(new BattleCell(MultiplayerActivity.this,square));
+        }
+        for(int i=0;i<3;i++){
+            TextView tv = (TextView) threeMastsFirst.getChildAt(i);
+            tv.setBackground(new BattleCell(MultiplayerActivity.this,square));
+        }
+        for(int i=0;i<3;i++){
+            TextView tv = (TextView) threeMastsSecond.getChildAt(i);
+            tv.setBackground(new BattleCell(MultiplayerActivity.this,square));
+        }
+        for(int i=0;i<2;i++){
+            TextView tv = (TextView) twoMastsFirst.getChildAt(i);
+            tv.setBackground(new BattleCell(MultiplayerActivity.this,square));
+        }
+        for(int i=0;i<2;i++){
+            TextView tv = (TextView) twoMastsSecond.getChildAt(i);
+            tv.setBackground(new BattleCell(MultiplayerActivity.this,square));
+        }
+        for(int i=0;i<2;i++){
+            TextView tv = (TextView) twoMastsThird.getChildAt(i);
+            tv.setBackground(new BattleCell(MultiplayerActivity.this,square));
+        }
+        TextView tv1 = (TextView) oneMastsFirst.getChildAt(0);
+        tv1.setBackground(new BattleCell(MultiplayerActivity.this,square));
+
+        TextView tv2 = (TextView) oneMastsSecond.getChildAt(0);
+        tv2.setBackground(new BattleCell(MultiplayerActivity.this,square));
+
+        TextView tv3 = (TextView) oneMastsThird.getChildAt(0);
+        tv3.setBackground(new BattleCell(MultiplayerActivity.this,square));
+
+        TextView tv4 = (TextView) oneMastsFourth.getChildAt(0);
+        tv4.setBackground(new BattleCell(MultiplayerActivity.this,square));
+
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);
 
@@ -546,7 +583,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void displayBattleCell(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
+        textView.setBackground(new BattleCell(MultiplayerActivity.this,square));
     }
 
     private void displayShipCell(TextView textView) {
@@ -1660,7 +1697,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 }else if(battleFieldOpponent[i][j]==WATER){
                     layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x));
                 }else if(battleFieldOpponent[i][j]==BATTLE_CELL){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(new BattleCell(MultiplayerActivity.this,square));
                 }else;
 
             }

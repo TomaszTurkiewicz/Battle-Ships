@@ -148,10 +148,11 @@ public class ChooseOpponent extends AppCompatActivity {
 
         linearLayout.setLayoutParams(params);
         leave.setLayoutParams(params1);
+        int textSize = 8*square/10;
 
         for(int i = 0; i<linearLayout.getChildCount(); i++){
             TextView tv = (TextView)linearLayout.getChildAt(i);
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,square);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSize);
         }
         ConstraintSet set = new ConstraintSet();
         set.clone(mainLayout);

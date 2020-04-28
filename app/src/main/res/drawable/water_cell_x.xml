@@ -25,7 +25,7 @@
     <item>
         <shape android:shape="oval">
             <stroke android:color="@android:color/transparent"
-                android:width="15dp"/>
+                android:width="20dp"/>
             <solid android:color="@color/pen"/>
 
         </shape>

@@ -31,6 +31,7 @@ import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
+import com.example.ships.drawings.BattleCell;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -261,6 +262,43 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             TextView tv = (TextView) linearLayoutNumbersOpponent.getChildAt(i);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         }
+
+        for(int i=0;i<4;i++){
+            TextView tv = (TextView) fourMasts.getChildAt(i);
+            tv.setBackground(new BattleCell(GameBattle.this,square));
+        }
+        for(int i=0;i<3;i++){
+            TextView tv = (TextView) threeMastsFirst.getChildAt(i);
+            tv.setBackground(new BattleCell(GameBattle.this,square));
+        }
+        for(int i=0;i<3;i++){
+            TextView tv = (TextView) threeMastsSecond.getChildAt(i);
+            tv.setBackground(new BattleCell(GameBattle.this,square));
+        }
+        for(int i=0;i<2;i++){
+            TextView tv = (TextView) twoMastsFirst.getChildAt(i);
+            tv.setBackground(new BattleCell(GameBattle.this,square));
+        }
+        for(int i=0;i<2;i++){
+            TextView tv = (TextView) twoMastsSecond.getChildAt(i);
+            tv.setBackground(new BattleCell(GameBattle.this,square));
+        }
+        for(int i=0;i<2;i++){
+            TextView tv = (TextView) twoMastsThird.getChildAt(i);
+            tv.setBackground(new BattleCell(GameBattle.this,square));
+        }
+        TextView tv1 = (TextView) oneMastsFirst.getChildAt(0);
+        tv1.setBackground(new BattleCell(GameBattle.this,square));
+
+        TextView tv2 = (TextView) oneMastsSecond.getChildAt(0);
+        tv2.setBackground(new BattleCell(GameBattle.this,square));
+
+        TextView tv3 = (TextView) oneMastsThird.getChildAt(0);
+        tv3.setBackground(new BattleCell(GameBattle.this,square));
+
+        TextView tv4 = (TextView) oneMastsFourth.getChildAt(0);
+        tv4.setBackground(new BattleCell(GameBattle.this,square));
+
         marginTop = 4 * square;
         marginLeft = screenWidth - screenWidthOffSet - 13 * square;
         marginDown = screenHeight - screenHeightOffSet - 2 * square;
@@ -783,7 +821,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 } else if (battleFieldOpponent[i][j] == WATER) {
                     layoutOpponent.getChildAt(i * 10 + j).setBackground(getDrawable(R.drawable.water_cell_x));
                 } else if (battleFieldOpponent[i][j] == BATTLE_CELL) {
-                    layoutOpponent.getChildAt(i * 10 + j).setBackground(getDrawable(R.drawable.battle_cell_x));
+                    layoutOpponent.getChildAt(i * 10 + j).setBackground(new BattleCell(GameBattle.this,square));
+                   // layoutOpponent.getChildAt(i * 10 + j).setBackground(getDrawable(R.drawable.battle_cell_x));
                 } else ;
 
             }
@@ -821,7 +860,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void displayBattleCell(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
+    textView.setBackground(new BattleCell(GameBattle.this,square));
+    //    textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x));
     }
 
     private void displayWidmoShip(TextView textView) {

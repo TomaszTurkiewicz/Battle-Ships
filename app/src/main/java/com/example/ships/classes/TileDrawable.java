@@ -41,6 +41,7 @@ public class TileDrawable extends Drawable {
     public int getOpacity() {
         return PixelFormat.TRANSLUCENT;
     }
+
     private Bitmap getBitmap(Drawable drawable, int x) {
         if (drawable instanceof BitmapDrawable)
             return ((BitmapDrawable) drawable).getBitmap();
