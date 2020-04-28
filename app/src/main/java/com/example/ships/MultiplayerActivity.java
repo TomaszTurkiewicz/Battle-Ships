@@ -47,6 +47,7 @@ import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.drawings.BattleCellRedBackground;
 import com.example.ships.drawings.ShipBlueWhiteBackground;
 import com.example.ships.drawings.ShipGreyWhiteBackground;
+import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -869,10 +870,10 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         for(int i =0;i<10;i++){
             for(int j = 0; j<10;j++){
                 if(battleFieldOpponent[i][j]==SHIP_BROWN){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(new ShipRedHiddenBackground(MultiplayerActivity.this,square));
                 }
                 else if(battleFieldOpponent[i][j]==SHIP_RED){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(new ShipRedHiddenBackground(MultiplayerActivity.this,square));
                 }else if(battleFieldOpponent[i][j]==WATER){
                     layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x_hidden));
                 }else{
@@ -926,7 +927,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void displayShipCellHidden(TextView TextView){
-        TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x_hidden));
+        TextView.setBackground(new ShipRedHiddenBackground(MultiplayerActivity.this,square));
     }
 
     private void displayWaterCellHidden(TextView TextView){

@@ -925,10 +925,10 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
 }
 
 
-
+// TODO home screen button zamraża grę
+// TODO poprawić disable sound icon (resize in activity)
 // TODO last activity time for all users.
 // TODO maybe some training... or info...
 // TODO test on every virtual devices
 // TODO admobs (change admobs id before uploading to google)
 // TODO upload to GooglePlay
-// TODO home screen button zamraża grę
