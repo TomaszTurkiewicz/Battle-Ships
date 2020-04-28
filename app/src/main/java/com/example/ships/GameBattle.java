@@ -35,6 +35,7 @@ import com.example.ships.drawings.BattleCell;
 import com.example.ships.drawings.BattleCellGreenBackground;
 import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.drawings.BattleCellRedBackground;
+import com.example.ships.drawings.ShipBlueGreenBackground;
 import com.example.ships.drawings.ShipBlueWhiteBackground;
 import com.example.ships.drawings.ShipGreyHiddenBackground;
 import com.example.ships.drawings.ShipGreyWhiteBackground;
@@ -1622,7 +1623,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
                                     } else {
                                         tv = (TextView) layoutOpponent.getChildAt(10 * i + j);
-                                        tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
+                                        tv.setBackground(new ShipBlueGreenBackground(GameBattle.this,square));
                                     }
                                 }
                             }
@@ -1665,7 +1666,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                             tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
                                         } else {
                                             tv = (TextView) layoutOpponent.getChildAt(10 * i + j);
-                                            tv.setBackground(getDrawable(R.drawable.ship_cell_x_green_field));
+                                            tv.setBackground(new ShipBlueGreenBackground(GameBattle.this,square));
                                         }
                                     }
                                 }
