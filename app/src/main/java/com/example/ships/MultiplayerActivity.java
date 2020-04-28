@@ -43,6 +43,7 @@ import com.example.ships.classes.User;
 import com.example.ships.classes.Winner;
 import com.example.ships.drawings.BattleCell;
 import com.example.ships.drawings.BattleCellGreenBackground;
+import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
@@ -871,7 +872,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 }else if(battleFieldOpponent[i][j]==WATER){
                     layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x_hidden));
                 }else{
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(new BattleCellHiddenBackground(MultiplayerActivity.this,square));
                 }
 
             }
@@ -933,7 +934,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void displayBattleCellHidden(TextView TextView){
-        TextView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
+        TextView.setBackground(new BattleCellHiddenBackground(MultiplayerActivity.this,square));
     }
 
     private Runnable checkWinner = new Runnable() {

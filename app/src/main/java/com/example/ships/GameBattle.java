@@ -33,6 +33,7 @@ import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
 import com.example.ships.drawings.BattleCell;
 import com.example.ships.drawings.BattleCellGreenBackground;
+import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -890,7 +891,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void displayBattleCellHidden(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_x_hidden));
+        textView.setBackground(new BattleCellHiddenBackground(GameBattle.this,square));
     }
 
     private void hideBattleFiledAvailablePlayerOne() {
@@ -934,7 +935,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 } else if (battleFieldOpponent[i][j] == WATER) {
                     layoutOpponent.getChildAt(i * 10 + j).setBackground(getDrawable(R.drawable.water_cell_x_hidden));
                 } else {
-                    layoutOpponent.getChildAt(i * 10 + j).setBackground(getDrawable(R.drawable.battle_cell_x_hidden));
+                    layoutOpponent.getChildAt(i * 10 + j).setBackground(new BattleCellHiddenBackground(GameBattle.this,square));
                 }
 
             }
