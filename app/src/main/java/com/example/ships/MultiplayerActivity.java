@@ -46,6 +46,7 @@ import com.example.ships.drawings.BattleCellGreenBackground;
 import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.drawings.BattleCellRedBackground;
 import com.example.ships.drawings.ShipBlueWhiteBackground;
+import com.example.ships.drawings.ShipRedWhiteBackground;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
@@ -591,7 +592,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void displayShipCell(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
+        textView.setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
     }
 
     private void createFields() {
@@ -1456,12 +1457,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipFourMastsCounter;i++){
-                    fourMasts.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    fourMasts.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                 }
             }else{
                 if(shipFourMastsCounter==4){
                     for(int i=0;i<shipFourMastsCounter;i++){
-                        fourMasts.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        fourMasts.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                     }
                 }
             }
@@ -1471,12 +1472,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipThreeMastsCounterFirst;i++){
-                    threeMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    threeMastsFirst.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                 }
             }else{
                 if(shipThreeMastsCounterFirst==3){
                     for(int i=0;i<shipThreeMastsCounterFirst;i++){
-                        threeMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        threeMastsFirst.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                     }
                 }
             }
@@ -1486,12 +1487,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipThreeMastsCounterSecond;i++){
-                    threeMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    threeMastsSecond.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                 }
             }else{
                 if(shipThreeMastsCounterSecond==3){
                     for(int i=0;i<shipThreeMastsCounterSecond;i++){
-                        threeMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        threeMastsSecond.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                     }
                 }
             }
@@ -1501,12 +1502,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipTwoMastsCounterFirst;i++){
-                    twoMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsFirst.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                 }
             }else{
                 if(shipTwoMastsCounterFirst==2){
                     for(int i=0;i<shipTwoMastsCounterFirst;i++){
-                        twoMastsFirst.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        twoMastsFirst.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                     }
                 }
             }
@@ -1516,12 +1517,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipTwoMastsCounterSecond;i++){
-                    twoMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsSecond.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                 }
             }else{
                 if(shipTwoMastsCounterSecond==2){
                     for(int i=0;i<shipTwoMastsCounterSecond;i++){
-                        twoMastsSecond.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        twoMastsSecond.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                     }
                 }
             }
@@ -1531,12 +1532,12 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         }else{
             if(battleFieldForDataBaseMy.getDifficulty().isEasy()){
                 for(int i=0;i<shipTwoMastsCounterThird;i++){
-                    twoMastsThird.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    twoMastsThird.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                 }
             }else{
                 if(shipTwoMastsCounterThird==2){
                     for(int i=0;i<shipTwoMastsCounterThird;i++){
-                        twoMastsThird.getChildAt(i).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                        twoMastsThird.getChildAt(i).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                     }
                 }
             }
@@ -1544,22 +1545,22 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
 
         if(shipOneMastsCounterFirst==0){
         }else{
-            oneMastsFirst.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            oneMastsFirst.getChildAt(0).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
         }
 
         if(shipOneMastsCounterSecond==0){
         }else{
-            oneMastsSecond.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            oneMastsSecond.getChildAt(0).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
         }
 
         if(shipOneMastsCounterThird==0){
         }else{
-            oneMastsThird.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            oneMastsThird.getChildAt(0).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
         }
 
         if(shipOneMastsCounterFourth==0){
         }else{
-            oneMastsFourth.getChildAt(0).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            oneMastsFourth.getChildAt(0).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
         }
     }
 
@@ -1694,7 +1695,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         for(int i =0;i<10;i++){
             for(int j = 0; j<10;j++){
                 if(battleFieldOpponent[i][j]==SHIP_BROWN){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.battle_cell_ship_sunk_x));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(new ShipRedWhiteBackground(MultiplayerActivity.this,square));
                 }
                 else if(battleFieldOpponent[i][j]==SHIP_RED){
                     layoutOpponent.getChildAt(i*10+j).setBackground(new ShipBlueWhiteBackground(MultiplayerActivity.this,square));

@@ -33,6 +33,7 @@ import com.example.ships.classes.Winner;
 import com.example.ships.drawings.BattleCell;
 import com.example.ships.drawings.BattleCellHiddenBackground;
 import com.example.ships.drawings.ShipBlueWhiteBackground;
+import com.example.ships.drawings.ShipRedWhiteBackground;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -381,7 +382,7 @@ public class CreateBattleField extends AppCompatActivity {
     }
 
     private void setShipColor(TextView textView) {
-            textView.setBackground(getResources().getDrawable(R.drawable.battle_cell_ship_sunk_x));
+            textView.setBackground(new ShipRedWhiteBackground(CreateBattleField.this,square));
     }
 
     private void setGreyColor(TextView textView) {
