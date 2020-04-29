@@ -49,6 +49,7 @@ import com.example.ships.drawings.WaterBlueGreenBackground;
 import com.example.ships.drawings.WaterBlueHiddenBackground;
 import com.example.ships.drawings.WaterBlueRedBackground;
 import com.example.ships.drawings.WaterBlueWhiteBackground;
+import com.example.ships.drawings.WaterLightGreyWhiteBackground;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -706,7 +707,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                         }
                     }else {
                         if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isHit()){
-                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.water_cell_x_grey);
+                            field.getChildAt(10*i+j).setBackground(new WaterLightGreyWhiteBackground(getApplicationContext(),square));
                         }else{
                             field.getChildAt(10*i+j).setBackgroundResource(R.drawable.background_x);
                         }
