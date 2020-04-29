@@ -1027,7 +1027,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 dialog.dismiss();
                 finish();
             });
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8*square,8*square);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10*square,10*square);
             params.setMargins(square,square,square,square);
             field.setLayoutParams(params);
 

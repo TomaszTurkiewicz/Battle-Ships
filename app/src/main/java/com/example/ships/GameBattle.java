@@ -681,6 +681,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             TextView message = mView.findViewById(R.id.alert_dialog_message_layout_one_button_and_field_red);
             GridLayout field = mView.findViewById(R.id.alert_dialog_linear_gridlayout_layout_one_button_and_field_red);
             Button positiveButton = mView.findViewById(R.id.alert_dialog_button_layout_one_button_and_field_red);
+
+
             title.setText("SORRY");
             message.setText("Maybe next time");
             positiveButton.setText("OK");
@@ -694,7 +696,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 dialog.dismiss();
                 finish();
             });
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8*square,8*square);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10*square,10*square);
             params.setMargins(square,square,square,square);
             field.setLayoutParams(params);
 

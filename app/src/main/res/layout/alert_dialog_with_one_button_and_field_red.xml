@@ -34,8 +34,8 @@
 
             <GridLayout
                 android:id="@+id/alert_dialog_linear_gridlayout_layout_one_button_and_field_red"
-                android:layout_width="@dimen/Distance80dp"
-                android:layout_height="@dimen/Distance80dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:columnCount="10"
                 android:rowCount="10">
 
@@ -549,8 +549,7 @@
 
             <LinearLayout
                 android:id="@+id/alert_dialog_linear_layout_text_layout_one_button_and_field_red"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="5dp"
