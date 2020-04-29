@@ -43,6 +43,7 @@ import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedRedBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
+import com.example.ships.drawings.WaterBlueGreenBackground;
 import com.example.ships.drawings.WaterBlueWhiteBackground;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
 import com.google.android.gms.ads.AdRequest;
@@ -1623,7 +1624,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                         tv.setBackground(new BattleCellGreenBackground(GameBattle.this,square));
                                     } else if (battleFieldOpponent[i][j] == WATER) {
                                         tv = (TextView) layoutOpponent.getChildAt(10 * i + j);
-                                        tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
+                                        tv.setBackground(new WaterBlueGreenBackground(GameBattle.this,square));
                                     } else {
                                         tv = (TextView) layoutOpponent.getChildAt(10 * i + j);
                                         tv.setBackground(new ShipBlueGreenBackground(GameBattle.this,square));
@@ -1666,7 +1667,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                                             tv.setBackground(new BattleCellGreenBackground(GameBattle.this,square));
                                         } else if (battleFieldOpponent[i][j] == WATER) {
                                             tv = (TextView) layoutOpponent.getChildAt(10 * i + j);
-                                            tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
+                                            tv.setBackground(new WaterBlueGreenBackground(GameBattle.this,square));
                                         } else {
                                             tv = (TextView) layoutOpponent.getChildAt(10 * i + j);
                                             tv.setBackground(new ShipBlueGreenBackground(GameBattle.this,square));

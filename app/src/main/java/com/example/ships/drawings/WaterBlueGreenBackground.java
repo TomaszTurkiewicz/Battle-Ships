@@ -14,13 +14,13 @@ import androidx.core.content.ContextCompat;
 
 import com.example.ships.R;
 
-public class WaterBlueWhiteBackground extends Drawable {
+public class WaterBlueGreenBackground extends Drawable {
 
     private Context context;
     private final Paint paint;
     private final int square;
 
-    public WaterBlueWhiteBackground(Context context, int square){
+    public WaterBlueGreenBackground(Context context, int square){
         this.square=square;
         this.paint=new Paint();
         this.context=context;
@@ -32,7 +32,7 @@ public class WaterBlueWhiteBackground extends Drawable {
         Rect rect = new Rect(0,0,square,square);
 
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(ContextCompat.getColor(context, R.color.WHITE));
+        paint.setColor(ContextCompat.getColor(context, R.color.background_color_green));
         canvas.drawRect(rect,paint);
 
         paint.setStyle(Paint.Style.STROKE);

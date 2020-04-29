@@ -52,6 +52,7 @@ import com.example.ships.drawings.ShipGreyHiddenBackground;
 import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
+import com.example.ships.drawings.WaterBlueGreenBackground;
 import com.example.ships.drawings.WaterBlueWhiteBackground;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -1153,7 +1154,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                         tv.setBackground(new BattleCellGreenBackground(MultiplayerActivity.this,square));
                                     }else if(battleFieldOpponent[i][j]==WATER){
                                         tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
+                                        tv.setBackground(new WaterBlueGreenBackground(MultiplayerActivity.this,square));
                                     }else{
                                         tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(new ShipBlueGreenBackground(MultiplayerActivity.this,square));
@@ -1192,7 +1193,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                             tv.setBackground(new BattleCellGreenBackground(MultiplayerActivity.this,square));
                                         }else if(battleFieldOpponent[i][j]==WATER){
                                             tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.water_cell_x_green_field));
+                                            tv.setBackground(new WaterBlueGreenBackground(MultiplayerActivity.this,square));
                                         }else{
                                             tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(new ShipBlueGreenBackground(MultiplayerActivity.this,square));
