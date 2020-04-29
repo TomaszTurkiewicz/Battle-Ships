@@ -477,9 +477,22 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
         });
         layoutOpponent.setOnTouchListener(this);
 
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         game.run();
         checkWinner.run();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(game);
+        mHandler2.removeCallbacks(checkWinner);
     }
 
     private Runnable game = new Runnable() {

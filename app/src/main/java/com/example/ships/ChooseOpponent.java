@@ -161,12 +161,20 @@ public class ChooseOpponent extends AppCompatActivity {
 
         set.applyTo(mainLayout);
 
+
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         progressBarProgress=0;
         Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
         progressDrawable.setColorFilter(getColor(R.color.pen_red), PorterDuff.Mode.SRC_IN);
         progressBar.setProgressDrawable(progressDrawable);
         recyclerView.setVisibility(View.GONE);
-
         initRanking();
         accepted=false;
         checkMyOpponentIndex.run();

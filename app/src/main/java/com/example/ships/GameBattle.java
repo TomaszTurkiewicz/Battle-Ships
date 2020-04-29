@@ -549,8 +549,16 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
             userName.setText("ME");
             opponentName.setText("PHONE");
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         game.run();
     }
+
+
 
     private void updateBattleFieldFromSaved() {
         for (int i = 0; i < 10; i++) {
