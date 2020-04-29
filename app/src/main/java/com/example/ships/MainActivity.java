@@ -726,8 +726,43 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
                     boolean savedGame = user.getSinglePlayerMatch().isGame();
 
                     if (savedGame) {
-                        Intent intent = new Intent(getApplicationContext(), GameBattle.class);
-                        startActivity(intent);
+
+                        alertDialogInUse=true;
+                        android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+                        View mView = getLayoutInflater().inflate(R.layout.alert_dialog_with_two_buttons,null);
+                        mBuilder.setView(mView);
+                        android.app.AlertDialog dialog = mBuilder.create();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                        dialog.getWindow().getDecorView().setSystemUiVisibility(flags);
+                        dialog.setCancelable(false);
+                        dialog.setCanceledOnTouchOutside(false);
+                        TextView title = mView.findViewById(R.id.alert_dialog_title_layout_with_two_buttons);
+                        TextView message = mView.findViewById(R.id.alert_dialog_message_layout_with_two_buttons);
+                        Button negativeButton = mView.findViewById(R.id.alert_dialog_left_button_layout_with_two_buttons);
+                        Button positiveButton = mView.findViewById(R.id.alert_dialog_right_button_layout_with_two_buttons);
+                        title.setText("GAME");
+                        message.setText("You have saved game \n Do you want to continue?");
+                        negativeButton.setText("NO");
+                        negativeButton.setOnClickListener(v12 -> {
+                            alertDialogInUse=false;
+                            dialog.dismiss();
+                            user.setSinglePlayerMatch(new SinglePlayerMatch());
+                            databaseReferenceMy.setValue(user);
+                            Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
+                            startActivity(intent);
+
+                        });
+                        positiveButton.setText("YES");
+                        positiveButton.setOnClickListener(v1 -> {
+                            alertDialogInUse=false;
+                            dialog.dismiss();
+                            Intent intent = new Intent(getApplicationContext(), GameBattle.class);
+                            startActivity(intent);
+
+                        });
+                        dialog.show();
+
                     } else {
                         Intent intent = new Intent(getApplicationContext(), ChooseGameLevel.class);
                         startActivity(intent);
@@ -740,7 +775,6 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
         }
 
     }
-
 
 
     public void onClickSignIn(View view) {
@@ -768,6 +802,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
     private Runnable checkMyOpponentAndMove = new Runnable() {
         @Override
         public void run() {
+            if(ready){
             databaseReferenceMy.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -826,6 +861,7 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
 
                 }
             });
+        }
         }
     };
 
@@ -925,8 +961,8 @@ public class MainActivity extends AppCompatActivity implements UpdateHelper.OnUp
 }
 
 
-// TODO home screen button zamraża grę
-// TODO poprawić disable sound icon (resize in activity)
+
+// TODO single player alert dialog when game saved (asking new game or saved)
 // TODO last activity time for all users.
 // TODO maybe some training... or info...
 // TODO test on every virtual devices

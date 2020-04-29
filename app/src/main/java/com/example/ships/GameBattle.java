@@ -704,7 +704,8 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 dialog.dismiss();
                 finish();
             });
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10*square,10*square);
+            int gridSize = 6*square;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(gridSize,gridSize);
             params.setMargins(square,square,square,square);
             field.setLayoutParams(params);
 
@@ -712,15 +713,15 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 for(int j=0;j<10;j++){
                     if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isShip()){
                         if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isHit()){
-                            field.getChildAt(10*i+j).setBackground(new ShipLightGreyWhiteBackground(getApplicationContext(),square));
+                            field.getChildAt(10*i+j).setBackground(new ShipLightGreyWhiteBackground(getApplicationContext(),gridSize/10));
                         }else{
-                            field.getChildAt(10*i+j).setBackground(new ShipRedWhiteBackgroundGreyStroke(getApplicationContext(),square));
+                            field.getChildAt(10*i+j).setBackground(new ShipRedWhiteBackgroundGreyStroke(getApplicationContext(),gridSize/10));
                         }
                     }else {
                         if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isHit()){
-                            field.getChildAt(10*i+j).setBackground(new WaterLightGreyWhiteBackground(getApplicationContext(),square));
+                            field.getChildAt(10*i+j).setBackground(new WaterLightGreyWhiteBackground(getApplicationContext(),gridSize/10));
                         }else{
-                            field.getChildAt(10*i+j).setBackground(new Background(getApplicationContext(),square));
+                            field.getChildAt(10*i+j).setBackground(new Background(getApplicationContext(),gridSize/10));
                         }
                     }
                 }
