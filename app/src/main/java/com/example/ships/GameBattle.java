@@ -40,6 +40,7 @@ import com.example.ships.drawings.ShipBlueRedBackground;
 import com.example.ships.drawings.ShipBlueWhiteBackground;
 import com.example.ships.drawings.ShipGreyHiddenBackground;
 import com.example.ships.drawings.ShipGreyWhiteBackground;
+import com.example.ships.drawings.ShipLightGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedRedBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
@@ -698,7 +699,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 for(int j=0;j<10;j++){
                     if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isShip()){
                         if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isHit()){
-                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.ship_x_hit);
+                            field.getChildAt(10*i+j).setBackground(new ShipLightGreyWhiteBackground(getApplicationContext(),square));
                         }else{
                             field.getChildAt(10*i+j).setBackgroundResource(R.drawable.ship_x_not_hit);
                         }

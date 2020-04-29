@@ -14,13 +14,13 @@ import androidx.core.content.ContextCompat;
 
 import com.example.ships.R;
 
-public class ShipRedHiddenBackground extends Drawable {
+public class ShipLightGreyWhiteBackground extends Drawable {
 
     private Context context;
     private final Paint paint;
     private final int square;
 
-    public ShipRedHiddenBackground(Context context, int square){
+    public ShipLightGreyWhiteBackground(Context context, int square){
         this.square=square;
         this.paint=new Paint();
         this.context=context;
@@ -32,17 +32,17 @@ public class ShipRedHiddenBackground extends Drawable {
         Rect rect = new Rect(0,0,square,square);
 
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(ContextCompat.getColor(context, R.color.background_color_hidden));
+        paint.setColor(ContextCompat.getColor(context, R.color.WHITE));
         canvas.drawRect(rect,paint);
 
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(square/10);
-        paint.setColor(ContextCompat.getColor(context, R.color.pen));
+        paint.setColor(ContextCompat.getColor(context, R.color.pen_light));
         canvas.drawRect(rect,paint);
 
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setStrokeWidth(square/10);
-        paint.setColor(ContextCompat.getColor(context, R.color.pen_red));
+        paint.setColor(ContextCompat.getColor(context, R.color.pen_light));
         canvas.drawLine(0+distance,0+distance,square-distance,square-distance,paint);
         canvas.drawLine(square-distance,0+distance,0+distance,square-distance,paint);
 
@@ -63,4 +63,5 @@ public class ShipRedHiddenBackground extends Drawable {
     public int getOpacity() {
         return PixelFormat.TRANSLUCENT;
     }
+
 }
