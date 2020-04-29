@@ -53,6 +53,7 @@ import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
 import com.example.ships.drawings.WaterBlueGreenBackground;
+import com.example.ships.drawings.WaterBlueRedBackground;
 import com.example.ships.drawings.WaterBlueWhiteBackground;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -578,7 +579,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void displayWaterHit(TextView childAt) {
-        childAt.setBackground(getResources().getDrawable(R.drawable.water_cell_x_red_field));
+        childAt.setBackground(new WaterBlueRedBackground(MultiplayerActivity.this,square));
     }
 
     private void displayShipHit(TextView childAt) {
@@ -1171,7 +1172,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                         tv.setBackground(new BattleCellRedBackground(MultiplayerActivity.this,square));
                                     }else if(battleFieldOpponent[i][j]==WATER){
                                         tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                        tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
+                                        tv.setBackground(new WaterBlueRedBackground(MultiplayerActivity.this,square));
                                     }else{
                                         tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                         tv.setBackground(new ShipBlueRedBackground(MultiplayerActivity.this,square));
@@ -1210,7 +1211,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                                             tv.setBackground(new BattleCellRedBackground(MultiplayerActivity.this,square));
                                         }else if(battleFieldOpponent[i][j]==WATER){
                                             tv = (TextView) layoutOpponent.getChildAt(10*i+j);
-                                            tv.setBackground(getDrawable(R.drawable.water_cell_x_red_field));
+                                            tv.setBackground(new WaterBlueRedBackground(MultiplayerActivity.this,square));
                                         }else{
                                             tv = (TextView) layoutOpponent.getChildAt(10*i+j);
                                             tv.setBackground(new ShipBlueRedBackground(MultiplayerActivity.this,square));
