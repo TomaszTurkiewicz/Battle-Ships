@@ -14,13 +14,13 @@ import androidx.core.content.ContextCompat;
 
 import com.example.ships.R;
 
-public class BattleCell extends Drawable {
+public class Background extends Drawable {
 
     private Context context;
     private final Paint paint;
     private final int square;
 
-    public BattleCell(Context context, int square){
+    public Background(Context context, int square){
         this.square=square;
         this.paint=new Paint();
         this.context=context;
@@ -37,7 +37,7 @@ public class BattleCell extends Drawable {
 
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(square/10);
-        paint.setColor(ContextCompat.getColor(context, R.color.pen));
+        paint.setColor(ContextCompat.getColor(context, R.color.pen_light));
         canvas.drawRect(rect,paint);
 
 
@@ -57,4 +57,5 @@ public class BattleCell extends Drawable {
     public int getOpacity() {
         return PixelFormat.TRANSLUCENT;
     }
+
 }

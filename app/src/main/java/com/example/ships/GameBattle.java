@@ -31,6 +31,7 @@ import com.example.ships.classes.GameDifficulty;
 import com.example.ships.classes.SinglePlayerMatch;
 import com.example.ships.classes.TileDrawable;
 import com.example.ships.classes.User;
+import com.example.ships.drawings.Background;
 import com.example.ships.drawings.BattleCell;
 import com.example.ships.drawings.BattleCellGreenBackground;
 import com.example.ships.drawings.BattleCellHiddenBackground;
@@ -709,7 +710,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                         if(battleFieldOpponentActivityRandomGame.getBattleField(i,j).isHit()){
                             field.getChildAt(10*i+j).setBackground(new WaterLightGreyWhiteBackground(getApplicationContext(),square));
                         }else{
-                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.background_x);
+                            field.getChildAt(10*i+j).setBackground(new Background(getApplicationContext(),square));
                         }
                     }
                 }
