@@ -1233,6 +1233,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 case MotionEvent.ACTION_UP:
                     if(x>=0&&x<=9&&y>=0&&y<=9){
                         if(battleFieldOpponent[y][x]==BATTLE_CELL) {
+                            stopAllSounds();
                             hitCell(y, x);
                         }else
                             showOpponentBattleField();

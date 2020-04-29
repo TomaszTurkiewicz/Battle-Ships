@@ -1710,7 +1710,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
 
                     if (xOnTouch >= 0 && xOnTouch <= 9 && yOnTouch >= 0 && yOnTouch <= 9) {
                         if (battleFieldOpponent[yOnTouch][xOnTouch] == BATTLE_CELL) {
-
+                            stopAllSounds();
 
                             hitCell(yOnTouch, xOnTouch);
 
