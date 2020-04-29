@@ -53,6 +53,7 @@ import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
 import com.example.ships.drawings.WaterBlueGreenBackground;
+import com.example.ships.drawings.WaterBlueHiddenBackground;
 import com.example.ships.drawings.WaterBlueRedBackground;
 import com.example.ships.drawings.WaterBlueWhiteBackground;
 import com.google.android.gms.ads.AdRequest;
@@ -881,7 +882,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                 else if(battleFieldOpponent[i][j]==SHIP_RED){
                     layoutOpponent.getChildAt(i*10+j).setBackground(new ShipRedHiddenBackground(MultiplayerActivity.this,square));
                 }else if(battleFieldOpponent[i][j]==WATER){
-                    layoutOpponent.getChildAt(i*10+j).setBackground(getDrawable(R.drawable.water_cell_x_hidden));
+                    layoutOpponent.getChildAt(i*10+j).setBackground(new WaterBlueHiddenBackground(MultiplayerActivity.this,square));
                 }else{
                     layoutOpponent.getChildAt(i*10+j).setBackground(new BattleCellHiddenBackground(MultiplayerActivity.this,square));
                 }
@@ -937,7 +938,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
     }
 
     private void displayWaterCellHidden(TextView TextView){
-        TextView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hidden));
+        TextView.setBackground(new WaterBlueHiddenBackground(MultiplayerActivity.this,square));
     }
 
     private void displayWidmoShipHidden(TextView TextView){

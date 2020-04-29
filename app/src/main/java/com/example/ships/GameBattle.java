@@ -44,6 +44,7 @@ import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedRedBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
 import com.example.ships.drawings.WaterBlueGreenBackground;
+import com.example.ships.drawings.WaterBlueHiddenBackground;
 import com.example.ships.drawings.WaterBlueRedBackground;
 import com.example.ships.drawings.WaterBlueWhiteBackground;
 import com.example.ships.singletons.BattleFieldPlayerOneSingleton;
@@ -895,7 +896,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
     }
 
     private void displayWaterCellHidden(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.water_cell_x_hidden));
+        textView.setBackground(new WaterBlueHiddenBackground(GameBattle.this,square));
     }
 
     private void displayWidmoShipHidden(TextView textView) {
@@ -945,7 +946,7 @@ public class GameBattle extends AppCompatActivity implements View.OnTouchListene
                 } else if (battleFieldOpponent[i][j] == SHIP_RED) {
                     layoutOpponent.getChildAt(i * 10 + j).setBackground(new ShipRedHiddenBackground(GameBattle.this,square));
                 } else if (battleFieldOpponent[i][j] == WATER) {
-                    layoutOpponent.getChildAt(i * 10 + j).setBackground(getDrawable(R.drawable.water_cell_x_hidden));
+                    layoutOpponent.getChildAt(i * 10 + j).setBackground(new WaterBlueHiddenBackground(GameBattle.this,square));
                 } else {
                     layoutOpponent.getChildAt(i * 10 + j).setBackground(new BattleCellHiddenBackground(GameBattle.this,square));
                 }
