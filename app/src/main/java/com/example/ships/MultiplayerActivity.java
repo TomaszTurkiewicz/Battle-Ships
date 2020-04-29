@@ -53,6 +53,7 @@ import com.example.ships.drawings.ShipGreyWhiteBackground;
 import com.example.ships.drawings.ShipLightGreyWhiteBackground;
 import com.example.ships.drawings.ShipRedHiddenBackground;
 import com.example.ships.drawings.ShipRedWhiteBackground;
+import com.example.ships.drawings.ShipRedWhiteBackgroundGreyStroke;
 import com.example.ships.drawings.WaterBlueGreenBackground;
 import com.example.ships.drawings.WaterBlueHiddenBackground;
 import com.example.ships.drawings.WaterBlueRedBackground;
@@ -1034,7 +1035,7 @@ public class MultiplayerActivity extends AppCompatActivity implements View.OnTou
                         if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
                             field.getChildAt(10*i+j).setBackground(new ShipLightGreyWhiteBackground(getApplicationContext(),square));
                         }else{
-                            field.getChildAt(10*i+j).setBackgroundResource(R.drawable.ship_x_not_hit);
+                            field.getChildAt(10*i+j).setBackground(new ShipRedWhiteBackgroundGreyStroke(getApplicationContext(),square));
                         }
                     }else {
                         if(battleFieldForDataBaseOpponent.showBattleField().getBattleField(i,j).isHit()){
